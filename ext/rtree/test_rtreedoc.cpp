@@ -101,7 +101,7 @@ static int invokeTclGeomCb(
           if( p->pUser || p->xDelUser ){
             rc = SQLITE_ERROR;
           }else{
-            BoxGeomCtx *pBGCtx = sqlite3_malloc(sizeof(BoxGeomCtx));
+            BoxGeomCtx *pBGCtx = (BoxGeomCtx *)sqlite3_malloc(sizeof(BoxGeomCtx));
             if( pBGCtx==0 ){
               rc = SQLITE_NOMEM;
             }else{

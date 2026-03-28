@@ -1716,7 +1716,7 @@ static int idxPopulateOneStat1(
       );
     }else{
       zQuery = sqlite3_mprintf(
-          "SELECT %s FROM temp."UNIQUE_TABLE_NAME" x ORDER BY %s", zCols, zOrder
+          "SELECT %s FROM temp." UNIQUE_TABLE_NAME " x ORDER BY %s", zCols, zOrder
       );
     }
   }
@@ -1782,7 +1782,7 @@ static int idxBuildSampleTable(sqlite3expert *p, const char *zTab){
   int rc;
   char *zSql;
 
-  rc = sqlite3_exec(p->dbv,"DROP TABLE IF EXISTS temp."UNIQUE_TABLE_NAME,0,0,0);
+  rc = sqlite3_exec(p->dbv,"DROP TABLE IF EXISTS temp." UNIQUE_TABLE_NAME,0,0,0);
   if( rc!=SQLITE_OK ) return rc;
 
   zSql = sqlite3_mprintf(
@@ -1898,7 +1898,7 @@ static int idxPopulateStat1(sqlite3expert *p, char **pzErr){
   sqlite3_create_function(p->db, "sqlite_expert_rem", 2, SQLITE_UTF8, 0,0,0,0);
   sqlite3_create_function(p->db, "sqlite_expert_sample", 0,SQLITE_UTF8,0,0,0,0);
 
-  sqlite3_exec(p->db, "DROP TABLE IF EXISTS temp."UNIQUE_TABLE_NAME,0,0,0);
+  sqlite3_exec(p->db, "DROP TABLE IF EXISTS temp." UNIQUE_TABLE_NAME,0,0,0);
   return rc;
 }
 

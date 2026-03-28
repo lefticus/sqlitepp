@@ -590,7 +590,7 @@ static void xF5tFunction(
         break;
       case SQLITE_BLOB:
         pObj = Tcl_NewByteArrayObj(
-            sqlite3_value_blob(apVal[i]), sqlite3_value_bytes(apVal[i])
+            (const unsigned char *)sqlite3_value_blob(apVal[i]), sqlite3_value_bytes(apVal[i])
         );
         break;
       case SQLITE_INTEGER:
@@ -762,7 +762,7 @@ static int SQLITE_TCLAPI f5tTokenize(
   }
   if( nArg==0 ){
     Tcl_AppendResult(interp, "no such tokenizer: ", (char*)0);
-    Tcl_Free((void*)azArg);
+    Tcl_Free((char*)azArg);
     return TCL_ERROR;
   }
   zText = Tcl_GetStringFromObj(objv[objc-1], &nText);
@@ -780,7 +780,7 @@ static int SQLITE_TCLAPI f5tTokenize(
   }
 
   if( nText>0 ){
-    pCopy = sqlite3_malloc64(nText);
+    pCopy = (char *)sqlite3_malloc64(nText);
     if( pCopy==0 ){
       tokenizer.xDelete(pTok);
       Tcl_AppendResult(interp, "error in sqlite3_malloc()", (char*)0);
@@ -806,7 +806,7 @@ static int SQLITE_TCLAPI f5tTokenize(
     return TCL_ERROR;
   }
 
-  Tcl_Free((void*)azArg);
+  Tcl_Free((char*)azArg);
   Tcl_SetObjResult(interp, pRet);
   Tcl_DecrRefCount(pRet);
   return TCL_OK;
@@ -1480,7 +1480,7 @@ static int xOriginToken(
     int nReq = nToken + 1 + (iEnd-iStart);
     if( nReq>p->nBuf ){
       sqlite3_free(p->aBuf);
-      p->aBuf = sqlite3_malloc64(nReq*2);
+      p->aBuf = (char*)sqlite3_malloc64(nReq*2);
       if( p->aBuf==0 ) return SQLITE_NOMEM;
       p->nBuf = nReq*2;
     }
