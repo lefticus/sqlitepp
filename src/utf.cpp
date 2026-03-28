@@ -577,6 +577,7 @@ void sqlite3UtfSelfTest(void){
   unsigned char *z;
   int n;
   unsigned int c;
+  (void)t; (void)n; (void)c;
 
   for(i=0; i<0x00110000; i++){
     z = zBuf;

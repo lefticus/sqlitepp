@@ -202,7 +202,7 @@ int TestExpert_Init(Tcl_Interp *interp){
   };
   int i;
 
-  for(i=0; i<sizeof(aCmd)/sizeof(struct Cmd); i++){
+  for(i=0; i<(int)(sizeof(aCmd)/sizeof(struct Cmd)); i++){
     struct Cmd *p = &aCmd[i];
     Tcl_CreateObjCommand(interp, p->zCmd, p->xProc, 0, 0);
   }

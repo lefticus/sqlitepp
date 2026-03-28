@@ -342,6 +342,7 @@ static int qpvtabBestIndex(
   sqlite3_str *pStr = sqlite3_str_new(0);
   int i, k = 0;
   int rc;
+  (void)rc;
   sqlite3_str_appendf(pStr, "nConstraint,%d,,,,\n", pIdxInfo->nConstraint);
   for(i=0; i<pIdxInfo->nConstraint; i++){
     sqlite3_value *pVal;

@@ -340,7 +340,7 @@ int Sqlitetest_window_Init(Tcl_Interp *interp){
      { "test_override_sum", test_override_sum, 0 },
   };
   int i;
-  for(i=0; i<sizeof(aObjCmd)/sizeof(aObjCmd[0]); i++){
+  for(i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
     ClientData c = (ClientData)SQLITE_INT_TO_PTR(aObjCmd[i].clientData);
     Tcl_CreateObjCommand(interp, aObjCmd[i].zName, aObjCmd[i].xProc, c, 0);
   }

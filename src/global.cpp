@@ -83,9 +83,9 @@ extern const unsigned char sqlite3UpperToLower[] = {
    0,  1,  0,  1,  0,  1,  /* aEQb[]: Use when compare(A,B) equals zero */
    1,  0,  1,  0,  0,  1   /* aGTb[]: Use when compare(A,B) greater than zero*/
 };
-extern const unsigned char *sqlite3aLTb = &sqlite3UpperToLower[256-OP_Ne];
-extern const unsigned char *sqlite3aEQb = &sqlite3UpperToLower[256+6-OP_Ne];
-extern const unsigned char *sqlite3aGTb = &sqlite3UpperToLower[256+12-OP_Ne];
+const unsigned char *sqlite3aLTb = &sqlite3UpperToLower[256-OP_Ne];
+const unsigned char *sqlite3aEQb = &sqlite3UpperToLower[256+6-OP_Ne];
+const unsigned char *sqlite3aGTb = &sqlite3UpperToLower[256+12-OP_Ne];
 
 /*
 ** The following 256 byte lookup table is used to support SQLites built-in
@@ -391,7 +391,7 @@ extern const char sqlite3StdTypeAffinity[] = {
   SQLITE_AFF_REAL,
   SQLITE_AFF_TEXT
 };
-extern const char *sqlite3StdType[] = {
+const char *sqlite3StdType[] = {
   "ANY",
   "BLOB",
   "INT",

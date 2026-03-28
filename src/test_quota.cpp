@@ -1956,7 +1956,7 @@ int Sqlitequota_Init(Tcl_Interp *interp){
   };
   int i;
 
-  for(i=0; i<sizeof(aCmd)/sizeof(aCmd[0]); i++){
+  for(i=0; i<(int)(sizeof(aCmd)/sizeof(aCmd[0])); i++){
     Tcl_CreateObjCommand(interp, aCmd[i].zName, aCmd[i].xProc, 0, 0);
   }
 

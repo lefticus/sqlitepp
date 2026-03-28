@@ -210,7 +210,7 @@ int Sqlitetest5_Init(Tcl_Interp *interp){
     { "translate_selftest",      (Tcl_ObjCmdProc*)test_translate_selftest},
   };
   int i;
-  for(i=0; i<sizeof(aCmd)/sizeof(aCmd[0]); i++){
+  for(i=0; i<(int)(sizeof(aCmd)/sizeof(aCmd[0])); i++){
     Tcl_CreateObjCommand(interp, aCmd[i].zName, aCmd[i].xProc, 0, 0);
   }
   return SQLITE_OK;

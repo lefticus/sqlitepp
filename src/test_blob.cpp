@@ -320,7 +320,7 @@ int Sqlitetest_blob_Init(Tcl_Interp *interp){
      { "sqlite3_blob_write",           test_blob_write       },
   };
   int i;
-  for(i=0; i<sizeof(aObjCmd)/sizeof(aObjCmd[0]); i++){
+  for(i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
     Tcl_CreateObjCommand(interp, aObjCmd[i].zName, aObjCmd[i].xProc, 0, 0);
   }
 #endif /* SQLITE_OMIT_INCRBLOB */

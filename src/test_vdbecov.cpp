@@ -27,7 +27,7 @@ static void test_vdbe_branch(
   unsigned char iBranch, 
   unsigned char iType
 ){
-  if( iSrc<sizeof(aBranchArray) ){
+  if( iSrc<(int)sizeof(aBranchArray) ){
     aBranchArray[iSrc] |= iBranch;
   }
 }
@@ -76,7 +76,7 @@ static int SQLITE_TCLAPI test_vdbe_coverage(
       int i;
       Tcl_Obj *pRes = Tcl_NewObj();
       Tcl_IncrRefCount(pRes);
-      for(i=0; i<sizeof(aBranchArray); i++){
+      for(i=0; i<(int)sizeof(aBranchArray); i++){
         u8 b = aBranchArray[i];
         int bFlag = ((b >> 4)==4);
         if( b ){

@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_C_STANDARD 11)
 
-add_compile_options(-Wall -Werror=write-strings)
+add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-Wall -Werror>)
 
 # --------------------------------------------------------------------------
 # Options

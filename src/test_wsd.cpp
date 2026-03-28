@@ -57,7 +57,7 @@ void *sqlite3_wsd_find(void *K, int L){
   ProcessLocalVar *pVar;
 
   /* Calculate a hash of K */
-  for(i=0; i<sizeof(void*); i++){
+  for(i=0; i<(int)sizeof(void*); i++){
     iHash = (iHash<<3) + ((unsigned char *)&K)[i];
   }
   iHash = iHash%PLS_HASHSIZE;

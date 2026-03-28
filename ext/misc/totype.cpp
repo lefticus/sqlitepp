@@ -398,7 +398,7 @@ static void tointegerFunc(
           if( TOTYPE_BIGENDIAN ){
             int i;
             unsigned char zBlobRev[sizeof(sqlite3_int64)];
-            for(i=0; i<sizeof(sqlite3_int64); i++){
+            for(i=0; i<(int)sizeof(sqlite3_int64); i++){
               zBlobRev[i] = zBlob[sizeof(sqlite3_int64)-1-i];
             }
             memcpy(&iVal, zBlobRev, sizeof(sqlite3_int64));
@@ -468,7 +468,7 @@ static void torealFunc(
           if( TOTYPE_LITTLEENDIAN ){
             int i;
             unsigned char zBlobRev[sizeof(double)];
-            for(i=0; i<sizeof(double); i++){
+            for(i=0; i<(int)sizeof(double); i++){
               zBlobRev[i] = zBlob[sizeof(double)-1-i];
             }
             memcpy(&rVal, zBlobRev, sizeof(double));

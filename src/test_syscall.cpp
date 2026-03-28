@@ -502,7 +502,7 @@ static int SQLITE_TCLAPI test_syscall_reset(
     char *zFunc = Tcl_GetStringFromObj(objv[2], &nFunc);
     rc = pVfs->xSetSystemCall(pVfs, Tcl_GetString(objv[2]), 0);
     for(i=0; rc==SQLITE_OK && aSyscall[i].zName; i++){
-      if( strlen(aSyscall[i].zName)!=nFunc ) continue;
+      if( (int)strlen(aSyscall[i].zName)!=nFunc ) continue;
       if( memcmp(aSyscall[i].zName, zFunc, nFunc) ) continue;
       aSyscall[i].xOrig = 0;
     }
@@ -749,7 +749,7 @@ int SqlitetestSyscall_Init(Tcl_Interp *interp){
   };
   int i;
 
-  for(i=0; i<sizeof(aCmd)/sizeof(aCmd[0]); i++){
+  for(i=0; i<(int)(sizeof(aCmd)/sizeof(aCmd[0])); i++){
     Tcl_CreateObjCommand(interp, aCmd[i].zName, aCmd[i].xCmd, 0, 0);
   }
   return TCL_OK;

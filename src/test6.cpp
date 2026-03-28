@@ -933,7 +933,7 @@ static int SQLITE_TCLAPI crashParamsObjCmd(
   }
 
   zCrashFile = Tcl_GetStringFromObj(objv[objc-1], &nCrashFile);
-  if( nCrashFile>=sizeof(g.zCrashFile) ){
+  if( nCrashFile>=(int)sizeof(g.zCrashFile) ){
     Tcl_AppendResult(interp, "Filename is too long: \"", zCrashFile, "\"", NULL);
     goto error;
   }

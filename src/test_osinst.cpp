@@ -659,7 +659,7 @@ static void vfslog_call(
 ){
   VfslogVfs *p = (VfslogVfs *)pVfs;
   unsigned char *zRec;
-  if( (24+p->nBuf)>sizeof(p->aBuf) ){
+  if( (24+p->nBuf)>(int)sizeof(p->aBuf) ){
     vfslog_flush(p);
   }
   zRec = (unsigned char *)&p->aBuf[p->nBuf];
@@ -676,7 +676,7 @@ static void vfslog_string(sqlite3_vfs *pVfs, const char *zStr){
   VfslogVfs *p = (VfslogVfs *)pVfs;
   unsigned char *zRec;
   int nStr = zStr ? (int)strlen(zStr) : 0;
-  if( (4+nStr+p->nBuf)>sizeof(p->aBuf) ){
+  if( (4+nStr+p->nBuf)>(int)sizeof(p->aBuf) ){
     vfslog_flush(p);
   }
   zRec = (unsigned char *)&p->aBuf[p->nBuf];

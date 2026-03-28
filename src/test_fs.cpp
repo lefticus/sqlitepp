@@ -566,7 +566,7 @@ static int fstreeColumn(sqlite3_vtab_cursor *cur, sqlite3_context *ctx, int i){
         char *aBuf = (char*)sqlite3_malloc(sBuf.st_mode+1);
         if( !aBuf ) return SQLITE_NOMEM;
         nRead = read(pCsr->fd, aBuf, sBuf.st_mode);
-        if( nRead!=sBuf.st_mode ){
+        if( nRead!=(int)sBuf.st_mode ){
           return SQLITE_IOERR;
         }
         sqlite3_result_blob(ctx, aBuf, nRead, SQLITE_TRANSIENT);
@@ -911,7 +911,7 @@ int Sqlitetestfs_Init(Tcl_Interp *interp){
      { "register_fs_module",   register_fs_module, 0 },
   };
   int i;
-  for(i=0; i<sizeof(aObjCmd)/sizeof(aObjCmd[0]); i++){
+  for(i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
     Tcl_CreateObjCommand(interp, aObjCmd[i].zName, 
         aObjCmd[i].xProc, aObjCmd[i].clientData, 0);
   }

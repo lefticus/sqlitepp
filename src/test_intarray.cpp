@@ -381,7 +381,7 @@ int Sqlitetestintarray_Init(Tcl_Interp *interp){
      { "sqlite3_intarray_bind", test_intarray_bind, 0 },
   };
   int i;
-  for(i=0; i<sizeof(aObjCmd)/sizeof(aObjCmd[0]); i++){
+  for(i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
     Tcl_CreateObjCommand(interp, aObjCmd[i].zName, 
         aObjCmd[i].xProc, aObjCmd[i].clientData, 0);
   }

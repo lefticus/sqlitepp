@@ -6329,7 +6329,7 @@ static int unixGetTempname(int nBuf, char *zBuf){
       sqlite3_randomness(sizeof(r), &r);
       assert( nBuf>2 );
       zBuf[nBuf-2] = 0;
-      sqlite3_snprintf(nBuf, zBuf, "%s/"SQLITE_TEMP_FILE_PREFIX"%llx%c",
+      sqlite3_snprintf(nBuf, zBuf, "%s/" SQLITE_TEMP_FILE_PREFIX "%llx%c",
                        zDir, r, 0);
       if( zBuf[nBuf-2]!=0 || (iLimit++)>10 ){
         rc = SQLITE_ERROR;

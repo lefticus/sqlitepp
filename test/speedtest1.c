@@ -288,7 +288,7 @@ static int integerValue(const char *zArg){
       zArg++;
     }
   }
-  for(i=0; i<sizeof(aMult)/sizeof(aMult[0]); i++){
+  for(i=0; i<(int)(sizeof(aMult)/sizeof(aMult[0])); i++){
     if( sqlite3_stricmp(aMult[i].zSuffix, zArg)==0 ){
       v *= aMult[i].iMult;
       break;
@@ -550,7 +550,6 @@ char *speedtest1_once(const char *zFormat, ...){
   char *zSql;
   sqlite3_stmt *pStmt;
   char *zResult = 0;
-  int rc;
   va_start(ap, zFormat);
   zSql = sqlite3_vmprintf(zFormat, ap);
   va_end(ap);
@@ -652,7 +651,7 @@ void speedtest1_run(void){
         }
       }
 #endif
-      if( g.nResult+len<sizeof(g.zResult)-2 ){
+      if( g.nResult+len<(int)sizeof(g.zResult)-2 ){
         if( g.nResult>0 ) g.zResult[g.nResult++] = ' ';
         memcpy(g.zResult + g.nResult, z, len+1);
         g.nResult += len;
@@ -2937,7 +2936,7 @@ static void displayLinuxIoStats(FILE *out){
       { "cancelled_write_bytes: ",  "Cancelled write bytes:"    },
     };
     int i;
-    for(i=0; i<sizeof(aTrans)/sizeof(aTrans[0]); i++){
+    for(i=0; i<(int)(sizeof(aTrans)/sizeof(aTrans[0])); i++){
       int n = (int)strlen(aTrans[i].zPattern);
       if( strncmp(aTrans[i].zPattern, z, n)==0 ){
         fprintf(out, "-- %-28s %s", aTrans[i].zDesc, &z[n]);

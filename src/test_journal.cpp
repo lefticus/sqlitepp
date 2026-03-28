@@ -486,6 +486,7 @@ static int readJournalFile(jt_file *p, jt_file *pMain){
             if( rc==SQLITE_OK ){
               u32 cksum = genCksum(aPage, pMain->nPagesize);
               assert( cksum==pMain->aCksum[pgno-1] );
+              (void)cksum;
             }
           }
           sqlite3BitvecSet(pMain->pWritable, pgno);
@@ -555,6 +556,7 @@ static int jtWrite(
       */
     }else{
       u32 pgno = (u32)(iOfst/p->nPagesize + 1);
+      (void)pgno;
       assert( (iAmt==1||iAmt==(int)p->nPagesize) &&
               ((iOfst+iAmt)%p->nPagesize)==0 );
       /* The following assert() statements may fail if this layer is used
@@ -587,6 +589,7 @@ static int jtTruncate(sqlite3_file *pFile, sqlite_int64 size){
   if( p->flags&SQLITE_OPEN_MAIN_DB && p->pWritable ){
     u32 pgno;
     u32 locking_page = (u32)(PENDING_BYTE/p->nPagesize+1);
+    (void)locking_page;
     for(pgno=(u32)(size/p->nPagesize+1); pgno<=p->nPage; pgno++){
       assert( pgno==locking_page || sqlite3BitvecTest(p->pWritable, pgno) );
     }

@@ -1870,8 +1870,9 @@ struct SumCtx {
 */
 static void kahanBabuskaNeumaierStep(
   volatile SumCtx *pSum,
-  volatile double r
+  double rArg
 ){
+  volatile double r = rArg;
   volatile double s = pSum->rSum;
   volatile double t = s + r;
   if( fabs(s) > fabs(r) ){

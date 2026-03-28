@@ -353,7 +353,7 @@ static int SQLITE_TCLAPI test_exec_hex(
   }
   if( getDbPointer(interp, argv[1], &db) ) return TCL_ERROR;
   zHex = argv[2];
-  for(i=j=0; i<(sizeof(zSql)-1) && zHex[j]; i++, j++){
+  for(i=j=0; i<(int)(sizeof(zSql)-1) && zHex[j]; i++, j++){
     if( zHex[j]=='%' && zHex[j+2] && zHex[j+2] ){
       zSql[i] = (testHexToInt(zHex[j+1])<<4) + testHexToInt(zHex[j+2]);
       j += 2;
@@ -548,7 +548,7 @@ static int SQLITE_TCLAPI test_snprintf_int(
   int n = atoi(argv[1]);
   const char *zFormat = argv[2];
   int a1 = atoi(argv[3]);
-  if( n>sizeof(zStr) ) n = sizeof(zStr);
+  if( n>(int)sizeof(zStr) ) n = sizeof(zStr);
   sqlite3_snprintf(sizeof(zStr), zStr, "abcdefghijklmnopqrstuvwxyz");
   sqlite3_snprintf(n, zStr, zFormat, a1);
   Tcl_AppendResult(interp, zStr, NULL);
@@ -753,7 +753,7 @@ static void hex8Func(sqlite3_context *p, int argc, sqlite3_value **argv){
   int i;
   char zBuf[200];
   z = sqlite3_value_text(argv[0]);
-  for(i=0; i<sizeof(zBuf)/2 - 2 && z[i]; i++){
+  for(i=0; i<(int)sizeof(zBuf)/2 - 2 && z[i]; i++){
     sqlite3_snprintf(sizeof(zBuf)-i*2, &zBuf[i*2], "%02x", z[i]);
   }
   zBuf[i*2] = 0;
@@ -765,7 +765,7 @@ static void hex16Func(sqlite3_context *p, int argc, sqlite3_value **argv){
   int i;
   char zBuf[400];
   z = (const unsigned short int *)sqlite3_value_text16(argv[0]);
-  for(i=0; i<sizeof(zBuf)/4 - 4 && z[i]; i++){
+  for(i=0; i<(int)sizeof(zBuf)/4 - 4 && z[i]; i++){
     sqlite3_snprintf(sizeof(zBuf)-i*4, &zBuf[i*4],"%04x", z[i]&0xff);
   }
   zBuf[i*4] = 0;
@@ -4050,7 +4050,7 @@ static int SQLITE_TCLAPI test_bind_double(
   ** contain a bug.
   */
   zVal = Tcl_GetString(objv[3]);
-  for(i=0; i<sizeof(aSpecialFp)/sizeof(aSpecialFp[0]); i++){
+  for(i=0; i<(int)(sizeof(aSpecialFp)/sizeof(aSpecialFp[0])); i++){
     if( strcmp(aSpecialFp[i].zName, zVal)==0 ){
       sqlite3_uint64 x;
       x = aSpecialFp[i].iUpper;
@@ -4062,7 +4062,7 @@ static int SQLITE_TCLAPI test_bind_double(
       break;
     }
   }
-  if( i>=sizeof(aSpecialFp)/sizeof(aSpecialFp[0]) &&
+  if( i>=(int)(sizeof(aSpecialFp)/sizeof(aSpecialFp[0])) &&
          Tcl_GetDoubleFromObj(interp, objv[3], &value) ){
     return TCL_ERROR;
   }
@@ -6675,7 +6675,7 @@ static int SQLITE_TCLAPI vfs_unlink_test(
   /* Unlink the default VFS.  Repeat until there are no more VFSes
   ** registered.
   */
-  for(i=0; i<sizeof(apVfs)/sizeof(apVfs[0]); i++){
+  for(i=0; i<(int)(sizeof(apVfs)/sizeof(apVfs[0])); i++){
     apVfs[i] = sqlite3_vfs_find(0);
     if( apVfs[i] ){
       assert( apVfs[i]==sqlite3_vfs_find(apVfs[i]->zName) );
@@ -6814,6 +6814,7 @@ static int SQLITE_TCLAPI file_control_test(
   }
   if( getDbPointer(interp, Tcl_GetString(objv[1]), &db) ) return TCL_ERROR;
   rc = sqlite3_file_control(db, 0, 0, &iArg);
+  (void)rc;
   assert( rc==SQLITE_NOTFOUND );
   rc = sqlite3_file_control(db, "notadatabase", SQLITE_FCNTL_LOCKSTATE, &iArg);
   assert( rc==SQLITE_ERROR );
@@ -7415,13 +7416,13 @@ static int SQLITE_TCLAPI test_limit(
   }
   if( getDbPointer(interp, Tcl_GetString(objv[1]), &db) ) return TCL_ERROR;
   zId = Tcl_GetString(objv[2]);
-  for(i=0; i<sizeof(aId)/sizeof(aId[0]); i++){
+  for(i=0; i<(int)(sizeof(aId)/sizeof(aId[0])); i++){
     if( strcmp(zId, aId[i].zName)==0 ){
       id = aId[i].id;
       break;
     }
   }
-  if( i>=sizeof(aId)/sizeof(aId[0]) ){
+  if( i>=(int)(sizeof(aId)/sizeof(aId[0])) ){
     Tcl_AppendResult(interp, "unknown limit type: ", zId, (char*)0);
     return TCL_ERROR;
   }
@@ -7448,6 +7449,7 @@ static int SQLITE_TCLAPI save_prng_state(
   assert( rc==0 );
   rc = sqlite3_test_control(-1);
   assert( rc==0 );
+  (void)rc;
   sqlite3_test_control(SQLITE_TESTCTRL_PRNG_SAVE);
   return TCL_OK;
 }
@@ -7992,7 +7994,7 @@ static int SQLITE_TCLAPI strftime_cmd(
   t = (time_t)ts;
   pTm = gmtime(&t);
   n = strftime(zBuf, sizeof(zBuf)-1, zFmt, pTm);
-  if( n>=0 && n<sizeof(zBuf) ){
+  if( n>=0 && n<(int)sizeof(zBuf) ){
     zBuf[n] = 0;
     Tcl_SetResult(interp, zBuf, TCL_VOLATILE);
   }
@@ -8340,7 +8342,7 @@ static int SQLITE_TCLAPI optimization_control(
   if( getDbPointer(interp, Tcl_GetString(objv[1]), &db) ) return TCL_ERROR;
   if( Tcl_GetBooleanFromObj(interp, objv[3], &onoff) ) return TCL_ERROR;
   zOpt = Tcl_GetString(objv[2]);
-  for(i=0; i<sizeof(aOpt)/sizeof(aOpt[0]); i++){
+  for(i=0; i<(int)(sizeof(aOpt)/sizeof(aOpt[0])); i++){
     if( strstr(zOpt, aOpt[i].zOptName)!=0 ){
       mask |= aOpt[i].mask;
       cnt++;
@@ -8350,7 +8352,7 @@ static int SQLITE_TCLAPI optimization_control(
   if( cnt==0 ){
     Tcl_AppendResult(interp, "unknown optimization - should be one of:",
                      (char*)0);
-    for(i=0; i<sizeof(aOpt)/sizeof(aOpt[0]); i++){
+    for(i=0; i<(int)(sizeof(aOpt)/sizeof(aOpt[0])); i++){
       Tcl_AppendResult(interp, " ", aOpt[i].zOptName, (char*)0);
     }
     return TCL_ERROR;
@@ -9355,10 +9357,10 @@ extern int sqlite3WalTrace;
 #endif
 #endif
 
-  for(i=0; i<sizeof(aCmd)/sizeof(aCmd[0]); i++){
+  for(i=0; i<(int)(sizeof(aCmd)/sizeof(aCmd[0])); i++){
     Tcl_CreateCommand(interp, aCmd[i].zName, aCmd[i].xProc, 0, 0);
   }
-  for(i=0; i<sizeof(aObjCmd)/sizeof(aObjCmd[0]); i++){
+  for(i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
     Tcl_CreateObjCommand(interp, aObjCmd[i].zName, 
         aObjCmd[i].xProc, aObjCmd[i].clientData, 0);
   }

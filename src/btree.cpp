@@ -10680,8 +10680,8 @@ static void checkPtrmap(
   Pgno iParent           /* Expected pointer map parent page number */
 ){
   int rc;
-  u8 ePtrmapType;
-  Pgno iPtrmapParent;
+  u8 ePtrmapType = 0;
+  Pgno iPtrmapParent = 0;
 
   rc = ptrmapGet(pCheck->pBt, iChild, &ePtrmapType, &iPtrmapParent);
   if( rc!=SQLITE_OK ){

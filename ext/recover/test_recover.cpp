@@ -195,6 +195,7 @@ static int testRecoverCmd(
       }
       res2 = sqlite3_recover_finish(pTest->p);
       assert( res2==res );
+      (void)res2;
       if( res ) return TCL_ERROR;
       break;
     }
@@ -300,7 +301,7 @@ int TestRecover_Init(Tcl_Interp *interp){
   };
   int i;
 
-  for(i=0; i<sizeof(aCmd)/sizeof(struct Cmd); i++){
+  for(i=0; i<(int)(sizeof(aCmd)/sizeof(struct Cmd)); i++){
     struct Cmd *p = &aCmd[i];
     Tcl_CreateObjCommand(interp, p->zCmd, p->xProc, p->pArg, 0);
   }

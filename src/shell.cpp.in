@@ -2157,7 +2157,8 @@ static void append_c_string(sqlite3_str *out, const char *z){
 */
 static void interrupt_handler(int NotUsed){
   UNUSED_PARAMETER(NotUsed);
-  if( ++seenInterrupt>1 ) cli_exit(1);
+  seenInterrupt = seenInterrupt + 1;
+  if( seenInterrupt>1 ) cli_exit(1);
   if( globalDb ) sqlite3_interrupt(globalDb);
 }
 
@@ -3711,7 +3712,7 @@ static int run_schema_dump_query(
 ** There must be two or more spaces between the end of the command and the
 ** start of the description of what that command does.
 */
-static const char *(azHelp[]) = {
+static const char *azHelp[] = {
 #if defined(SQLITE_HAVE_ZLIB) && !defined(SQLITE_OMIT_VIRTUALTABLE) \
   && !defined(SQLITE_SHELL_FIDDLE)
   ".archive ...             Manage SQL archives",
@@ -7192,8 +7193,8 @@ SELECT count(DISTINCT (substring(name,1,nlen-chop)||suff) COLLATE NOCASE)\
   static const char * const zDedoctor = "\
 UPDATE ColNames SET chop=iif(\
   (substring(name,nlen,1) BETWEEN '0' AND '9')\
-  AND (rtrim(name,'0123456790') glob '*"AUTOCOLUMN_SEP"'),\
- nlen-length(rtrim(name, '"AUTOCOLUMN_SEP"0123456789')),\
+  AND (rtrim(name,'0123456790') glob '*" AUTOCOLUMN_SEP "'),\
+ nlen-length(rtrim(name, '" AUTOCOLUMN_SEP "0123456789')),\
  0\
 )\
 ";
@@ -7220,7 +7221,7 @@ SELECT CASE WHEN (nc < 10) THEN 1 WHEN (nc < 100) THEN 2 \
   static const char * const zRenameRank =
 #ifdef SHELL_COLUMN_RENAME_CLEAN
     "UPDATE ColNames AS t SET suff="
-    "iif(reps>1, printf('%c%0*d', '"AUTOCOLUMN_SEP"', $1, cpos), '')"
+    "iif(reps>1, printf('%c%0*d', '" AUTOCOLUMN_SEP "', $1, cpos), '')"
 #else /* ...RENAME_MINIMAL_ONE_PASS */
 "WITH Lzn(nlz) AS (" /* Find minimum extraneous leading 0's for uniqueness */
 "  SELECT 0 AS nlz"
@@ -7231,13 +7232,13 @@ SELECT CASE WHEN (nc < 10) THEN 1 WHEN (nc < 100) THEN 2 \
 "   FROM ColNames t, ColNames o"
 "   WHERE"
 "    iif(t.name IN (SELECT * FROM RepeatedNames),"
-"     printf('%s"AUTOCOLUMN_SEP"%s',"
+"     printf('%s" AUTOCOLUMN_SEP "%s',"
 "      t.name, substring(printf('%.*c%0.*d',nlz+1,'0',$1,t.cpos),2)),"
 "     t.name"
 "    )"
 "    ="
 "    iif(o.name IN (SELECT * FROM RepeatedNames),"
-"     printf('%s"AUTOCOLUMN_SEP"%s',"
+"     printf('%s" AUTOCOLUMN_SEP "%s',"
 "      o.name, substring(printf('%.*c%0.*d',nlz+1,'0',$1,o.cpos),2)),"
 "     o.name"
 "    )"
@@ -7248,7 +7249,7 @@ SELECT CASE WHEN (nc < 10) THEN 1 WHEN (nc < 100) THEN 2 \
 ") UPDATE Colnames AS t SET"
 " chop = 0," /* No chopping, never touch incoming names. */
 " suff = iif(name IN (SELECT * FROM RepeatedNames),"
-"  printf('"AUTOCOLUMN_SEP"%s', substring("
+"  printf('" AUTOCOLUMN_SEP "%s', substring("
 "   printf('%.*c%0.*d',(SELECT max(nlz) FROM Lzn)+1,'0',1,t.cpos),2)),"
 "  ''"
 " )"

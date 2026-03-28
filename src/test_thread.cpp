@@ -650,7 +650,7 @@ int SqlitetestThread_Init(Tcl_Interp *interp){
   };
   int ii;
 
-  for(ii=0; ii<sizeof(aCmd)/sizeof(aCmd[0]); ii++){
+  for(ii=0; ii<(int)(sizeof(aCmd)/sizeof(aCmd[0])); ii++){
     void *p = SQLITE_INT_TO_PTR(aCmd[ii].iCtx);
     Tcl_CreateObjCommand(interp, aCmd[ii].zName, aCmd[ii].xProc, p, 0);
   }

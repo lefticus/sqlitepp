@@ -2893,7 +2893,7 @@ static int SQLITE_TCLAPI DbObjCmd(
       /* With no arguments, list all configuration options and with the
       ** current value */
       pResult = Tcl_NewListObj(0,0);
-      for(ii=0; ii<sizeof(aDbConfig)/sizeof(aDbConfig[0]); ii++){
+      for(ii=0; ii<(int)(sizeof(aDbConfig)/sizeof(aDbConfig[0])); ii++){
         int v = 0;
         sqlite3_db_config(pDb->db, aDbConfig[ii].op, -1, &v);
         Tcl_ListObjAppendElement(interp, pResult,
@@ -2906,10 +2906,10 @@ static int SQLITE_TCLAPI DbObjCmd(
       int onoff = -1;
       int v = 0;
       if( zOpt[0]=='-' ) zOpt++;
-      for(ii=0; ii<sizeof(aDbConfig)/sizeof(aDbConfig[0]); ii++){
+      for(ii=0; ii<(int)(sizeof(aDbConfig)/sizeof(aDbConfig[0])); ii++){
         if( strcmp(aDbConfig[ii].zName, zOpt)==0 ) break;
       }
-      if( ii>=sizeof(aDbConfig)/sizeof(aDbConfig[0]) ){
+      if( ii>=(int)(sizeof(aDbConfig)/sizeof(aDbConfig[0])) ){
         Tcl_AppendResult(interp, "unknown config option: \"", zOpt,
                                 "\"", (void*)0);
         return TCL_ERROR;

@@ -86,7 +86,7 @@ static void sqlarUncompressFunc(
   assert( argc==2 );
   sz = sqlite3_value_int64(argv[1]);
 
-  if( sz<=0 || sz==(nData = sqlite3_value_bytes(argv[0])) ){
+  if( sz<=0 || sz==(sqlite3_int64)(nData = sqlite3_value_bytes(argv[0])) ){
     sqlite3_result_value(context, argv[0]);
   }else{
     uLongf szf = sz;

@@ -251,7 +251,7 @@ static void pointerToText(void *p, char *z){
   }else{
     assert( 0 );
   }
-  for(i=0, k=sizeof(p)*2-1; i<sizeof(p)*2; i++, k--){
+  for(i=0, k=sizeof(p)*2-1; i<(int)sizeof(p)*2; i++, k--){
     z[k] = zHex[n&0xf];
     n >>= 4;
   }
@@ -270,7 +270,7 @@ static int textToPointer(const char *z, void **pp){
   sqlite3_uint64 n = 0;
   int i;
   unsigned int u;
-  for(i=0; i<sizeof(void*)*2 && z[0]; i++){
+  for(i=0; i<(int)sizeof(void*)*2 && z[0]; i++){
     int v;
     v = hexToInt(*z++);
     if( v<0 ) return TCL_ERROR;
@@ -407,7 +407,7 @@ static int SQLITE_TCLAPI test_memset(
     return TCL_ERROR;
   }
   zHex = Tcl_GetStringFromObj(objv[3], &n);
-  if( n>sizeof(zBin)*2 ) n = sizeof(zBin)*2;
+  if( n>(int)sizeof(zBin)*2 ) n = sizeof(zBin)*2;
   n = sqlite3TestHexToBin((const unsigned char*)zHex, (int)n, (unsigned char*)zBin);
   if( n==0 ){
     Tcl_AppendResult(interp, "no data", (char*)0);
@@ -453,7 +453,7 @@ static int SQLITE_TCLAPI test_memget(
   }
   zBin = (char*)p;
   while( size>0 ){
-    if( size>(sizeof(zHex)-1)/2 ){
+    if( size>(int)(sizeof(zHex)-1)/2 ){
       n = (sizeof(zHex)-1)/2;
     }else{
       n = size;
@@ -1042,7 +1042,7 @@ static int SQLITE_TCLAPI test_db_config_lookaside(
   if( Tcl_GetIntFromObj(interp, objv[4], &cnt) ) return TCL_ERROR;
   if( bufid==0 ){
     rc = sqlite3_db_config(db, SQLITE_DBCONFIG_LOOKASIDE, (void*)0, sz, cnt);
-  }else if( bufid>=1 && bufid<=2 && sz*cnt<=sizeof(azBuf[0]) ){
+  }else if( bufid>=1 && bufid<=2 && sz*cnt<=(int)sizeof(azBuf[0]) ){
     rc = sqlite3_db_config(db, SQLITE_DBCONFIG_LOOKASIDE, azBuf[bufid], sz,cnt);
   }else{
     Tcl_AppendResult(interp, "illegal arguments - see documentation", (char*)0);
@@ -1504,7 +1504,7 @@ int Sqlitetest_malloc_Init(Tcl_Interp *interp){
      { "sqlite3_memdebug_vfs_oom_test", test_vfs_oom_test          ,0 },
   };
   int i;
-  for(i=0; i<sizeof(aObjCmd)/sizeof(aObjCmd[0]); i++){
+  for(i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
     ClientData c = (ClientData)SQLITE_INT_TO_PTR(aObjCmd[i].clientData);
     Tcl_CreateObjCommand(interp, aObjCmd[i].zName, aObjCmd[i].xProc, c, 0);
   }

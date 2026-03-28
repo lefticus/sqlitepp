@@ -493,7 +493,7 @@ int Sqlitetest_mutex_Init(Tcl_Interp *interp){
     { "clear_mutex_counters",    (Tcl_ObjCmdProc*)test_clear_mutex_counters },
   };
   int i;
-  for(i=0; i<sizeof(aCmd)/sizeof(aCmd[0]); i++){
+  for(i=0; i<(int)(sizeof(aCmd)/sizeof(aCmd[0])); i++){
     Tcl_CreateObjCommand(interp, aCmd[i].zName, aCmd[i].xProc, 0, 0);
   }
 

@@ -129,7 +129,7 @@ SQLITE_API int sqlite3_delete_database(
 
   /* Delete both the regular and 8.3 filenames versions of the database,
   ** journal, wal and shm files.  */
-  for(i=0; rc==0 && i<sizeof(azFmt)/sizeof(azFmt[0]); i++){
+  for(i=0; rc==0 && i<(int)(sizeof(azFmt)/sizeof(azFmt[0])); i++){
     sqlite3_snprintf(nBuf, zBuf, azFmt[i], zFile);
     rc = sqlite3DeleteUnlinkIfExists(pVfs, zBuf, 0);
     if( rc==0 && i!=0 ){
@@ -139,7 +139,7 @@ SQLITE_API int sqlite3_delete_database(
   }
 
   /* Delete any multiplexor files */
-  for(i=0; rc==0 && i<sizeof(aMFile)/sizeof(aMFile[0]); i++){
+  for(i=0; rc==0 && i<(int)(sizeof(aMFile)/sizeof(aMFile[0])); i++){
     struct MFile *p = &aMFile[i];
     int iChunk;
     for(iChunk=1; iChunk<=MX_CHUNK_NUMBER; iChunk++){

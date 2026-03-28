@@ -468,7 +468,7 @@ int Sqlitetest_hexio_Init(Tcl_Interp *interp){
      { "make_fts3record",              make_fts3record       },
   };
   int i;
-  for(i=0; i<sizeof(aObjCmd)/sizeof(aObjCmd[0]); i++){
+  for(i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
     Tcl_CreateObjCommand(interp, aObjCmd[i].zName, aObjCmd[i].xProc, 0, 0);
   }
   return TCL_OK;

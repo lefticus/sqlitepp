@@ -72,7 +72,7 @@ static int f5tResultToErrorCode(const char *zRes){
   };
   int i;
 
-  for(i=0; i<sizeof(aErr)/sizeof(aErr[0]); i++){
+  for(i=0; i<(int)(sizeof(aErr)/sizeof(aErr[0])); i++){
     if( 0==sqlite3_stricmp(zRes, aErr[i].zError) ){
       return aErr[i].rc;
     }
@@ -1724,7 +1724,7 @@ int Fts5tcl_Init(Tcl_Interp *interp){
   pContext = (F5tTokenizerContext*)ckalloc(sizeof(F5tTokenizerContext));
   memset(pContext, 0, sizeof(*pContext));
 
-  for(i=0; i<sizeof(aCmd)/sizeof(aCmd[0]); i++){
+  for(i=0; i<(int)(sizeof(aCmd)/sizeof(aCmd[0])); i++){
     struct Cmd *p = &aCmd[i];
     void *pCtx = 0;
     if( p->bTokenizeCtx ) pCtx = (void*)pContext;

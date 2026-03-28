@@ -556,10 +556,10 @@ static int tvfsFileControl(sqlite3_file *pFile, int op, void *pArg){
       { SQLITE_FCNTL_ZIPVFS, "ZIPVFS" },
     };
     int i;
-    for(i=0; i<sizeof(aF)/sizeof(aF[0]); i++){
+    for(i=0; i<(int)(sizeof(aF)/sizeof(aF[0])); i++){
       if( op==aF[i].iFnctl ) break;
     }
-    if( i<sizeof(aF)/sizeof(aF[0]) ){
+    if( i<(int)(sizeof(aF)/sizeof(aF[0])) ){
       int rc = 0;
       tvfsExecTcl(p, "xFileControl", 
           Tcl_NewStringObj(pFd->zFilename, -1), 
@@ -1363,7 +1363,7 @@ static int SQLITE_TCLAPI testvfs_obj_cmd(
       }
 
       pRet = Tcl_NewObj();
-      for(iFlag=0; iFlag<sizeof(aFlag)/sizeof(aFlag[0]); iFlag++){
+      for(iFlag=0; iFlag<(int)(sizeof(aFlag)/sizeof(aFlag[0])); iFlag++){
         if( p->iDevchar & aFlag[iFlag].iValue ){
           Tcl_ListObjAppendElement(
               interp, pRet, Tcl_NewStringObj(aFlag[iFlag].zName, -1)
@@ -1534,7 +1534,7 @@ static int SQLITE_TCLAPI testvfs_cmd(
     }
   }
 
-  if( szOsFile<sizeof(TestvfsFile) ){
+  if( szOsFile<(int)sizeof(TestvfsFile) ){
     szOsFile = sizeof(TestvfsFile);
   }
 

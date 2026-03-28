@@ -168,6 +168,7 @@ static sqlite3_pcache *testpcacheCreate(
 */
 static void testpcacheCachesize(sqlite3_pcache *pCache, int newSize){
   testpcache *p = (testpcache*)pCache;
+  (void)p;
   assert( p->iMagic==TESTPCACHE_VALID );
   assert( testpcacheGlobal.pDummy!=0 );
   assert( testpcacheGlobal.nInstance>0 );

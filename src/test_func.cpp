@@ -54,17 +54,17 @@ static void randStr(sqlite3_context *context, int argc, sqlite3_value **argv){
 
   iMin = sqlite3_value_int(argv[0]);
   if( iMin<0 ) iMin = 0;
-  if( iMin>=sizeof(zBuf) ) iMin = sizeof(zBuf)-1;
+  if( iMin>=(int)sizeof(zBuf) ) iMin = sizeof(zBuf)-1;
   iMax = sqlite3_value_int(argv[1]);
   if( iMax<iMin ) iMax = iMin;
-  if( iMax>=sizeof(zBuf) ) iMax = sizeof(zBuf)-1;
+  if( iMax>=(int)sizeof(zBuf) ) iMax = sizeof(zBuf)-1;
   n = iMin;
   if( iMax>iMin ){
     sqlite3_randomness(sizeof(r), &r);
     r &= 0x7fffffff;
     n += r%(iMax + 1 - iMin);
   }
-  assert( n<sizeof(zBuf) );
+  assert( n<(int)sizeof(zBuf) );
   sqlite3_randomness(n, zBuf);
   for(i=0; i<n; i++){
     zBuf[i] = zSrc[zBuf[i]%(sizeof(zSrc)-1)];
@@ -696,7 +696,7 @@ static int registerTestFunctions(
   };
   int i;
 
-  for(i=0; i<sizeof(aFuncs)/sizeof(aFuncs[0]); i++){
+  for(i=0; i<(int)(sizeof(aFuncs)/sizeof(aFuncs[0])); i++){
     sqlite3_create_function(db, aFuncs[i].zName, aFuncs[i].nArg,
         aFuncs[i].eTextRep, 0, aFuncs[i].xFunc, 0, 0);
   }
@@ -941,7 +941,7 @@ int Sqlitetest_func_Init(Tcl_Interp *interp){
   int i;
   extern int Md5_Register(sqlite3 *, char **, const sqlite3_api_routines *);
 
-  for(i=0; i<sizeof(aObjCmd)/sizeof(aObjCmd[0]); i++){
+  for(i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
     Tcl_CreateObjCommand(interp, aObjCmd[i].zName, aObjCmd[i].xProc, 0, 0);
   }
   sqlite3_initialize();

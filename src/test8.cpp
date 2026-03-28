@@ -937,7 +937,7 @@ static int echoBestIndex(sqlite3_vtab *tab, sqlite3_index_info *pIdxInfo){
     pIdxInfo->estimatedCost = cost;
   }else if( useIdx ){
     /* Approximation of log2(nRow). */
-    for( ii=0; ii<(sizeof(int)*8)-1; ii++ ){
+    for( ii=0; ii<(int)(sizeof(int)*8)-1; ii++ ){
       if( nRow & (1<<ii) ){
         pIdxInfo->estimatedCost = (double)ii;
       }
@@ -1444,7 +1444,7 @@ int Sqlitetest8_Init(Tcl_Interp *interp){
      { "sqlite3_declare_vtab",       declare_vtab, 0 },
   };
   int i;
-  for(i=0; i<sizeof(aObjCmd)/sizeof(aObjCmd[0]); i++){
+  for(i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
     Tcl_CreateObjCommand(interp, aObjCmd[i].zName, 
         aObjCmd[i].xProc, aObjCmd[i].clientData, 0);
   }

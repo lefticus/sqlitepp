@@ -143,7 +143,7 @@ puts $out [subst {*/
 #define SQLITE_AMALGAMATION 1}]
 if {$addstatic} {
   puts $out "#ifndef SQLITE_PRIVATE"
-  puts $out "# define SQLITE_PRIVATE extern"
+  puts $out "# define SQLITE_PRIVATE"
   puts $out "#endif"
 }
 
@@ -330,7 +330,9 @@ proc copy_file {filename} {
           regsub {^SQLITE_API } $line {} line
           if {![regexp {^sqlite3_} $varname]
               && ![regexp {^sqlite3Show[A-Z]} $varname]} {
-            regsub {^extern } $line {} line
+            if {![regexp {const} $line]} {
+              regsub {^extern } $line {} line
+            }
             puts $out "SQLITE_PRIVATE $line"
           } else {
             if {[regexp {const char sqlite3_version\[\];} $line]} {
