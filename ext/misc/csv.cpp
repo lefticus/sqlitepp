@@ -570,7 +570,7 @@ static int csvtabConnect(
   memset(pNew, 0, sizeof(*pNew));
   if( CSV_SCHEMA==0 ){
     sqlite3_str *pStr = sqlite3_str_new(0);
-    char *zSep = "";
+    const char *zSep = "";
     int iCol = 0;
     sqlite3_str_appendf(pStr, "CREATE TABLE x(");
     if( nCol<0 && bHeader<1 ){

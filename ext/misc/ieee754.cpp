@@ -332,7 +332,7 @@ int sqlite3_ieee_init(
   const sqlite3_api_routines *pApi
 ){
   static const struct {
-    char *zFName;
+    const char *zFName;
     int nArg;
     int iAux;
     void (*xFunc)(sqlite3_context*,int,sqlite3_value**);

@@ -882,14 +882,15 @@ static char *fts3QuoteId(char const *zInput){
 static char *fts3ReadExprList(Fts3Table *p, const char *zFunc, int *pRc){
   char *zRet = 0;
   char *zFree = 0;
-  char *zFunction;
+  const char *zFunction;
   int i;
 
   if( p->zContentTbl==0 ){
     if( !zFunc ){
       zFunction = "";
     }else{
-      zFree = zFunction = fts3QuoteId(zFunc);
+      zFree = fts3QuoteId(zFunc);
+      zFunction = zFree;
     }
     fts3Appendf(pRc, &zRet, "docid");
     for(i=0; i<p->nColumn; i++){
@@ -939,13 +940,14 @@ static char *fts3ReadExprList(Fts3Table *p, const char *zFunc, int *pRc){
 static char *fts3WriteExprList(Fts3Table *p, const char *zFunc, int *pRc){
   char *zRet = 0;
   char *zFree = 0;
-  char *zFunction;
+  const char *zFunction;
   int i;
 
   if( !zFunc ){
     zFunction = "";
   }else{
-    zFree = zFunction = fts3QuoteId(zFunc);
+    zFree = fts3QuoteId(zFunc);
+    zFunction = zFree;
   }
   fts3Appendf(pRc, &zRet, "?");
   for(i=0; i<p->nColumn; i++){
@@ -1716,10 +1718,12 @@ static int fts3BestIndexMethod(sqlite3_vtab *pVTab, sqlite3_index_info *pInfo){
   if( pInfo->nOrderBy==1 ){
     struct sqlite3_index_orderby *pOrder = &pInfo->aOrderBy[0];
     if( pOrder->iColumn<0 || pOrder->iColumn==p->nColumn+1 ){
+      static char zDesc[] = "DESC";
+      static char zAsc[] = "ASC";
       if( pOrder->desc ){
-        pInfo->idxStr = "DESC";
+        pInfo->idxStr = zDesc;
       }else{
-        pInfo->idxStr = "ASC";
+        pInfo->idxStr = zAsc;
       }
       pInfo->orderByConsumed = 1;
     }

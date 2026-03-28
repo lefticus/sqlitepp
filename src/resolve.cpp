@@ -771,8 +771,9 @@ static int lookupName(
           pExpr->pRight = 0;
         }
         extendFJMatch(pParse, &pFJMatch, pMatch, pExpr->iColumn);
+        static char zCoalesce[] = "coalesce";
         pExpr->op = TK_FUNCTION;
-        pExpr->u.zToken = "coalesce";
+        pExpr->u.zToken = zCoalesce;
         pExpr->x.pList = pFJMatch;
         cnt = 1;
         goto lookupname_end;

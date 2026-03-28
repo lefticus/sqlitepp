@@ -101,14 +101,14 @@ int sqlite3Strlen30(const char *z){
 ** The column type is an extra string stored after the zero-terminator on
 ** the column name if and only if the COLFLAG_HASTYPE flag is set.
 */
-char *sqlite3ColumnType(Column *pCol, char *zDflt){
+char *sqlite3ColumnType(Column *pCol, const char *zDflt){
   if( pCol->colFlags & COLFLAG_HASTYPE ){
     return pCol->zCnName + strlen(pCol->zCnName) + 1;
   }else if( pCol->eCType ){
     assert( pCol->eCType<=SQLITE_N_STDTYPE );
     return (char*)sqlite3StdType[pCol->eCType-1];
   }else{
-    return zDflt;
+    return (char*)zDflt;
   }
 }
 
@@ -1324,10 +1324,11 @@ void sqlite3FpDecode(FpDecode *p, double r, int iRound, int mxRound){
     p->sign = '-';
     r = -r;
   }else if( r==0.0 ){
+    static char zZero[] = "0";
     p->sign = '+';
     p->n = 1;
     p->iDP = 1;
-    p->z = "0";
+    p->z = zZero;
     return;
   }else{
     p->sign = '+';

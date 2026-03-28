@@ -1115,7 +1115,8 @@ static SQLITE_NOINLINE void constructAutomaticIndex(
                                     0, &zNotUsed);
   if( pIdx==0 ) goto end_auto_index_create;
   pLoop->u.btree.pIndex = pIdx;
-  pIdx->zName = "auto-index";
+  static char zAutoIndex[] = "auto-index";
+  pIdx->zName = zAutoIndex;
   pIdx->pTable = pTable;
   n = 0;
   idxCols = 0;

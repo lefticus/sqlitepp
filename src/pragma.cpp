@@ -287,7 +287,7 @@ static const char *actionName(u8 action){
 ** journal-mode name.
 */
 const char *sqlite3JournalModename(int eMode){
-  static char * const azModeName[] = {
+  static const char * const azModeName[] = {
     "delete", "persist", "off", "truncate", "memory"
 #ifndef SQLITE_OMIT_WAL
      , "wal"
@@ -2208,8 +2208,9 @@ void sqlite3Pragma(
       aOp = sqlite3VdbeAddOpList(v, ArraySize(endCode), endCode, iLn);
       if( aOp ){
         aOp[0].p2 = 1-mxErr;
+        static char zOk[] = "ok";
         aOp[2].p4type = P4_STATIC;
-        aOp[2].p4.z = "ok";
+        aOp[2].p4.z = zOk;
         aOp[5].p4type = P4_STATIC;
         aOp[5].p4.z = (char*)sqlite3ErrStr(SQLITE_CORRUPT);
       }
@@ -2244,7 +2245,7 @@ void sqlite3Pragma(
   */
   case PragTyp_ENCODING: {
     static const struct EncName {
-      char *zName;
+      const char *zName;
       u8 enc;
     } encnames[] = {
       { "UTF8",     SQLITE_UTF8        },

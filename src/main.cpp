@@ -3216,7 +3216,7 @@ int sqlite3ParseUri(
           const char *z;
           int mode;
         } *aMode = 0;
-        char *zModeType = 0;
+        const char *zModeType = 0;
         int mask = 0;
         int limit = 0;
 
@@ -3597,9 +3597,11 @@ static int openDatabase(
   /* The default safety_level for the main database is FULL; for the temp
   ** database it is OFF. This matches the pager layer defaults. 
   */
-  db->aDb[0].zDbSName = "main";
+  static char zMainDbName[] = "main";
+  static char zTempDbName[] = "temp";
+  db->aDb[0].zDbSName = zMainDbName;
   db->aDb[0].safety_level = SQLITE_DEFAULT_SYNCHRONOUS+1;
-  db->aDb[1].zDbSName = "temp";
+  db->aDb[1].zDbSName = zTempDbName;
   db->aDb[1].safety_level = PAGER_SYNCHRONOUS_OFF;
 
   db->eOpenState = SQLITE_STATE_OPEN;

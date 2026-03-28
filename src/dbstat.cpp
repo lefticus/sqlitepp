@@ -129,7 +129,7 @@ struct StatCursor {
   u32 iPageno;                    /* Value of 'pageno' column */
   char *zName;                    /* Value of 'name' column */
   char *zPath;                    /* Value of 'path' column */
-  char *zPagetype;                /* Value of 'pagetype' column */
+  const char *zPagetype;          /* Value of 'pagetype' column */
   int nPage;                      /* Number of pages in current btree */
   int nCell;                      /* Value of 'ncell' column */
   int nMxPayload;                 /* Value of 'mx_payload' column */

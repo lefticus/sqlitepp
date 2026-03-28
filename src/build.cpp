@@ -2112,7 +2112,7 @@ static char *createTableStmt(sqlite3 *db, Table *p){
   int i, k, len;
   i64 n;
   char *zStmt;
-  char *zSep, *zSep2, *zEnd;
+  const char *zSep, *zSep2, *zEnd;
   Column *pCol;
   n = 0;
   for(pCol = p->aCol, i=0; i<p->nCol; i++, pCol++){
@@ -2795,8 +2795,8 @@ void sqlite3EndTable(
   if( !db->init.busy ){
     int n;
     Vdbe *v;
-    char *zType;    /* "view" or "table" */
-    char *zType2;   /* "VIEW" or "TABLE" */
+    const char *zType;    /* "view" or "table" */
+    const char *zType2;   /* "VIEW" or "TABLE" */
     char *zStmt;    /* Text of the CREATE TABLE or CREATE VIEW statement */
 
     v = sqlite3GetVdbe(pParse);

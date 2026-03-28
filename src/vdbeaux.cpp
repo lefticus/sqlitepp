@@ -1903,7 +1903,7 @@ static void displayP4Expr(StrAccum *p, Expr *pExpr){
 ** Use zTemp for any required temporary buffer space.
 */
 char *sqlite3VdbeDisplayP4(sqlite3 *db, Op *pOp){
-  char *zP4 = 0;
+  const char *zP4 = 0;
   StrAccum x;
 
   sqlite3StrAccumInit(&x, 0, 0, 0, SQLITE_MAX_LENGTH);

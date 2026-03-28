@@ -548,8 +548,8 @@ static int vfstraceFileControl(sqlite3_file *pFile, int op, void *pArg){
   int rc;
   char zBuf[100];
   char zBuf2[100];
-  char *zOp;
-  char *zRVal = 0;
+  const char *zOp;
+  const char *zRVal = 0;
   vfstraceOnOff(pInfo, VTR_FCTRL);
   switch( op ){
     case SQLITE_FCNTL_LOCKSTATE:           zOp = "LOCKSTATE";           break;

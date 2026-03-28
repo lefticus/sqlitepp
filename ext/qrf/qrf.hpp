@@ -45,10 +45,10 @@ struct sqlite3_qrf_spec {
   int nAlign;                 /* Number of entries in aAlignment[] */
   short int *aWidth;          /* Column widths */
   unsigned char *aAlign;      /* Column alignments */
-  char *zColumnSep;           /* Alternative column separator */
-  char *zRowSep;              /* Alternative row separator */
-  char *zTableName;           /* Output table name */
-  char *zNull;                /* Rendering of NULL */
+  const char *zColumnSep;     /* Alternative column separator */
+  const char *zRowSep;        /* Alternative row separator */
+  const char *zTableName;     /* Output table name */
+  const char *zNull;          /* Rendering of NULL */
   char *(*xRender)(void*,sqlite3_value*);           /* Render a value */
   int (*xWrite)(void*,const char*,sqlite3_int64);   /* Write output */
   void *pRenderArg;           /* First argument to the xRender callback */

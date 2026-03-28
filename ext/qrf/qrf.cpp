@@ -1475,7 +1475,7 @@ static void qrfAppendWithTabs(
 ** that it can be more easily passed into subroutines.
 */
 struct qrfPerCol {         /* Per-column data */
-  char *z;                 /* Cache of text for current row */
+  const char *z;           /* Cache of text for current row */
   int w;                   /* Computed width of this column */
   int mxW;                 /* Maximum natural (unwrapped) width */
   unsigned char e;         /* Alignment */

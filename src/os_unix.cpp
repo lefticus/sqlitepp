@@ -1387,7 +1387,7 @@ static int unixLogErrorAtLine(
   const char *zPath,              /* File path associated with error */
   int iLine                       /* Source line number where error occurred */
 ){
-  char *zErr;                     /* Message from strerror() or equivalent */
+  const char *zErr;               /* Message from strerror() or equivalent */
   int iErrno = errno;             /* Saved syscall error number */
 
   /* If this is not a threadsafe build (SQLITE_THREADSAFE==0), then use

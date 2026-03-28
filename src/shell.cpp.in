@@ -859,7 +859,7 @@ static struct DynaPrompt {
   char dynamicPrompt[PROMPT_LEN_MAX];
   char acAwait[2];
   int inParenLevel;
-  char *zScannerAwaits;
+  const char *zScannerAwaits;
 } dynPrompt = { {0}, {0}, 0, 0 };
 
 /* Record parenthesis nesting level change, or force level to 0. */
@@ -870,7 +870,7 @@ static void trackParenLevel(struct DynaPrompt *p, int ni){
 }
 
 /* Record that a lexeme is opened, or closed with args==0. */
-static void setLexemeOpen(struct DynaPrompt *p, char *s, char c){
+static void setLexemeOpen(struct DynaPrompt *p, const char *s, char c){
   if( s!=0 || c==0 ){
     p->zScannerAwaits = s;
     p->acAwait[0] = 0;
@@ -1098,7 +1098,7 @@ static int hexDigitValue(char c){
 */
 static sqlite3_int64 integerValue(const char *zArg){
   sqlite3_uint64 v = 0;
-  static const struct { char *zSuffix; unsigned int iMult; } aMult[] = {
+  static const struct { const char *zSuffix; unsigned int iMult; } aMult[] = {
     { "KiB", 1024 },
     { "MiB", 1024*1024 },
     { "GiB", 1024*1024*1024 },
@@ -1246,7 +1246,7 @@ static char *shellFakeSchema(
   char *zSql;
   ShellText s;
   char cQuote;
-  char *zDiv = "(";
+  const char *zDiv = "(";
   int nRow = 0;
 
   zSql = sqlite3_mprintf("PRAGMA \"%w\".table_info=%Q;",
@@ -1578,10 +1578,10 @@ static void modeFree(Mode *p){
   u8 autoExplain = p->autoExplain;
   free(p->spec.aWidth);
   free(p->spec.aAlign);
-  free(p->spec.zColumnSep);
-  free(p->spec.zRowSep);
-  free(p->spec.zTableName);
-  free(p->spec.zNull);
+  free((char*)p->spec.zColumnSep);
+  free((char*)p->spec.zRowSep);
+  free((char*)p->spec.zTableName);
+  free((char*)p->spec.zNull);
   memset(p, 0, sizeof(*p));
   p->spec.iVersion = 1;
   p->autoExplain = autoExplain;
@@ -1629,15 +1629,15 @@ static void modeDup(Mode *pDest, Mode *pSrc){
 ** Set a string value to a copy of the zNew string in memory
 ** obtained from system malloc().
 */
-static void modeSetStr(char **az, const char *zNew){
-  free(*az);
+static void modeSetStr(const char **az, const char *zNew){
+  free((char*)*az);
   if( zNew==0 ){
     *az = 0;
   }else{
     size_t n = strlen(zNew);
-    *az = (char*)malloc( n+1 );
+    *az = (const char*)malloc( n+1 );
     if( *az ){
-      memcpy(*az, zNew, n+1 );
+      memcpy((char*)*az, zNew, n+1 );
     }
   }
 }
@@ -2762,8 +2762,8 @@ static void displayLinuxIoStats(FILE *out){
 */
 static void displayStatLine(
   FILE *out,                /* Write to this channel */
-  char *zLabel,             /* Label for this one line */
-  char *zFormat,            /* Format for the result */
+  const char *zLabel,       /* Label for this one line */
+  const char *zFormat,      /* Format for the result */
   int iStatusCtrl,          /* Which status to display */
   int bReset                /* True to reset the stats */
 ){
@@ -3488,7 +3488,7 @@ static char **tableColumnList(ShellState *p, const char *zTab){
   if( preserveRowid ){
     /* Only preserve the rowid if we can find a name to use for the
     ** rowid */
-    static char *azRowid[] = { "rowid", "_rowid_", "oid" };
+    static const char *azRowid[] = { "rowid", "_rowid_", "oid" };
     int i, j;
     for(j=0; j<3; j++){
       for(i=1; i<=nCol; i++){
@@ -3643,7 +3643,7 @@ static int dump_callback(void *pArg, int nArg, char **azArg, char **azNotUsed){
 
 
     savedMode = p->mode;
-    p->mode.spec.zTableName = (char*)zTable;
+    p->mode.spec.zTableName = zTable;
     p->mode.eMode = MODE_Insert;
     p->mode.spec.eText = QRF_TEXT_Sql;
     p->mode.spec.eBlob = QRF_BLOB_Sql;
@@ -7786,7 +7786,7 @@ static int dotCmdImport(ShellState *p){
   do{
     int startLine = sCtx.nLine;
     for(i=0; i<nCol; i++){
-      char *z = xRead(&sCtx);
+      const char *z = xRead(&sCtx);
       /*
       ** Did we reach end-of-file before finding any columns?
       ** If so, stop instead of NULL filling the remaining columns.
@@ -8745,7 +8745,7 @@ static int dotCmdCheck(ShellState *p){
   char **azArg = p->dot.azArg;       /* Text of the arguments */
   int i;                             /* Loop counter */
   int k;                             /* Result of pickStr() */
-  char *zTest;                       /* Textcase result */
+  const char *zTest;                 /* Textcase result */
   int bKeep = 0;                     /* --keep option */
   char *zCheck = 0;                  /* PATTERN argument */
   char *zPattern = 0;                /* Actual test pattern */
@@ -11075,8 +11075,8 @@ static int do_meta_command(const char *zLine, ShellState *p){
     int iSize = 224;         /* Hash algorithm to use */
     int bDebug = 0;          /* Only show the query that would have run */
     sqlite3_stmt *pStmt;     /* For querying tables names */
-    char *zSql;              /* SQL to be run */
-    char *zSep;              /* Separator */
+    const char *zSql;        /* SQL to be run */
+    const char *zSep;        /* Separator */
     ShellText sSql;          /* Complete SQL for the query to run the hash */
     ShellText sQuery;        /* Set of queries used to read all content */
     open_db(p, 0);
@@ -11183,12 +11183,13 @@ static int do_meta_command(const char *zLine, ShellState *p){
 #if !defined(SQLITE_OMIT_SCHEMA_PRAGMAS) && !defined(SQLITE_OMIT_VIRTUALTABLE)
     {
       int lrc;
-      char *zRevText = /* Query for reversible to-blob-to-text check */
+      static const char zRevTmpl[] = /* Query template */
         "SELECT lower(name) as tname FROM sqlite_schema\n"
         "WHERE type='table' AND coalesce(rootpage,0)>1\n"
         "AND name NOT LIKE 'sqlite__%%' ESCAPE '_'%s\n"
         "ORDER BY 1 collate nocase";
-      zRevText = sqlite3_mprintf(zRevText, zLike? " AND name LIKE $tspec" : "");
+      char *zRevText;
+      zRevText = sqlite3_mprintf(zRevTmpl, zLike? " AND name LIKE $tspec" : "");
       zRevText = sqlite3_mprintf(
           /* lower-case query is first run, producing upper-case query. */
           "with tabcols as materialized(\n"

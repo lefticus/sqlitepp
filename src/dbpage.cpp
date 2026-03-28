@@ -346,7 +346,7 @@ static int dbpageUpdate(
   Pgno pgno;
   DbPage *pDbPage = 0;
   int rc = SQLITE_OK;
-  char *zErr = 0;
+  const char *zErr = 0;
   int iDb;
   Btree *pBt;
   Pager *pPager;

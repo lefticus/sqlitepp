@@ -1623,7 +1623,7 @@ KeyInfo *sqlite3KeyInfoFromExprList(
 ** Name of the connection operator, used for error messages.
 */
 const char *sqlite3SelectOpName(int id){
-  char *z;
+  const char *z;
   switch( id ){
     case TK_ALL:       z = "UNION ALL";   break;
     case TK_INTERSECT: z = "INTERSECT";   break;
@@ -2175,7 +2175,7 @@ void sqlite3GenerateColumnNames(
       char *zName = pEList->a[i].zEName;
       sqlite3VdbeSetColName(v, i, COLNAME_NAME, zName, SQLITE_TRANSIENT);
     }else if( srcName && p->op==TK_COLUMN ){
-      char *zCol;
+      const char *zCol;
       int iCol = p->iColumn;
       pTab = p->y.pTab;
       assert( pTab!=0 );

@@ -421,7 +421,7 @@ static int getNextNode(
   int *pnConsumed                         /* OUT: Number of bytes consumed */
 ){
   static const struct Fts3Keyword {
-    char *z;                              /* Keyword text */
+    const char *z;                        /* Keyword text */
     unsigned char n;                      /* Length of the keyword */
     unsigned char parenOnly;              /* Only valid in paren mode */
     unsigned char eType;                  /* Keyword code */

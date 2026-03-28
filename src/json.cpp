@@ -1116,8 +1116,8 @@ static const struct NanInfName {
   char n;
   char eType;
   char nRepl;
-  char *zMatch;
-  char *zRepl;
+  const char *zMatch;
+  const char *zRepl;
 } aNanInfName[] = {
   { 'i', 'I', 3, JSONB_FLOAT, 7, "inf", "9.0e999" },
   { 'i', 'I', 8, JSONB_FLOAT, 7, "infinity", "9.0e999" },

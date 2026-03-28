@@ -98,7 +98,7 @@ SQLITE_EXTENSION_INIT1;
 #  define setmode(fd,m)
 # endif
 
-static char *zHelp =
+static const char *zHelp =
   "Usage: base85 <dirFlag> <binFile>\n"
   " <dirFlag> is either -r to read or -w to write <binFile>,\n"
   "   content to be converted to/from base85 on stdout/stdin.\n"
@@ -157,7 +157,7 @@ static char base85Numeral( u8 b ){
   ((char)(((dn) < 4)? (char)((dn) + '#') : (char)((dn) - 4 + '*')))
 #endif
 
-static char *putcs(char *pc, char *s){
+static char *putcs(char *pc, const char *s){
   char c;
   while( (c = *s++)!=0 ) *pc++ = c;
   return pc;
@@ -167,7 +167,7 @@ static char *putcs(char *pc, char *s){
 ** to be appended to encoded groups to limit their length to B85_DARK_MAX
 ** or to terminate the last group (to aid concatenation.)
 */
-static char* toBase85( u8 *pIn, int nbIn, char *pOut, char *pSep ){
+static char* toBase85( u8 *pIn, int nbIn, char *pOut, const char *pSep ){
   int nCol = 0;
   while( nbIn >= 4 ){
     int nco = 5;

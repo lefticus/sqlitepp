@@ -4558,8 +4558,9 @@ case OP_OpenEphemeral: {     /* ncycle */
     assert( pOp->p2==0 ); /* Only used when number of columns is zero */
     assert( pOp->opcode==OP_OpenEphemeral );
     assert( aMem[pOp->p3].flags & MEM_Null );
+    static char zEmpty[] = "";
     aMem[pOp->p3].n = 0;
-    aMem[pOp->p3].z = "";
+    aMem[pOp->p3].z = zEmpty;
   }
   pCx = p->apCsr[pOp->p1];
   if( pCx && !pCx->noReuse &&  ALWAYS(pOp->p2<=pCx->nField) ){
