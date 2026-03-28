@@ -1,19 +1,19 @@
 #!/usr/bin/tcl
 #
-# This script makes modifications to the vdbe.c source file which reduce
+# This script makes modifications to the vdbe.cpp source file which reduce
 # the amount of stack space required by the sqlite3VdbeExec() routine.
 #
-# The modifications performed by this script are optional.  The vdbe.c
+# The modifications performed by this script are optional.  The vdbe.cpp
 # source file will compile correctly with and without the modifications
-# performed by this script.  And all routines within vdbe.c will compute
+# performed by this script.  And all routines within vdbe.cpp will compute
 # the same result.  The modifications made by this script merely help
 # the C compiler to generate code for sqlite3VdbeExec() that uses less
 # stack space.
 #
 # Script usage:
 #
-#          mv vdbe.c vdbe.c.template
-#          tclsh vdbe-compress.tcl $CFLAGS <vdbe.c.template >vdbe.c
+#          mv vdbe.cpp vdbe.cpp.template
+#          tclsh vdbe-compress.tcl $CFLAGS <vdbe.cpp.template >vdbe.cpp
 #
 # Modifications made:
 #

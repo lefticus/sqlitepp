@@ -79,7 +79,7 @@ if {![clang_sanitize_address]} {
   if {$rc} {
     do_re_test 1.1.3 { 
       lindex $::log 0 
-    } {^os_unix.c:\d+: \(\d+\) (open|getcwd)\(.*test.db\) - }
+    } {^os_unix.cpp:\d+: \(\d+\) (open|getcwd)\(.*test.db\) - }
   }
 }
 
@@ -92,7 +92,7 @@ do_test 1.2.1 {
   list [catch { sqlite3 dbh dir.db } msg] $msg
 } {1 {unable to open database file}}
 
-do_re_test 1.2.2 { lindex $::log 0 } {^os_unix.c:\d+: \(\d+\) open\(.*dir.db\) - }
+do_re_test 1.2.2 { lindex $::log 0 } {^os_unix.cpp:\d+: \(\d+\) open\(.*dir.db\) - }
 
 # Test a failure in open() due to the path not existing.
 #
@@ -101,7 +101,7 @@ do_test 1.3.1 {
   list [catch { sqlite3 dbh /x/y/z/test.db } msg] $msg
 } {1 {unable to open database file}}
 
-do_re_test 1.3.2 { lindex $::log 0 } {^os_unix.c:\d+: \(\d+\) open\(.*test.db\) - }
+do_re_test 1.3.2 { lindex $::log 0 } {^os_unix.cpp:\d+: \(\d+\) open\(.*test.db\) - }
 
 # Test a failure in open() due to the path not existing.
 #
@@ -112,7 +112,7 @@ do_test 1.4.1 {
 
 do_re_test 1.4.2 { 
   lindex $::log 0
-} {^os_unix.c:\d*: \(\d+\) (open|readlink|lstat)\(.*test.db\) - }
+} {^os_unix.cpp:\d*: \(\d+\) (open|readlink|lstat)\(.*test.db\) - }
 
 #--------------------------------------------------------------------------
 # Tests oserror-1.* test failures in the unlink() system call.
@@ -130,7 +130,7 @@ ifcapable wal {
   
   do_re_test 2.1.2 { 
     lindex $::log 0 
-  } {^os_unix.c:\d+: \(\d+\) unlink\(.*test.db-wal\) - }
+  } {^os_unix.cpp:\d+: \(\d+\) unlink\(.*test.db-wal\) - }
   do_test 2.1.3 { 
     catch { dbh close }
     forcedelete test.db-wal

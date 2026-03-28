@@ -22,11 +22,11 @@
 # The amalgamated SQLite code will be written into sqlite3.c
 #
 
-# Begin by reading the "sqlite3.h" header file.  Count the number of lines
+# Begin by reading the "sqlite3.hpp" header file.  Count the number of lines
 # in this file and extract the version number.  That information will be
 # needed in order to generate the header of the amalgamation.
 #
-set in [open tsrc/sqlite3.h]
+set in [open tsrc/sqlite3.hpp]
 set cnt 0
 set VERSION ?????
 while {![eof $in]} {
@@ -53,25 +53,25 @@ puts $out [subst \
 # text of the file in-line.  The file only needs to be included once.
 #
 foreach hdr {
-   btree.h
-   btreeInt.h
-   hash.h
-   hwtime.h
+   btree.hpp
+   btreeInt.hpp
+   hash.hpp
+   hwtime.hpp
    keywordhash.h
-   msvc.h
+   msvc.hpp
    opcodes.h
-   os_common.h
-   os_setup.h
-   os_win.h
-   os.h
-   pager.h
+   os_common.hpp
+   os_setup.hpp
+   os_win.hpp
+   os.hpp
+   pager.hpp
    parse.h
-   sqlite3ext.h
-   sqlite3.h
-   sqliteInt.h
-   sqliteLimit.h
-   vdbe.h
-   vdbeInt.h
+   sqlite3ext.hpp
+   sqlite3.hpp
+   sqliteInt.hpp
+   sqliteLimit.hpp
+   vdbe.hpp
+   vdbeInt.hpp
 } {
   set available_hdr($hdr) 1
 }
@@ -130,15 +130,15 @@ proc copy_file {filename} {
 # inlining opportunities.
 #
 foreach file {
-   sqliteInt.h
-   sqlite3.h
-   btree.h
-   hash.h
-   os.h
-   pager.h
+   sqliteInt.hpp
+   sqlite3.hpp
+   btree.hpp
+   hash.hpp
+   os.hpp
+   pager.hpp
    parse.h
-   sqlite3ext.h
-   vdbe.h
+   sqlite3ext.hpp
+   vdbe.hpp
 } {
   if {$available_hdr($file)} {
     copy_file tsrc/$file

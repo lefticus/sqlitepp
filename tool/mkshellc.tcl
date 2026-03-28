@@ -21,12 +21,12 @@ if {[lindex $argv 0]!=""} {
 }
 
 ############################## FIRST PASS ################################
-# Read through the shell.c.in source file to gather information.  Do not
+# Read through the shell.cpp.in source file to gather information.  Do not
 # yet generate any code
 #
-set in [open $topdir/src/shell.c.in]
+set in [open $topdir/src/shell.cpp.in]
 fconfigure $in -translation binary
-set allSource(src/shell.c.in) 1
+set allSource(src/shell.cpp.in) 1
 set inUsage 0
 set dotcmd {}
 while {1} {
@@ -78,7 +78,7 @@ proc generate_usage {out} {
 # generate_usage stderr
 
 ###### SECOND PASS #######
-# Make a second pass through shell.c.in to generate the the final
+# Make a second pass through shell.cpp.in to generate the the final
 # output, based on data gathered during the first pass.
 #
 
@@ -92,11 +92,11 @@ foreach fn [lsort [array names allSource]] {
 }
 puts $out {**
 ** To modify this program, get a copy of the canonical SQLite source tree,
-** edit the src/shell.c.in file and/or some of the other files that are
+** edit the src/shell.cpp.in file and/or some of the other files that are
 ** listed above, then rerun the command "make shell.c".
 */}
 seek $in 0 start
-puts $out "/************************* Begin src/shell.c.in ******************/"
+puts $out "/************************* Begin src/shell.cpp.in ******************/"
 proc omit_redundant_typedefs {line} {
   global typedef_seen
   if {[regexp {^typedef .* ([a-zA-Z0-9_]+);} $line all typename]} {
@@ -129,7 +129,7 @@ while {1} {
       if {[regexp {^# *include "sqlite} $lx]} {
         set lx "/* $lx */"
       }
-      if {[regexp {^# *include "windirent.h"} $lx]} {
+      if {[regexp {^# *include "windirent.hpp"} $lx]} {
         set lx "/* $lx */"
       }
       set lx [string map [list __declspec(dllexport) {}] $lx]
@@ -137,13 +137,13 @@ while {1} {
     }
     close $in2
     puts $out "/************************* End $xfile ********************/"
-#   puts $out "#line [expr $iLine+1] \"shell.c.in\""
+#   puts $out "#line [expr $iLine+1] \"shell.cpp.in\""
   } elseif {[regexp {^INSERT-USAGE-TEXT-HERE} $lx]} {
     generate_usage $out
   } else {
     puts $out $lx
   }
 }
-puts $out "/************************* End src/shell.c.in ******************/"
+puts $out "/************************* End src/shell.cpp.in ******************/"
 close $in
 close $out

@@ -32,7 +32,7 @@ set help {Usage: tclsh mksqlite3c.tcl <options>
  The value setting options default to --linemacros=1 and '--srcdir tsrc' .
 }
 
-# Begin by reading the "sqlite3.h" header file.  Extract the version number
+# Begin by reading the "sqlite3.hpp" header file.  Extract the version number
 # from in this file.  The version number is needed to generate the header
 # comment of the amalgamation.
 #
@@ -70,7 +70,7 @@ for {set i 0} {$i<[llength $argv]} {incr i} {
     lappend extrasrc $x
   }
 }
-set in [open $srcdir/sqlite3.h rb]
+set in [open $srcdir/sqlite3.hpp rb]
 set cnt 0
 set VERSION ?????
 while {![eof $in]} {
@@ -84,8 +84,8 @@ close $in
 # Open the output file and write a header comment at the beginning
 # of the file.
 #
-set fname sqlite3.c
-if {$enable_recover} { set fname sqlite3r.c }
+set fname sqlite3.cpp
+if {$enable_recover} { set fname sqlite3r.cpp }
 set out [open $fname wb]
 # Force the output to use unix line endings, even on Windows.
 fconfigure $out -translation binary
@@ -101,11 +101,11 @@ puts $out [subst \
 ** translation unit.
 **
 ** This file is all you need to compile SQLite.  To use SQLite in other
-** programs, you need this file and the "sqlite3.h" header file that defines
+** programs, you need this file and the "sqlite3.hpp" header file that defines
 ** the programming interface to the SQLite library.  (If you do not have
-** the "sqlite3.h" header file at hand, you will find a copy embedded within
-** the text of this file.  Search for "Begin file sqlite3.h" to find the start
-** of the embedded sqlite3.h header file.) Additional code files may be needed
+** the "sqlite3.hpp" header file at hand, you will find a copy embedded within
+** the text of this file.  Search for "Begin file sqlite3.hpp" to find the start
+** of the embedded sqlite3.hpp header file.) Additional code files may be needed
 ** if you want a wrapper to interface SQLite with your choice of programming
 ** language. The code for the "sqlite3" command-line shell is also in a
 ** separate file. This file contains only code for the core SQLite library.
@@ -142,10 +142,9 @@ puts $out [subst {*/
 #define SQLITE_CORE 1
 #define SQLITE_AMALGAMATION 1}]
 if {$addstatic} {
-  puts $out \
-{#ifndef SQLITE_PRIVATE
-# define SQLITE_PRIVATE static
-#endif}
+  puts $out "#ifndef SQLITE_PRIVATE"
+  puts $out "# define SQLITE_PRIVATE extern"
+  puts $out "#endif"
 }
 
 # Examine the parse.c file.  If it contains lines of the form:
@@ -165,51 +164,51 @@ close $in
 # text of the file in-line.  The file only needs to be included once.
 #
 foreach hdr {
-   btree.h
-   btreeInt.h
-   fts3.h
-   fts3Int.h
-   fts3_hash.h
-   fts3_tokenizer.h
-   geopoly.c
-   hash.h
-   hwtime.h
+   btree.hpp
+   btreeInt.hpp
+   fts3.hpp
+   fts3Int.hpp
+   fts3_hash.hpp
+   fts3_tokenizer.hpp
+   geopoly.cpp
+   hash.hpp
+   hwtime.hpp
    keywordhash.h
-   msvc.h
-   mutex.h
+   msvc.hpp
+   mutex.hpp
    opcodes.h
-   os_common.h
-   os_setup.h
-   os_win.h
-   os.h
-   pager.h
+   os_common.hpp
+   os_setup.hpp
+   os_win.hpp
+   os.hpp
+   pager.hpp
    parse.h
-   pcache.h
+   pcache.hpp
    pragma.h
-   rtree.h
-   sqlite3session.h
-   sqlite3.h
-   sqlite3ext.h
-   sqlite3rbu.h
-   sqliteicu.h
-   sqliteInt.h
-   sqliteLimit.h
-   vdbe.h
-   vdbeInt.h
-   vxworks.h
-   wal.h
-   whereInt.h
-   sqlite3recover.h
+   rtree.hpp
+   sqlite3session.hpp
+   sqlite3.hpp
+   sqlite3ext.hpp
+   sqlite3rbu.hpp
+   sqliteicu.hpp
+   sqliteInt.hpp
+   sqliteLimit.hpp
+   vdbe.hpp
+   vdbeInt.hpp
+   vxworks.hpp
+   wal.hpp
+   whereInt.hpp
+   sqlite3recover.hpp
 } {
   set available_hdr($hdr) 1
 }
-set available_hdr(sqliteInt.h) 0
-set available_hdr(os_common.h) 0
-set available_hdr(sqlite3session.h) 0
+set available_hdr(sqliteInt.hpp) 0
+set available_hdr(os_common.hpp) 0
+set available_hdr(sqlite3session.hpp) 0
 
 # These headers should be copied into the amalgamation without modifying any
 # of their function declarations or definitions.
-set varonly_hdr(sqlite3.h) 1
+set varonly_hdr(sqlite3.hpp) 1
 
 # These are the functions that accept a variable number of arguments.  They
 # always need to use the "cdecl" calling convention even when another calling
@@ -287,7 +286,7 @@ proc copy_file {filename} {
         puts $out "/* [string map [list /* ** */ **] $line] */"
       }
     } elseif {[regexp {^#ifdef __cplusplus} $line]} {
-      puts $out "#if 0"
+      puts $out $line
     } elseif {!$linemacros && [regexp {^#line} $line]} {
       # Skip #line directives.
     } elseif {$addstatic
@@ -379,125 +378,125 @@ proc copy_file_verbatim {filename} {
 # inlining opportunities.
 #
 set flist {
-   sqliteInt.h
-   os_common.h
+   sqliteInt.hpp
+   os_common.hpp
    ctime.c
 
-   global.c
-   status.c
-   date.c
-   os.c
+   global.cpp
+   status.cpp
+   date.cpp
+   os.cpp
 
-   fault.c
-   mem0.c
-   mem1.c
-   mem2.c
-   mem3.c
-   mem5.c
-   mutex.c
-   mutex_noop.c
-   mutex_unix.c
-   mutex_w32.c
-   malloc.c
-   printf.c
-   treeview.c
-   random.c
-   threads.c
-   utf.c
-   util.c
-   hash.c
+   fault.cpp
+   mem0.cpp
+   mem1.cpp
+   mem2.cpp
+   mem3.cpp
+   mem5.cpp
+   mutex.cpp
+   mutex_noop.cpp
+   mutex_unix.cpp
+   mutex_w32.cpp
+   malloc.cpp
+   printf.cpp
+   treeview.cpp
+   random.cpp
+   threads.cpp
+   utf.cpp
+   util.cpp
+   hash.cpp
    opcodes.c
 
-   os_kv.c
-   os_unix.c
-   os_win.c
-   memdb.c
+   os_kv.cpp
+   os_unix.cpp
+   os_win.cpp
+   memdb.cpp
 
-   bitvec.c
-   pcache.c
-   pcache1.c
-   rowset.c
-   pager.c
-   wal.c
+   bitvec.cpp
+   pcache.cpp
+   pcache1.cpp
+   rowset.cpp
+   pager.cpp
+   wal.cpp
 
-   btmutex.c
-   btree.c
-   backup.c
+   btmutex.cpp
+   btree.cpp
+   backup.cpp
 
-   vdbemem.c
-   vdbeaux.c
-   vdbeapi.c
-   vdbetrace.c
-   vdbe.c
-   vdbeblob.c
-   vdbesort.c
-   vdbevtab.c
-   memjournal.c
+   vdbemem.cpp
+   vdbeaux.cpp
+   vdbeapi.cpp
+   vdbetrace.cpp
+   vdbe.cpp
+   vdbeblob.cpp
+   vdbesort.cpp
+   vdbevtab.cpp
+   memjournal.cpp
 
-   walker.c
-   resolve.c
-   expr.c
-   alter.c
-   analyze.c
-   attach.c
-   auth.c
-   build.c
-   callback.c
-   delete.c
-   func.c
-   fkey.c
-   insert.c
-   legacy.c
-   loadext.c
-   pragma.c
-   prepare.c
-   select.c
-   table.c
-   trigger.c
-   update.c
-   upsert.c
-   vacuum.c
-   vtab.c
-   wherecode.c
-   whereexpr.c
-   where.c
-   window.c
+   walker.cpp
+   resolve.cpp
+   expr.cpp
+   alter.cpp
+   analyze.cpp
+   attach.cpp
+   auth.cpp
+   build.cpp
+   callback.cpp
+   delete.cpp
+   func.cpp
+   fkey.cpp
+   insert.cpp
+   legacy.cpp
+   loadext.cpp
+   pragma.cpp
+   prepare.cpp
+   select.cpp
+   table.cpp
+   trigger.cpp
+   update.cpp
+   upsert.cpp
+   vacuum.cpp
+   vtab.cpp
+   wherecode.cpp
+   whereexpr.cpp
+   where.cpp
+   window.cpp
 
    parse.c
 
-   tokenize.c
-   complete.c
+   tokenize.cpp
+   complete.cpp
 
-   main.c
-   notify.c
+   main.cpp
+   notify.cpp
 
-   fts3.c
-   fts3_aux.c
-   fts3_expr.c
-   fts3_hash.c
-   fts3_porter.c
-   fts3_tokenizer.c
-   fts3_tokenizer1.c
-   fts3_tokenize_vtab.c
-   fts3_write.c
-   fts3_snippet.c
-   fts3_unicode.c
-   fts3_unicode2.c
+   fts3.cpp
+   fts3_aux.cpp
+   fts3_expr.cpp
+   fts3_hash.cpp
+   fts3_porter.cpp
+   fts3_tokenizer.cpp
+   fts3_tokenizer1.cpp
+   fts3_tokenize_vtab.cpp
+   fts3_write.cpp
+   fts3_snippet.cpp
+   fts3_unicode.cpp
+   fts3_unicode2.cpp
 
-   json.c
-   rtree.c
-   icu.c
-   fts3_icu.c
-   sqlite3rbu.c
-   dbstat.c
-   dbpage.c
-   carray.c
-   sqlite3session.c
+   json.cpp
+   rtree.cpp
+   icu.cpp
+   fts3_icu.cpp
+   sqlite3rbu.cpp
+   dbstat.cpp
+   dbpage.cpp
+   carray.cpp
+   sqlite3session.cpp
    fts5.c
-   stmt.c
+   stmt.cpp
 }
 if {$enable_recover} {
-  lappend flist sqlite3recover.c dbdata.c
+  lappend flist sqlite3recover.cpp dbdata.cpp
 }
 foreach file $flist {
   copy_file $srcdir/$file
@@ -512,6 +511,6 @@ SQLITE_API const char *sqlite3_sourceid(void){ return SQLITE_SOURCE_ID; }"
 
 puts $out \
 "#endif /* SQLITE_AMALGAMATION */
-/************************** End of sqlite3.c ******************************/"
+/************************** End of sqlite3.cpp ******************************/"
 
 close $out

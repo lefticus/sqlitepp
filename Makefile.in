@@ -70,8 +70,9 @@ INSTALL = @BIN_INSTALL@
 AR = @AR@
 AR.flags = cr
 CC = @CC@
+CXX = @CXX@
 B.cc = @CC_FOR_BUILD@ @BUILD_CFLAGS@
-T.cc = $(CC)
+T.cc = $(CXX) -std=c++20
 #
 # $(CFLAGS) is problematic because it is frequently overridden when
 # invoking make, which loses things like -fPIC. So... we avoid using
@@ -333,7 +334,7 @@ distclean: distclean-autosetup
 # tool/version-info: a utility for emitting sqlite3 version info
 # in various forms. It's used by ext/wasm/.
 #
-version-info$(T.exe): $(TOP)/tool/version-info.c Makefile sqlite3.h
+version-info$(T.exe): $(TOP)/tool/version-info.c Makefile sqlite3.hpp
 	$(T.link) $(ST_OPT) -o $@ $(TOP)/tool/version-info.c
 
 include $(TOP)/main.mk

@@ -14,7 +14,7 @@
 ** initialization of the library will fail.
 */
 
-#include "sqlite3.h"
+#include "sqlite3.hpp"
 #include <stdio.h>
 
 int sqlite3_wasm_extra_init(const char *z){

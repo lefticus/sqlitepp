@@ -5,9 +5,9 @@
 # To add new pragmas, first add the name and other relevant attributes
 # of the pragma to the "pragma_def" object below.  Then run this script
 # to generate the pragma.h header file that contains macros and
-# the lookup table needed for pragma name lookup in the pragma.c module.
+# the lookup table needed for pragma name lookup in the pragma.cpp module.
 # Then add the extra "case PragTyp_XXXXX:" and subsequent code for the
-# new pragma in ../src/pragma.c.
+# new pragma in ../src/pragma.cpp.
 #
 # The results are normally written into the pragma.h file.  However,
 # if an alternative output file name is provided as an argument, then

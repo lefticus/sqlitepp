@@ -78,7 +78,7 @@ static const char zHelp[] =
   "  --without-rowid     Use WITHOUT ROWID where appropriate\n"
 ;
 
-#include "sqlite3.h"
+#include "sqlite3.hpp"
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -639,7 +639,7 @@ void speedtest1_run(void){
           int nBlob = sqlite3_column_bytes(g.pStmt, i);
           int iBlob;
           unsigned char zChar[2];
-          const unsigned char *aBlob = sqlite3_column_blob(g.pStmt, i);
+          const unsigned char *aBlob = (const unsigned char*)sqlite3_column_blob(g.pStmt, i);
           for(iBlob=0; iBlob<nBlob; iBlob++){
             zChar[0] = "0123456789abcdef"[aBlob[iBlob]>>4];
             zChar[1] = "0123456789abcdef"[aBlob[iBlob]&15];

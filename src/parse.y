@@ -62,7 +62,7 @@
 // code file that implements the parser.
 //
 %include {
-#include "sqliteInt.h"
+#include "sqliteInt.hpp"
 
 /*
 ** Verify that the pParse->isCreate field is set
@@ -1138,7 +1138,7 @@ idlist(A) ::= nm(Y).
 
   /* Construct a new Expr object from a single token */
   static Expr *tokenExpr(Parse *pParse, int op, Token t){
-    Expr *p = sqlite3DbMallocRawNN(pParse->db, sizeof(Expr)+t.n+1);
+    Expr *p = static_cast<Expr*>(sqlite3DbMallocRawNN(pParse->db, sizeof(Expr)+t.n+1));
     if( p ){
       /* memset(p, 0, sizeof(Expr)); */
       p->op = (u8)op;

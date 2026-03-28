@@ -3,10 +3,10 @@
 # Generate the file opcodes.h.
 #
 # This TCL script scans a concatenation of the parse.h output file from the
-# parser and the vdbe.c source file in order to generate the opcodes numbers
+# parser and the vdbe.cpp source file in order to generate the opcodes numbers
 # for all opcodes.  
 #
-# The lines of the vdbe.c that we are interested in are of the form:
+# The lines of the vdbe.cpp that we are interested in are of the form:
 #
 #       case OP_aaaa:      /* same as TK_bbbbb */
 #
@@ -48,7 +48,7 @@ while {![eof $in]} {
     continue
   }
 
-  # Find "/* Opcode: " lines in the vdbe.c file.  Each one introduces
+  # Find "/* Opcode: " lines in the vdbe.cpp file.  Each one introduces
   # a new opcode.  Remember which parameters are used.
   #
   if {[regexp {^.. Opcode: } $line]} {
@@ -72,7 +72,7 @@ while {![eof $in]} {
     set synopsis($currentOp) [string trim $x]
   }
 
-  # Scan for "case OP_aaaa:" lines in the vdbe.c file
+  # Scan for "case OP_aaaa:" lines in the vdbe.cpp file
   #
   if {[regexp {^case OP_} $line]} {
     set line [split $line]
@@ -300,7 +300,7 @@ for {set i 0} {$i<=$max} {incr i} {
 }
 puts ""
 puts "/* Properties such as \"out2\" or \"jump\" that are specified in"
-puts "** comments following the \"case\" for each opcode in the vdbe.c"
+puts "** comments following the \"case\" for each opcode in the vdbe.cpp"
 puts "** are encoded into bitvectors as follows:"
 puts "*/"
 puts "#define OPFLG_JUMP        0x01  /* jump:  P2 holds jmp target */"

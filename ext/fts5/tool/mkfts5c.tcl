@@ -4,22 +4,22 @@ exec tclsh "$0" "$@"
 
 set srcdir [file dirname [file dirname [file normalize [info script]]]]
 set G(src) [string map [list %dir% $srcdir] {
-  %dir%/fts5.h
-  %dir%/fts5Int.h
+  %dir%/fts5.hpp
+  %dir%/fts5Int.hpp
   fts5parse.h
   fts5parse.c
-  %dir%/fts5_aux.c
-  %dir%/fts5_buffer.c
-  %dir%/fts5_config.c
-  %dir%/fts5_expr.c
-  %dir%/fts5_hash.c
-  %dir%/fts5_index.c
-  %dir%/fts5_main.c
-  %dir%/fts5_storage.c
-  %dir%/fts5_tokenize.c
-  %dir%/fts5_unicode2.c
-  %dir%/fts5_varint.c
-  %dir%/fts5_vocab.c
+  %dir%/fts5_aux.cpp
+  %dir%/fts5_buffer.cpp
+  %dir%/fts5_config.cpp
+  %dir%/fts5_expr.cpp
+  %dir%/fts5_hash.cpp
+  %dir%/fts5_index.cpp
+  %dir%/fts5_main.cpp
+  %dir%/fts5_storage.cpp
+  %dir%/fts5_tokenize.cpp
+  %dir%/fts5_unicode2.cpp
+  %dir%/fts5_varint.cpp
+  %dir%/fts5_vocab.cpp
 }]
 
 set G(hdr) {
@@ -27,22 +27,22 @@ set G(hdr) {
 ** This, the "fts5.c" source file, is a composite file that is itself
 ** assembled from the following files:
 **
-**    fts5.h
-**    fts5Int.h
+**    fts5.hpp
+**    fts5Int.hpp
 **    fts5parse.h          <--- Generated from fts5parse.y by Lemon
 **    fts5parse.c          <--- Generated from fts5parse.y by Lemon
-**    fts5_aux.c
-**    fts5_buffer.c
-**    fts5_config.c
-**    fts5_expr.c
-**    fts5_hash.c
-**    fts5_index.c
-**    fts5_main.c
-**    fts5_storage.c
-**    fts5_tokenize.c
-**    fts5_unicode2.c
-**    fts5_varint.c
-**    fts5_vocab.c
+**    fts5_aux.cpp
+**    fts5_buffer.cpp
+**    fts5_config.cpp
+**    fts5_expr.cpp
+**    fts5_hash.cpp
+**    fts5_index.cpp
+**    fts5_main.cpp
+**    fts5_storage.cpp
+**    fts5_tokenize.cpp
+**    fts5_unicode2.cpp
+**    fts5_varint.cpp
+**    fts5_vocab.cpp
 */
 #if !defined(SQLITE_CORE) || defined(SQLITE_ENABLE_FTS5) 
 

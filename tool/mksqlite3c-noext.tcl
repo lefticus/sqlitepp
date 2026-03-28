@@ -22,7 +22,7 @@
 # The amalgamated SQLite code will be written into sqlite3.c
 #
 
-# Begin by reading the "sqlite3.h" header file.  Extract the version number
+# Begin by reading the "sqlite3.hpp" header file.  Extract the version number
 # from in this file.  The version number is needed to generate the header
 # comment of the amalgamation.
 #
@@ -41,7 +41,7 @@ for {set i 0} {$i<[llength $argv]} {incr i} {
     error "unknown command-line option: $x"
   }
 }
-set in [open tsrc/sqlite3.h]
+set in [open tsrc/sqlite3.hpp]
 set cnt 0
 set VERSION ?????
 while {![eof $in]} {
@@ -70,11 +70,11 @@ puts $out [subst \
 ** translation unit.
 **
 ** This file is all you need to compile SQLite.  To use SQLite in other
-** programs, you need this file and the "sqlite3.h" header file that defines
+** programs, you need this file and the "sqlite3.hpp" header file that defines
 ** the programming interface to the SQLite library.  (If you do not have
-** the "sqlite3.h" header file at hand, you will find a copy embedded within
-** the text of this file.  Search for "Begin file sqlite3.h" to find the start
-** of the embedded sqlite3.h header file.) Additional code files may be needed
+** the "sqlite3.hpp" header file at hand, you will find a copy embedded within
+** the text of this file.  Search for "Begin file sqlite3.hpp" to find the start
+** of the embedded sqlite3.hpp header file.) Additional code files may be needed
 ** if you want a wrapper to interface SQLite with your choice of programming
 ** language. The code for the "sqlite3" command-line shell is also in a
 ** separate file. This file contains only code for the core SQLite library.
@@ -93,40 +93,40 @@ if {$addstatic} {
 # text of the file in-line.  The file only needs to be included once.
 #
 foreach hdr {
-   btree.h
-   btreeInt.h
-   hash.h
-   hwtime.h
+   btree.hpp
+   btreeInt.hpp
+   hash.hpp
+   hwtime.hpp
    keywordhash.h
-   msvc.h
-   mutex.h
+   msvc.hpp
+   mutex.hpp
    opcodes.h
-   os_common.h
-   os_setup.h
-   os_win.h
-   os.h
-   pager.h
+   os_common.hpp
+   os_setup.hpp
+   os_win.hpp
+   os.hpp
+   pager.hpp
    parse.h
-   pcache.h
+   pcache.hpp
    pragma.h
-   sqlite3.h
-   sqlite3ext.h
-   sqliteicu.h
-   sqliteInt.h
-   sqliteLimit.h
-   vdbe.h
-   vdbeInt.h
-   vxworks.h
-   wal.h
-   whereInt.h
+   sqlite3.hpp
+   sqlite3ext.hpp
+   sqliteicu.hpp
+   sqliteInt.hpp
+   sqliteLimit.hpp
+   vdbe.hpp
+   vdbeInt.hpp
+   vxworks.hpp
+   wal.hpp
+   whereInt.hpp
 } {
   set available_hdr($hdr) 1
 }
-set available_hdr(sqliteInt.h) 0
+set available_hdr(sqliteInt.hpp) 0
 
 # These headers should be copied into the amalgamation without modifying any
 # of their function declarations or definitions.
-set varonly_hdr(sqlite3.h) 1
+set varonly_hdr(sqlite3.hpp) 1
 
 # These are the functions that accept a variable number of arguments.  They
 # always need to use the "cdecl" calling convention even when another calling
@@ -179,7 +179,7 @@ proc copy_file {filename} {
     if {[regexp {^\s*#\s*include\s+["<]([^">]+)[">]} $line all hdr]} {
       if {[info exists available_hdr($hdr)]} {
         if {$available_hdr($hdr)} {
-          if {$hdr!="os_common.h" && $hdr!="hwtime.h"} {
+          if {$hdr!="os_common.hpp" && $hdr!="hwtime.hpp"} {
             set available_hdr($hdr) 0
           }
           section_comment "Include $hdr in the middle of $tail"
@@ -274,92 +274,92 @@ proc copy_file {filename} {
 # inlining opportunities.
 #
 foreach file {
-   sqliteInt.h
+   sqliteInt.hpp
 
-   global.c
+   global.cpp
    ctime.c
-   status.c
-   date.c
-   os.c
+   status.cpp
+   date.cpp
+   os.cpp
 
-   fault.c
-   mem0.c
-   mem1.c
-   mem2.c
-   mem3.c
-   mem5.c
-   mutex.c
-   mutex_noop.c
-   mutex_unix.c
-   mutex_w32.c
-   malloc.c
-   printf.c
-   treeview.c
-   random.c
-   threads.c
-   utf.c
-   util.c
-   hash.c
+   fault.cpp
+   mem0.cpp
+   mem1.cpp
+   mem2.cpp
+   mem3.cpp
+   mem5.cpp
+   mutex.cpp
+   mutex_noop.cpp
+   mutex_unix.cpp
+   mutex_w32.cpp
+   malloc.cpp
+   printf.cpp
+   treeview.cpp
+   random.cpp
+   threads.cpp
+   utf.cpp
+   util.cpp
+   hash.cpp
    opcodes.c
 
-   os_unix.c
-   os_win.c
+   os_unix.cpp
+   os_win.cpp
 
-   bitvec.c
-   pcache.c
-   pcache1.c
-   rowset.c
-   pager.c
-   wal.c
+   bitvec.cpp
+   pcache.cpp
+   pcache1.cpp
+   rowset.cpp
+   pager.cpp
+   wal.cpp
 
-   btmutex.c
-   btree.c
-   backup.c
+   btmutex.cpp
+   btree.cpp
+   backup.cpp
 
-   vdbemem.c
-   vdbeaux.c
-   vdbeapi.c
-   vdbetrace.c
-   vdbe.c
-   vdbeblob.c
-   vdbesort.c
-   memjournal.c
+   vdbemem.cpp
+   vdbeaux.cpp
+   vdbeapi.cpp
+   vdbetrace.cpp
+   vdbe.cpp
+   vdbeblob.cpp
+   vdbesort.cpp
+   memjournal.cpp
 
-   walker.c
-   resolve.c
-   expr.c
-   alter.c
-   analyze.c
-   attach.c
-   auth.c
-   build.c
-   callback.c
-   delete.c
-   func.c
-   fkey.c
-   insert.c
-   legacy.c
-   loadext.c
-   pragma.c
-   prepare.c
-   select.c
-   table.c
-   trigger.c
-   update.c
-   vacuum.c
-   vtab.c
-   wherecode.c
-   whereexpr.c
-   where.c
-   window.c
+   walker.cpp
+   resolve.cpp
+   expr.cpp
+   alter.cpp
+   analyze.cpp
+   attach.cpp
+   auth.cpp
+   build.cpp
+   callback.cpp
+   delete.cpp
+   func.cpp
+   fkey.cpp
+   insert.cpp
+   legacy.cpp
+   loadext.cpp
+   pragma.cpp
+   prepare.cpp
+   select.cpp
+   table.cpp
+   trigger.cpp
+   update.cpp
+   vacuum.cpp
+   vtab.cpp
+   wherecode.cpp
+   whereexpr.cpp
+   where.cpp
+   window.cpp
 
    parse.c
 
-   tokenize.c
-   complete.c
+   tokenize.cpp
+   complete.cpp
 
-   main.c
-   notify.c
+   main.cpp
+   notify.cpp
 } {
   copy_file tsrc/$file
 }

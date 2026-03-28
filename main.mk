@@ -213,7 +213,7 @@ ENABLE_LIB_STATIC ?= 1
 #
 # $(USE_AMALGAMATION)
 #
-# 1 if the amalgamation (sqlite3.c/h) should be built/used, otherwise
+# 1 if the amalgamation (sqlite3.cpp/h) should be built/used, otherwise
 # the library is built from all of its original source files.
 # Certain tools, like sqlite3$(T.exe), require the amalgamation and
 # will ignore this preference.
@@ -298,7 +298,7 @@ HAVE_WASI_SDK ?= 0
 # With the above-described defined, the rest of this make script will
 # build the project's deliverables and testing tools.
 ################################################################################
-all:	sqlite3.h sqlite3.c
+all:	sqlite3.hpp sqlite3.cpp
 
 ########################################################################
 ########################################################################
@@ -442,7 +442,7 @@ T.link.shared = $(T.link) $(LDFLAGS.shlib)
 # any of the following apply:
 #
 #  - Results in building libsqlite3.so
-#  - Compiles sqlite3.c in to an application
+#  - Compiles sqlite3.cpp in to an application
 #  - Links with libsqlite3.a
 #  - Links in either of $(LIBOBJSO) or $(LIBOBJS1)
 #
@@ -576,148 +576,148 @@ $(LIBOBJ): $(MAKE_SANITY_CHECK)
 # All of the source code files.
 #
 SRC = \
-  $(TOP)/src/alter.c \
-  $(TOP)/src/analyze.c \
-  $(TOP)/src/attach.c \
-  $(TOP)/src/auth.c \
-  $(TOP)/src/backup.c \
-  $(TOP)/src/bitvec.c \
-  $(TOP)/src/btmutex.c \
-  $(TOP)/src/btree.c \
-  $(TOP)/src/btree.h \
-  $(TOP)/src/btreeInt.h \
-  $(TOP)/src/build.c \
-  $(TOP)/src/callback.c \
-  $(TOP)/src/carray.c \
-  $(TOP)/src/complete.c \
+  $(TOP)/src/alter.cpp \
+  $(TOP)/src/analyze.cpp \
+  $(TOP)/src/attach.cpp \
+  $(TOP)/src/auth.cpp \
+  $(TOP)/src/backup.cpp \
+  $(TOP)/src/bitvec.cpp \
+  $(TOP)/src/btmutex.cpp \
+  $(TOP)/src/btree.cpp \
+  $(TOP)/src/btree.hpp \
+  $(TOP)/src/btreeInt.hpp \
+  $(TOP)/src/build.cpp \
+  $(TOP)/src/callback.cpp \
+  $(TOP)/src/carray.cpp \
+  $(TOP)/src/complete.cpp \
   ctime.c \
-  $(TOP)/src/date.c \
-  $(TOP)/src/dbpage.c \
-  $(TOP)/src/dbstat.c \
-  $(TOP)/src/delete.c \
-  $(TOP)/src/expr.c \
-  $(TOP)/src/fault.c \
-  $(TOP)/src/fkey.c \
-  $(TOP)/src/func.c \
-  $(TOP)/src/global.c \
-  $(TOP)/src/hash.c \
-  $(TOP)/src/hash.h \
-  $(TOP)/src/hwtime.h \
-  $(TOP)/src/insert.c \
-  $(TOP)/src/json.c \
-  $(TOP)/src/legacy.c \
-  $(TOP)/src/loadext.c \
-  $(TOP)/src/main.c \
-  $(TOP)/src/malloc.c \
-  $(TOP)/src/mem0.c \
-  $(TOP)/src/mem1.c \
-  $(TOP)/src/mem2.c \
-  $(TOP)/src/mem3.c \
-  $(TOP)/src/mem5.c \
-  $(TOP)/src/memdb.c \
-  $(TOP)/src/memjournal.c \
-  $(TOP)/src/msvc.h \
-  $(TOP)/src/mutex.c \
-  $(TOP)/src/mutex.h \
-  $(TOP)/src/mutex_noop.c \
-  $(TOP)/src/mutex_unix.c \
-  $(TOP)/src/mutex_w32.c \
-  $(TOP)/src/notify.c \
-  $(TOP)/src/os.c \
-  $(TOP)/src/os.h \
-  $(TOP)/src/os_common.h \
-  $(TOP)/src/os_setup.h \
-  $(TOP)/src/os_kv.c \
-  $(TOP)/src/os_unix.c \
-  $(TOP)/src/os_win.c \
-  $(TOP)/src/os_win.h \
-  $(TOP)/src/pager.c \
-  $(TOP)/src/pager.h \
+  $(TOP)/src/date.cpp \
+  $(TOP)/src/dbpage.cpp \
+  $(TOP)/src/dbstat.cpp \
+  $(TOP)/src/delete.cpp \
+  $(TOP)/src/expr.cpp \
+  $(TOP)/src/fault.cpp \
+  $(TOP)/src/fkey.cpp \
+  $(TOP)/src/func.cpp \
+  $(TOP)/src/global.cpp \
+  $(TOP)/src/hash.cpp \
+  $(TOP)/src/hash.hpp \
+  $(TOP)/src/hwtime.hpp \
+  $(TOP)/src/insert.cpp \
+  $(TOP)/src/json.cpp \
+  $(TOP)/src/legacy.cpp \
+  $(TOP)/src/loadext.cpp \
+  $(TOP)/src/main.cpp \
+  $(TOP)/src/malloc.cpp \
+  $(TOP)/src/mem0.cpp \
+  $(TOP)/src/mem1.cpp \
+  $(TOP)/src/mem2.cpp \
+  $(TOP)/src/mem3.cpp \
+  $(TOP)/src/mem5.cpp \
+  $(TOP)/src/memdb.cpp \
+  $(TOP)/src/memjournal.cpp \
+  $(TOP)/src/msvc.hpp \
+  $(TOP)/src/mutex.cpp \
+  $(TOP)/src/mutex.hpp \
+  $(TOP)/src/mutex_noop.cpp \
+  $(TOP)/src/mutex_unix.cpp \
+  $(TOP)/src/mutex_w32.cpp \
+  $(TOP)/src/notify.cpp \
+  $(TOP)/src/os.cpp \
+  $(TOP)/src/os.hpp \
+  $(TOP)/src/os_common.hpp \
+  $(TOP)/src/os_setup.hpp \
+  $(TOP)/src/os_kv.cpp \
+  $(TOP)/src/os_unix.cpp \
+  $(TOP)/src/os_win.cpp \
+  $(TOP)/src/os_win.hpp \
+  $(TOP)/src/pager.cpp \
+  $(TOP)/src/pager.hpp \
   $(TOP)/src/parse.y \
-  $(TOP)/src/pcache.c \
-  $(TOP)/src/pcache.h \
-  $(TOP)/src/pcache1.c \
-  $(TOP)/src/pragma.c \
+  $(TOP)/src/pcache.cpp \
+  $(TOP)/src/pcache.hpp \
+  $(TOP)/src/pcache1.cpp \
+  $(TOP)/src/pragma.cpp \
   pragma.h \
-  $(TOP)/src/prepare.c \
-  $(TOP)/src/printf.c \
-  $(TOP)/src/random.c \
-  $(TOP)/src/resolve.c \
-  $(TOP)/src/rowset.c \
-  $(TOP)/src/select.c \
-  $(TOP)/src/status.c \
-  $(TOP)/src/shell.c.in \
-  $(TOP)/src/sqlite.h.in \
-  $(TOP)/src/sqlite3ext.h \
-  $(TOP)/src/sqliteInt.h \
-  $(TOP)/src/sqliteLimit.h \
-  $(TOP)/src/table.c \
+  $(TOP)/src/prepare.cpp \
+  $(TOP)/src/printf.cpp \
+  $(TOP)/src/random.cpp \
+  $(TOP)/src/resolve.cpp \
+  $(TOP)/src/rowset.cpp \
+  $(TOP)/src/select.cpp \
+  $(TOP)/src/status.cpp \
+  $(TOP)/src/shell.cpp.in \
+  $(TOP)/src/sqlite.hpp.in \
+  $(TOP)/src/sqlite3ext.hpp \
+  $(TOP)/src/sqliteInt.hpp \
+  $(TOP)/src/sqliteLimit.hpp \
+  $(TOP)/src/table.cpp \
   tclsqlite-ex.c \
-  $(TOP)/src/threads.c \
-  $(TOP)/src/tokenize.c \
-  $(TOP)/src/treeview.c \
-  $(TOP)/src/trigger.c \
-  $(TOP)/src/utf.c \
-  $(TOP)/src/update.c \
-  $(TOP)/src/upsert.c \
-  $(TOP)/src/util.c \
-  $(TOP)/src/vacuum.c \
-  $(TOP)/src/vdbe.c \
-  $(TOP)/src/vdbe.h \
-  $(TOP)/src/vdbeapi.c \
-  $(TOP)/src/vdbeaux.c \
-  $(TOP)/src/vdbeblob.c \
-  $(TOP)/src/vdbemem.c \
-  $(TOP)/src/vdbesort.c \
-  $(TOP)/src/vdbetrace.c \
-  $(TOP)/src/vdbevtab.c \
-  $(TOP)/src/vdbeInt.h \
-  $(TOP)/src/vtab.c \
-  $(TOP)/src/vxworks.h \
-  $(TOP)/src/wal.c \
-  $(TOP)/src/wal.h \
-  $(TOP)/src/walker.c \
-  $(TOP)/src/where.c \
-  $(TOP)/src/wherecode.c \
-  $(TOP)/src/whereexpr.c \
-  $(TOP)/src/whereInt.h \
-  $(TOP)/src/window.c
+  $(TOP)/src/threads.cpp \
+  $(TOP)/src/tokenize.cpp \
+  $(TOP)/src/treeview.cpp \
+  $(TOP)/src/trigger.cpp \
+  $(TOP)/src/utf.cpp \
+  $(TOP)/src/update.cpp \
+  $(TOP)/src/upsert.cpp \
+  $(TOP)/src/util.cpp \
+  $(TOP)/src/vacuum.cpp \
+  $(TOP)/src/vdbe.cpp \
+  $(TOP)/src/vdbe.hpp \
+  $(TOP)/src/vdbeapi.cpp \
+  $(TOP)/src/vdbeaux.cpp \
+  $(TOP)/src/vdbeblob.cpp \
+  $(TOP)/src/vdbemem.cpp \
+  $(TOP)/src/vdbesort.cpp \
+  $(TOP)/src/vdbetrace.cpp \
+  $(TOP)/src/vdbevtab.cpp \
+  $(TOP)/src/vdbeInt.hpp \
+  $(TOP)/src/vtab.cpp \
+  $(TOP)/src/vxworks.hpp \
+  $(TOP)/src/wal.cpp \
+  $(TOP)/src/wal.hpp \
+  $(TOP)/src/walker.cpp \
+  $(TOP)/src/where.cpp \
+  $(TOP)/src/wherecode.cpp \
+  $(TOP)/src/whereexpr.cpp \
+  $(TOP)/src/whereInt.hpp \
+  $(TOP)/src/window.cpp
 
 # Source code for extensions
 #
 SRC += \
-  $(TOP)/ext/fts3/fts3.c \
-  $(TOP)/ext/fts3/fts3.h \
-  $(TOP)/ext/fts3/fts3Int.h \
-  $(TOP)/ext/fts3/fts3_aux.c \
-  $(TOP)/ext/fts3/fts3_expr.c \
-  $(TOP)/ext/fts3/fts3_hash.c \
-  $(TOP)/ext/fts3/fts3_hash.h \
-  $(TOP)/ext/fts3/fts3_icu.c \
-  $(TOP)/ext/fts3/fts3_porter.c \
-  $(TOP)/ext/fts3/fts3_snippet.c \
-  $(TOP)/ext/fts3/fts3_tokenizer.h \
-  $(TOP)/ext/fts3/fts3_tokenizer.c \
-  $(TOP)/ext/fts3/fts3_tokenizer1.c \
-  $(TOP)/ext/fts3/fts3_tokenize_vtab.c \
-  $(TOP)/ext/fts3/fts3_unicode.c \
-  $(TOP)/ext/fts3/fts3_unicode2.c \
-  $(TOP)/ext/fts3/fts3_write.c
+  $(TOP)/ext/fts3/fts3.cpp \
+  $(TOP)/ext/fts3/fts3.hpp \
+  $(TOP)/ext/fts3/fts3Int.hpp \
+  $(TOP)/ext/fts3/fts3_aux.cpp \
+  $(TOP)/ext/fts3/fts3_expr.cpp \
+  $(TOP)/ext/fts3/fts3_hash.cpp \
+  $(TOP)/ext/fts3/fts3_hash.hpp \
+  $(TOP)/ext/fts3/fts3_icu.cpp \
+  $(TOP)/ext/fts3/fts3_porter.cpp \
+  $(TOP)/ext/fts3/fts3_snippet.cpp \
+  $(TOP)/ext/fts3/fts3_tokenizer.hpp \
+  $(TOP)/ext/fts3/fts3_tokenizer.cpp \
+  $(TOP)/ext/fts3/fts3_tokenizer1.cpp \
+  $(TOP)/ext/fts3/fts3_tokenize_vtab.cpp \
+  $(TOP)/ext/fts3/fts3_unicode.cpp \
+  $(TOP)/ext/fts3/fts3_unicode2.cpp \
+  $(TOP)/ext/fts3/fts3_write.cpp
 SRC += \
-  $(TOP)/ext/icu/sqliteicu.h \
-  $(TOP)/ext/icu/icu.c
+  $(TOP)/ext/icu/sqliteicu.hpp \
+  $(TOP)/ext/icu/icu.cpp
 SRC += \
-  $(TOP)/ext/rtree/rtree.h \
-  $(TOP)/ext/rtree/rtree.c \
-  $(TOP)/ext/rtree/geopoly.c
+  $(TOP)/ext/rtree/rtree.hpp \
+  $(TOP)/ext/rtree/rtree.cpp \
+  $(TOP)/ext/rtree/geopoly.cpp
 SRC += \
-  $(TOP)/ext/session/sqlite3session.c \
-  $(TOP)/ext/session/sqlite3session.h
+  $(TOP)/ext/session/sqlite3session.cpp \
+  $(TOP)/ext/session/sqlite3session.hpp
 SRC += \
-  $(TOP)/ext/rbu/sqlite3rbu.h \
-  $(TOP)/ext/rbu/sqlite3rbu.c
+  $(TOP)/ext/rbu/sqlite3rbu.hpp \
+  $(TOP)/ext/rbu/sqlite3rbu.cpp
 SRC += \
-  $(TOP)/ext/misc/stmt.c
+  $(TOP)/ext/misc/stmt.cpp
 
 # Generated source code files
 #
@@ -728,201 +728,201 @@ SRC += \
   parse.c \
   parse.h \
   sqlite_cfg.h \
-  shell.c \
-  sqlite3.h
+  shell.cpp \
+  sqlite3.hpp
 
 # Source code to the test files.
 #
 TESTSRC = \
-  $(TOP)/src/test1.c \
-  $(TOP)/src/test2.c \
-  $(TOP)/src/test3.c \
-  $(TOP)/src/test4.c \
-  $(TOP)/src/test5.c \
-  $(TOP)/src/test6.c \
-  $(TOP)/src/test8.c \
-  $(TOP)/src/test9.c \
-  $(TOP)/src/test_autoext.c \
-  $(TOP)/src/test_backup.c \
-  $(TOP)/src/test_bestindex.c \
-  $(TOP)/src/test_blob.c \
-  $(TOP)/src/test_btree.c \
-  $(TOP)/src/test_config.c \
-  $(TOP)/src/test_delete.c \
-  $(TOP)/src/test_demovfs.c \
-  $(TOP)/src/test_devsym.c \
-  $(TOP)/src/test_fs.c \
-  $(TOP)/src/test_func.c \
-  $(TOP)/src/test_hexio.c \
-  $(TOP)/src/test_init.c \
-  $(TOP)/src/test_intarray.c \
-  $(TOP)/src/test_journal.c \
-  $(TOP)/src/test_malloc.c \
-  $(TOP)/src/test_md5.c \
-  $(TOP)/src/test_multiplex.c \
-  $(TOP)/src/test_mutex.c \
-  $(TOP)/src/test_onefile.c \
-  $(TOP)/src/test_osinst.c \
-  $(TOP)/src/test_pcache.c \
-  $(TOP)/src/test_quota.c \
-  $(TOP)/src/test_rtree.c \
-  $(TOP)/src/test_schema.c \
-  $(TOP)/src/test_superlock.c \
-  $(TOP)/src/test_syscall.c \
-  $(TOP)/src/test_tclsh.c \
-  $(TOP)/src/test_tclvar.c \
-  $(TOP)/src/test_thread.c \
-  $(TOP)/src/test_vdbecov.c \
-  $(TOP)/src/test_vfs.c \
-  $(TOP)/src/test_window.c \
-  $(TOP)/src/test_wsd.c       \
-  $(TOP)/ext/fts3/fts3_term.c \
-  $(TOP)/ext/fts3/fts3_test.c  \
-  $(TOP)/ext/session/test_session.c \
-  $(TOP)/ext/recover/sqlite3recover.c \
-  $(TOP)/ext/recover/dbdata.c \
-  $(TOP)/ext/recover/test_recover.c \
-  $(TOP)/ext/intck/test_intck.c  \
-  $(TOP)/ext/intck/sqlite3intck.c \
-  $(TOP)/ext/rbu/test_rbu.c
+  $(TOP)/src/test1.cpp \
+  $(TOP)/src/test2.cpp \
+  $(TOP)/src/test3.cpp \
+  $(TOP)/src/test4.cpp \
+  $(TOP)/src/test5.cpp \
+  $(TOP)/src/test6.cpp \
+  $(TOP)/src/test8.cpp \
+  $(TOP)/src/test9.cpp \
+  $(TOP)/src/test_autoext.cpp \
+  $(TOP)/src/test_backup.cpp \
+  $(TOP)/src/test_bestindex.cpp \
+  $(TOP)/src/test_blob.cpp \
+  $(TOP)/src/test_btree.cpp \
+  $(TOP)/src/test_config.cpp \
+  $(TOP)/src/test_delete.cpp \
+  $(TOP)/src/test_demovfs.cpp \
+  $(TOP)/src/test_devsym.cpp \
+  $(TOP)/src/test_fs.cpp \
+  $(TOP)/src/test_func.cpp \
+  $(TOP)/src/test_hexio.cpp \
+  $(TOP)/src/test_init.cpp \
+  $(TOP)/src/test_intarray.cpp \
+  $(TOP)/src/test_journal.cpp \
+  $(TOP)/src/test_malloc.cpp \
+  $(TOP)/src/test_md5.cpp \
+  $(TOP)/src/test_multiplex.cpp \
+  $(TOP)/src/test_mutex.cpp \
+  $(TOP)/src/test_onefile.cpp \
+  $(TOP)/src/test_osinst.cpp \
+  $(TOP)/src/test_pcache.cpp \
+  $(TOP)/src/test_quota.cpp \
+  $(TOP)/src/test_rtree.cpp \
+  $(TOP)/src/test_schema.cpp \
+  $(TOP)/src/test_superlock.cpp \
+  $(TOP)/src/test_syscall.cpp \
+  $(TOP)/src/test_tclsh.cpp \
+  $(TOP)/src/test_tclvar.cpp \
+  $(TOP)/src/test_thread.cpp \
+  $(TOP)/src/test_vdbecov.cpp \
+  $(TOP)/src/test_vfs.cpp \
+  $(TOP)/src/test_window.cpp \
+  $(TOP)/src/test_wsd.cpp       \
+  $(TOP)/ext/fts3/fts3_term.cpp \
+  $(TOP)/ext/fts3/fts3_test.cpp  \
+  $(TOP)/ext/session/test_session.cpp \
+  $(TOP)/ext/recover/sqlite3recover.cpp \
+  $(TOP)/ext/recover/dbdata.cpp \
+  $(TOP)/ext/recover/test_recover.cpp \
+  $(TOP)/ext/intck/test_intck.cpp  \
+  $(TOP)/ext/intck/sqlite3intck.cpp \
+  $(TOP)/ext/rbu/test_rbu.cpp
 
 # Statically linked extensions
 #
 TESTSRC += \
-  $(TOP)/ext/expert/sqlite3expert.c \
-  $(TOP)/ext/expert/test_expert.c \
-  $(TOP)/ext/misc/amatch.c \
-  $(TOP)/ext/misc/appendvfs.c \
-  $(TOP)/ext/misc/basexx.c \
-  $(TOP)/ext/misc/cksumvfs.c \
-  $(TOP)/ext/misc/closure.c \
-  $(TOP)/ext/misc/csv.c \
-  $(TOP)/ext/misc/decimal.c \
-  $(TOP)/ext/misc/eval.c \
-  $(TOP)/ext/misc/explain.c \
-  $(TOP)/ext/misc/fileio.c \
-  $(TOP)/ext/misc/fuzzer.c \
-  $(TOP)/ext/fts5/fts5_tcl.c \
-  $(TOP)/ext/fts5/fts5_test_mi.c \
-  $(TOP)/ext/fts5/fts5_test_tok.c \
-  $(TOP)/ext/misc/ieee754.c \
-  $(TOP)/ext/misc/mmapwarm.c \
-  $(TOP)/ext/misc/nextchar.c \
-  $(TOP)/ext/misc/normalize.c \
-  $(TOP)/ext/misc/prefixes.c \
-  $(TOP)/ext/misc/qpvtab.c \
-  $(TOP)/ext/misc/randomjson.c \
-  $(TOP)/ext/misc/regexp.c \
-  $(TOP)/ext/misc/remember.c \
-  $(TOP)/ext/misc/series.c \
-  $(TOP)/ext/misc/spellfix.c \
-  $(TOP)/ext/misc/stmtrand.c \
-  $(TOP)/ext/misc/totype.c \
-  $(TOP)/ext/misc/unionvtab.c \
-  $(TOP)/ext/misc/wholenumber.c \
-  $(TOP)/ext/misc/zipfile.c \
-  $(TOP)/ext/rtree/test_rtreedoc.c
+  $(TOP)/ext/expert/sqlite3expert.cpp \
+  $(TOP)/ext/expert/test_expert.cpp \
+  $(TOP)/ext/misc/amatch.cpp \
+  $(TOP)/ext/misc/appendvfs.cpp \
+  $(TOP)/ext/misc/basexx.cpp \
+  $(TOP)/ext/misc/cksumvfs.cpp \
+  $(TOP)/ext/misc/closure.cpp \
+  $(TOP)/ext/misc/csv.cpp \
+  $(TOP)/ext/misc/decimal.cpp \
+  $(TOP)/ext/misc/eval.cpp \
+  $(TOP)/ext/misc/explain.cpp \
+  $(TOP)/ext/misc/fileio.cpp \
+  $(TOP)/ext/misc/fuzzer.cpp \
+  $(TOP)/ext/fts5/fts5_tcl.cpp \
+  $(TOP)/ext/fts5/fts5_test_mi.cpp \
+  $(TOP)/ext/fts5/fts5_test_tok.cpp \
+  $(TOP)/ext/misc/ieee754.cpp \
+  $(TOP)/ext/misc/mmapwarm.cpp \
+  $(TOP)/ext/misc/nextchar.cpp \
+  $(TOP)/ext/misc/normalize.cpp \
+  $(TOP)/ext/misc/prefixes.cpp \
+  $(TOP)/ext/misc/qpvtab.cpp \
+  $(TOP)/ext/misc/randomjson.cpp \
+  $(TOP)/ext/misc/regexp.cpp \
+  $(TOP)/ext/misc/remember.cpp \
+  $(TOP)/ext/misc/series.cpp \
+  $(TOP)/ext/misc/spellfix.cpp \
+  $(TOP)/ext/misc/stmtrand.cpp \
+  $(TOP)/ext/misc/totype.cpp \
+  $(TOP)/ext/misc/unionvtab.cpp \
+  $(TOP)/ext/misc/wholenumber.cpp \
+  $(TOP)/ext/misc/zipfile.cpp \
+  $(TOP)/ext/rtree/test_rtreedoc.cpp
 
 # Source code to the library files needed by the test fixture
 #
 TESTSRC2 = \
-  $(TOP)/src/attach.c \
-  $(TOP)/src/backup.c \
-  $(TOP)/src/bitvec.c \
-  $(TOP)/src/btree.c \
-  $(TOP)/src/build.c \
-  $(TOP)/src/carray.c \
+  $(TOP)/src/attach.cpp \
+  $(TOP)/src/backup.cpp \
+  $(TOP)/src/bitvec.cpp \
+  $(TOP)/src/btree.cpp \
+  $(TOP)/src/build.cpp \
+  $(TOP)/src/carray.cpp \
   ctime.c \
-  $(TOP)/src/date.c \
-  $(TOP)/src/dbpage.c \
-  $(TOP)/src/dbstat.c \
-  $(TOP)/src/expr.c \
-  $(TOP)/src/func.c \
-  $(TOP)/src/global.c \
-  $(TOP)/src/insert.c \
-  $(TOP)/src/wal.c \
-  $(TOP)/src/main.c \
-  $(TOP)/src/mem5.c \
-  $(TOP)/src/os.c \
-  $(TOP)/src/os_kv.c \
-  $(TOP)/src/os_unix.c \
-  $(TOP)/src/os_win.c \
-  $(TOP)/src/pager.c \
-  $(TOP)/src/pragma.c \
-  $(TOP)/src/prepare.c \
-  $(TOP)/src/printf.c \
-  $(TOP)/src/random.c \
-  $(TOP)/src/pcache.c \
-  $(TOP)/src/pcache1.c \
-  $(TOP)/src/select.c \
-  $(TOP)/src/tokenize.c \
-  $(TOP)/src/treeview.c \
-  $(TOP)/src/utf.c \
-  $(TOP)/src/util.c \
-  $(TOP)/src/vdbeapi.c \
-  $(TOP)/src/vdbeaux.c \
-  $(TOP)/src/vdbe.c \
-  $(TOP)/src/vdbemem.c \
-  $(TOP)/src/vdbetrace.c \
-  $(TOP)/src/vdbevtab.c \
-  $(TOP)/src/where.c \
-  $(TOP)/src/wherecode.c \
-  $(TOP)/src/whereexpr.c \
-  $(TOP)/src/window.c \
+  $(TOP)/src/date.cpp \
+  $(TOP)/src/dbpage.cpp \
+  $(TOP)/src/dbstat.cpp \
+  $(TOP)/src/expr.cpp \
+  $(TOP)/src/func.cpp \
+  $(TOP)/src/global.cpp \
+  $(TOP)/src/insert.cpp \
+  $(TOP)/src/wal.cpp \
+  $(TOP)/src/main.cpp \
+  $(TOP)/src/mem5.cpp \
+  $(TOP)/src/os.cpp \
+  $(TOP)/src/os_kv.cpp \
+  $(TOP)/src/os_unix.cpp \
+  $(TOP)/src/os_win.cpp \
+  $(TOP)/src/pager.cpp \
+  $(TOP)/src/pragma.cpp \
+  $(TOP)/src/prepare.cpp \
+  $(TOP)/src/printf.cpp \
+  $(TOP)/src/random.cpp \
+  $(TOP)/src/pcache.cpp \
+  $(TOP)/src/pcache1.cpp \
+  $(TOP)/src/select.cpp \
+  $(TOP)/src/tokenize.cpp \
+  $(TOP)/src/treeview.cpp \
+  $(TOP)/src/utf.cpp \
+  $(TOP)/src/util.cpp \
+  $(TOP)/src/vdbeapi.cpp \
+  $(TOP)/src/vdbeaux.cpp \
+  $(TOP)/src/vdbe.cpp \
+  $(TOP)/src/vdbemem.cpp \
+  $(TOP)/src/vdbetrace.cpp \
+  $(TOP)/src/vdbevtab.cpp \
+  $(TOP)/src/where.cpp \
+  $(TOP)/src/wherecode.cpp \
+  $(TOP)/src/whereexpr.cpp \
+  $(TOP)/src/window.cpp \
   parse.c \
-  $(TOP)/ext/fts3/fts3.c \
-  $(TOP)/ext/fts3/fts3_aux.c \
-  $(TOP)/ext/fts3/fts3_expr.c \
-  $(TOP)/ext/fts3/fts3_tokenizer.c \
-  $(TOP)/ext/fts3/fts3_write.c \
-  $(TOP)/ext/session/sqlite3session.c \
-  $(TOP)/ext/misc/stmt.c \
+  $(TOP)/ext/fts3/fts3.cpp \
+  $(TOP)/ext/fts3/fts3_aux.cpp \
+  $(TOP)/ext/fts3/fts3_expr.cpp \
+  $(TOP)/ext/fts3/fts3_tokenizer.cpp \
+  $(TOP)/ext/fts3/fts3_write.cpp \
+  $(TOP)/ext/session/sqlite3session.cpp \
+  $(TOP)/ext/misc/stmt.cpp \
   fts5.c
 
 # Header files used by all library source files.
 #
 HDR = \
-   $(TOP)/src/btree.h \
-   $(TOP)/src/btreeInt.h \
-   $(TOP)/src/hash.h \
-   $(TOP)/src/hwtime.h \
+   $(TOP)/src/btree.hpp \
+   $(TOP)/src/btreeInt.hpp \
+   $(TOP)/src/hash.hpp \
+   $(TOP)/src/hwtime.hpp \
    keywordhash.h \
-   $(TOP)/src/msvc.h \
-   $(TOP)/src/mutex.h \
+   $(TOP)/src/msvc.hpp \
+   $(TOP)/src/mutex.hpp \
    opcodes.h \
-   $(TOP)/src/os.h \
-   $(TOP)/src/os_common.h \
-   $(TOP)/src/os_setup.h \
-   $(TOP)/src/os_win.h \
-   $(TOP)/src/pager.h \
-   $(TOP)/src/pcache.h \
+   $(TOP)/src/os.hpp \
+   $(TOP)/src/os_common.hpp \
+   $(TOP)/src/os_setup.hpp \
+   $(TOP)/src/os_win.hpp \
+   $(TOP)/src/pager.hpp \
+   $(TOP)/src/pcache.hpp \
    parse.h  \
    pragma.h \
-   sqlite3.h  \
-   $(TOP)/src/sqlite3ext.h \
-   $(TOP)/src/sqliteInt.h  \
-   $(TOP)/src/sqliteLimit.h \
-   $(TOP)/src/vdbe.h \
-   $(TOP)/src/vdbeInt.h \
-   $(TOP)/src/vxworks.h \
-   $(TOP)/src/whereInt.h \
+   sqlite3.hpp  \
+   $(TOP)/src/sqlite3ext.hpp \
+   $(TOP)/src/sqliteInt.hpp  \
+   $(TOP)/src/sqliteLimit.hpp \
+   $(TOP)/src/vdbe.hpp \
+   $(TOP)/src/vdbeInt.hpp \
+   $(TOP)/src/vxworks.hpp \
+   $(TOP)/src/whereInt.hpp \
    sqlite_cfg.h
 # Reminder: sqlite_cfg.h is typically created by the configure script
 
 # Header files used by extensions
 #
 EXTHDR += \
-  $(TOP)/ext/fts3/fts3.h \
-  $(TOP)/ext/fts3/fts3Int.h \
-  $(TOP)/ext/fts3/fts3_hash.h \
-  $(TOP)/ext/fts3/fts3_tokenizer.h
+  $(TOP)/ext/fts3/fts3.hpp \
+  $(TOP)/ext/fts3/fts3Int.hpp \
+  $(TOP)/ext/fts3/fts3_hash.hpp \
+  $(TOP)/ext/fts3/fts3_tokenizer.hpp
 EXTHDR += \
-  $(TOP)/ext/rtree/rtree.h \
-  $(TOP)/ext/rtree/geopoly.c
+  $(TOP)/ext/rtree/rtree.hpp \
+  $(TOP)/ext/rtree/geopoly.cpp
 EXTHDR += \
-  $(TOP)/ext/icu/sqliteicu.h
+  $(TOP)/ext/icu/sqliteicu.hpp
 EXTHDR += \
-  $(TOP)/ext/rtree/sqlite3rtree.h
+  $(TOP)/ext/rtree/sqlite3rtree.hpp
 
 #
 # Executables needed for testing
@@ -985,30 +985,30 @@ FUZZCHECK_OPT += \
   -DSQLITE_MAX_MMAP_SIZE=0 \
   -DSQLITE_OMIT_LOAD_EXTENSION \
   -DSQLITE_PRINTF_PRECISION_LIMIT=1000 \
-  -DSQLITE_PRIVATE="" \
+  -DSQLITE_PRIVATE=extern \
   -DSQLITE_STRICT_SUBTYPE=1 \
   -DSQLITE_STATIC_RANDOMJSON
 
-FUZZCHECK_SRC = sqlite3.c \
+FUZZCHECK_SRC = sqlite3.cpp \
    $(TOP)/test/fuzzcheck.c \
    $(TOP)/test/ossfuzz.c \
    $(TOP)/test/fuzzinvariants.c \
-   $(TOP)/ext/recover/dbdata.c \
-   $(TOP)/ext/recover/sqlite3recover.c \
+   $(TOP)/ext/recover/dbdata.cpp \
+   $(TOP)/ext/recover/sqlite3recover.cpp \
    $(TOP)/test/vt02.c \
-   $(TOP)/ext/misc/base64.c \
-   $(TOP)/ext/misc/base85.c \
-   $(TOP)/ext/misc/completion.c \
-   $(TOP)/ext/misc/decimal.c \
-   $(TOP)/ext/misc/ieee754.c \
-   $(TOP)/ext/misc/randomjson.c \
-   $(TOP)/ext/misc/regexp.c \
-   $(TOP)/ext/misc/series.c \
-   $(TOP)/ext/misc/shathree.c \
-   $(TOP)/ext/misc/sha1.c \
-   $(TOP)/ext/misc/stmtrand.c
+   $(TOP)/ext/misc/base64.cpp \
+   $(TOP)/ext/misc/base85.cpp \
+   $(TOP)/ext/misc/completion.cpp \
+   $(TOP)/ext/misc/decimal.cpp \
+   $(TOP)/ext/misc/ieee754.cpp \
+   $(TOP)/ext/misc/randomjson.cpp \
+   $(TOP)/ext/misc/regexp.cpp \
+   $(TOP)/ext/misc/series.cpp \
+   $(TOP)/ext/misc/shathree.cpp \
+   $(TOP)/ext/misc/sha1.cpp \
+   $(TOP)/ext/misc/stmtrand.cpp
 
-FUZZCHECK_DEP = sqlite3.h
+FUZZCHECK_DEP = sqlite3.hpp
 DBFUZZ_OPT =
 ST_OPT = -DSQLITE_OS_KV_OPTIONAL
 
@@ -1083,14 +1083,14 @@ T.link.tcl = $(T.tcl.env.source); $(T.link)
 # all that automatic generation.
 #
 .target_source: $(MAKE_SANITY_CHECK) $(SRC) $(TOP)/tool/vdbe-compress.tcl \
-    fts5.c $(B.tclsh)
+    fts5.c fts5.hpp $(B.tclsh)
 	rm -rf tsrc
 	mkdir tsrc
 	cp -f $(SRC) tsrc
-	rm -f tsrc/sqlite.h.in tsrc/parse.y
-	$(B.tclsh) $(TOP)/tool/vdbe-compress.tcl $(OPTS) <tsrc/vdbe.c >vdbe.new
-	mv -f vdbe.new tsrc/vdbe.c
-	cp fts5.c fts5.h tsrc
+	rm -f tsrc/sqlite.hpp.in tsrc/parse.y
+	$(B.tclsh) $(TOP)/tool/vdbe-compress.tcl $(OPTS) <tsrc/vdbe.cpp >vdbe.new
+	mv -f vdbe.new tsrc/vdbe.cpp
+	cp fts5.c fts5.hpp tsrc
 	touch .target_source
 
 #
@@ -1136,28 +1136,28 @@ lemon$(B.exe): $(MAKE_SANITY_CHECK) $(TOP)/tool/lemon.c $(TOP)/tool/lempar.c
 mksourceid$(B.exe): $(MAKE_SANITY_CHECK) $(TOP)/tool/mksourceid.c
 	$(B.cc) -o $@ $(TOP)/tool/mksourceid.c
 
-sqlite3.h: $(MAKE_SANITY_CHECK) $(TOP)/src/sqlite.h.in \
+sqlite3.hpp: $(MAKE_SANITY_CHECK) $(TOP)/src/sqlite.hpp.in \
     $(TOP)/manifest mksourceid$(B.exe) \
 		$(TOP)/VERSION $(B.tclsh)
-	$(B.tclsh) $(TOP)/tool/mksqlite3h.tcl $(TOP) -o sqlite3.h
+	$(B.tclsh) $(TOP)/tool/mksqlite3h.tcl $(TOP) -o sqlite3.hpp
 
-sqlite3.c:	.target_source sqlite3.h $(TOP)/tool/mksqlite3c.tcl src-verify$(B.exe) \
+sqlite3.cpp:	.target_source sqlite3.hpp $(TOP)/tool/mksqlite3c.tcl src-verify$(B.exe) \
 		$(B.tclsh) $(EXTRA_SRC)
 	$(B.tclsh) $(TOP)/tool/mksqlite3c.tcl $(AMALGAMATION_GEN_FLAGS) $(EXTRA_SRC)
-	cp tsrc/sqlite3ext.h .
-	cp $(TOP)/ext/session/sqlite3session.h .
+	cp tsrc/sqlite3ext.hpp .
+	cp $(TOP)/ext/session/sqlite3session.hpp .
 
-sqlite3r.h: sqlite3.h $(B.tclsh)
+sqlite3r.h: sqlite3.hpp $(B.tclsh)
 	$(B.tclsh) $(TOP)/tool/mksqlite3h.tcl $(TOP) --enable-recover -o sqlite3r.h
 
-sqlite3r.c: sqlite3.c sqlite3r.h $(B.tclsh)
-	cp $(TOP)/ext/recover/sqlite3recover.c tsrc/
-	cp $(TOP)/ext/recover/sqlite3recover.h tsrc/
-	cp $(TOP)/ext/recover/dbdata.c tsrc/
+sqlite3r.cpp: sqlite3.cpp sqlite3r.h $(B.tclsh)
+	cp $(TOP)/ext/recover/sqlite3recover.cpp tsrc/
+	cp $(TOP)/ext/recover/sqlite3recover.hpp tsrc/
+	cp $(TOP)/ext/recover/dbdata.cpp tsrc/
 	$(B.tclsh) $(TOP)/tool/mksqlite3c.tcl --enable-recover $(AMALGAMATION_GEN_FLAGS) $(EXTRA_SRC)
 
-sqlite3ext.h: .target_source
-	cp tsrc/sqlite3ext.h .
+sqlite3ext.hpp: .target_source
+	cp tsrc/sqlite3ext.hpp .
 
 # Rules to build individual *.o files from generated *.c files. This
 # applies to:
@@ -1174,41 +1174,41 @@ opcodes.o:	opcodes.c
 
 # Rules to build individual *.o files from files in the src directory.
 #
-alter.o:	$(TOP)/src/alter.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/alter.c
+alter.o:	$(TOP)/src/alter.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/alter.cpp
 
-analyze.o:	$(TOP)/src/analyze.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/analyze.c
+analyze.o:	$(TOP)/src/analyze.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/analyze.cpp
 
-attach.o:	$(TOP)/src/attach.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/attach.c
+attach.o:	$(TOP)/src/attach.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/attach.cpp
 
-auth.o:	$(TOP)/src/auth.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/auth.c
+auth.o:	$(TOP)/src/auth.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/auth.cpp
 
-backup.o:	$(TOP)/src/backup.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/backup.c
+backup.o:	$(TOP)/src/backup.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/backup.cpp
 
-bitvec.o:	$(TOP)/src/bitvec.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/bitvec.c
+bitvec.o:	$(TOP)/src/bitvec.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/bitvec.cpp
 
-btmutex.o:	$(TOP)/src/btmutex.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/btmutex.c
+btmutex.o:	$(TOP)/src/btmutex.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/btmutex.cpp
 
-btree.o:	$(TOP)/src/btree.c $(DEPS_OBJ_COMMON) $(TOP)/src/pager.h
-	$(T.cc.sqlite) -c $(TOP)/src/btree.c
+btree.o:	$(TOP)/src/btree.cpp $(DEPS_OBJ_COMMON) $(TOP)/src/pager.hpp
+	$(T.cc.sqlite) -c $(TOP)/src/btree.cpp
 
-build.o:	$(TOP)/src/build.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/build.c
+build.o:	$(TOP)/src/build.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/build.cpp
 
-callback.o:	$(TOP)/src/callback.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/callback.c
+callback.o:	$(TOP)/src/callback.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/callback.cpp
 
-carray.o:	$(TOP)/src/carray.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/carray.c
+carray.o:	$(TOP)/src/carray.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/carray.cpp
 
-complete.o:	$(TOP)/src/complete.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/complete.c
+complete.o:	$(TOP)/src/complete.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/complete.cpp
 
 ctime.c:	$(TOP)/tool/mkctimec.tcl $(B.tclsh)
 	$(B.tclsh) $(TOP)/tool/mkctimec.tcl
@@ -1216,212 +1216,212 @@ ctime.c:	$(TOP)/tool/mkctimec.tcl $(B.tclsh)
 ctime.o:	ctime.c $(DEPS_OBJ_COMMON)
 	$(T.cc.sqlite) -c ctime.c
 
-date.o:	$(TOP)/src/date.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/date.c
+date.o:	$(TOP)/src/date.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/date.cpp
 
-dbpage.o:	$(TOP)/src/dbpage.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/dbpage.c
+dbpage.o:	$(TOP)/src/dbpage.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/dbpage.cpp
 
-dbstat.o:	$(TOP)/src/dbstat.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/dbstat.c
+dbstat.o:	$(TOP)/src/dbstat.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/dbstat.cpp
 
-delete.o:	$(TOP)/src/delete.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/delete.c
+delete.o:	$(TOP)/src/delete.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/delete.cpp
 
-expr.o:	$(TOP)/src/expr.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/expr.c
+expr.o:	$(TOP)/src/expr.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/expr.cpp
 
-fault.o:	$(TOP)/src/fault.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/fault.c
+fault.o:	$(TOP)/src/fault.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/fault.cpp
 
-fkey.o:	$(TOP)/src/fkey.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/fkey.c
+fkey.o:	$(TOP)/src/fkey.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/fkey.cpp
 
-func.o:	$(TOP)/src/func.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/func.c
+func.o:	$(TOP)/src/func.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/func.cpp
 
-global.o:	$(TOP)/src/global.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/global.c
+global.o:	$(TOP)/src/global.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/global.cpp
 
-hash.o:	$(TOP)/src/hash.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/hash.c
+hash.o:	$(TOP)/src/hash.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/hash.cpp
 
-insert.o:	$(TOP)/src/insert.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/insert.c
+insert.o:	$(TOP)/src/insert.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/insert.cpp
 
-json.o:	$(TOP)/src/json.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/json.c
+json.o:	$(TOP)/src/json.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/json.cpp
 
-legacy.o:	$(TOP)/src/legacy.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/legacy.c
+legacy.o:	$(TOP)/src/legacy.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/legacy.cpp
 
-loadext.o:	$(TOP)/src/loadext.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/loadext.c
+loadext.o:	$(TOP)/src/loadext.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/loadext.cpp
 
-main.o:	$(TOP)/src/main.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/main.c
+main.o:	$(TOP)/src/main.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/main.cpp
 
-malloc.o:	$(TOP)/src/malloc.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/malloc.c
+malloc.o:	$(TOP)/src/malloc.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/malloc.cpp
 
-mem0.o:	$(TOP)/src/mem0.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/mem0.c
+mem0.o:	$(TOP)/src/mem0.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/mem0.cpp
 
-mem1.o:	$(TOP)/src/mem1.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/mem1.c
+mem1.o:	$(TOP)/src/mem1.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/mem1.cpp
 
-mem2.o:	$(TOP)/src/mem2.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/mem2.c
+mem2.o:	$(TOP)/src/mem2.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/mem2.cpp
 
-mem3.o:	$(TOP)/src/mem3.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/mem3.c
+mem3.o:	$(TOP)/src/mem3.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/mem3.cpp
 
-mem5.o:	$(TOP)/src/mem5.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/mem5.c
+mem5.o:	$(TOP)/src/mem5.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/mem5.cpp
 
-memdb.o:	$(TOP)/src/memdb.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/memdb.c
+memdb.o:	$(TOP)/src/memdb.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/memdb.cpp
 
-memjournal.o:	$(TOP)/src/memjournal.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/memjournal.c
+memjournal.o:	$(TOP)/src/memjournal.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/memjournal.cpp
 
-mutex.o:	$(TOP)/src/mutex.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/mutex.c
+mutex.o:	$(TOP)/src/mutex.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/mutex.cpp
 
-mutex_noop.o:	$(TOP)/src/mutex_noop.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/mutex_noop.c
+mutex_noop.o:	$(TOP)/src/mutex_noop.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/mutex_noop.cpp
 
-mutex_unix.o:	$(TOP)/src/mutex_unix.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/mutex_unix.c
+mutex_unix.o:	$(TOP)/src/mutex_unix.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/mutex_unix.cpp
 
-mutex_w32.o:	$(TOP)/src/mutex_w32.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/mutex_w32.c
+mutex_w32.o:	$(TOP)/src/mutex_w32.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/mutex_w32.cpp
 
-notify.o:	$(TOP)/src/notify.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/notify.c
+notify.o:	$(TOP)/src/notify.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/notify.cpp
 
-pager.o:	$(TOP)/src/pager.c $(DEPS_OBJ_COMMON) $(TOP)/src/pager.h
-	$(T.cc.sqlite) -c $(TOP)/src/pager.c
+pager.o:	$(TOP)/src/pager.cpp $(DEPS_OBJ_COMMON) $(TOP)/src/pager.hpp
+	$(T.cc.sqlite) -c $(TOP)/src/pager.cpp
 
-pcache.o:	$(TOP)/src/pcache.c $(DEPS_OBJ_COMMON) $(TOP)/src/pcache.h
-	$(T.cc.sqlite) -c $(TOP)/src/pcache.c
+pcache.o:	$(TOP)/src/pcache.cpp $(DEPS_OBJ_COMMON) $(TOP)/src/pcache.hpp
+	$(T.cc.sqlite) -c $(TOP)/src/pcache.cpp
 
-pcache1.o:	$(TOP)/src/pcache1.c $(DEPS_OBJ_COMMON) $(TOP)/src/pcache.h
-	$(T.cc.sqlite) -c $(TOP)/src/pcache1.c
+pcache1.o:	$(TOP)/src/pcache1.cpp $(DEPS_OBJ_COMMON) $(TOP)/src/pcache.hpp
+	$(T.cc.sqlite) -c $(TOP)/src/pcache1.cpp
 
-os.o:	$(TOP)/src/os.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/os.c
+os.o:	$(TOP)/src/os.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/os.cpp
 
-os_kv.o:	$(TOP)/src/os_kv.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/os_kv.c
+os_kv.o:	$(TOP)/src/os_kv.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/os_kv.cpp
 
-os_unix.o:	$(TOP)/src/os_unix.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/os_unix.c
+os_unix.o:	$(TOP)/src/os_unix.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/os_unix.cpp
 
-os_win.o:	$(TOP)/src/os_win.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/os_win.c
+os_win.o:	$(TOP)/src/os_win.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/os_win.cpp
 
-pragma.o:	$(TOP)/src/pragma.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/pragma.c
+pragma.o:	$(TOP)/src/pragma.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/pragma.cpp
 
-prepare.o:	$(TOP)/src/prepare.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/prepare.c
+prepare.o:	$(TOP)/src/prepare.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/prepare.cpp
 
-printf.o:	$(TOP)/src/printf.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/printf.c
+printf.o:	$(TOP)/src/printf.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/printf.cpp
 
-random.o:	$(TOP)/src/random.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/random.c
+random.o:	$(TOP)/src/random.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/random.cpp
 
-resolve.o:	$(TOP)/src/resolve.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/resolve.c
+resolve.o:	$(TOP)/src/resolve.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/resolve.cpp
 
-rowset.o:	$(TOP)/src/rowset.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/rowset.c
+rowset.o:	$(TOP)/src/rowset.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/rowset.cpp
 
-select.o:	$(TOP)/src/select.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/select.c
+select.o:	$(TOP)/src/select.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/select.cpp
 
-status.o:	$(TOP)/src/status.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/status.c
+status.o:	$(TOP)/src/status.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/status.cpp
 
-sqlite3.o:	sqlite3.h sqlite3.c
-	$(T.cc.sqlite) -c sqlite3.c
+sqlite3.o:	sqlite3.hpp sqlite3.cpp
+	$(T.cc.sqlite) -c sqlite3.cpp
 
-table.o:	$(TOP)/src/table.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/table.c
+table.o:	$(TOP)/src/table.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/table.cpp
 
-threads.o:	$(TOP)/src/threads.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/threads.c
+threads.o:	$(TOP)/src/threads.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/threads.cpp
 
-tokenize.o:	$(TOP)/src/tokenize.c keywordhash.h $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/tokenize.c
+tokenize.o:	$(TOP)/src/tokenize.cpp keywordhash.h $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/tokenize.cpp
 
-treeview.o:	$(TOP)/src/treeview.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/treeview.c
+treeview.o:	$(TOP)/src/treeview.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/treeview.cpp
 
-trigger.o:	$(TOP)/src/trigger.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/trigger.c
+trigger.o:	$(TOP)/src/trigger.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/trigger.cpp
 
-update.o:	$(TOP)/src/update.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/update.c
+update.o:	$(TOP)/src/update.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/update.cpp
 
-upsert.o:	$(TOP)/src/upsert.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/upsert.c
+upsert.o:	$(TOP)/src/upsert.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/upsert.cpp
 
-utf.o:	$(TOP)/src/utf.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/utf.c
+utf.o:	$(TOP)/src/utf.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/utf.cpp
 
-util.o:	$(TOP)/src/util.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/util.c
+util.o:	$(TOP)/src/util.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/util.cpp
 
-vacuum.o:	$(TOP)/src/vacuum.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/vacuum.c
+vacuum.o:	$(TOP)/src/vacuum.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/vacuum.cpp
 
-vdbe.o:	$(TOP)/src/vdbe.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/vdbe.c
+vdbe.o:	$(TOP)/src/vdbe.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/vdbe.cpp
 
-vdbeapi.o:	$(TOP)/src/vdbeapi.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/vdbeapi.c
+vdbeapi.o:	$(TOP)/src/vdbeapi.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/vdbeapi.cpp
 
-vdbeaux.o:	$(TOP)/src/vdbeaux.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/vdbeaux.c
+vdbeaux.o:	$(TOP)/src/vdbeaux.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/vdbeaux.cpp
 
-vdbeblob.o:	$(TOP)/src/vdbeblob.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/vdbeblob.c
+vdbeblob.o:	$(TOP)/src/vdbeblob.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/vdbeblob.cpp
 
-vdbemem.o:	$(TOP)/src/vdbemem.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/vdbemem.c
+vdbemem.o:	$(TOP)/src/vdbemem.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/vdbemem.cpp
 
-vdbesort.o:	$(TOP)/src/vdbesort.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/vdbesort.c
+vdbesort.o:	$(TOP)/src/vdbesort.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/vdbesort.cpp
 
-vdbetrace.o:	$(TOP)/src/vdbetrace.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/vdbetrace.c
+vdbetrace.o:	$(TOP)/src/vdbetrace.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/vdbetrace.cpp
 
-vdbevtab.o:	$(TOP)/src/vdbevtab.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/vdbevtab.c
+vdbevtab.o:	$(TOP)/src/vdbevtab.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/vdbevtab.cpp
 
-vtab.o:	$(TOP)/src/vtab.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/vtab.c
+vtab.o:	$(TOP)/src/vtab.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/vtab.cpp
 
-wal.o:	$(TOP)/src/wal.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/wal.c
+wal.o:	$(TOP)/src/wal.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/wal.cpp
 
-walker.o:	$(TOP)/src/walker.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/walker.c
+walker.o:	$(TOP)/src/walker.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/walker.cpp
 
-where.o:	$(TOP)/src/where.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/where.c
+where.o:	$(TOP)/src/where.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/where.cpp
 
-wherecode.o:	$(TOP)/src/wherecode.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/wherecode.c
+wherecode.o:	$(TOP)/src/wherecode.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/wherecode.cpp
 
-whereexpr.o:	$(TOP)/src/whereexpr.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/whereexpr.c
+whereexpr.o:	$(TOP)/src/whereexpr.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/whereexpr.cpp
 
-window.o:	$(TOP)/src/window.c $(DEPS_OBJ_COMMON)
-	$(T.cc.sqlite) -c $(TOP)/src/window.c
+window.o:	$(TOP)/src/window.cpp $(DEPS_OBJ_COMMON)
+	$(T.cc.sqlite) -c $(TOP)/src/window.cpp
 
 tclsqlite.o:	$(T.tcl.env.sh) tclsqlite-ex.c $(DEPS_OBJ_COMMON)
 	$(T.compile.tcl) -DUSE_TCL_STUBS=1 $$TCL_INCLUDE_SPEC \
@@ -1460,9 +1460,9 @@ tcl: tclsqlite3$(T.exe)-$(HAVE_TCL)
 opcodes.c:	opcodes.h $(TOP)/tool/mkopcodec.tcl $(B.tclsh)
 	$(B.tclsh) $(TOP)/tool/mkopcodec.tcl opcodes.h >opcodes.c
 
-opcodes.h:	parse.h $(TOP)/src/vdbe.c \
+opcodes.h:	parse.h $(TOP)/src/vdbe.cpp \
 		$(TOP)/tool/mkopcodeh.tcl $(B.tclsh)
-	cat parse.h $(TOP)/src/vdbe.c | $(B.tclsh) $(TOP)/tool/mkopcodeh.tcl >opcodes.h
+	cat parse.h $(TOP)/src/vdbe.cpp | $(B.tclsh) $(TOP)/tool/mkopcodeh.tcl >opcodes.h
 
 # Rules to build parse.c and parse.h - the outputs of lemon.
 #
@@ -1487,9 +1487,9 @@ keywordhash.h:	mkkeywordhash$(B.exe)
 	./mkkeywordhash$(B.exe) > $@
 
 #
-# sqlite3.c split into many smaller files.
+# sqlite3.cpp split into many smaller files.
 #
-sqlite3-all.c:	sqlite3.c $(TOP)/tool/split-sqlite3c.tcl $(B.tclsh)
+sqlite3-all.c:	sqlite3.cpp $(TOP)/tool/split-sqlite3c.tcl $(B.tclsh)
 	$(B.tclsh) $(TOP)/tool/split-sqlite3c.tcl
 
 #
@@ -1624,8 +1624,8 @@ install: install-lib
 #
 # Install C header files
 #
-install-headers: sqlite3.h $(install-dir.include)
-	$(INSTALL.noexec) sqlite3.h "$(TOP)/src/sqlite3ext.h" "$(install-dir.include)"
+install-headers: sqlite3.hpp $(install-dir.include)
+	$(INSTALL.noexec) sqlite3.hpp "$(TOP)/src/sqlite3ext.h" "$(install-dir.include)"
 install: install-headers
 
 #
@@ -1676,18 +1676,18 @@ install-tcl: install-tcl-$(HAVE_TCL)
 install: install-tcl
 
 TCLSQLITEEX = \
-  $(TOP)/ext/qrf/qrf.h \
-  $(TOP)/ext/qrf/qrf.c \
-  $(TOP)/src/tclsqlite.c
+  $(TOP)/ext/qrf/qrf.hpp \
+  $(TOP)/ext/qrf/qrf.cpp \
+  $(TOP)/src/tclsqlite.cpp
 
 tclsqlite-ex.c:	$(TCLSQLITEEX) $(TOP)/tool/mkcombo.tcl $(B.tclsh)
 	$(B.tclsh) $(TOP)/tool/mkcombo.tcl $(TCLSQLITEEX) -o $@
 
-tclsqlite3.c:	sqlite3.c tclsqlite-ex.c
-	echo '#ifndef USE_SYSTEM_SQLITE' >tclsqlite3.c
-	cat sqlite3.c >>tclsqlite3.c
-	echo '#endif /* USE_SYSTEM_SQLITE */' >>tclsqlite3.c
-	cat tclsqlite-ex.c >>tclsqlite3.c
+tclsqlite3.cpp:	sqlite3.cpp tclsqlite-ex.c
+	echo '#ifndef USE_SYSTEM_SQLITE' >tclsqlite3.cpp
+	cat sqlite3.cpp >>tclsqlite3.cpp
+	echo '#endif /* USE_SYSTEM_SQLITE */' >>tclsqlite3.cpp
+	cat tclsqlite-ex.c >>tclsqlite3.cpp
 
 #
 # $(CFLAGS.tclextension) = CFLAGS for the tclextension* targets.
@@ -1698,7 +1698,7 @@ CFLAGS.tclextension = $(CFLAGS.intree_includes) $(CFLAGS.env) $(OPT_FEATURE_FLAG
 # with whatever version of TCL is running as $TCLSH_CMD, possibly defined
 # by --with-tclsh=/path/to/tclsh.
 #
-tclextension: tclsqlite3.c
+tclextension: tclsqlite3.cpp
 	$(TCLSH_CMD) $(TOP)/tool/buildtclext.tcl --build-only \
 		--tclConfig.sh $(TCL_CONFIG_SH) --cc "$(T.cc)" $(CFLAGS.tclextension)
 
@@ -1706,7 +1706,7 @@ tclextension: tclsqlite3.c
 # Install the SQLite TCL extension in a way that is appropriate for $TCLSH_CMD
 # to find it.
 #
-tclextension-install: tclsqlite3.c
+tclextension-install: tclsqlite3.cpp
 	$(TCLSH_CMD) $(TOP)/tool/buildtclext.tcl --destdir "$(DESTDIR)" \
 		--tclConfig.sh $(TCL_CONFIG_SH) --cc "$(T.cc)" $(CFLAGS.tclextension)
 
@@ -1729,7 +1729,7 @@ tclextension-list:
 # in $(TCLSH_CMD) is the same as the version of SQLite for the
 # current source tree
 #
-tclextension-verify: sqlite3.h
+tclextension-verify: sqlite3.hpp
 	@ $(TCLSH_CMD) $(TOP)/tool/buildtclext.tcl --version-check \
 		--tclConfig.sh $(TCL_CONFIG_SH)
 
@@ -1745,21 +1745,21 @@ tclextension-all:
 # FTS5 things
 #
 FTS5_SRC = \
-   $(TOP)/ext/fts5/fts5.h \
-   $(TOP)/ext/fts5/fts5Int.h \
-   $(TOP)/ext/fts5/fts5_aux.c \
-   $(TOP)/ext/fts5/fts5_buffer.c \
-   $(TOP)/ext/fts5/fts5_main.c \
-   $(TOP)/ext/fts5/fts5_config.c \
-   $(TOP)/ext/fts5/fts5_expr.c \
-   $(TOP)/ext/fts5/fts5_hash.c \
-   $(TOP)/ext/fts5/fts5_index.c \
+   $(TOP)/ext/fts5/fts5.hpp \
+   $(TOP)/ext/fts5/fts5Int.hpp \
+   $(TOP)/ext/fts5/fts5_aux.cpp \
+   $(TOP)/ext/fts5/fts5_buffer.cpp \
+   $(TOP)/ext/fts5/fts5_main.cpp \
+   $(TOP)/ext/fts5/fts5_config.cpp \
+   $(TOP)/ext/fts5/fts5_expr.cpp \
+   $(TOP)/ext/fts5/fts5_hash.cpp \
+   $(TOP)/ext/fts5/fts5_index.cpp \
    fts5parse.c fts5parse.h \
-   $(TOP)/ext/fts5/fts5_storage.c \
-   $(TOP)/ext/fts5/fts5_tokenize.c \
-   $(TOP)/ext/fts5/fts5_unicode2.c \
-   $(TOP)/ext/fts5/fts5_varint.c \
-   $(TOP)/ext/fts5/fts5_vocab.c  \
+   $(TOP)/ext/fts5/fts5_storage.cpp \
+   $(TOP)/ext/fts5/fts5_tokenize.cpp \
+   $(TOP)/ext/fts5/fts5_unicode2.cpp \
+   $(TOP)/ext/fts5/fts5_varint.cpp \
+   $(TOP)/ext/fts5/fts5_vocab.cpp  \
 
 fts5parse.c:	$(TOP)/ext/fts5/fts5parse.y lemon$(B.exe)
 	cp $(TOP)/ext/fts5/fts5parse.y .
@@ -1770,26 +1770,29 @@ fts5parse.h: fts5parse.c
 
 fts5.c: $(FTS5_SRC) $(B.tclsh)
 	$(B.tclsh) $(TOP)/ext/fts5/tool/mkfts5c.tcl
-	cp $(TOP)/ext/fts5/fts5.h .
+	cp $(TOP)/ext/fts5/fts5.hpp .
+
+fts5.hpp: $(TOP)/ext/fts5/fts5.hpp
+	cp $(TOP)/ext/fts5/fts5.hpp .
 
 fts5.o:	fts5.c $(DEPS_OBJ_COMMON) $(EXTHDR)
 	$(T.cc.extension) -c fts5.c
 
-sqlite3rbu.o:	$(TOP)/ext/rbu/sqlite3rbu.c $(DEPS_OBJ_COMMON) $(EXTHDR)
-	$(T.cc.extension) -c $(TOP)/ext/rbu/sqlite3rbu.c
+sqlite3rbu.o:	$(TOP)/ext/rbu/sqlite3rbu.cpp $(DEPS_OBJ_COMMON) $(EXTHDR)
+	$(T.cc.extension) -c $(TOP)/ext/rbu/sqlite3rbu.cpp
 
 
 #
 # Rules to build the 'testfixture' application.
 #
-# If using the amalgamation, use sqlite3.c directly to build the test
+# If using the amalgamation, use sqlite3.cpp directly to build the test
 # fixture.  Otherwise link against libsqlite3.a.  (This distinction is
 # necessary because the test fixture requires non-API symbols which are
 # hidden when the library is built via the amalgamation).
 #
 TESTFIXTURE_FLAGS  = -DSQLITE_TEST=1 -DSQLITE_CRASH_TEST=1
 TESTFIXTURE_FLAGS += -DTCLSH_INIT_PROC=sqlite3TestInit
-TESTFIXTURE_FLAGS += -DSQLITE_SERVER=1 -DSQLITE_PRIVATE="" -DSQLITE_CORE
+TESTFIXTURE_FLAGS += -DSQLITE_SERVER=1 -DSQLITE_PRIVATE=extern -DSQLITE_CORE
 TESTFIXTURE_FLAGS += -DBUILD_sqlite
 TESTFIXTURE_FLAGS += -DSQLITE_SERIES_CONSTRAINT_VERIFY=1
 TESTFIXTURE_FLAGS += -DSQLITE_DEFAULT_PAGE_SIZE=1024
@@ -1803,7 +1806,7 @@ TESTFIXTURE_FLAGS += -DSQLITE_STATIC_RANDOMJSON
 TESTFIXTURE_FLAGS += -DSQLITE_STRICT_SUBTYPE=1
 
 TESTFIXTURE_SRC0 = $(TESTSRC2) $(libsqlite3.LIB)
-TESTFIXTURE_SRC1 = sqlite3.c
+TESTFIXTURE_SRC1 = sqlite3.cpp
 TESTFIXTURE_SRC = $(TESTSRC) tclsqlite-ex.c
 TESTFIXTURE_SRC += $(TESTFIXTURE_SRC$(USE_AMALGAMATION))
 
@@ -1931,7 +1934,7 @@ fp-speed-test:	fp-speed-1$(T.exe) fp-speed-2$(T.exe)
 #
 sqlite3_analyzer.c.flags.0 = -DINCLUDE_SQLITE3_C=1
 sqlite3_analyzer.c.flags.1 =
-sqlite3_analyzer.c: sqlite3.c tclsqlite-ex.c $(TOP)/tool/spaceanal.tcl \
+sqlite3_analyzer.c: sqlite3.cpp tclsqlite-ex.c $(TOP)/tool/spaceanal.tcl \
                     $(TOP)/tool/mkccode.tcl $(TOP)/tool/sqlite3_analyzer.c.in
 	$(B.tclsh) $(TOP)/tool/mkccode.tcl $(TOP)/tool/sqlite3_analyzer.c.in \
 		$(sqlite3_analyzer.c.flags.$(LINK_TOOLS_DYNAMICALLY)) \
@@ -1955,8 +1958,8 @@ sqlite3_analyzer$(T.exe): $(T.tcl.env.sh) sqlite3_analyzer.c \
 # can cause the $@ to link to an out-of-tree libsqlite3.so, which may
 # or may not fail or otherwise cause confusion.
 
-sqltclsh.c: sqlite3.c tclsqlite-ex.c $(TOP)/tool/sqltclsh.tcl \
-            $(TOP)/ext/misc/appendvfs.c $(TOP)/tool/mkccode.tcl \
+sqltclsh.c: sqlite3.cpp tclsqlite-ex.c $(TOP)/tool/sqltclsh.tcl \
+            $(TOP)/ext/misc/appendvfs.cpp $(TOP)/tool/mkccode.tcl \
             $(TOP)/tool/sqltclsh.c.in
 	$(B.tclsh) $(TOP)/tool/mkccode.tcl $(TOP)/tool/sqltclsh.c.in >sqltclsh.c
 
@@ -1967,15 +1970,15 @@ sqltclsh$(T.exe): $(T.tcl.env.sh) sqltclsh.c
 # used primarily for testing the build process.
 xbin: sqltclsh$(T.exe) sqlite3_analyzer$(T.exe)
 
-sqlite3_expert$(T.exe): $(TOP)/ext/expert/sqlite3expert.h $(TOP)/ext/expert/sqlite3expert.c \
-                       $(TOP)/ext/expert/expert.c sqlite3.c
-	$(T.link) $(TOP)/ext/expert/sqlite3expert.c \
-		$(TOP)/ext/expert/expert.c sqlite3.c -o sqlite3_expert $(LDFLAGS.libsqlite3)
+sqlite3_expert$(T.exe): $(TOP)/ext/expert/sqlite3expert.hpp $(TOP)/ext/expert/sqlite3expert.cpp \
+                       $(TOP)/ext/expert/expert.cpp sqlite3.cpp
+	$(T.link) $(TOP)/ext/expert/sqlite3expert.cpp \
+		$(TOP)/ext/expert/expert.cpp sqlite3.cpp -o sqlite3_expert $(LDFLAGS.libsqlite3)
 xbin: sqlite3_expert$(T.exe)
 
-dbdump$(T.exe): $(TOP)/ext/misc/dbdump.c sqlite3.o
+dbdump$(T.exe): $(TOP)/ext/misc/dbdump.cpp sqlite3.o
 	$(T.link) -DDBDUMP_STANDALONE -o $@ \
-		$(TOP)/ext/misc/dbdump.c sqlite3.o $(LDFLAGS.libsqlite3)
+		$(TOP)/ext/misc/dbdump.cpp sqlite3.o $(LDFLAGS.libsqlite3)
 xbin: dbdump$(T.exe)
 
 dbtotxt$(T.exe): $(TOP)/tool/dbtotxt.c
@@ -2012,13 +2015,13 @@ index_usage$(T.exe): $(TOP)/tool/index_usage.c sqlite3.o
 xbin: index_usage$(T.exe)
 
 # Reminder: changeset does not build without -DSQLITE_ENABLE_SESSION
-changeset$(T.exe):	$(TOP)/ext/session/changeset.c sqlite3.o
-	$(T.link) -o $@ $(TOP)/ext/session/changeset.c sqlite3.o \
+changeset$(T.exe):	$(TOP)/ext/session/changeset.cpp sqlite3.o
+	$(T.link) -o $@ $(TOP)/ext/session/changeset.cpp sqlite3.o \
 		$(LDFLAGS.libsqlite3)
 xbin: changeset$(T.exe)
 
-changesetfuzz$(T.exe):	$(TOP)/ext/session/changesetfuzz.c sqlite3.o
-	$(T.link) -o $@ $(TOP)/ext/session/changesetfuzz.c sqlite3.o \
+changesetfuzz$(T.exe):	$(TOP)/ext/session/changesetfuzz.cpp sqlite3.o
+	$(T.link) -o $@ $(TOP)/ext/session/changesetfuzz.cpp sqlite3.o \
 		$(LDFLAGS.libsqlite3)
 xbin: changesetfuzz$(T.exe)
 
@@ -2030,7 +2033,7 @@ atrc$(T.exe): $(TOP)/test/atrc.c sqlite3.o
 	$(T.link) -o $@ $(TOP)/test/atrc.c sqlite3.o $(LDFLAGS.libsqlite3)
 xbin: atrc$(T.exe)
 
-LogEst$(T.exe):	$(TOP)/tool/logest.c sqlite3.h
+LogEst$(T.exe):	$(TOP)/tool/logest.c sqlite3.hpp
 	$(T.link) -I. -o $@ $(TOP)/tool/logest.c $(LDFLAGS.configure)
 xbin: LogEst$(T.exe)
 
@@ -2038,8 +2041,8 @@ wordcount$(T.exe):	$(TOP)/test/wordcount.c sqlite3.o
 	$(T.link) -o $@ $(TOP)/test/wordcount.c sqlite3.o $(LDFLAGS.libsqlite3)
 xbin: wordcount$(T.exe)
 
-speedtest1$(T.exe):	$(TOP)/test/speedtest1.c sqlite3.c Makefile
-	$(T.link) $(ST_OPT) -o $@ $(TOP)/test/speedtest1.c sqlite3.c \
+speedtest1$(T.exe):	$(TOP)/test/speedtest1.c sqlite3.cpp Makefile
+	$(T.link) $(ST_OPT) -o $@ $(TOP)/test/speedtest1.c sqlite3.cpp \
 		$(LDFLAGS.libsqlite3)
 xbin: speedtest1$(T.exe)
 
@@ -2051,15 +2054,15 @@ fp-speed-2$(T.exe):	$(TOP)/test/fp-speed-2.c sqlite3.o Makefile
 	$(T.link) $(ST_OPT) -o $@ $(TOP)/test/fp-speed-2.c sqlite3.o \
 		$(LDFLAGS.libsqlite3)
 
-startup$(T.exe):	$(TOP)/test/startup.c sqlite3.c
+startup$(T.exe):	$(TOP)/test/startup.c sqlite3.cpp
 	$(T.link) -Os -g -USQLITE_THREADSAFE -DSQLITE_THREADSAFE=0 \
-		-o $@ $(TOP)/test/startup.c sqlite3.c $(LDFLAGS.libsqlite3)
+		-o $@ $(TOP)/test/startup.c sqlite3.cpp $(LDFLAGS.libsqlite3)
 xbin: startup$(T.exe)
 
 KV_OPT += -DSQLITE_DIRECT_OVERFLOW_READ
 
-kvtest$(T.exe):	$(TOP)/test/kvtest.c sqlite3.c
-	$(T.link) $(KV_OPT) -o $@ $(TOP)/test/kvtest.c sqlite3.c \
+kvtest$(T.exe):	$(TOP)/test/kvtest.c sqlite3.cpp
+	$(T.link) $(KV_OPT) -o $@ $(TOP)/test/kvtest.c sqlite3.cpp \
 		$(LDFLAGS.libsqlite3)
 xbin: kvtest$(T.exe)
 
@@ -2067,8 +2070,8 @@ xbin: kvtest$(T.exe)
 # rbu$(T.exe) requires building with -DSQLITE_ENABLE_RBU, which
 # specifically does not have an --enable-rbu flag in the configure
 # script.
-rbu$(T.exe): $(TOP)/ext/rbu/rbu.c $(TOP)/ext/rbu/sqlite3rbu.c sqlite3.o
-	$(T.link) -I. -o $@ $(TOP)/ext/rbu/rbu.c sqlite3.o $(LDFLAGS.libsqlite3)
+rbu$(T.exe): $(TOP)/ext/rbu/rbu.cpp $(TOP)/ext/rbu/sqlite3rbu.cpp sqlite3.o
+	$(T.link) -I. -o $@ $(TOP)/ext/rbu/rbu.cpp sqlite3.o $(LDFLAGS.libsqlite3)
 
 loadfts$(T.exe): $(TOP)/tool/loadfts.c $(libsqlite3.LIB)
 	$(T.link) $(TOP)/tool/loadfts.c $(libsqlite3.LIB) \
@@ -2089,10 +2092,10 @@ checksymbols: sqlite3.o
 # a tarball named for the version number.  Ex:  sqlite-autoconf-3110000.tar.gz.
 # The snapshot-tarball target builds a tarball named by the SHA3 hash
 #
-amalgamation-tarball: sqlite3.c sqlite3rc.h
+amalgamation-tarball: sqlite3.cpp sqlite3rc.h
 	TOP=$(TOP) sh $(TOP)/tool/mkautoconfamal.sh --normal
 
-snapshot-tarball: sqlite3.c sqlite3rc.h
+snapshot-tarball: sqlite3.cpp sqlite3rc.h
 	TOP=$(TOP) sh $(TOP)/tool/mkautoconfamal.sh --snapshot
 
 # Build a ZIP archive snapshot of the latest check-in.
@@ -2102,7 +2105,7 @@ sqlite-src.zip:	$(TOP)/tool/mksrczip.tcl
 
 # Build a ZIP archive of the amalgamation
 #
-sqlite-amalgamation.zip:	$(TOP)/tool/mkamalzip.tcl sqlite3.c sqlite3.h shell.c sqlite3ext.h
+sqlite-amalgamation.zip:	$(TOP)/tool/mkamalzip.tcl sqlite3.cpp sqlite3.hpp shell.cpp sqlite3ext.hpp
 	$(TCLSH_CMD) $(TOP)/tool/mkamalzip.tcl
 
 # Build all the source code deliverables
@@ -2132,7 +2135,7 @@ clean: clean-tool-zip
 # threadtest runs a few thread-safety tests that are implemented in C. This
 # target is invoked by the releasetest.tcl script.
 #
-THREADTEST3_SRC = $(TOP)/test/threadtest3.c    \
+THREADTEST3_SRC = $(TOP)/test/threadtest3.cpp    \
                   $(TOP)/test/tt3_checkpoint.c \
                   $(TOP)/test/tt3_index.c      \
                   $(TOP)/test/tt3_vacuum.c      \
@@ -2140,15 +2143,15 @@ THREADTEST3_SRC = $(TOP)/test/threadtest3.c    \
                   $(TOP)/test/tt3_lookaside1.c
 
 threadtest3$(T.exe): sqlite3.o $(THREADTEST3_SRC)
-	$(T.link) $(TOP)/test/threadtest3.c $(TOP)/src/test_multiplex.c sqlite3.o \
+	$(T.link) $(TOP)/test/threadtest3.cpp $(TOP)/src/test_multiplex.cpp sqlite3.o \
 		-o $@ $(LDFLAGS.libsqlite3)
 xbin: threadtest3$(T.exe)
 
 threadtest: threadtest3$(T.exe)
 	./threadtest3$(T.exe)
 
-threadtest5: sqlite3.c $(TOP)/test/threadtest5.c
-	$(T.link) $(TOP)/test/threadtest5.c sqlite3.c -o $@ $(LDFLAGS.libsqlite3)
+threadtest5: sqlite3.cpp $(TOP)/test/threadtest5.cpp
+	$(T.link) $(TOP)/test/threadtest5.cpp sqlite3.cpp -o $@ $(LDFLAGS.libsqlite3)
 xbin: threadtest5
 
 #
@@ -2165,16 +2168,16 @@ sqlite3-shell-static.flags.1 = -static
 sqlite3-shell-static.flags.0 =
 #
 # When building sqlite3$(T.exe) we specifically embed a copy of
-# sqlite3.c, and not link to libsqlite3.so or libsqlite3.a, because
+# sqlite3.cpp, and not link to libsqlite3.so or libsqlite3.a, because
 # the shell needs to be able to enable arbitrary library features,
 # some of which have significant performance impacts. For example,,
 # SQLITE_ENABLE_EXPLAIN_COMMENTS has been measured as having a 5.2%
 # runtime performance hit, which is fine for use in the shell but is
 # not appropriate for the canonical library build.
 #
-sqlite3$(T.exe):	shell.c sqlite3.c
+sqlite3$(T.exe):	shell.cpp sqlite3.cpp
 	$(T.link) -o $@ \
-		shell.c sqlite3.c \
+		shell.cpp sqlite3.cpp \
 		$(sqlite3-shell-static.flags.$(STATIC_CLI_SHELL)) \
 		$(CFLAGS.readline) $(SHELL_OPT) $(CFLAGS.icu) \
 		$(LDFLAGS.libsqlite3) $(LDFLAGS.readline)
@@ -2189,9 +2192,9 @@ all: sqlite3$(T.exe)-$(HAVE_WASI_SDK)
 # The "sqlite3d" CLI is build using separate source files.  This
 # is useful during development and debugging.
 #
-sqlite3d$(T.exe):	shell.c $(LIBOBJS0)
+sqlite3d$(T.exe):	shell.cpp $(LIBOBJS0)
 	$(T.link) -o $@ \
-		shell.c $(LIBOBJS0) \
+		shell.cpp $(LIBOBJS0) \
 		$(CFLAGS.readline) $(SHELL_OPT) \
 		$(LDFLAGS.libsqlite3) $(LDFLAGS.readline)
 
@@ -2202,9 +2205,9 @@ install: install-shell-$(HAVE_WASI_SDK)
 
 # How to build sqldiff$(T.exe) depends on $(LINK_TOOLS_DYNAMICALLY)
 #
-sqldiff.0.deps = $(TOP)/tool/sqldiff.c $(TOP)/ext/misc/sqlite3_stdio.h sqlite3.o sqlite3.h
+sqldiff.0.deps = $(TOP)/tool/sqldiff.c $(TOP)/ext/misc/sqlite3_stdio.hpp sqlite3.o sqlite3.hpp
 sqldiff.0.rules = $(T.link) -o $@ $(TOP)/tool/sqldiff.c sqlite3.o $(LDFLAGS.libsqlite3)
-sqldiff.1.deps = $(TOP)/tool/sqldiff.c $(TOP)/ext/misc/sqlite3_stdio.h $(libsqlite3.DLL)
+sqldiff.1.deps = $(TOP)/tool/sqldiff.c $(TOP)/ext/misc/sqlite3_stdio.hpp $(libsqlite3.DLL)
 sqldiff.1.rules = $(T.link) -o $@ $(TOP)/tool/sqldiff.c -L. -lsqlite3 $(LDFLAGS.configure)
 sqldiff$(T.exe): $(sqldiff.$(LINK_TOOLS_DYNAMICALLY).deps)
 	$(sqldiff.$(LINK_TOOLS_DYNAMICALLY).rules)
@@ -2213,13 +2216,13 @@ install-diff: sqldiff$(T.exe) $(install-dir.bin)
 	$(INSTALL) sqldiff$(T.exe) "$(install-dir.bin)"
 #install: install-diff
 
-dbhash$(T.exe):	$(TOP)/tool/dbhash.c sqlite3.o sqlite3.h
+dbhash$(T.exe):	$(TOP)/tool/dbhash.c sqlite3.o sqlite3.hpp
 	$(T.link) -o $@ $(TOP)/tool/dbhash.c sqlite3.o $(LDFLAGS.libsqlite3)
 xbin: dbhash$(T.exe)
 
 RSYNC_SRC = \
   $(TOP)/tool/sqlite3_rsync.c \
-  sqlite3.c
+  sqlite3.cpp
 
 RSYNC_OPT = \
   -DSQLITE_ENABLE_DBPAGE_VTAB \
@@ -2246,17 +2249,17 @@ install: install-man1
 install-pc: sqlite3.pc $(install-dir.pkgconfig)
 	$(INSTALL.noexec) sqlite3.pc "$(install-dir.pkgconfig)"
 
-scrub$(T.exe):	$(TOP)/ext/misc/scrub.c sqlite3.o
+scrub$(T.exe):	$(TOP)/ext/misc/scrub.cpp sqlite3.o
 	$(T.link) -o $@ -I. -DSCRUB_STANDALONE \
-		$(TOP)/ext/misc/scrub.c sqlite3.o $(LDFLAGS.libsqlite3)
+		$(TOP)/ext/misc/scrub.cpp sqlite3.o $(LDFLAGS.libsqlite3)
 xbin: scrub$(T.exe)
 
 srcck1$(B.exe):	$(TOP)/tool/srcck1.c
 	$(B.cc) -o srcck1$(B.exe) $(TOP)/tool/srcck1.c
 xbin: srcck1$(B.exe)
 
-sourcetest:	srcck1$(B.exe) sqlite3.c
-	./srcck1$(B.exe) sqlite3.c
+sourcetest:	srcck1$(B.exe) sqlite3.cpp
+	./srcck1$(B.exe) sqlite3.cpp
 
 src-verify$(B.exe):	$(TOP)/tool/src-verify.c
 	$(B.cc) -o src-verify$(B.exe) $(TOP)/tool/src-verify.c
@@ -2265,9 +2268,9 @@ xbin: src-verify$(B.exe)
 verify-source:	./src-verify$(B.exe)
 	./src-verify$(B.exe) $(TOP)
 
-fuzzershell$(T.exe):	$(TOP)/tool/fuzzershell.c sqlite3.c sqlite3.h
+fuzzershell$(T.exe):	$(TOP)/tool/fuzzershell.c sqlite3.cpp sqlite3.hpp
 	$(T.link) -o $@ $(FUZZERSHELL_OPT) \
-		$(TOP)/tool/fuzzershell.c sqlite3.c $(LDFLAGS.libsqlite3)
+		$(TOP)/tool/fuzzershell.c sqlite3.cpp $(LDFLAGS.libsqlite3)
 fuzzy: fuzzershell$(T.exe)
 xbin: fuzzershell$(T.exe)
 
@@ -2292,18 +2295,18 @@ fuzzy: fuzzcheck-ubsan$(T.exe)
 xbin: fuzzcheck-ubsan$(T.exe)
 
 
-ossshell$(T.exe):	$(TOP)/test/ossfuzz.c $(TOP)/test/ossshell.c sqlite3.c sqlite3.h
+ossshell$(T.exe):	$(TOP)/test/ossfuzz.c $(TOP)/test/ossshell.c sqlite3.cpp sqlite3.hpp
 	$(T.link) -o $@ $(FUZZCHECK_OPT) $(TOP)/test/ossshell.c \
-		$(TOP)/test/ossfuzz.c sqlite3.c $(LDFLAGS.libsqlite3)
+		$(TOP)/test/ossfuzz.c sqlite3.cpp $(LDFLAGS.libsqlite3)
 fuzzy: ossshell$(T.exe)
 xbin: ossshell$(T.exe)
 
-sessionfuzz$(T.exe):	$(TOP)/test/sessionfuzz.c sqlite3.c sqlite3.h
+sessionfuzz$(T.exe):	$(TOP)/test/sessionfuzz.c sqlite3.cpp sqlite3.hpp
 	$(T.link) -o $@ $(TOP)/test/sessionfuzz.c $(LDFLAGS.libsqlite3)
 fuzzy: sessionfuzz$(T.exe)
 
-dbfuzz$(T.exe):	$(TOP)/test/dbfuzz.c sqlite3.c sqlite3.h
-	$(T.link) -o $@ $(DBFUZZ_OPT) $(TOP)/test/dbfuzz.c sqlite3.c \
+dbfuzz$(T.exe):	$(TOP)/test/dbfuzz.c sqlite3.cpp sqlite3.hpp
+	$(T.link) -o $@ $(DBFUZZ_OPT) $(TOP)/test/dbfuzz.c sqlite3.cpp \
 		$(LDFLAGS.libsqlite3)
 fuzzy: dbfuzz$(T.exe)
 xbin: dbfuzz$(T.exe)
@@ -2319,10 +2322,10 @@ DBFUZZ2_OPTS = \
   -DSQLITE_ENABLE_FTS4 \
   -DSQLITE_ENABLE_FTS5
 
-dbfuzz2$(T.exe):	$(TOP)/test/dbfuzz2.c sqlite3.c sqlite3.h
+dbfuzz2$(T.exe):	$(TOP)/test/dbfuzz2.c sqlite3.cpp sqlite3.hpp
 	$(T.cc) -I. -g -O0 \
 		-DSTANDALONE -o dbfuzz2 \
-		$(DBFUZZ2_OPTS) $(TOP)/test/dbfuzz2.c sqlite3.c $(LDFLAGS.libsqlite3)
+		$(DBFUZZ2_OPTS) $(TOP)/test/dbfuzz2.c sqlite3.cpp $(LDFLAGS.libsqlite3)
 	mkdir -p dbfuzz2-dir
 	cp $(TOP)/test/dbfuzz2-seed* dbfuzz2-dir
 fuzzy: dbfuzz2$(T.exe)
@@ -2346,95 +2349,95 @@ mptest:	mptester$(T.exe)
 	$(MPTEST1) --journalmode TRUNCATE
 	$(MPTEST2) --journalmode DELETE
 
-# Source and header files that shell.c depends on
+# Source and header files that shell.cpp depends on
 SHELL_DEP = \
-    $(TOP)/src/shell.c.in \
-    $(TOP)/ext/qrf/qrf.c \
-    $(TOP)/ext/qrf/qrf.h \
-    $(TOP)/ext/expert/sqlite3expert.c \
-    $(TOP)/ext/expert/sqlite3expert.h \
-    $(TOP)/ext/intck/sqlite3intck.c \
-    $(TOP)/ext/intck/sqlite3intck.h \
-    $(TOP)/ext/misc/appendvfs.c \
-    $(TOP)/ext/misc/base64.c \
-    $(TOP)/ext/misc/base85.c \
-    $(TOP)/ext/misc/completion.c \
-    $(TOP)/ext/misc/decimal.c \
-    $(TOP)/ext/misc/fileio.c \
-    $(TOP)/ext/misc/ieee754.c \
-    $(TOP)/ext/misc/memtrace.c \
-    $(TOP)/ext/misc/pcachetrace.c \
-    $(TOP)/ext/misc/regexp.c \
-    $(TOP)/ext/misc/series.c \
-    $(TOP)/ext/misc/sha1.c \
-    $(TOP)/ext/misc/shathree.c \
-    $(TOP)/ext/misc/sqlar.c \
-    $(TOP)/ext/misc/uint.c \
-    $(TOP)/ext/misc/vfstrace.c \
-    $(TOP)/ext/misc/windirent.h \
-    $(TOP)/ext/misc/zipfile.c \
-    $(TOP)/ext/recover/dbdata.c \
-    $(TOP)/ext/recover/sqlite3recover.c \
-    $(TOP)/ext/recover/sqlite3recover.h
+    $(TOP)/src/shell.cpp.in \
+    $(TOP)/ext/qrf/qrf.cpp \
+    $(TOP)/ext/qrf/qrf.hpp \
+    $(TOP)/ext/expert/sqlite3expert.cpp \
+    $(TOP)/ext/expert/sqlite3expert.hpp \
+    $(TOP)/ext/intck/sqlite3intck.cpp \
+    $(TOP)/ext/intck/sqlite3intck.hpp \
+    $(TOP)/ext/misc/appendvfs.cpp \
+    $(TOP)/ext/misc/base64.cpp \
+    $(TOP)/ext/misc/base85.cpp \
+    $(TOP)/ext/misc/completion.cpp \
+    $(TOP)/ext/misc/decimal.cpp \
+    $(TOP)/ext/misc/fileio.cpp \
+    $(TOP)/ext/misc/ieee754.cpp \
+    $(TOP)/ext/misc/memtrace.cpp \
+    $(TOP)/ext/misc/pcachetrace.cpp \
+    $(TOP)/ext/misc/regexp.cpp \
+    $(TOP)/ext/misc/series.cpp \
+    $(TOP)/ext/misc/sha1.cpp \
+    $(TOP)/ext/misc/shathree.cpp \
+    $(TOP)/ext/misc/sqlar.cpp \
+    $(TOP)/ext/misc/uint.cpp \
+    $(TOP)/ext/misc/vfstrace.cpp \
+    $(TOP)/ext/misc/windirent.hpp \
+    $(TOP)/ext/misc/zipfile.cpp \
+    $(TOP)/ext/recover/dbdata.cpp \
+    $(TOP)/ext/recover/sqlite3recover.cpp \
+    $(TOP)/ext/recover/sqlite3recover.hpp
 
 
-shell.c:	$(SHELL_DEP) $(TOP)/tool/mkshellc.tcl $(B.tclsh)
-	$(B.tclsh) $(TOP)/tool/mkshellc.tcl shell.c
+shell.cpp:	$(SHELL_DEP) $(TOP)/tool/mkshellc.tcl $(B.tclsh)
+	$(B.tclsh) $(TOP)/tool/mkshellc.tcl shell.cpp
 
 #
 # Rules to build the extension objects.
 #
 DEPS_EXT_COMMON = $(DEPS_OBJ_COMMON) $(EXTHDR)
-icu.o:	$(TOP)/ext/icu/icu.c $(DEPS_EXT_COMMON)
-	$(T.cc.extension) -c $(TOP)/ext/icu/icu.c $(CFLAGS.icu)
+icu.o:	$(TOP)/ext/icu/icu.cpp $(DEPS_EXT_COMMON)
+	$(T.cc.extension) -c $(TOP)/ext/icu/icu.cpp $(CFLAGS.icu)
 
-fts3.o:	$(TOP)/ext/fts3/fts3.c $(DEPS_EXT_COMMON)
-	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3.c
+fts3.o:	$(TOP)/ext/fts3/fts3.cpp $(DEPS_EXT_COMMON)
+	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3.cpp
 
-fts3_aux.o:	$(TOP)/ext/fts3/fts3_aux.c $(DEPS_EXT_COMMON)
-	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3_aux.c
+fts3_aux.o:	$(TOP)/ext/fts3/fts3_aux.cpp $(DEPS_EXT_COMMON)
+	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3_aux.cpp
 
-fts3_expr.o:	$(TOP)/ext/fts3/fts3_expr.c $(DEPS_EXT_COMMON)
-	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3_expr.c
+fts3_expr.o:	$(TOP)/ext/fts3/fts3_expr.cpp $(DEPS_EXT_COMMON)
+	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3_expr.cpp
 
-fts3_hash.o:	$(TOP)/ext/fts3/fts3_hash.c $(DEPS_EXT_COMMON)
-	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3_hash.c
+fts3_hash.o:	$(TOP)/ext/fts3/fts3_hash.cpp $(DEPS_EXT_COMMON)
+	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3_hash.cpp
 
-fts3_icu.o:	$(TOP)/ext/fts3/fts3_icu.c $(DEPS_EXT_COMMON)
-	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3_icu.c $(CFLAGS.icu)
+fts3_icu.o:	$(TOP)/ext/fts3/fts3_icu.cpp $(DEPS_EXT_COMMON)
+	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3_icu.cpp $(CFLAGS.icu)
 
-fts3_porter.o:	$(TOP)/ext/fts3/fts3_porter.c $(DEPS_EXT_COMMON)
-	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3_porter.c
+fts3_porter.o:	$(TOP)/ext/fts3/fts3_porter.cpp $(DEPS_EXT_COMMON)
+	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3_porter.cpp
 
-fts3_snippet.o:	$(TOP)/ext/fts3/fts3_snippet.c $(DEPS_EXT_COMMON)
-	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3_snippet.c
+fts3_snippet.o:	$(TOP)/ext/fts3/fts3_snippet.cpp $(DEPS_EXT_COMMON)
+	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3_snippet.cpp
 
-fts3_tokenizer.o:	$(TOP)/ext/fts3/fts3_tokenizer.c $(DEPS_EXT_COMMON)
-	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3_tokenizer.c
+fts3_tokenizer.o:	$(TOP)/ext/fts3/fts3_tokenizer.cpp $(DEPS_EXT_COMMON)
+	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3_tokenizer.cpp
 
-fts3_tokenizer1.o:	$(TOP)/ext/fts3/fts3_tokenizer1.c $(DEPS_EXT_COMMON)
-	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3_tokenizer1.c
+fts3_tokenizer1.o:	$(TOP)/ext/fts3/fts3_tokenizer1.cpp $(DEPS_EXT_COMMON)
+	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3_tokenizer1.cpp
 
-fts3_tokenize_vtab.o:	$(TOP)/ext/fts3/fts3_tokenize_vtab.c $(DEPS_EXT_COMMON)
-	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3_tokenize_vtab.c
+fts3_tokenize_vtab.o:	$(TOP)/ext/fts3/fts3_tokenize_vtab.cpp $(DEPS_EXT_COMMON)
+	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3_tokenize_vtab.cpp
 
-fts3_unicode.o:	$(TOP)/ext/fts3/fts3_unicode.c $(DEPS_EXT_COMMON)
-	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3_unicode.c
+fts3_unicode.o:	$(TOP)/ext/fts3/fts3_unicode.cpp $(DEPS_EXT_COMMON)
+	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3_unicode.cpp
 
-fts3_unicode2.o:	$(TOP)/ext/fts3/fts3_unicode2.c $(DEPS_EXT_COMMON)
-	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3_unicode2.c
+fts3_unicode2.o:	$(TOP)/ext/fts3/fts3_unicode2.cpp $(DEPS_EXT_COMMON)
+	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3_unicode2.cpp
 
-fts3_write.o:	$(TOP)/ext/fts3/fts3_write.c $(DEPS_EXT_COMMON)
-	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3_write.c
+fts3_write.o:	$(TOP)/ext/fts3/fts3_write.cpp $(DEPS_EXT_COMMON)
+	$(T.cc.extension) -c $(TOP)/ext/fts3/fts3_write.cpp
 
-rtree.o:	$(TOP)/ext/rtree/rtree.c $(DEPS_EXT_COMMON)
-	$(T.cc.extension) -c $(TOP)/ext/rtree/rtree.c
+rtree.o:	$(TOP)/ext/rtree/rtree.cpp $(DEPS_EXT_COMMON)
+	$(T.cc.extension) -c $(TOP)/ext/rtree/rtree.cpp
 
-sqlite3session.o:	$(TOP)/ext/session/sqlite3session.c $(DEPS_EXT_COMMON)
-	$(T.cc.extension) -c $(TOP)/ext/session/sqlite3session.c
+sqlite3session.o:	$(TOP)/ext/session/sqlite3session.cpp $(DEPS_EXT_COMMON)
+	$(T.cc.extension) -c $(TOP)/ext/session/sqlite3session.cpp
 
-stmt.o:	$(TOP)/ext/misc/stmt.c $(DEPS_EXT_COMMON)
-	$(T.cc.extension) -c $(TOP)/ext/misc/stmt.c
+stmt.o:	$(TOP)/ext/misc/stmt.cpp $(DEPS_EXT_COMMON)
+	$(T.cc.extension) -c $(TOP)/ext/misc/stmt.cpp
 
 #
 # Windows section
@@ -2487,7 +2490,7 @@ help:
 #
 tidy:
 	rm -f *.o *.obj *.c *.da *.bb *.bbg gmon.* *.rws sqlite3$(T.exe)
-	rm -f fts5.h keywordhash.h opcodes.h sqlite3.h sqlite3ext.h sqlite3session.h
+	rm -f fts5.hpp keywordhash.h opcodes.h sqlite3.hpp sqlite3ext.hpp sqlite3session.hpp
 	rm -rf .libs .deps tsrc .target_source
 	rm -f lemon$(B.exe) sqlite*.tar.gz
 	rm -f mkkeywordhash$(B.exe) mksourceid$(B.exe)
@@ -2511,7 +2514,7 @@ tidy:
 	rm -f dbdump$(T.exe) dbtotxt$(T.exe) atrc$(T.exe)
 	rm -f threadtest5$(T.exe)
 	rm -f src-verify$(B.exe)
-	rm -f tclsqlite3.c has_tclsh* $(T.tcl.env.sh)
+	rm -f tclsqlite3.cpp has_tclsh* $(T.tcl.env.sh)
 	rm -f sqlite3rc.h sqlite3.def
 	rm -f ctime.c pragma.h
 

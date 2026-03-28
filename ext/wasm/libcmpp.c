@@ -4160,7 +4160,7 @@ static cmpp_api_thunk const * CMPP_API_THUNK_NAME = 0;
    This file houses declarations and macros for the private/internal
    libcmpp APIs.
 */
-#include "sqlite3.h"
+#include "sqlite3.hpp"
 
 #include <stdlib.h>
 #include <string.h>
@@ -5783,7 +5783,7 @@ bool cmpp__file_is_readable(char const *zFile);
 ** See the accompanying c-pp.h and README.md and/or c-pp.h for more
 ** details.
 */
-#include "sqlite3.h"
+#include "sqlite3.hpp"
 
 char const * cmpp_version(void){ return CMPP_VERSION; }
 
@@ -15830,9 +15830,9 @@ int cmpp_module_load(cmpp * pp, char const * fname,
 **
 */
 #if 0
-#include "sqlite3ext.h"
+#include "sqlite3ext.hpp"
 #else
-#include "sqlite3.h"
+#include "sqlite3.hpp"
 #endif
 #include <assert.h>
 #include <string.h>
