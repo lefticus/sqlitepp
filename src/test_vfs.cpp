@@ -427,7 +427,7 @@ static int tvfsSync(sqlite3_file *pFile, int flags){
   Testvfs *p = (Testvfs *)pFd->pVfs->pAppData;
 
   if( p->pScript && p->mask&TESTVFS_SYNC_MASK ){
-    char *zFlags = 0;
+    const char *zFlags = 0;
 
     switch( flags ){
       case SQLITE_SYNC_NORMAL:
@@ -728,7 +728,7 @@ static int tvfsAccess(
   Testvfs *p = (Testvfs *)pVfs->pAppData;
   if( p->pScript && p->mask&TESTVFS_ACCESS_MASK ){
     int rc;
-    char *zArg = 0;
+    const char *zArg = 0;
     if( flags==SQLITE_ACCESS_EXISTS ) zArg = "SQLITE_ACCESS_EXISTS";
     if( flags==SQLITE_ACCESS_READWRITE ) zArg = "SQLITE_ACCESS_READWRITE";
     if( flags==SQLITE_ACCESS_READ ) zArg = "SQLITE_ACCESS_READ";
@@ -1094,7 +1094,7 @@ static int SQLITE_TCLAPI testvfs_obj_cmd(
     CMD_DEVCHAR, CMD_SECTORSIZE, CMD_FULLERR, CMD_CANTOPENERR
   };
   struct TestvfsSubcmd {
-    char *zName;
+    const char *zName;
     enum DB_enum eCmd;
   } aSubcmd[] = {
     { "shm",         CMD_SHM         },
@@ -1181,7 +1181,7 @@ static int SQLITE_TCLAPI testvfs_obj_cmd(
     */
     case CMD_FILTER: {
       static struct VfsMethod {
-        char *zName;
+        const char *zName;
         int mask;
       } vfsmethod [] = {
         { "xShmOpen",           TESTVFS_SHMOPEN_MASK },
@@ -1308,7 +1308,7 @@ static int SQLITE_TCLAPI testvfs_obj_cmd(
 
     case CMD_DEVCHAR: {
       struct DeviceFlag {
-        char *zName;
+        const char *zName;
         int iValue;
       } aFlag[] = {
         { "default",               -1 },

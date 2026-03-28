@@ -330,7 +330,7 @@ static int SQLITE_TCLAPI test_override_sum(
 
 int Sqlitetest_window_Init(Tcl_Interp *interp){
   static struct {
-     char *zName;
+     const char *zName;
      Tcl_ObjCmdProc *xProc;
      int clientData;
   } aObjCmd[] = {

@@ -324,10 +324,10 @@ static int SQLITE_TCLAPI sqlthread_proc(
   Tcl_Obj *CONST objv[]
 ){
   struct SubCommand {
-    char *zName;
+    const char *zName;
     Tcl_ObjCmdProc *xProc;
     int nArg;
-    char *zUsage;
+    const char *zUsage;
   } aSub[] = {
     {"parent", sqlthread_parent, 1, "SCRIPT"},
     {"spawn",  sqlthread_spawn,  2, "VARNAME SCRIPT"},

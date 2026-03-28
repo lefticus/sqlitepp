@@ -330,7 +330,7 @@ static int SQLITE_TCLAPI register_schema_module(
 */
 int Sqlitetestschema_Init(Tcl_Interp *interp){
   static struct {
-     char *zName;
+     const char *zName;
      Tcl_ObjCmdProc *xProc;
      void *clientData;
   } aObjCmd[] = {

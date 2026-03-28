@@ -1574,7 +1574,7 @@ static int SQLITE_TCLAPI test_quota_fread(
   if( Tcl_GetIntFromObj(interp, objv[3], &nElem) ) return TCL_ERROR;
   zBuf = (char*)sqlite3_malloc( sz*nElem + 1 );
   if( zBuf==0 ){
-    Tcl_SetResult(interp, "out of memory", TCL_STATIC);
+    Tcl_SetObjResult(interp, Tcl_NewStringObj("out of memory", -1));
     return TCL_ERROR;
   }
   got = sqlite3_quota_fread(zBuf, sz, nElem, p);
@@ -1929,7 +1929,7 @@ static int SQLITE_TCLAPI test_quota_ferror(
 */
 int Sqlitequota_Init(Tcl_Interp *interp){
   static struct {
-     char *zName;
+     const char *zName;
      Tcl_ObjCmdProc *xProc;
   } aCmd[] = {
     { "sqlite3_quota_initialize",    test_quota_initialize },

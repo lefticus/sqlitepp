@@ -310,7 +310,7 @@ static int SQLITE_TCLAPI test_blob_write(
 int Sqlitetest_blob_Init(Tcl_Interp *interp){
 #ifndef SQLITE_OMIT_INCRBLOB
   static struct {
-     char *zName;
+     const char *zName;
      Tcl_ObjCmdProc *xProc;
   } aObjCmd[] = {
      { "sqlite3_blob_open",            test_blob_open        },

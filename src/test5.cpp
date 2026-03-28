@@ -74,8 +74,9 @@ static int SQLITE_TCLAPI test_value_overhead(
   if( Tcl_GetIntFromObj(interp, objv[1], &repeat_count) ) return TCL_ERROR;
   if( Tcl_GetIntFromObj(interp, objv[2], &do_calls) ) return TCL_ERROR;
 
+  static char zHello[] = "hello world";
   val.flags = MEM_Str|MEM_Term|MEM_Static;
-  val.z = "hello world";
+  val.z = zHello;
   val.enc = SQLITE_UTF8;
 
   for(i=0; i<repeat_count; i++){
@@ -89,7 +90,7 @@ static int SQLITE_TCLAPI test_value_overhead(
 
 static u8 name_to_enc(Tcl_Interp *interp, Tcl_Obj *pObj){
   struct EncName {
-    char *zName;
+    const char *zName;
     u8 enc;
   } encnames[] = {
     { "UTF8", SQLITE_UTF8 },
@@ -200,7 +201,7 @@ static int SQLITE_TCLAPI test_translate_selftest(
 */
 int Sqlitetest5_Init(Tcl_Interp *interp){
   static struct {
-    char *zName;
+    const char *zName;
     Tcl_ObjCmdProc *xProc;
   } aCmd[] = {
     { "binarize",                (Tcl_ObjCmdProc*)binarize },

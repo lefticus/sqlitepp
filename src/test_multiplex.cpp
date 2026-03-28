@@ -1353,7 +1353,7 @@ static int SQLITE_TCLAPI test_multiplex_control(
 */
 int Sqlitemultiplex_Init(Tcl_Interp *interp){
   static struct {
-     char *zName;
+     const char *zName;
      Tcl_ObjCmdProc *xProc;
   } aCmd[] = {
     { "sqlite3_multiplex_initialize", test_multiplex_initialize },

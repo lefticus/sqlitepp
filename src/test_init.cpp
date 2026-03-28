@@ -273,7 +273,7 @@ static int SQLITE_TCLAPI init_wrapper_query(
 
 int Sqlitetest_init_Init(Tcl_Interp *interp){
   static struct {
-     char *zName;
+     const char *zName;
      Tcl_ObjCmdProc *xProc;
   } aObjCmd[] = {
     {"init_wrapper_install",   init_wrapper_install},

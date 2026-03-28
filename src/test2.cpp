@@ -258,7 +258,7 @@ static int SQLITE_TCLAPI pager_stats(
   pPager = (Pager*)sqlite3TestTextToPtr(argv[1]);
   a = sqlite3PagerStats(pPager);
   for(i=0; i<9; i++){
-    static char *zName[] = {
+    static const char *zName[] = {
       "ref", "page", "max", "size", "state", "err",
       "hit", "miss", "ovfl",
     };
@@ -706,7 +706,7 @@ int Sqlitetest2_Init(Tcl_Interp *interp){
   extern int sqlite3_diskfull_pending;
   extern int sqlite3_diskfull;
   static struct {
-    char *zName;
+    const char *zName;
     Tcl_CmdProc *xProc;
   } aCmd[] = {
     { "pager_open",              (Tcl_CmdProc*)pager_open          },

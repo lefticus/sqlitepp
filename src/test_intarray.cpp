@@ -373,7 +373,7 @@ static int SQLITE_TCLAPI test_intarray_bind(
 */
 int Sqlitetestintarray_Init(Tcl_Interp *interp){
   static struct {
-     char *zName;
+     const char *zName;
      Tcl_ObjCmdProc *xProc;
      void *clientData;
   } aObjCmd[] = {

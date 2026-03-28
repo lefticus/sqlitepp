@@ -455,7 +455,7 @@ static int SQLITE_TCLAPI make_fts3record(
 */
 int Sqlitetest_hexio_Init(Tcl_Interp *interp){
   static struct {
-     char *zName;
+     const char *zName;
      Tcl_ObjCmdProc *xProc;
   } aObjCmd[] = {
      { "hexio_read",                   hexio_read            },

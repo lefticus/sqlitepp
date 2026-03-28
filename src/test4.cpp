@@ -40,8 +40,8 @@ struct Thread {
   int completed;        /* Number of operations completed */
   sqlite3 *db;           /* Open database */
   sqlite3_stmt *pStmt;     /* Pending operation */
-  char *zErr;           /* operation error */
-  char *zStaticErr;     /* Static error message */
+  const char *zErr;     /* operation error */
+  const char *zStaticErr; /* Static error message */
   int rc;               /* operation return code */
   int argc;             /* number of columns in result */
   const char *argv[100];    /* result columns */
@@ -82,7 +82,7 @@ static void *test_thread_main(void *pArg){
   test_barrier();
   while( p->xOp ){
     if( p->zErr && p->zErr!=p->zStaticErr ){
-      sqlite3_free(p->zErr);
+      sqlite3_free((void*)p->zErr);
       p->zErr = 0;
     }
     (*p->xOp)(p);
@@ -100,7 +100,7 @@ static void *test_thread_main(void *pArg){
     p->db = 0;
   }
   if( p->zErr && p->zErr!=p->zStaticErr ){
-    sqlite3_free(p->zErr);
+    sqlite3_free((void*)p->zErr);
     p->zErr = 0;
   }
   test_barrier();
@@ -705,7 +705,7 @@ static int SQLITE_TCLAPI tcl_thread_stmt_get(
 */
 int Sqlitetest4_Init(Tcl_Interp *interp){
   static struct {
-     char *zName;
+     const char *zName;
      Tcl_CmdProc *xProc;
   } aCmd[] = {
      { "thread_create",     (Tcl_CmdProc*)tcl_thread_create     },

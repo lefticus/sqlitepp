@@ -3500,7 +3500,7 @@ static char **tableColumnList(ShellState *p, const char *zTab){
         ** name for the rowid before adding it to azCol[0].  WITHOUT ROWID
         ** tables will fail this last check */
         rc = sqlite3_table_column_metadata(p->db,0,zTab,azRowid[j],0,0,0,0,0);
-        if( rc==SQLITE_OK ) azCol[0] = azRowid[j];
+        if( rc==SQLITE_OK ) azCol[0] = sqlite3_mprintf("%s", azRowid[j]);
         break;
       }
     }
@@ -11075,7 +11075,7 @@ static int do_meta_command(const char *zLine, ShellState *p){
     int iSize = 224;         /* Hash algorithm to use */
     int bDebug = 0;          /* Only show the query that would have run */
     sqlite3_stmt *pStmt;     /* For querying tables names */
-    const char *zSql;        /* SQL to be run */
+    char *zSql = 0;          /* SQL to be run (allocated) */
     const char *zSep;        /* Separator */
     ShellText sSql;          /* Complete SQL for the query to run the hash */
     ShellText sQuery;        /* Set of queries used to read all content */
@@ -11113,18 +11113,21 @@ static int do_meta_command(const char *zLine, ShellState *p){
         if( sqlite3_strlike("sqlite\\_%", zLike, '\\')==0 ) bSchema = 1;
       }
     }
-    if( bSchema ){
-      zSql = "SELECT lower(name) as tname FROM sqlite_schema"
-             " WHERE type='table' AND coalesce(rootpage,0)>1"
-             " UNION ALL SELECT 'sqlite_schema'"
-             " ORDER BY 1 collate nocase";
-    }else{
-      zSql = "SELECT lower(name) as tname FROM sqlite_schema"
-             " WHERE type='table' AND coalesce(rootpage,0)>1"
-             " AND name NOT LIKE 'sqlite__%' ESCAPE '_'"
-             " ORDER BY 1 collate nocase";
+    {
+      const char *zListSql;
+      if( bSchema ){
+        zListSql = "SELECT lower(name) as tname FROM sqlite_schema"
+               " WHERE type='table' AND coalesce(rootpage,0)>1"
+               " UNION ALL SELECT 'sqlite_schema'"
+               " ORDER BY 1 collate nocase";
+      }else{
+        zListSql = "SELECT lower(name) as tname FROM sqlite_schema"
+               " WHERE type='table' AND coalesce(rootpage,0)>1"
+               " AND name NOT LIKE 'sqlite__%' ESCAPE '_'"
+               " ORDER BY 1 collate nocase";
+      }
+      sqlite3_prepare_v2(p->db, zListSql, -1, &pStmt, 0);
     }
-    sqlite3_prepare_v2(p->db, zSql, -1, &pStmt, 0);
     initText(&sQuery);
     initText(&sSql);
     appendText(&sSql, "WITH [sha3sum$query](a,b) AS(",0);

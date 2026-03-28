@@ -995,7 +995,8 @@ static int fuzzerFilter(
   pCur->nullRule.rCost = 0;
   pCur->nullRule.nFrom = 0;
   pCur->nullRule.nTo = 0;
-  pCur->nullRule.zFrom = "";
+  static char zEmpty[] = "";
+  pCur->nullRule.zFrom = zEmpty;
   pCur->iRowid = 1;
   assert( pCur->pStem==0 );
 

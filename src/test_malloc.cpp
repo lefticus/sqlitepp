@@ -625,7 +625,7 @@ static int SQLITE_TCLAPI test_memdebug_fail(
   for(ii=2; ii<objc; ii+=2){
     Tcl_Size nOption;
     char *zOption = Tcl_GetStringFromObj(objv[ii], &nOption);
-    char *zErr = 0;
+    const char *zErr = 0;
 
     if( nOption>1 && strncmp(zOption, "-repeat", nOption)==0 ){
       if( ii==(objc-1) ){
@@ -1466,7 +1466,7 @@ static int SQLITE_TCLAPI test_vfs_oom_test(
 */
 int Sqlitetest_malloc_Init(Tcl_Interp *interp){
   static struct {
-     char *zName;
+     const char *zName;
      Tcl_ObjCmdProc *xProc;
      int clientData;
   } aObjCmd[] = {

@@ -665,7 +665,7 @@ static int registerTestFunctions(
   const sqlite3_api_routines *pThunk
 ){
   static const struct {
-     char *zName;
+     const char *zName;
      signed char nArg;
      unsigned int eTextRep; /* 1: UTF-16.  0: UTF-8 */
      void (*xFunc)(sqlite3_context*,int,sqlite3_value **);
@@ -931,7 +931,7 @@ static int SQLITE_TCLAPI install_fts3_rank_function(
 */
 int Sqlitetest_func_Init(Tcl_Interp *interp){
   static struct {
-     char *zName;
+     const char *zName;
      Tcl_ObjCmdProc *xProc;
   } aObjCmd[] = {
      { "autoinstall_test_functions",    autoinstall_test_funcs },

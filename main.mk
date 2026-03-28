@@ -327,7 +327,7 @@ all:	sqlite3.hpp sqlite3.cpp
 #
 CFLAGS.core ?=
 CFLAGS.env  = $(CFLAGS)
-T.cc += $(CFLAGS.core) $(CFLAGS.env)
+T.cc += $(CFLAGS.core) $(CFLAGS.env) -Werror=write-strings
 
 #
 # $(LDFLAGS.configure) represents any LDFLAGS=... the client passes to

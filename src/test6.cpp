@@ -721,7 +721,7 @@ static int processDevSymArgs(
   int *piSectorSize
 ){
   struct DeviceFlag {
-    char *zName;
+    const char *zName;
     int iValue;
   } aFlag[] = {
     { "atomic",              SQLITE_IOCAP_ATOMIC                },

@@ -172,7 +172,7 @@ static int SQLITE_TCLAPI btree_pager_stats(
   sqlite3BtreeEnter(pBt);
   a = sqlite3PagerStats(sqlite3BtreePager(pBt));
   for(i=0; i<11; i++){
-    static char *zName[] = {
+    static const char *zName[] = {
       "ref", "page", "max", "size", "state", "err",
       "hit", "miss", "ovfl", "read", "write"
     };
@@ -658,7 +658,7 @@ static int SQLITE_TCLAPI btree_insert(
 */
 int Sqlitetest3_Init(Tcl_Interp *interp){
   static struct {
-     char *zName;
+     const char *zName;
      Tcl_CmdProc *xProc;
   } aCmd[] = {
      { "btree_open",               (Tcl_CmdProc*)btree_open               },

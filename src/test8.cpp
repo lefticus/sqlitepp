@@ -720,7 +720,7 @@ static int echoFilter(
 ** If the third argument, doFree, is true, then sqlite3_free() is
 ** also called to free the buffer pointed to by zAppend.
 */
-static void string_concat(char **pzStr, char *zAppend, int doFree, int *pRc){
+static void string_concat(char **pzStr, const char *zAppend, int doFree, int *pRc){
   char *zIn = *pzStr;
   if( !zAppend && doFree && *pRc==SQLITE_OK ){
     *pRc = SQLITE_NOMEM;
@@ -742,7 +742,7 @@ static void string_concat(char **pzStr, char *zAppend, int doFree, int *pRc){
   }
   *pzStr = zIn;
   if( doFree ){
-    sqlite3_free(zAppend);
+    sqlite3_free((void*)zAppend);
   }
 }
 
@@ -865,11 +865,11 @@ static int echoBestIndex(sqlite3_vtab *tab, sqlite3_index_info *pIdxInfo){
     iCol = pConstraint->iColumn;
     if( iCol<0 || pVtab->aIndex[iCol] ){
       char *zNewCol = iCol>=0 ? pVtab->aCol[iCol] : (char*)"rowid";
-      char *zOp = 0;
+      const char *zOp = 0;
       useIdx = 1;
       switch( pConstraint->op ){
         case SQLITE_INDEX_CONSTRAINT_EQ:
-          zOp = (char*)"="; break;
+          zOp = "="; break;
         case SQLITE_INDEX_CONSTRAINT_LT:
           zOp = "<"; break;
         case SQLITE_INDEX_CONSTRAINT_GT:
@@ -990,7 +990,7 @@ int echoUpdate(
 
   /* If apData[0] is an integer and nData>1 then do an UPDATE */
   if( nData>1 && sqlite3_value_type(apData[0])==SQLITE_INTEGER ){
-    char *zSep = " SET";
+    const char *zSep = " SET";
     z = sqlite3_mprintf("UPDATE %Q", pVtab->zTableName);
     if( !z ){
       rc = SQLITE_NOMEM;
@@ -1436,7 +1436,7 @@ static int SQLITE_TCLAPI declare_vtab(
 int Sqlitetest8_Init(Tcl_Interp *interp){
 #ifndef SQLITE_OMIT_VIRTUALTABLE
   static struct {
-     char *zName;
+     const char *zName;
      Tcl_ObjCmdProc *xProc;
      void *clientData;
   } aObjCmd[] = {

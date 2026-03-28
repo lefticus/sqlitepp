@@ -488,9 +488,9 @@ static int fstreeFilter(
   zPrefix = sqlite3_mprintf("%s", zDrive);
   nPrefix = sqlite3Strlen30(zPrefix);
 #else
-  zRoot = "/";
+  zRoot = sqlite3_mprintf("/");
   nRoot = 1;
-  zPrefix = "";
+  zPrefix = sqlite3_mprintf("");
   nPrefix = 0;
 #endif
 
@@ -904,7 +904,7 @@ static int SQLITE_TCLAPI register_fs_module(
 int Sqlitetestfs_Init(Tcl_Interp *interp){
 #ifndef SQLITE_OMIT_VIRTUALTABLE
   static struct {
-     char *zName;
+     const char *zName;
      Tcl_ObjCmdProc *xProc;
      void *clientData;
   } aObjCmd[] = {

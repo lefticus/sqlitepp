@@ -56,7 +56,7 @@ static unsigned int prngInt(Prng *p){
   return p->x ^ p->y;
 }
 
-static char *azJsonAtoms[] = {
+static const char *azJsonAtoms[] = {
   /* JSON                    JSON-5 */
   "0",                       "0",
   "1",                       "1",
@@ -101,7 +101,7 @@ static char *azJsonAtoms[] = {
   "\"y\\uXXXXz\"",           "\"y\\uXXXXz\"",
   "\"\"",                    "\"\"",
 };
-static char *azJsonTemplate[] = {
+static const char *azJsonTemplate[] = {
   /* JSON                                      JSON-5 */
   "{\"a\":%,\"b\":%,\"cDD\":%}",               "{a:%,b:%,cDD:%}",
   "{\"a\":%,\"b\":%,\"c\":%,\"d\":%,\"e\":%}", "{a:%,b:%,c:%,d:%,e:%}",
@@ -131,7 +131,7 @@ static void jsonExpand(
   unsigned int r        /* Growth probability 0..1000.  0 means no growth */
 ){
   unsigned int i, j, k;
-  char *z;
+  const char *z;
   char *zX;
   size_t n;
   char zBuf[200];
@@ -156,7 +156,7 @@ static void jsonExpand(
       z = azJsonTemplate[k];
     }
     n = strlen(z);
-    if( (zX = strstr(z,"XX"))!=0 ){
+    if( strstr(z,"XX")!=0 ){
       unsigned int y = prngInt(p);
       if( (y&0xff)==((y>>8)&0xff) ) y += 0x100;
       while( (y&0xff)==((y>>16)&0xff) || ((y>>8)&0xff)==((y>>16)&0xff) ){
@@ -164,17 +164,17 @@ static void jsonExpand(
       }
       memcpy(zBuf, z, n+1);
       z = zBuf;
-      zX = strstr(z,"XX");
+      zX = strstr(zBuf,"XX");
       while( zX!=0 ){
         zX[0] = "0123456789abcdef"[y%16];  y /= 16;
         zX[1] = "0123456789abcdef"[y%16];  y /= 16;
         zX = strstr(zX, "XX");
       }
-    }else if( (zX = strstr(z,"DD"))!=0 ){
+    }else if( strstr(z,"DD")!=0 ){
       unsigned int y = prngInt(p);
       memcpy(zBuf, z, n+1);
       z = zBuf;
-      zX = strstr(z,"DD");
+      zX = strstr(zBuf,"DD");
       while( zX!=0 ){
         zX[0] = "0123456789"[y%10];  y /= 10;
         zX[1] = "0123456789"[y%10];  y /= 10;

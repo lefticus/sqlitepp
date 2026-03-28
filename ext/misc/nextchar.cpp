@@ -208,8 +208,10 @@ static void nextCharFunc(
   const unsigned char *zField = sqlite3_value_text(argv[2]);
   const unsigned char *zWhere;
   const unsigned char *zCollName;
-  char *zWhereClause = 0;
-  char *zColl = 0;
+  const char *zWhereClause = "";
+  const char *zColl = "";
+  char *zWhereClauseAlloc = 0;
+  char *zCollAlloc = 0;
   char *zSql;
   int rc;
 
@@ -222,26 +224,24 @@ static void nextCharFunc(
    && (zWhere = sqlite3_value_text(argv[3]))!=0
    && zWhere[0]!=0
   ){
-    zWhereClause = sqlite3_mprintf("AND (%s)", zWhere);
-    if( zWhereClause==0 ){
+    zWhereClauseAlloc = sqlite3_mprintf("AND (%s)", zWhere);
+    if( zWhereClauseAlloc==0 ){
       sqlite3_result_error_nomem(context);
       return;
     }
-  }else{
-    zWhereClause = "";
+    zWhereClause = zWhereClauseAlloc;
   }
   if( argc>=5
    && (zCollName = sqlite3_value_text(argv[4]))!=0
-   && zCollName[0]!=0 
+   && zCollName[0]!=0
   ){
-    zColl = sqlite3_mprintf("collate \"%w\"", zCollName);
-    if( zColl==0 ){
+    zCollAlloc = sqlite3_mprintf("collate \"%w\"", zCollName);
+    if( zCollAlloc==0 ){
       sqlite3_result_error_nomem(context);
-      if( zWhereClause[0] ) sqlite3_free(zWhereClause);
+      sqlite3_free(zWhereClauseAlloc);
       return;
     }
-  }else{
-    zColl = "";
+    zColl = zCollAlloc;
   }
   zSql = sqlite3_mprintf(
     "SELECT %s FROM %s"
@@ -251,8 +251,8 @@ static void nextCharFunc(
     " ORDER BY 1 %s ASC LIMIT 1",
     zField, zTable, zField, zColl, zField, zColl, zWhereClause, zColl
   );
-  if( zWhereClause[0] ) sqlite3_free(zWhereClause);
-  if( zColl[0] ) sqlite3_free(zColl);
+  sqlite3_free(zWhereClauseAlloc);
+  sqlite3_free(zCollAlloc);
   if( zSql==0 ){
     sqlite3_result_error_nomem(context);
     return;

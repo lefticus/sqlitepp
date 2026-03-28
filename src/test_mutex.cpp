@@ -474,7 +474,7 @@ static int SQLITE_TCLAPI test_leave_db_mutex(
 
 int Sqlitetest_mutex_Init(Tcl_Interp *interp){
   static struct {
-    char *zName;
+    const char *zName;
     Tcl_ObjCmdProc *xProc;
   } aCmd[] = {
     { "sqlite3_shutdown",        (Tcl_ObjCmdProc*)test_shutdown },

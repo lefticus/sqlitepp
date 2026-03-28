@@ -5707,19 +5707,19 @@ static int SQLITE_TCLAPI test_column_type(
   tp = sqlite3_column_type(pStmt, col);
   switch( tp ){
     case SQLITE_INTEGER: 
-      Tcl_SetResult(interp, "INTEGER", TCL_STATIC); 
+      Tcl_SetObjResult(interp, Tcl_NewStringObj("INTEGER", -1));
       break;
     case SQLITE_NULL:
-      Tcl_SetResult(interp, "NULL", TCL_STATIC); 
+      Tcl_SetObjResult(interp, Tcl_NewStringObj("NULL", -1));
       break;
     case SQLITE_FLOAT:
-      Tcl_SetResult(interp, "FLOAT", TCL_STATIC); 
+      Tcl_SetObjResult(interp, Tcl_NewStringObj("FLOAT", -1));
       break;
     case SQLITE_TEXT:
-      Tcl_SetResult(interp, "TEXT", TCL_STATIC); 
+      Tcl_SetObjResult(interp, Tcl_NewStringObj("TEXT", -1));
       break;
     case SQLITE_BLOB:
-      Tcl_SetResult(interp, "BLOB", TCL_STATIC); 
+      Tcl_SetObjResult(interp, Tcl_NewStringObj("BLOB", -1));
       break;
     default:
       assert(0);
@@ -7383,7 +7383,7 @@ static int SQLITE_TCLAPI test_limit(
   sqlite3 *db;
   int rc;
   static const struct {
-     char *zName;
+     const char *zName;
      int id;
   } aId[] = {
     { "SQLITE_LIMIT_LENGTH",              SQLITE_LIMIT_LENGTH               },
@@ -9050,7 +9050,7 @@ int Sqlitetest1_Init(Tcl_Interp *interp){
   extern int SQLITE_TCLAPI sqlite3BtreeSharedCacheReport(void*,
                                           Tcl_Interp*,int,Tcl_Obj*CONST*);
   static struct {
-     char *zName;
+     const char *zName;
      Tcl_CmdProc *xProc;
   } aCmd[] = {
      { "db_enter",                      (Tcl_CmdProc*)db_enter               },
@@ -9098,7 +9098,7 @@ int Sqlitetest1_Init(Tcl_Interp *interp){
      { "clang_sanitize_address",        (Tcl_CmdProc*)clang_sanitize_address },
   };
   static struct {
-     char *zName;
+     const char *zName;
      Tcl_ObjCmdProc *xProc;
      void *clientData;
   } aObjCmd[] = {
