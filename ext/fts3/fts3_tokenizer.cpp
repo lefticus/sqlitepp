@@ -448,6 +448,7 @@ static void intTestFunc(
     assert( p2==p1 );
   }
 
+  (void)rc;
   sqlite3_result_text(context, "ok", -1, SQLITE_STATIC);
 }
 

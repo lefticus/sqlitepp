@@ -2691,7 +2691,7 @@ void sqlite3EndTable(
         if( pCol->colFlags & COLFLAG_HASTYPE ){
           sqlite3ErrorMsg(pParse,
             "unknown datatype for %s.%s: \"%s\"",
-            p->zName, pCol->zCnName, sqlite3ColumnType(pCol, "")
+            p->zName, pCol->zCnName, sqlite3ColumnType(pCol, 0)
           );
         }else{
           sqlite3ErrorMsg(pParse, "missing datatype for %s.%s",

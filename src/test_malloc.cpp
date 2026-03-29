@@ -270,7 +270,7 @@ static int textToPointer(const char *z, void **pp){
   sqlite3_uint64 n = 0;
   int i;
   unsigned int u;
-  for(i=0; i<(int)sizeof(void*)*2 && z[0]; i++){
+  for(i=0; i<static_cast<int>(sizeof(void*))*2 && z[0]; i++){
     int v;
     v = hexToInt(*z++);
     if( v<0 ) return TCL_ERROR;

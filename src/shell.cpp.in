@@ -3045,7 +3045,7 @@ static void bind_prepared_stmt(ShellState *pArg, sqlite3_stmt *pStmt){
       sqlite3_bind_double(pStmt, i, pArg->prevTimer);
 #ifdef SQLITE_ENABLE_CARRAY
     }else if( strncmp(zVar, "$carray_", 8)==0 ){
-      static char *azColorNames[] = {
+      static const char *azColorNames[] = {
         "azure", "black", "blue",   "brown", "cyan",   "fuchsia", "gold",
         "gray",  "green", "indigo", "khaki", "lime",   "magenta", "maroon",
         "navy",  "olive", "orange", "pink",  "purple", "red",     "silver",

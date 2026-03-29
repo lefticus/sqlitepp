@@ -629,6 +629,12 @@ static void geopolyRegularFunc(
 ** If pPoly is NULL but aCoord is not NULL, then compute a new GeoPoly from
 ** the bounding box in aCoord and return a pointer to that GeoPoly.
 */
+/* GCC falsely warns that pOut->a[] "may be used uninitialized" because it
+** does not track that the GeoX/GeoY macros expand to lvalue writes, not
+** reads. The realloc'd buffer is fully written before any read. Suppress
+** until this module is refactored to use placement new. */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 static GeoPoly *geopolyBBox(
   sqlite3_context *context,   /* For recording the error */
   sqlite3_value *pPoly,       /* The polygon */
@@ -637,7 +643,7 @@ static GeoPoly *geopolyBBox(
 ){
   GeoPoly *pOut = 0;
   GeoPoly *p;
-  float mnX, mxX, mnY, mxY;
+  float mnX = 0, mxX = 0, mnY = 0, mxY = 0;
   if( pPoly==0 && aCoord!=0 ){
     p = 0;
     mnX = aCoord[0].f;
@@ -696,6 +702,7 @@ static GeoPoly *geopolyBBox(
   }
   return pOut;
 }
+#pragma GCC diagnostic pop
 
 /*
 ** Implementation of the geopoly_bbox(X) SQL function.

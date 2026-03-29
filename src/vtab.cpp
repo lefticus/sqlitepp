@@ -651,7 +651,7 @@ static int vtabCallConstructor(
       pTab->u.vtab.p = pVTable;
 
       for(iCol=0; iCol<pTab->nCol; iCol++){
-        char *zType = sqlite3ColumnType(&pTab->aCol[iCol], "");
+        char *zType = sqlite3ColumnType(&pTab->aCol[iCol], 0);
         int nType;
         int i = 0;
         nType = sqlite3Strlen30(zType);

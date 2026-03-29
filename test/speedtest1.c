@@ -2090,7 +2090,7 @@ void testset_rtree(int p1, int p2){
   unsigned x0, x1, y0, y1, z0, z1;
   unsigned iStep;
   unsigned mxRowid;
-  int *aCheck = (int*)sqlite3_malloc( sizeof(int)*g.szTest*500 );
+  int *aCheck = static_cast<int*>(sqlite3_malloc( sizeof(int)*g.szTest*500 ));
 
   mxCoord = 15000;
   mxRowid = n = g.szTest*500;

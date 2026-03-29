@@ -1249,7 +1249,7 @@ void sqlite3Pragma(
         sqlite3VdbeMultiLoad(v, 1, pPragma->iArg ? "issisii" : "issisi",
                i-nHidden,
                pCol->zCnName,
-               sqlite3ColumnType(pCol,""),
+               sqlite3ColumnType(pCol, 0),
                pCol->notNull ? 1 : 0,
                (isHidden>=2 || pColExpr==0) ? 0 : pColExpr->u.zToken,
                k,
