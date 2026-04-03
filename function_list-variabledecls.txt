@@ -27,11 +27,11 @@
 [x] src/alter.cpp::sqlite3AlterDropColumn
 [x] src/alter.cpp::getWhitespace
 [x] src/alter.cpp::getConstraint
-[ ] src/alter.cpp::skipCreateTable
-[ ] src/alter.cpp::alterFindCol
-[ ] src/alter.cpp::sqlite3AlterFunctions
-[ ] src/analyze.cpp::sampleClear
-[ ] src/analyze.cpp::sampleSetRowid
+[x] src/alter.cpp::skipCreateTable
+[x] src/alter.cpp::alterFindCol
+[x] src/alter.cpp::sqlite3AlterFunctions
+[x] src/analyze.cpp::sampleClear
+[x] src/analyze.cpp::sampleSetRowid
 [ ] src/analyze.cpp::sampleSetRowidInt64
 [ ] src/analyze.cpp::sampleCopy
 [ ] src/analyze.cpp::statAccumDestructor

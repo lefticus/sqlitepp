@@ -2667,8 +2667,8 @@ static void addConstraintFunc(
 ** code.
 */
 static int alterFindCol(Parse *pParse, Table *pTab, Token *pCol, int *piCol){
-  sqlite3 *db = pParse->db;
-  char *zName = sqlite3NameFromToken(db, pCol);
+  sqlite3 *const db = pParse->db;
+  char *const zName = sqlite3NameFromToken(db, pCol);
   int rc = SQLITE_NOMEM;
   int iCol = -1;
 
