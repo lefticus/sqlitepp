@@ -2757,7 +2757,6 @@ btree_open_out:
 static int removeFromSharingList(BtShared *pBt){
 #ifndef SQLITE_OMIT_SHARED_CACHE
   MUTEX_LOGIC( sqlite3_mutex *pMainMtx; )
-  BtShared *pList;
   int removed = 0;
 
   assert( sqlite3_mutex_notheld(pBt->mutex) );
@@ -2768,7 +2767,7 @@ static int removeFromSharingList(BtShared *pBt){
     if( GLOBAL(BtShared*,sqlite3SharedCacheList)==pBt ){
       GLOBAL(BtShared*,sqlite3SharedCacheList) = pBt->pNext;
     }else{
-      pList = GLOBAL(BtShared*,sqlite3SharedCacheList);
+      BtShared *pList = GLOBAL(BtShared*,sqlite3SharedCacheList);
       while( ALWAYS(pList) && pList->pNext!=pBt ){
         pList=pList->pNext;
       }
@@ -2843,7 +2842,7 @@ static void freeTempSpace(BtShared *pBt){
 ** Close an open database and invalidate all cursors.
 */
 int sqlite3BtreeClose(Btree *p){
-  BtShared *pBt = p->pBt;
+  BtShared *const pBt = p->pBt;
 
   /* Close all cursors opened via this handle.  */
   assert( sqlite3_mutex_held(p->db->mutex) );
@@ -2909,7 +2908,7 @@ int sqlite3BtreeClose(Btree *p){
 ** dirty pages or pages still in active use.
 */
 int sqlite3BtreeSetCacheSize(Btree *p, int mxPage){
-  BtShared *pBt = p->pBt;
+  BtShared *const pBt = p->pBt;
   assert( sqlite3_mutex_held(p->db->mutex) );
   sqlite3BtreeEnter(p);
   sqlite3PagerSetCachesize(pBt->pPager, mxPage);

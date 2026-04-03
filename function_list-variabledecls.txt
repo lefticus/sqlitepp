@@ -147,11 +147,11 @@
 [x] src/btree.cpp::releasePageOne
 [x] src/btree.cpp::pageReinit
 [x] src/btree.cpp::btreeInvokeBusyHandler
-[ ] src/btree.cpp::removeFromSharingList
-[ ] src/btree.cpp::allocateTempSpace
-[ ] src/btree.cpp::freeTempSpace
-[ ] src/btree.cpp::sqlite3BtreeClose
-[ ] src/btree.cpp::sqlite3BtreeSetCacheSize
+[x] src/btree.cpp::removeFromSharingList
+[x] src/btree.cpp::allocateTempSpace
+[x] src/btree.cpp::freeTempSpace
+[x] src/btree.cpp::sqlite3BtreeClose
+[x] src/btree.cpp::sqlite3BtreeSetCacheSize
 [ ] src/btree.cpp::sqlite3BtreeSetSpillSize
 [ ] src/btree.cpp::sqlite3BtreeSetMmapLimit
 [ ] src/btree.cpp::sqlite3BtreeSetPageSize
