@@ -312,7 +312,7 @@ package ifneeded sqlite3 $VERSION \\
 
   # Generate and execute the command with which to do the compilation.
   #
-  set cmd "$CMD -DUSE_TCL_STUBS tclsqlite3.c -o $OUT $LIBS"
+  set cmd "$CMD -DUSE_TCL_STUBS tclsqlite3.cpp -o $OUT $LIBS"
   puts $cmd
   file delete -force $OUT
   catch {exec {*}$cmd} errmsg

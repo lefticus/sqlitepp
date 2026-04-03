@@ -58,7 +58,7 @@ static Tcl_ObjCmdProc blocking_step_proc;
 static Tcl_ObjCmdProc blocking_prepare_v2_proc;
 #endif
 int Sqlitetest1_Init(Tcl_Interp *);
-extern int Sqlite3_Init(Tcl_Interp *);
+extern "C" int Sqlite3_Init(Tcl_Interp *);
 
 /* Functions from main.c */
 extern const char *sqlite3ErrName(int);

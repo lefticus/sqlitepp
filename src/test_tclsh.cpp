@@ -48,7 +48,7 @@ static int SQLITE_TCLAPI load_testfixture_extensions(
 **   * If SQLITE_TEST is set, the various test interfaces used by the Tcl
 **     test suite.
 */
-extern int Sqlite3_Init(Tcl_Interp*);
+extern "C" int Sqlite3_Init(Tcl_Interp*);
 const char *sqlite3TestInit(Tcl_Interp *interp){
   extern int Sqliteconfig_Init(Tcl_Interp*);
   extern int Sqlitetest1_Init(Tcl_Interp*);

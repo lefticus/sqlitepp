@@ -4439,7 +4439,7 @@ static int SQLITE_TCLAPI DbMain(
 **
 ** The EXTERN macros are required by TCL in order to work on windows.
 */
-int Sqlite3_Init(Tcl_Interp *interp){
+extern "C" int Sqlite3_Init(Tcl_Interp *interp){
   int rc = Tcl_InitStubs(interp, "8.5-", 0) ? TCL_OK : TCL_ERROR;
   if( rc==TCL_OK ){
     Tcl_CreateObjCommand(interp, "sqlite3", (Tcl_ObjCmdProc*)DbMain, 0, 0);
@@ -4453,8 +4453,8 @@ int Sqlite3_Init(Tcl_Interp *interp){
   }
   return rc;
 }
-int Tclsqlite3_Init(Tcl_Interp *interp){ return Sqlite3_Init(interp); }
-int Sqlite3_Unload(Tcl_Interp *interp, int flags){ return TCL_OK; }
+extern "C" int Tclsqlite3_Init(Tcl_Interp *interp){ return Sqlite3_Init(interp); }
+extern "C" int Sqlite3_Unload(Tcl_Interp *interp, int flags){ return TCL_OK; }
 int Tclsqlite3_Unload(Tcl_Interp *interp, int flags){ return TCL_OK; }
 
 /* Because it accesses the file-system and uses persistent state, SQLite
@@ -4472,18 +4472,18 @@ int Sqlite3_SafeUnload(Tcl_Interp *interp, int flags){return TCL_ERROR;}
 **
 ** Omitting the "3" helps TCL find the entry point.
 */
-int Sqlite_Init(Tcl_Interp *interp){ return Sqlite3_Init(interp);}
-int Tclsqlite_Init(Tcl_Interp *interp){ return Sqlite3_Init(interp); }
-int Sqlite_Unload(Tcl_Interp *interp, int flags){ return TCL_OK; }
-int Tclsqlite_Unload(Tcl_Interp *interp, int flags){ return TCL_OK; }
-int Sqlite_SafeInit(Tcl_Interp *interp){ return TCL_ERROR; }
-int Sqlite_SafeUnload(Tcl_Interp *interp, int flags){return TCL_ERROR;}
+extern "C" int Sqlite_Init(Tcl_Interp *interp){ return Sqlite3_Init(interp);}
+extern "C" int Tclsqlite_Init(Tcl_Interp *interp){ return Sqlite3_Init(interp); }
+extern "C" int Sqlite_Unload(Tcl_Interp *interp, int flags){ return TCL_OK; }
+extern "C" int Tclsqlite_Unload(Tcl_Interp *interp, int flags){ return TCL_OK; }
+extern "C" int Sqlite_SafeInit(Tcl_Interp *interp){ return TCL_ERROR; }
+extern "C" int Sqlite_SafeUnload(Tcl_Interp *interp, int flags){return TCL_ERROR;}
 
 /* Also variants with a lowercase "s".  I'm told that these are
 ** deprecated in Tcl9, but they continue to be included for backwards
 ** compatibility. */
-int sqlite3_Init(Tcl_Interp *interp){ return Sqlite3_Init(interp);}
-int sqlite_Init(Tcl_Interp *interp){ return Sqlite3_Init(interp);}
+extern "C" int sqlite3_Init(Tcl_Interp *interp){ return Sqlite3_Init(interp);}
+extern "C" int sqlite_Init(Tcl_Interp *interp){ return Sqlite3_Init(interp);}
 
 
 /*
