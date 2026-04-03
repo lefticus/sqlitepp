@@ -42,11 +42,11 @@
 [x] src/analyze.cpp::analyzeDatabase
 [x] src/analyze.cpp::analyzeTable
 [x] src/analyze.cpp::sqlite3Analyze
-[ ] src/analyze.cpp::analysisLoader
-[ ] src/analyze.cpp::sqlite3DeleteIndexSamples
-[ ] src/analyze.cpp::initAvgEq
-[ ] src/analyze.cpp::loadStat4
-[ ] src/analyze.cpp::sqlite3AnalysisLoad
+[x] src/analyze.cpp::analysisLoader
+[x] src/analyze.cpp::sqlite3DeleteIndexSamples
+[x] src/analyze.cpp::initAvgEq
+[x] src/analyze.cpp::loadStat4
+[x] src/analyze.cpp::sqlite3AnalysisLoad
 [ ] src/attach.cpp::resolveAttachExpr
 [ ] src/attach.cpp::sqlite3DbIsNamed
 [ ] src/attach.cpp::sqlite3Detach

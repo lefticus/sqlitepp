@@ -1578,9 +1578,6 @@ static void decodeIntArray(
 */
 static int analysisLoader(void *pData, int argc, char **argv, char **NotUsed){
   analysisInfo *pInfo = (analysisInfo*)pData;
-  Index *pIndex;
-  Table *pTable;
-  const char *z;
 
   assert( argc==3 );
   UNUSED_PARAMETER2(NotUsed, argc);
@@ -1588,10 +1585,11 @@ static int analysisLoader(void *pData, int argc, char **argv, char **NotUsed){
   if( argv==0 || argv[0]==0 || argv[2]==0 ){
     return 0;
   }
-  pTable = sqlite3FindTable(pInfo->db, argv[0], pInfo->zDatabase);
+  Table *const pTable = sqlite3FindTable(pInfo->db, argv[0], pInfo->zDatabase);
   if( pTable==0 ){
     return 0;
   }
+  Index *pIndex;
   if( argv[1]==0 ){
     pIndex = 0;
   }else if( sqlite3_stricmp(argv[0],argv[1])==0 ){
@@ -1599,7 +1597,7 @@ static int analysisLoader(void *pData, int argc, char **argv, char **NotUsed){
   }else{
     pIndex = sqlite3FindIndex(pInfo->db, argv[1], pInfo->zDatabase);
   }
-  z = argv[2];
+  const char *const z = argv[2];
 
   if( pIndex ){
     tRowcnt *aiRowEst = 0;
@@ -1668,8 +1666,8 @@ void sqlite3DeleteIndexSamples(sqlite3 *db, Index *pIdx){
 */
 static void initAvgEq(Index *pIdx){
   if( pIdx ){
-    IndexSample *aSample = pIdx->aSample;
-    IndexSample *pFinal = &aSample[pIdx->nSample-1];
+    IndexSample *const aSample = pIdx->aSample;
+    IndexSample *const pFinal = &aSample[pIdx->nSample-1];
     int iCol;
     int nCol = 1;
     if( pIdx->nSampleCol>1 ){
@@ -1926,12 +1924,9 @@ static int loadStat4(sqlite3 *db, const char *zDb){
 ** code may be ignored.
 */
 int sqlite3AnalysisLoad(sqlite3 *db, int iDb){
-  analysisInfo sInfo;
   HashElem *i;
-  char *zSql;
   int rc = SQLITE_OK;
-  Schema *pSchema = db->aDb[iDb].pSchema;
-  const Table *pStat1;
+  Schema *const pSchema = db->aDb[iDb].pSchema;
 
   assert( iDb>=0 && iDb<db->nDb );
   assert( db->aDb[iDb].pBt!=0 );
@@ -1952,12 +1947,14 @@ int sqlite3AnalysisLoad(sqlite3 *db, int iDb){
   }
 
   /* Load new statistics out of the sqlite_stat1 table */
+  analysisInfo sInfo;
   sInfo.db = db;
   sInfo.zDatabase = db->aDb[iDb].zDbSName;
+  const Table *pStat1;
   if( (pStat1 = sqlite3FindTable(db, "sqlite_stat1", sInfo.zDatabase))
    && IsOrdinaryTable(pStat1)
   ){
-    zSql = sqlite3MPrintf(db, 
+    char *zSql = sqlite3MPrintf(db,
         "SELECT tbl,idx,stat FROM %Q.sqlite_stat1", sInfo.zDatabase);
     if( zSql==0 ){
       rc = SQLITE_NOMEM_BKPT;
