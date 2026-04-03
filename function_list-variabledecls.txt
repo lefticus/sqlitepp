@@ -157,11 +157,11 @@
 [x] src/btree.cpp::sqlite3BtreeSetPageSize
 [x] src/btree.cpp::sqlite3BtreeGetPageSize
 [x] src/btree.cpp::sqlite3BtreeGetReserveNoMutex
-[ ] src/btree.cpp::sqlite3BtreeGetRequestedReserve
-[ ] src/btree.cpp::sqlite3BtreeMaxPageCount
-[ ] src/btree.cpp::sqlite3BtreeSecureDelete
-[ ] src/btree.cpp::sqlite3BtreeSetAutoVacuum
-[ ] src/btree.cpp::sqlite3BtreeGetAutoVacuum
+[x] src/btree.cpp::sqlite3BtreeGetRequestedReserve
+[x] src/btree.cpp::sqlite3BtreeMaxPageCount
+[x] src/btree.cpp::sqlite3BtreeSecureDelete
+[x] src/btree.cpp::sqlite3BtreeSetAutoVacuum
+[x] src/btree.cpp::sqlite3BtreeGetAutoVacuum
 [ ] src/btree.cpp::setDefaultSyncFlag
 [ ] src/btree.cpp::lockBtree
 [ ] src/btree.cpp::countValidCursors

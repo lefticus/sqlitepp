@@ -3058,10 +3058,9 @@ int sqlite3BtreeGetReserveNoMutex(Btree *p){
 ** The amount of reserve can only grow - never shrink.
 */
 int sqlite3BtreeGetRequestedReserve(Btree *p){
-  int n1, n2;
   sqlite3BtreeEnter(p);
-  n1 = (int)p->pBt->nReserveWanted;
-  n2 = sqlite3BtreeGetReserveNoMutex(p);
+  const int n1 = (int)p->pBt->nReserveWanted;
+  const int n2 = sqlite3BtreeGetReserveNoMutex(p);
   sqlite3BtreeLeave(p);
   return n1>n2 ? n1 : n2;
 }
@@ -3073,9 +3072,8 @@ int sqlite3BtreeGetRequestedReserve(Btree *p){
 ** Regardless of the value of mxPage, return the maximum page count.
 */
 Pgno sqlite3BtreeMaxPageCount(Btree *p, Pgno mxPage){
-  Pgno n;
   sqlite3BtreeEnter(p);
-  n = sqlite3PagerMaxPageCount(p->pBt->pPager, mxPage);
+  const Pgno n = sqlite3PagerMaxPageCount(p->pBt->pPager, mxPage);
   sqlite3BtreeLeave(p);
   return n;
 }
@@ -3099,7 +3097,6 @@ Pgno sqlite3BtreeMaxPageCount(Btree *p, Pgno mxPage){
 ** the amount of disk I/O.
 */
 int sqlite3BtreeSecureDelete(Btree *p, int newFlag){
-  int b;
   if( p==0 ) return 0;
   sqlite3BtreeEnter(p);
   assert( BTS_OVERWRITE==BTS_SECURE_DELETE*2 );
@@ -3108,7 +3105,7 @@ int sqlite3BtreeSecureDelete(Btree *p, int newFlag){
     p->pBt->btsFlags &= ~BTS_FAST_SECURE;
     p->pBt->btsFlags |= (u16)(BTS_SECURE_DELETE*newFlag);
   }
-  b = (p->pBt->btsFlags & BTS_FAST_SECURE)/BTS_SECURE_DELETE;
+  const int b = (p->pBt->btsFlags & BTS_FAST_SECURE)/BTS_SECURE_DELETE;
   sqlite3BtreeLeave(p);
   return b;
 }
@@ -3123,9 +3120,9 @@ int sqlite3BtreeSetAutoVacuum(Btree *p, int autoVacuum){
 #ifdef SQLITE_OMIT_AUTOVACUUM
   return SQLITE_READONLY;
 #else
-  BtShared *pBt = p->pBt;
+  BtShared * const pBt = p->pBt;
   int rc = SQLITE_OK;
-  u8 av = (u8)autoVacuum;
+  const u8 av = (u8)autoVacuum;
 
   sqlite3BtreeEnter(p);
   if( (pBt->btsFlags & BTS_PAGESIZE_FIXED)!=0 && (av ?1:0)!=pBt->autoVacuum ){
@@ -3147,9 +3144,8 @@ int sqlite3BtreeGetAutoVacuum(Btree *p){
 #ifdef SQLITE_OMIT_AUTOVACUUM
   return BTREE_AUTOVACUUM_NONE;
 #else
-  int rc;
   sqlite3BtreeEnter(p);
-  rc = (
+  const int rc = (
     (!p->pBt->autoVacuum)?BTREE_AUTOVACUUM_NONE:
     (!p->pBt->incrVacuum)?BTREE_AUTOVACUUM_FULL:
     BTREE_AUTOVACUUM_INCR
