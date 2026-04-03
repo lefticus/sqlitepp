@@ -311,32 +311,20 @@ static void sqlite3ErrorIfNotEmpty(
 ** the new column during parsing.
 */
 void sqlite3AlterFinishAddColumn(Parse *pParse, Token *pColDef){
-  Table *pNew;              /* Copy of pParse->pNewTable */
-  Table *pTab;              /* Table being altered */
-  int iDb;                  /* Database number */
-  const char *zDb;          /* Database name */
-  const char *zTab;         /* Table name */
-  char *zCol;               /* Null-terminated column definition */
-  Column *pCol;             /* The new column */
-  Expr *pDflt;              /* Default value for the new column */
-  sqlite3 *db;              /* The database connection; */
-  Vdbe *v;                  /* The prepared statement under construction */
-  int r1;                   /* Temporary registers */
-
-  db = pParse->db;
+  sqlite3 *const db = pParse->db;              /* The database connection; */
   assert( db->pParse==pParse );
   if( pParse->nErr ) return;
   assert( db->mallocFailed==0 );
-  pNew = pParse->pNewTable;
+  Table *const pNew = pParse->pNewTable;       /* Copy of pParse->pNewTable */
   assert( pNew );
 
   assert( sqlite3BtreeHoldsAllMutexes(db) );
-  iDb = sqlite3SchemaToIndex(db, pNew->pSchema);
-  zDb = db->aDb[iDb].zDbSName;
-  zTab = &pNew->zName[16];  /* Skip the "sqlite_altertab_" prefix on the name */
-  pCol = &pNew->aCol[pNew->nCol-1];
-  pDflt = sqlite3ColumnExpr(pNew, pCol);
-  pTab = sqlite3FindTable(db, zTab, zDb);
+  const int iDb = sqlite3SchemaToIndex(db, pNew->pSchema);   /* Database number */
+  const char *const zDb = db->aDb[iDb].zDbSName;             /* Database name */
+  const char *const zTab = &pNew->zName[16];  /* Skip the "sqlite_altertab_" prefix on the name */
+  Column *const pCol = &pNew->aCol[pNew->nCol-1];            /* The new column */
+  Expr *pDflt = sqlite3ColumnExpr(pNew, pCol);               /* Default value for the new column */
+  Table *const pTab = sqlite3FindTable(db, zTab, zDb);       /* Table being altered */
   assert( pTab );
 
 #ifndef SQLITE_OMIT_AUTHORIZATION
@@ -385,8 +373,7 @@ void sqlite3AlterFinishAddColumn(Parse *pParse, Token *pColDef){
     */
     if( pDflt ){
       sqlite3_value *pVal = 0;
-      int rc;
-      rc = sqlite3ValueFromExpr(db, pDflt, SQLITE_UTF8, SQLITE_AFF_BLOB, &pVal);
+      const int rc = sqlite3ValueFromExpr(db, pDflt, SQLITE_UTF8, SQLITE_AFF_BLOB, &pVal);
       assert( rc==SQLITE_OK || rc==SQLITE_NOMEM );
       if( rc!=SQLITE_OK ){
         assert( db->mallocFailed == 1 );
@@ -404,7 +391,7 @@ void sqlite3AlterFinishAddColumn(Parse *pParse, Token *pColDef){
 
 
   /* Modify the CREATE TABLE statement. */
-  zCol = sqlite3DbStrNDup(db, (char*)pColDef->z, pColDef->n);
+  char *const zCol = sqlite3DbStrNDup(db, (char*)pColDef->z, pColDef->n);
   if( zCol ){
     char *zEnd = &zCol[pColDef->n-1];
     while( zEnd>zCol && (*zEnd==';' || sqlite3Isspace(*zEnd)) ){
@@ -425,13 +412,13 @@ void sqlite3AlterFinishAddColumn(Parse *pParse, Token *pColDef){
     sqlite3DbFree(db, zCol);
   }
 
-  v = sqlite3GetVdbe(pParse);
+  Vdbe *const v = sqlite3GetVdbe(pParse);
   if( v ){
     /* Make sure the schema version is at least 3.  But do not upgrade
     ** from less than 3 to 4, as that will corrupt any preexisting DESC
     ** index.
     */
-    r1 = sqlite3GetTempReg(pParse);
+    const int r1 = sqlite3GetTempReg(pParse);
     sqlite3VdbeAddOp3(v, OP_ReadCookie, iDb, r1, BTREE_FILE_FORMAT);
     sqlite3VdbeUsesBtree(v, iDb);
     sqlite3VdbeAddOp2(v, OP_AddImm, r1, -2);
