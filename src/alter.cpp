@@ -795,7 +795,7 @@ void sqlite3RenameTokenRemap(Parse *pParse, const void *pTo, const void *pFrom){
 ** Walker callback used by sqlite3RenameExprUnmap().
 */
 static int renameUnmapExprCb(Walker *pWalker, Expr *pExpr){
-  Parse *pParse = pWalker->pParse;
+  Parse *const pParse = pWalker->pParse;
   sqlite3RenameTokenRemap(pParse, 0, (const void*)pExpr);
   if( ExprUseYTab(pExpr) ){
     sqlite3RenameTokenRemap(pParse, 0, (const void*)&pExpr->y.pTab);

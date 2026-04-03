@@ -6,7 +6,7 @@
 [x] src/alter.cpp::isRealTable
 [x] src/alter.cpp::renameTokenCheckAll
 [x] src/alter.cpp::sqlite3RenameTokenRemap
-[ ] src/alter.cpp::renameUnmapExprCb
+[x] src/alter.cpp::renameUnmapExprCb
 [ ] src/alter.cpp::renameWalkWith
 [ ] src/alter.cpp::renameUnmapSelectCb
 [ ] src/alter.cpp::sqlite3RenameExprUnmap
