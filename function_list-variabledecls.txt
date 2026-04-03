@@ -57,11 +57,11 @@
 [x] src/auth.cpp::sqlite3AuthContextPop
 [x] src/backup.cpp::findBtree
 [x] src/backup.cpp::setDestPgsz
-[ ] src/backup.cpp::checkReadTransaction
-[ ] src/backup.cpp::isFatalError
-[ ] src/backup.cpp::backupTruncateFile
-[ ] src/backup.cpp::attachBackupObject
-[ ] src/backup.cpp::sqlite3_backup_step
+[x] src/backup.cpp::checkReadTransaction
+[x] src/backup.cpp::isFatalError
+[x] src/backup.cpp::backupTruncateFile
+[x] src/backup.cpp::attachBackupObject
+[x] src/backup.cpp::sqlite3_backup_step
 [ ] src/backup.cpp::sqlite3_backup_finish
 [ ] src/backup.cpp::sqlite3_backup_remaining
 [ ] src/backup.cpp::sqlite3_backup_pagecount

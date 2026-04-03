@@ -299,9 +299,8 @@ static int backupTruncateFile(sqlite3_file *pFile, i64 iSize){
 ** callbacks when pages are changed or the cache invalidated.
 */
 static void attachBackupObject(sqlite3_backup *p){
-  sqlite3_backup **pp;
   assert( sqlite3BtreeHoldsMutex(p->pSrc) );
-  pp = sqlite3PagerBackupPtr(sqlite3BtreePager(p->pSrc));
+  sqlite3_backup **const pp = sqlite3PagerBackupPtr(sqlite3BtreePager(p->pSrc));
   p->pNext = *pp;
   *pp = p;
   p->isAttached = 1;
@@ -312,9 +311,6 @@ static void attachBackupObject(sqlite3_backup *p){
 */
 int sqlite3_backup_step(sqlite3_backup *p, int nPage){
   int rc;
-  int destMode;       /* Destination journal mode */
-  int pgszSrc = 0;    /* Source page size */
-  int pgszDest = 0;   /* Destination page size */
 
 #ifdef SQLITE_ENABLE_API_ARMOR
   if( p==0 ) return SQLITE_MISUSE_BKPT;
@@ -371,9 +367,9 @@ int sqlite3_backup_step(sqlite3_backup *p, int nPage){
 
     /* Do not allow backup if the destination database is in WAL mode
     ** and the page sizes are different between source and destination */
-    pgszSrc = sqlite3BtreeGetPageSize(p->pSrc);
-    pgszDest = sqlite3BtreeGetPageSize(p->pDest);
-    destMode = sqlite3PagerGetJournalMode(sqlite3BtreePager(p->pDest));
+    const int pgszSrc = sqlite3BtreeGetPageSize(p->pSrc);
+    const int pgszDest = sqlite3BtreeGetPageSize(p->pDest);
+    const int destMode = sqlite3PagerGetJournalMode(sqlite3BtreePager(p->pDest));
     if( SQLITE_OK==rc 
      && (destMode==PAGER_JOURNALMODE_WAL || sqlite3PagerIsMemdb(pDestPager))
      && pgszSrc!=pgszDest 
@@ -446,7 +442,7 @@ int sqlite3_backup_step(sqlite3_backup *p, int nPage){
         assert( pgszSrc==sqlite3BtreeGetPageSize(p->pSrc) );
         assert( pgszDest==sqlite3BtreeGetPageSize(p->pDest) );
         if( pgszSrc<pgszDest ){
-          int ratio = pgszDest/pgszSrc;
+          const int ratio = pgszDest/pgszSrc;
           nDestTruncate = (nSrcPage+ratio-1)/ratio;
           if( nDestTruncate==(int)PENDING_BYTE_PAGE(p->pDest->pBt) ){
             nDestTruncate--;
@@ -468,13 +464,9 @@ int sqlite3_backup_step(sqlite3_backup *p, int nPage){
           */
           const i64 iSize = (i64)pgszSrc * (i64)nSrcPage;
           sqlite3_file * const pFile = sqlite3PagerFile(pDestPager);
-          Pgno iPg;
-          int nDstPage;
-          i64 iOff;
-          i64 iEnd;
 
           assert( pFile );
-          assert( nDestTruncate==0 
+          assert( nDestTruncate==0
               || (i64)nDestTruncate*(i64)pgszDest >= iSize || (
                 nDestTruncate==(int)(PENDING_BYTE_PAGE(p->pDest->pBt)-1)
              && iSize>=PENDING_BYTE && iSize<=PENDING_BYTE+pgszDest
@@ -484,10 +476,11 @@ int sqlite3_backup_step(sqlite3_backup *p, int nPage){
           ** database has been stored in the journal for pDestPager and the
           ** journal synced to disk. So at this point we may safely modify
           ** the database file in any way, knowing that if a power failure
-          ** occurs, the original database will be reconstructed from the 
+          ** occurs, the original database will be reconstructed from the
           ** journal file.  */
+          int nDstPage;
           sqlite3PagerPagecount(pDestPager, &nDstPage);
-          for(iPg=nDestTruncate; rc==SQLITE_OK && iPg<=(Pgno)nDstPage; iPg++){
+          for(Pgno iPg=nDestTruncate; rc==SQLITE_OK && iPg<=(Pgno)nDstPage; iPg++){
             if( iPg!=PENDING_BYTE_PAGE(p->pDest->pBt) ){
               DbPage *pPg;
               rc = sqlite3PagerGet(pDestPager, iPg, &pPg, 0);
@@ -502,9 +495,9 @@ int sqlite3_backup_step(sqlite3_backup *p, int nPage){
           }
 
           /* Write the extra pages and truncate the database file as required */
-          iEnd = MIN(PENDING_BYTE + pgszDest, iSize);
+          const i64 iEnd = MIN(PENDING_BYTE + pgszDest, iSize);
           for(
-            iOff=PENDING_BYTE+pgszSrc; 
+            i64 iOff=PENDING_BYTE+pgszSrc;
             rc==SQLITE_OK && iOff<iEnd; 
             iOff+=pgszSrc
           ){
