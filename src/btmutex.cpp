@@ -39,7 +39,7 @@ static void lockBtreeMutex(Btree *p){
 ** clear the p->locked boolean.
 */
 static void SQLITE_NOINLINE unlockBtreeMutex(Btree *p){
-  BtShared *pBt = p->pBt;
+  BtShared *const pBt = p->pBt;
   assert( p->locked==1 );
   assert( sqlite3_mutex_held(pBt->mutex) );
   assert( sqlite3_mutex_held(p->db->mutex) );
@@ -103,7 +103,6 @@ void sqlite3BtreeEnter(Btree *p){
 ** in the common case.
 */
 static void SQLITE_NOINLINE btreeLockCarefully(Btree *p){
-  Btree *pLater;
 
   /* In most cases, we should be able to acquire the lock we
   ** want without having to go through the ascending lock
@@ -120,7 +119,7 @@ static void SQLITE_NOINLINE btreeLockCarefully(Btree *p){
   ** the other BtShared locks that we used to hold in ascending
   ** order.
   */
-  for(pLater=p->pNext; pLater; pLater=pLater->pNext){
+  for(Btree *pLater=p->pNext; pLater; pLater=pLater->pNext){
     assert( pLater->sharable );
     assert( pLater->pNext==0 || pLater->pNext->pBt>pLater->pBt );
     assert( !pLater->locked || pLater->wantToLock>0 );
@@ -129,7 +128,7 @@ static void SQLITE_NOINLINE btreeLockCarefully(Btree *p){
     }
   }
   lockBtreeMutex(p);
-  for(pLater=p->pNext; pLater; pLater=pLater->pNext){
+  for(Btree *pLater=p->pNext; pLater; pLater=pLater->pNext){
     if( pLater->wantToLock ){
       lockBtreeMutex(pLater);
     }

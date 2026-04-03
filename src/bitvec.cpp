@@ -390,7 +390,8 @@ int sqlite3BitvecBuiltinTest(int sz, int *aOp){
   Bitvec *pBitvec = 0;
   unsigned char *pV = 0;
   int rc = -1;
-  int i, nx, pc, op;
+  int i;
+  int pc;
   void *pTmpSpace;
 
   /* Allocate the Bitvec to be tested and a linear array of
@@ -410,8 +411,9 @@ int sqlite3BitvecBuiltinTest(int sz, int *aOp){
   sqlite3BitvecClear(0, 1, pTmpSpace);
 
   /* Run the program */
-  pc = i = 0;
-  while( (op = aOp[pc])!=0 ){
+  pc = 0;
+  i = 0;
+  while( const int op = aOp[pc] ){
     if( op>=6 ){
 #ifdef SQLITE_DEBUG
       if( op==6 ){
@@ -430,6 +432,7 @@ int sqlite3BitvecBuiltinTest(int sz, int *aOp){
       pc++;
       continue;
     }
+    int nx;
     switch( op ){
       case 1:
       case 2:
