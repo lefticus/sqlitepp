@@ -162,11 +162,11 @@
 [x] src/btree.cpp::sqlite3BtreeSecureDelete
 [x] src/btree.cpp::sqlite3BtreeSetAutoVacuum
 [x] src/btree.cpp::sqlite3BtreeGetAutoVacuum
-[ ] src/btree.cpp::setDefaultSyncFlag
-[ ] src/btree.cpp::lockBtree
-[ ] src/btree.cpp::countValidCursors
-[ ] src/btree.cpp::unlockBtreeIfUnused
-[ ] src/btree.cpp::newDatabase
+[x] src/btree.cpp::setDefaultSyncFlag
+[x] src/btree.cpp::lockBtree
+[x] src/btree.cpp::countValidCursors
+[x] src/btree.cpp::unlockBtreeIfUnused
+[x] src/btree.cpp::newDatabase
 [ ] src/btree.cpp::sqlite3BtreeNewDb
 [ ] src/btree.cpp::sqlite3BtreeBeginTrans
 [ ] src/btree.cpp::setChildPtrmaps

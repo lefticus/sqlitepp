@@ -3388,9 +3388,8 @@ page1_init_failed:
 ** have been tripped into the CURSOR_FAULT state are not counted.
 */
 static int countValidCursors(BtShared *pBt, int wrOnly){
-  BtCursor *pCur;
   int r = 0;
-  for(pCur=pBt->pCursor; pCur; pCur=pCur->pNext){
+  for(BtCursor *pCur=pBt->pCursor; pCur; pCur=pCur->pNext){
     if( (wrOnly==0 || (pCur->curFlags & BTCF_WriteFlag)!=0)
      && pCur->eState!=CURSOR_FAULT ) r++;
   }
@@ -3424,18 +3423,14 @@ static void unlockBtreeIfUnused(BtShared *pBt){
 ** the database.
 */
 static int newDatabase(BtShared *pBt){
-  MemPage *pP1;
-  unsigned char *data;
-  int rc;
-
   assert( sqlite3_mutex_held(pBt->mutex) );
   if( pBt->nPage>0 ){
     return SQLITE_OK;
   }
-  pP1 = pBt->pPage1;
+  MemPage *const pP1 = pBt->pPage1;
   assert( pP1!=0 );
-  data = pP1->aData;
-  rc = sqlite3PagerWrite(pP1->pDbPage);
+  unsigned char *const data = pP1->aData;
+  const int rc = sqlite3PagerWrite(pP1->pDbPage);
   if( rc ) return rc;
   memcpy(data, zMagicHeader, sizeof(zMagicHeader));
   assert( sizeof(zMagicHeader)==16 );
