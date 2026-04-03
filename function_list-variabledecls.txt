@@ -127,11 +127,11 @@
 [x] src/btree.cpp::cellSizePtrIdxLeaf
 [x] src/btree.cpp::cellSizePtrNoPayload
 [x] src/btree.cpp::cellSizePtrTableLeaf
-[ ] src/btree.cpp::cellSize
-[ ] src/btree.cpp::ptrmapPutOvflPtr
-[ ] src/btree.cpp::defragmentPage
-[ ] src/btree.cpp::pageFindSlot
-[ ] src/btree.cpp::allocateSpace
+[x] src/btree.cpp::cellSize
+[x] src/btree.cpp::ptrmapPutOvflPtr
+[x] src/btree.cpp::defragmentPage
+[x] src/btree.cpp::pageFindSlot
+[x] src/btree.cpp::allocateSpace
 [ ] src/btree.cpp::freeSpace
 [ ] src/btree.cpp::decodeFlags
 [ ] src/btree.cpp::btreeComputeFreeSpace

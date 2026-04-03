@@ -1584,33 +1584,21 @@ static void ptrmapPutOvflPtr(MemPage *pPage, MemPage *pSrc, u8 *pCell,int *pRC){
 ** cells are packed tightly at the end of the page.
 */
 static int defragmentPage(MemPage *pPage, int nMaxFrag){
-  int i;                     /* Loop counter */
   int pc;                    /* Address of the i-th cell */
-  int hdr;                   /* Offset to the page header */
-  int size;                  /* Size of a cell */
-  int usableSize;            /* Number of usable bytes on a page */
-  int cellOffset;            /* Offset to the cell pointer array */
   int cbrk;                  /* Offset to the cell content area */
-  int nCell;                 /* Number of cells on the page */
-  unsigned char *data;       /* The page data */
-  unsigned char *temp;       /* Temp area for cell content */
-  unsigned char *src;        /* Source of content */
-  int iCellFirst;            /* First allowable cell index */
-  int iCellLast;             /* Last possible cell index */
-  int iCellStart;            /* First cell offset in input */
 
   assert( sqlite3PagerIswriteable(pPage->pDbPage) );
   assert( pPage->pBt!=0 );
   assert( pPage->pBt->usableSize <= SQLITE_MAX_PAGE_SIZE );
   assert( pPage->nOverflow==0 );
   assert( sqlite3_mutex_held(pPage->pBt->mutex) );
-  data = pPage->aData;
-  hdr = pPage->hdrOffset;
-  cellOffset = pPage->cellOffset;
-  nCell = pPage->nCell;
+  unsigned char * const data = pPage->aData;             /* The page data */
+  const int hdr = pPage->hdrOffset;                      /* Offset to the page header */
+  const int cellOffset = pPage->cellOffset;              /* Offset to the cell pointer array */
+  const int nCell = pPage->nCell;                        /* Number of cells on the page */
   assert( nCell==get2byte(&data[hdr+3]) || CORRUPT_DB );
-  iCellFirst = cellOffset + 2*nCell;
-  usableSize = pPage->pBt->usableSize;
+  const int iCellFirst = cellOffset + 2*nCell;           /* First allowable cell index */
+  const int usableSize = pPage->pBt->usableSize;        /* Number of usable bytes on a page */
 
   /* This block handles pages with two or fewer free blocks and nMaxFrag
   ** or fewer fragmented bytes. In this case it is faster to move the
@@ -1656,13 +1644,13 @@ static int defragmentPage(MemPage *pPage, int nMaxFrag){
   }
 
   cbrk = usableSize;
-  iCellLast = usableSize - 4;
-  iCellStart = get2byte(&data[hdr+5]);
   if( nCell>0 ){
-    temp = static_cast<unsigned char*>(sqlite3PagerTempSpace(pPage->pBt->pPager));
+    const int iCellLast = usableSize - 4;           /* Last possible cell index */
+    const int iCellStart = get2byte(&data[hdr+5]);  /* First cell offset in input */
+    unsigned char * const temp = static_cast<unsigned char*>(sqlite3PagerTempSpace(pPage->pBt->pPager));
     memcpy(temp, data, usableSize);
-    src = temp;
-    for(i=0; i<nCell; i++){
+    unsigned char * const src = temp;                /* Source of content */
+    for(int i=0; i<nCell; i++){
       u8 *pAddr;     /* The i-th cell pointer */
       pAddr = &data[cellOffset + i*2];
       pc = get2byte(pAddr);
@@ -1675,7 +1663,7 @@ static int defragmentPage(MemPage *pPage, int nMaxFrag){
         return SQLITE_CORRUPT_PAGE(pPage);
       }
       assert( pc>=0 && pc<=iCellLast );
-      size = pPage->xCellSize(pPage, &src[pc]);
+      const int size = pPage->xCellSize(pPage, &src[pc]);  /* Size of a cell */
       cbrk -= size;
       if( cbrk<iCellStart || pc+size>usableSize ){
         return SQLITE_CORRUPT_PAGE(pPage);
@@ -1723,9 +1711,7 @@ static u8 *pageFindSlot(MemPage *pPg, int nByte, int *pRc){
   int iAddr = hdr + 1;                       /* Address of ptr to pc */
   u8 *pTmp = &aData[iAddr];                  /* Temporary ptr into aData[] */
   int pc = get2byte(pTmp);                   /* Address of a free slot */
-  int x;                                     /* Excess size of the slot */
-  int maxPC = pPg->pBt->usableSize - nByte;  /* Max address for a usable slot */
-  int size;                                  /* Size of the free slot */
+  const int maxPC = pPg->pBt->usableSize - nByte;  /* Max address for a usable slot */
 
   assert( pc>0 );
   while( pc<=maxPC ){
@@ -1733,8 +1719,9 @@ static u8 *pageFindSlot(MemPage *pPg, int nByte, int *pRc){
     ** freeblock form a big-endian integer which is the size of the freeblock
     ** in bytes, including the 4-byte header. */
     pTmp = &aData[pc+2];
-    size = get2byte(pTmp);
-    if( (x = size - nByte)>=0 ){
+    const int size = get2byte(pTmp);             /* Size of the free slot */
+    const int x = size - nByte;                  /* Excess size of the slot */
+    if( x>=0 ){
       testcase( x==4 );
       testcase( x==3 );
       if( x<4 ){
@@ -1794,9 +1781,7 @@ static SQLITE_INLINE int allocateSpace(MemPage *pPage, int nByte, int *pIdx){
   u8 * const data = pPage->aData;      /* Local cache of pPage->aData */
   int top;                             /* First byte of cell content area */
   int rc = SQLITE_OK;                  /* Integer return code */
-  u8 *pTmp;                            /* Temp ptr into data[] */
-  int gap;        /* First byte of gap between cell pointers and cell content */
- 
+
   assert( sqlite3PagerIswriteable(pPage->pDbPage) );
   assert( pPage->pBt );
   assert( sqlite3_mutex_held(pPage->pBt->mutex) );
@@ -1806,14 +1791,14 @@ static SQLITE_INLINE int allocateSpace(MemPage *pPage, int nByte, int *pIdx){
   assert( nByte < (int)(pPage->pBt->usableSize-8) );
 
   assert( pPage->cellOffset == hdr + 12 - 4*pPage->leaf );
-  gap = pPage->cellOffset + 2*pPage->nCell;
+  const int gap = pPage->cellOffset + 2*pPage->nCell;  /* First byte of gap between cell pointers and cell content */
   assert( gap<=65536 );
   /* EVIDENCE-OF: R-29356-02391 If the database uses a 65536-byte page size
   ** and the reserved space is zero (the usual value for reserved space)
   ** then the cell content offset of an empty page wants to be 65536.
   ** However, that integer is too large to be stored in a 2-byte unsigned
   ** integer, so a value of 0 is used in its place. */
-  pTmp = &data[hdr+5];
+  u8 * const pTmp = &data[hdr+5];     /* Temp ptr into data[] */
   top = get2byte(pTmp);
   if( gap>top ){
     if( top==0 && pPage->pBt->usableSize==65536 ){
