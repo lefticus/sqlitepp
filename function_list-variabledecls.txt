@@ -47,11 +47,11 @@
 [x] src/analyze.cpp::initAvgEq
 [x] src/analyze.cpp::loadStat4
 [x] src/analyze.cpp::sqlite3AnalysisLoad
-[ ] src/attach.cpp::resolveAttachExpr
-[ ] src/attach.cpp::sqlite3DbIsNamed
-[ ] src/attach.cpp::sqlite3Detach
-[ ] src/attach.cpp::sqlite3Attach
-[ ] src/attach.cpp::fixExprCb
+[x] src/attach.cpp::resolveAttachExpr
+[x] src/attach.cpp::sqlite3DbIsNamed
+[x] src/attach.cpp::sqlite3Detach
+[x] src/attach.cpp::sqlite3Attach
+[x] src/attach.cpp::fixExprCb
 [ ] src/attach.cpp::fixSelectCb
 [ ] src/auth.cpp::sqliteAuthBadReturnCode
 [ ] src/auth.cpp::sqlite3AuthContextPop

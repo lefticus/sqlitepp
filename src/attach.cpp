@@ -457,7 +457,7 @@ void sqlite3Attach(Parse *pParse, Expr *p, Expr *pDbname, Expr *pKey){
 ** Expression callback used by sqlite3FixAAAA() routines.
 */
 static int fixExprCb(Walker *p, Expr *pExpr){
-  DbFixer *pFix = p->u.pFix;
+  DbFixer *const pFix = p->u.pFix;
   if( !pFix->bTemp ) ExprSetProperty(pExpr, EP_FromDDL);
   if( pExpr->op==TK_VARIABLE ){
     if( pFix->pParse->db->init.busy ){
