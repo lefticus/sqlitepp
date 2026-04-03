@@ -117,11 +117,11 @@
 [x] src/btree.cpp::sqlite3BtreeCursorHasMoved
 [x] src/btree.cpp::sqlite3BtreeFakeValidCursor
 [x] src/btree.cpp::sqlite3BtreeCursorRestore
-[ ] src/btree.cpp::sqlite3BtreeCursorHint
-[ ] src/btree.cpp::sqlite3BtreeCursorHintFlags
-[ ] src/btree.cpp::ptrmapPageno
-[ ] src/btree.cpp::ptrmapPut
-[ ] src/btree.cpp::ptrmapGet
+[x] src/btree.cpp::sqlite3BtreeCursorHint
+[x] src/btree.cpp::sqlite3BtreeCursorHintFlags
+[x] src/btree.cpp::ptrmapPageno
+[x] src/btree.cpp::ptrmapPut
+[x] src/btree.cpp::ptrmapGet
 [ ] src/btree.cpp::btreePayloadToLocal
 [ ] src/btree.cpp::cellSizePtr
 [ ] src/btree.cpp::cellSizePtrIdxLeaf

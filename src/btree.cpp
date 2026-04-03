@@ -987,12 +987,11 @@ void sqlite3BtreeCursorHint(BtCursor *pCur, int eHintType, ...){
 #ifdef SQLITE_DEBUG
   if( ALWAYS(eHintType==BTREE_HINT_RANGE) ){
     va_list ap;
-    Expr *pExpr;
     Walker w;
     memset(&w, 0, sizeof(w));
     w.xExprCallback = sqlite3CursorRangeHintExprCheck;
     va_start(ap, eHintType);
-    pExpr = va_arg(ap, Expr*);
+    Expr *const pExpr = va_arg(ap, Expr*);
     w.u.aMem = va_arg(ap, Mem*);
     va_end(ap);
     assert( pExpr!=0 );
@@ -1024,13 +1023,11 @@ void sqlite3BtreeCursorHintFlags(BtCursor *pCur, unsigned x){
 ** requires that ptrmapPageno(*,1)!=1.
 */
 static Pgno ptrmapPageno(BtShared *pBt, Pgno pgno){
-  int nPagesPerMapPage;
-  Pgno iPtrMap, ret;
   assert( sqlite3_mutex_held(pBt->mutex) );
   if( pgno<2 ) return 0;
-  nPagesPerMapPage = (pBt->usableSize/5)+1;
-  iPtrMap = (pgno-2)/nPagesPerMapPage;
-  ret = (iPtrMap*nPagesPerMapPage) + 2;
+  const int nPagesPerMapPage = (pBt->usableSize/5)+1;
+  const Pgno iPtrMap = (pgno-2)/nPagesPerMapPage;
+  Pgno ret = (iPtrMap*nPagesPerMapPage) + 2;
   if( ret==PENDING_BYTE_PAGE(pBt) ){
     ret++;
   }
@@ -1050,9 +1047,7 @@ static Pgno ptrmapPageno(BtShared *pBt, Pgno pgno){
 static void ptrmapPut(BtShared *pBt, Pgno key, u8 eType, Pgno parent, int *pRC){
   DbPage *pDbPage;  /* The pointer map page */
   u8 *pPtrmap;      /* The pointer map data */
-  Pgno iPtrmap;     /* The pointer map page number */
   int offset;       /* Offset in pointer map page */
-  int rc;           /* Return code from subfunctions */
 
   if( *pRC ) return;
 
@@ -1065,8 +1060,8 @@ static void ptrmapPut(BtShared *pBt, Pgno key, u8 eType, Pgno parent, int *pRC){
     *pRC = SQLITE_CORRUPT_BKPT;
     return;
   }
-  iPtrmap = PTRMAP_PAGENO(pBt, key);
-  rc = sqlite3PagerGet(pBt->pPager, iPtrmap, &pDbPage, 0);
+  const Pgno iPtrmap = PTRMAP_PAGENO(pBt, key);
+  int rc = sqlite3PagerGet(pBt->pPager, iPtrmap, &pDbPage, 0);
   if( rc!=SQLITE_OK ){
     *pRC = rc;
     return;
@@ -1107,22 +1102,17 @@ ptrmap_exit:
 ** An error code is returned if something goes wrong, otherwise SQLITE_OK.
 */
 static int ptrmapGet(BtShared *pBt, Pgno key, u8 *pEType, Pgno *pPgno){
-  DbPage *pDbPage;   /* The pointer map page */
-  int iPtrmap;       /* Pointer map page index */
-  u8 *pPtrmap;       /* Pointer map page data */
-  int offset;        /* Offset of entry in pointer map */
-  int rc;
-
   assert( sqlite3_mutex_held(pBt->mutex) );
 
-  iPtrmap = PTRMAP_PAGENO(pBt, key);
-  rc = sqlite3PagerGet(pBt->pPager, iPtrmap, &pDbPage, 0);
+  const int iPtrmap = PTRMAP_PAGENO(pBt, key);
+  DbPage *pDbPage;   /* The pointer map page */
+  const int rc = sqlite3PagerGet(pBt->pPager, iPtrmap, &pDbPage, 0);
   if( rc!=0 ){
     return rc;
   }
-  pPtrmap = static_cast<u8*>(sqlite3PagerGetData(pDbPage));
+  u8 *const pPtrmap = static_cast<u8*>(sqlite3PagerGetData(pDbPage));
 
-  offset = PTRMAP_PTROFFSET(iPtrmap, key);
+  const int offset = PTRMAP_PTROFFSET(iPtrmap, key);
   if( offset<0 ){
     sqlite3PagerUnref(pDbPage);
     return SQLITE_CORRUPT_BKPT;
