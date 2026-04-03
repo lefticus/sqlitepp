@@ -3463,10 +3463,9 @@ static int newDatabase(BtShared *pBt){
 ** if successful, or an SQLite error code otherwise.
 */
 int sqlite3BtreeNewDb(Btree *p){
-  int rc;
   sqlite3BtreeEnter(p);
   p->pBt->nPage = 0;
-  rc = newDatabase(p->pBt);
+  const int rc = newDatabase(p->pBt);
   sqlite3BtreeLeave(p);
   return rc;
 }
@@ -3714,14 +3713,13 @@ trans_begun:
   return rc;
 }
 int sqlite3BtreeBeginTrans(Btree *p, int wrflag, int *pSchemaVersion){
-  BtShared *pBt;
   if( p->sharable
    || p->inTrans==TRANS_NONE
    || (p->inTrans==TRANS_READ && wrflag!=0)
   ){
     return btreeBeginTrans(p,wrflag,pSchemaVersion);
   }
-  pBt = p->pBt;
+  BtShared *const pBt = p->pBt;
   if( pSchemaVersion ){
     *pSchemaVersion = get4byte(&pBt->pPage1->aData[40]);
   }
@@ -3744,18 +3742,16 @@ int sqlite3BtreeBeginTrans(Btree *p, int wrflag, int *pSchemaVersion){
 ** map entries for the overflow pages as well.
 */
 static int setChildPtrmaps(MemPage *pPage){
-  int i;                             /* Counter variable */
-  int nCell;                         /* Number of cells in page pPage */
   int rc;                            /* Return code */
-  BtShared *pBt = pPage->pBt;
-  Pgno pgno = pPage->pgno;
+  BtShared *const pBt = pPage->pBt;
+  const Pgno pgno = pPage->pgno;
 
   assert( sqlite3_mutex_held(pPage->pBt->mutex) );
   rc = pPage->isInit ? SQLITE_OK : btreeInitPage(pPage);
   if( rc!=SQLITE_OK ) return rc;
-  nCell = pPage->nCell;
+  const int nCell = pPage->nCell;
 
-  for(i=0; i<nCell; i++){
+  for(int i=0; i<nCell; i++){
     u8 *pCell = findCell(pPage, i);
 
     ptrmapPutOvflPtr(pPage, pPage, pCell, &rc);
@@ -3799,12 +3795,10 @@ static int modifyPagePointer(MemPage *pPage, Pgno iFrom, Pgno iTo, u8 eType){
     put4byte(pPage->aData, iTo);
   }else{
     int i;
-    int nCell;
-    int rc;
 
-    rc = pPage->isInit ? SQLITE_OK : btreeInitPage(pPage);
+    int rc = pPage->isInit ? SQLITE_OK : btreeInitPage(pPage);
     if( rc ) return rc;
-    nCell = pPage->nCell;
+    const int nCell = pPage->nCell;
 
     for(i=0; i<nCell; i++){
       u8 *pCell = findCell(pPage, i);
@@ -3947,8 +3941,6 @@ static int allocateBtreePage(BtShared *, MemPage **, Pgno *, Pgno, u8);
 ** operation, or false for an incremental vacuum.
 */
 static int incrVacuumStep(BtShared *pBt, Pgno nFin, Pgno iLastPg, int bCommit){
-  Pgno nFreeList;           /* Number of pages still on the free-list */
-  int rc;
 
   assert( sqlite3_mutex_held(pBt->mutex) );
   assert( iLastPg>nFin );
@@ -3957,12 +3949,12 @@ static int incrVacuumStep(BtShared *pBt, Pgno nFin, Pgno iLastPg, int bCommit){
     u8 eType;
     Pgno iPtrPage;
 
-    nFreeList = get4byte(&pBt->pPage1->aData[36]);
+    const Pgno nFreeList = get4byte(&pBt->pPage1->aData[36]);
     if( nFreeList==0 ){
       return SQLITE_DONE;
     }
 
-    rc = ptrmapGet(pBt, iLastPg, &eType, &iPtrPage);
+    int rc = ptrmapGet(pBt, iLastPg, &eType, &iPtrPage);
     if( rc!=SQLITE_OK ){
       return rc;
     }
@@ -4010,7 +4002,7 @@ static int incrVacuumStep(BtShared *pBt, Pgno nFin, Pgno iLastPg, int bCommit){
       }
       do {
         MemPage *pFreePg;
-        Pgno dbSize = btreePagecount(pBt);
+        const Pgno dbSize = btreePagecount(pBt);
         rc = allocateBtreePage(pBt, &pFreePg, &iFreePg, iNear, eMode);
         if( rc!=SQLITE_OK ){
           releasePage(pLastPg);
@@ -4023,7 +4015,7 @@ static int incrVacuumStep(BtShared *pBt, Pgno nFin, Pgno iLastPg, int bCommit){
         }
       }while( bCommit && iFreePg>nFin );
       assert( iFreePg<iLastPg );
-     
+
       rc = relocatePage(pBt, pLastPg, eType, iPtrPage, iFreePg, bCommit);
       releasePage(pLastPg);
       if( rc!=SQLITE_OK ){

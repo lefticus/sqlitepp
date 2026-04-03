@@ -167,11 +167,11 @@
 [x] src/btree.cpp::countValidCursors
 [x] src/btree.cpp::unlockBtreeIfUnused
 [x] src/btree.cpp::newDatabase
-[ ] src/btree.cpp::sqlite3BtreeNewDb
-[ ] src/btree.cpp::sqlite3BtreeBeginTrans
-[ ] src/btree.cpp::setChildPtrmaps
-[ ] src/btree.cpp::modifyPagePointer
-[ ] src/btree.cpp::incrVacuumStep
+[x] src/btree.cpp::sqlite3BtreeNewDb
+[x] src/btree.cpp::sqlite3BtreeBeginTrans
+[x] src/btree.cpp::setChildPtrmaps
+[x] src/btree.cpp::modifyPagePointer
+[x] src/btree.cpp::incrVacuumStep
 [ ] src/btree.cpp::finalDbSize
 [ ] src/btree.cpp::sqlite3BtreeIncrVacuum
 [ ] src/btree.cpp::autoVacuumCommit
