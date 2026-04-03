@@ -17,11 +17,11 @@
 [x] src/alter.cpp::renameColumnTokenNext
 [x] src/alter.cpp::errorMPrintf
 [x] src/alter.cpp::renameSetENames
-[ ] src/alter.cpp::renameResolveTrigger
-[ ] src/alter.cpp::renameWalkTrigger
-[ ] src/alter.cpp::renameParseCleanup
-[ ] src/alter.cpp::renameTableExprCb
-[ ] src/alter.cpp::renameTableSelectCb
+[x] src/alter.cpp::renameResolveTrigger
+[x] src/alter.cpp::renameWalkTrigger
+[x] src/alter.cpp::renameParseCleanup
+[x] src/alter.cpp::renameTableExprCb
+[x] src/alter.cpp::renameTableSelectCb
 [ ] src/alter.cpp::renameQuotefixExprCb
 [ ] src/alter.cpp::getConstraintToken
 [ ] src/alter.cpp::sqlite3AlterDropColumn

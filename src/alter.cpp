@@ -1316,7 +1316,6 @@ static void renameSetENames(ExprList *pEList, int val){
 static int renameResolveTrigger(Parse *pParse){
   sqlite3 *db = pParse->db;
   Trigger *pNew = pParse->pNewTrigger;
-  TriggerStep *pStep;
   NameContext sNC;
   int rc = SQLITE_OK;
 
@@ -1338,7 +1337,7 @@ static int renameResolveTrigger(Parse *pParse){
     rc = sqlite3ResolveExprNames(&sNC, pNew->pWhen);
   }
 
-  for(pStep=pNew->step_list; rc==SQLITE_OK && pStep; pStep=pStep->pNext){
+  for(TriggerStep *pStep=pNew->step_list; rc==SQLITE_OK && pStep; pStep=pStep->pNext){
     if( pStep->pSelect ){
       sqlite3SelectPrep(pParse, pStep->pSelect, &sNC);
       if( pParse->nErr ) rc = pParse->rc;
@@ -1427,13 +1426,12 @@ static int renameResolveTrigger(Parse *pParse){
 ** objects that are part of the trigger passed as the second argument.
 */
 static void renameWalkTrigger(Walker *pWalker, Trigger *pTrigger){
-  TriggerStep *pStep;
 
   /* Find tokens to edit in WHEN clause */
   sqlite3WalkExpr(pWalker, pTrigger->pWhen);
 
   /* Find tokens to edit in trigger steps */
-  for(pStep=pTrigger->step_list; pStep; pStep=pStep->pNext){
+  for(TriggerStep *pStep=pTrigger->step_list; pStep; pStep=pStep->pNext){
     sqlite3WalkSelect(pWalker, pStep->pSelect);
     sqlite3WalkExpr(pWalker, pStep->pWhere);
     sqlite3WalkExprList(pWalker, pStep->pExprList);
@@ -1462,7 +1460,7 @@ static void renameWalkTrigger(Walker *pWalker, Trigger *pTrigger){
 ** occupied by the Parse object itself.
 */
 static void renameParseCleanup(Parse *pParse){
-  sqlite3 *db = pParse->db;
+  sqlite3 * const db = pParse->db;
   Index *pIdx;
   if( pParse->pVdbe ){
     sqlite3VdbeFinalize(pParse->pVdbe);
@@ -1669,7 +1667,7 @@ renameColumnFunc_done:
 ** Walker expression callback used by "RENAME TABLE".
 */
 static int renameTableExprCb(Walker *pWalker, Expr *pExpr){
-  RenameCtx *p = pWalker->u.pRename;
+  RenameCtx * const p = pWalker->u.pRename;
   if( pExpr->op==TK_COLUMN
    && ALWAYS(ExprUseYTab(pExpr))
    && p->pTab==pExpr->y.pTab
@@ -1683,9 +1681,8 @@ static int renameTableExprCb(Walker *pWalker, Expr *pExpr){
 ** Walker select callback used by "RENAME TABLE".
 */
 static int renameTableSelectCb(Walker *pWalker, Select *pSelect){
-  int i;
-  RenameCtx *p = pWalker->u.pRename;
-  SrcList *pSrc = pSelect->pSrc;
+  RenameCtx * const p = pWalker->u.pRename;
+  SrcList * const pSrc = pSelect->pSrc;
   if( pSelect->selFlags & (SF_View|SF_CopyCte) ){
     testcase( pSelect->selFlags & SF_View );
     testcase( pSelect->selFlags & SF_CopyCte );
@@ -1695,7 +1692,7 @@ static int renameTableSelectCb(Walker *pWalker, Select *pSelect){
     assert( pWalker->pParse->db->mallocFailed );
     return WRC_Abort;
   }
-  for(i=0; i<pSrc->nSrc; i++){
+  for(int i=0; i<pSrc->nSrc; i++){
     SrcItem *pItem = &pSrc->a[i];
     if( pItem->pSTab==p->pTab ){
       renameTokenFind(pWalker->pParse, p, pItem->zName);
