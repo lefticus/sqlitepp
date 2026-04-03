@@ -782,9 +782,8 @@ const void *sqlite3RenameTokenMap(
 ** to parse tree element pTo.
 */
 void sqlite3RenameTokenRemap(Parse *pParse, const void *pTo, const void *pFrom){
-  RenameToken *p;
   renameTokenCheckAll(pParse, pTo);
-  for(p=pParse->pRename; p; p=p->pNext){
+  for(RenameToken *p=pParse->pRename; p; p=p->pNext){
     if( p->p==pFrom ){
       p->p = pTo;
       break;

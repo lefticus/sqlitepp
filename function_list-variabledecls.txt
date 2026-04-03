@@ -4,8 +4,8 @@
 [x] src/alter.cpp::sqlite3AlterFinishAddColumn
 [x] src/alter.cpp::sqlite3AlterBeginAddColumn
 [x] src/alter.cpp::isRealTable
-[ ] src/alter.cpp::renameTokenCheckAll
-[ ] src/alter.cpp::sqlite3RenameTokenRemap
+[x] src/alter.cpp::renameTokenCheckAll
+[x] src/alter.cpp::sqlite3RenameTokenRemap
 [ ] src/alter.cpp::renameUnmapExprCb
 [ ] src/alter.cpp::renameWalkWith
 [ ] src/alter.cpp::renameUnmapSelectCb
