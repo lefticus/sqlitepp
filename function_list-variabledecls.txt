@@ -152,11 +152,11 @@
 [x] src/btree.cpp::freeTempSpace
 [x] src/btree.cpp::sqlite3BtreeClose
 [x] src/btree.cpp::sqlite3BtreeSetCacheSize
-[ ] src/btree.cpp::sqlite3BtreeSetSpillSize
-[ ] src/btree.cpp::sqlite3BtreeSetMmapLimit
-[ ] src/btree.cpp::sqlite3BtreeSetPageSize
-[ ] src/btree.cpp::sqlite3BtreeGetPageSize
-[ ] src/btree.cpp::sqlite3BtreeGetReserveNoMutex
+[x] src/btree.cpp::sqlite3BtreeSetSpillSize
+[x] src/btree.cpp::sqlite3BtreeSetMmapLimit
+[x] src/btree.cpp::sqlite3BtreeSetPageSize
+[x] src/btree.cpp::sqlite3BtreeGetPageSize
+[x] src/btree.cpp::sqlite3BtreeGetReserveNoMutex
 [ ] src/btree.cpp::sqlite3BtreeGetRequestedReserve
 [ ] src/btree.cpp::sqlite3BtreeMaxPageCount
 [ ] src/btree.cpp::sqlite3BtreeSecureDelete

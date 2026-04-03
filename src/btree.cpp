@@ -2927,11 +2927,10 @@ int sqlite3BtreeSetCacheSize(Btree *p, int mxPage){
 ** using mxPage of 0 is a way to query the current spill size.
 */
 int sqlite3BtreeSetSpillSize(Btree *p, int mxPage){
-  BtShared *pBt = p->pBt;
-  int res;
+  BtShared *const pBt = p->pBt;
   assert( sqlite3_mutex_held(p->db->mutex) );
   sqlite3BtreeEnter(p);
-  res = sqlite3PagerSetSpillsize(pBt->pPager, mxPage);
+  const int res = sqlite3PagerSetSpillsize(pBt->pPager, mxPage);
   sqlite3BtreeLeave(p);
   return res;
 }
@@ -2942,7 +2941,7 @@ int sqlite3BtreeSetSpillSize(Btree *p, int mxPage){
 ** memory mapped.
 */
 int sqlite3BtreeSetMmapLimit(Btree *p, sqlite3_int64 szMmap){
-  BtShared *pBt = p->pBt;
+  BtShared *const pBt = p->pBt;
   assert( sqlite3_mutex_held(p->db->mutex) );
   sqlite3BtreeEnter(p);
   sqlite3PagerSetMmapLimit(pBt->pPager, szMmap);
@@ -2995,12 +2994,11 @@ int sqlite3BtreeSetPagerFlags(
 */
 int sqlite3BtreeSetPageSize(Btree *p, int pageSize, int nReserve, int iFix){
   int rc = SQLITE_OK;
-  int x;
-  BtShared *pBt = p->pBt;
+  BtShared *const pBt = p->pBt;
   assert( nReserve>=0 && nReserve<=255 );
   sqlite3BtreeEnter(p);
   pBt->nReserveWanted = (u8)nReserve;
-  x = pBt->pageSize - pBt->usableSize;
+  const int x = pBt->pageSize - pBt->usableSize;
   if( x==nReserve && (pageSize==0 || (u32)pageSize==pBt->pageSize) ){
     sqlite3BtreeLeave(p);
     return SQLITE_OK;
@@ -3045,9 +3043,8 @@ int sqlite3BtreeGetPageSize(Btree *p){
 ** database handle that owns *p, causing undefined behavior.
 */
 int sqlite3BtreeGetReserveNoMutex(Btree *p){
-  int n;
   assert( sqlite3_mutex_held(p->pBt->mutex) );
-  n = p->pBt->pageSize - p->pBt->usableSize;
+  const int n = p->pBt->pageSize - p->pBt->usableSize;
   return n;
 }
 
