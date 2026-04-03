@@ -132,11 +132,11 @@
 [x] src/btree.cpp::defragmentPage
 [x] src/btree.cpp::pageFindSlot
 [x] src/btree.cpp::allocateSpace
-[ ] src/btree.cpp::freeSpace
-[ ] src/btree.cpp::decodeFlags
-[ ] src/btree.cpp::btreeComputeFreeSpace
-[ ] src/btree.cpp::btreeCellSizeCheck
-[ ] src/btree.cpp::btreeInitPage
+[x] src/btree.cpp::freeSpace
+[x] src/btree.cpp::decodeFlags
+[x] src/btree.cpp::btreeComputeFreeSpace
+[x] src/btree.cpp::btreeCellSizeCheck
+[x] src/btree.cpp::btreeInitPage
 [ ] src/btree.cpp::zeroPage
 [ ] src/btree.cpp::btreePageFromDbPage
 [ ] src/btree.cpp::btreePageLookup

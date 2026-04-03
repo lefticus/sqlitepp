@@ -1874,15 +1874,9 @@ static SQLITE_INLINE int allocateSpace(MemPage *pPage, int nByte, int *pIdx){
 ** routine and return SQLITE_CORRUPT if any problems are found.
 */
 static int freeSpace(MemPage *pPage, int iStart, int iSize){
-  int iPtr;                             /* Address of ptr to next freeblock */
-  int iFreeBlk;                         /* Address of the next freeblock */
-  u8 hdr;                               /* Page header size.  0 or 100 */
-  int nFrag = 0;                        /* Reduction in fragmentation */
-  int iOrigSize = iSize;                /* Original value of iSize */
-  int x;                                /* Offset to cell content area */
+  const int iOrigSize = iSize;                /* Original value of iSize */
   int iEnd = iStart + iSize;            /* First byte past the iStart buffer */
-  unsigned char *data = pPage->aData;   /* Page content */
-  u8 *pTmp;                             /* Temporary ptr into data[] */
+  unsigned char *const data = pPage->aData;   /* Page content */
 
   assert( pPage->pBt!=0 );
   assert( sqlite3PagerIswriteable(pPage->pDbPage) );
@@ -1895,11 +1889,13 @@ static int freeSpace(MemPage *pPage, int iStart, int iSize){
   /* The list of freeblocks must be in ascending order.  Find the
   ** spot on the list where iStart should be inserted.
   */
-  hdr = pPage->hdrOffset;
-  iPtr = hdr + 1;
+  const u8 hdr = pPage->hdrOffset;
+  int iPtr = hdr + 1;
+  int iFreeBlk;                         /* Address of the next freeblock */
   if( data[iPtr+1]==0 && data[iPtr]==0 ){
     iFreeBlk = 0;  /* Shortcut for the case when the freelist is empty */
   }else{
+    int nFrag = 0;                        /* Reduction in fragmentation */
     while( (iFreeBlk = get2byte(&data[iPtr]))<iStart ){
       if( iFreeBlk<=iPtr ){
         if( iFreeBlk==0 ) break; /* TH3: corrupt082.100 */
@@ -1934,7 +1930,7 @@ static int freeSpace(MemPage *pPage, int iStart, int iSize){
     ** coalesced onto the end of iPtr.
     */
     if( iPtr>hdr+1 ){
-      int iPtrEnd = iPtr + get2byte(&data[iPtr+2]);
+      const int iPtrEnd = iPtr + get2byte(&data[iPtr+2]);
       if( iPtrEnd+3>=iStart ){
         if( iPtrEnd>iStart ) return SQLITE_CORRUPT_PAGE(pPage);
         nFrag += iStart - iPtrEnd;
@@ -1945,8 +1941,8 @@ static int freeSpace(MemPage *pPage, int iStart, int iSize){
     if( nFrag>data[hdr+7] ) return SQLITE_CORRUPT_PAGE(pPage);
     data[hdr+7] -= (u8)nFrag;
   }
-  pTmp = &data[hdr+5];
-  x = get2byte(pTmp);
+  u8 *const pTmp = &data[hdr+5];
+  const int x = get2byte(pTmp);
   if( pPage->pBt->btsFlags & BTS_FAST_SECURE ){
     /* Overwrite deleted information with zeros when the secure_delete
     ** option is enabled */
@@ -1984,11 +1980,9 @@ static int freeSpace(MemPage *pPage, int iStart, int iSize){
 **         PTF_LEAFDATA | PTF_INTKEY | PTF_LEAF     (0x0d, 13)
 */
 static int decodeFlags(MemPage *pPage, int flagByte){
-  BtShared *pBt;     /* A copy of pPage->pBt */
-
   assert( pPage->hdrOffset==(pPage->pgno==1 ? 100 : 0) );
   assert( sqlite3_mutex_held(pPage->pBt->mutex) );
-  pBt = pPage->pBt;
+  BtShared *const pBt = pPage->pBt;     /* A copy of pPage->pBt */
   pPage->max1bytePayload = pBt->max1bytePayload;
   if( flagByte>=(PTF_ZERODATA | PTF_LEAF) ){
     pPage->childPtrSize = 0;
@@ -2047,15 +2041,6 @@ static int decodeFlags(MemPage *pPage, int flagByte){
 ** in the pPage->nFree field.
 */
 static int btreeComputeFreeSpace(MemPage *pPage){
-  int pc;            /* Address of a freeblock within pPage->aData[] */
-  u8 hdr;            /* Offset to beginning of page header */
-  u8 *data;          /* Equal to pPage->aData */
-  int usableSize;    /* Amount of usable space on each page */
-  int nFree;         /* Number of unused bytes on the page */
-  int top;           /* First byte of the cell content area */
-  int iCellFirst;    /* First allowable cell or freeblock offset */
-  int iCellLast;     /* Last possible cell or freeblock offset */
-
   assert( pPage->pBt!=0 );
   assert( pPage->pBt->db!=0 );
   assert( sqlite3_mutex_held(pPage->pBt->mutex) );
@@ -2065,22 +2050,22 @@ static int btreeComputeFreeSpace(MemPage *pPage){
   assert( pPage->isInit==1 );
   assert( pPage->nFree<0 );
 
-  usableSize = pPage->pBt->usableSize;
-  hdr = pPage->hdrOffset;
-  data = pPage->aData;
+  const int usableSize = pPage->pBt->usableSize;
+  const u8 hdr = pPage->hdrOffset;
+  u8 *const data = pPage->aData;
   /* EVIDENCE-OF: R-58015-48175 The two-byte integer at offset 5 designates
   ** the start of the cell content area. A zero value for this integer is
   ** interpreted as 65536. */
-  top = get2byteNotZero(&data[hdr+5]);
-  iCellFirst = hdr + 8 + pPage->childPtrSize + 2*pPage->nCell;
-  iCellLast = usableSize - 4;
+  const int top = get2byteNotZero(&data[hdr+5]);
+  const int iCellFirst = hdr + 8 + pPage->childPtrSize + 2*pPage->nCell;
+  const int iCellLast = usableSize - 4;
 
   /* Compute the total free space on the page
   ** EVIDENCE-OF: R-23588-34450 The two-byte integer at offset 1 gives the
   ** start of the first freeblock on the page, or is zero if there are no
   ** freeblocks. */
-  pc = get2byte(&data[hdr+1]);
-  nFree = data[hdr+7] + top;  /* Init nFree to non-freeblock free space */
+  int pc = get2byte(&data[hdr+1]);
+  int nFree = data[hdr+7] + top;  /* Init nFree to non-freeblock free space */
   if( pc>0 ){
     u32 next, size;
     if( pc<top ){
@@ -2129,29 +2114,20 @@ static int btreeComputeFreeSpace(MemPage *pPage){
 ** PRAGMA cell_size_check=ON
 */
 static SQLITE_NOINLINE int btreeCellSizeCheck(MemPage *pPage){
-  int iCellFirst;    /* First allowable cell or freeblock offset */
-  int iCellLast;     /* Last possible cell or freeblock offset */
-  int i;             /* Index into the cell pointer array */
-  int sz;            /* Size of a cell */
-  int pc;            /* Address of a freeblock within pPage->aData[] */
-  u8 *data;          /* Equal to pPage->aData */
-  int usableSize;    /* Maximum usable space on the page */
-  int cellOffset;    /* Start of cell content area */
-
-  iCellFirst = pPage->cellOffset + 2*pPage->nCell;
-  usableSize = pPage->pBt->usableSize;
-  iCellLast = usableSize - 4;
-  data = pPage->aData;
-  cellOffset = pPage->cellOffset;
+  const int iCellFirst = pPage->cellOffset + 2*pPage->nCell;
+  const int usableSize = pPage->pBt->usableSize;
+  int iCellLast = usableSize - 4;
+  u8 *const data = pPage->aData;
+  const int cellOffset = pPage->cellOffset;
   if( !pPage->leaf ) iCellLast--;
-  for(i=0; i<pPage->nCell; i++){
-    pc = get2byteAligned(&data[cellOffset+i*2]);
+  for(int i=0; i<pPage->nCell; i++){
+    const int pc = get2byteAligned(&data[cellOffset+i*2]);
     testcase( pc==iCellFirst );
     testcase( pc==iCellLast );
     if( pc<iCellFirst || pc>iCellLast ){
       return SQLITE_CORRUPT_PAGE(pPage);
     }
-    sz = pPage->xCellSize(pPage, &data[pc]);
+    const int sz = pPage->xCellSize(pPage, &data[pc]);
     testcase( pc+sz==usableSize );
     if( pc+sz>usableSize ){
       return SQLITE_CORRUPT_PAGE(pPage);
@@ -2170,9 +2146,6 @@ static SQLITE_NOINLINE int btreeCellSizeCheck(MemPage *pPage){
 ** we failed to detect any corruption.
 */
 static int btreeInitPage(MemPage *pPage){
-  u8 *data;          /* Equal to pPage->aData */
-  BtShared *pBt;        /* The main btree structure */
-
   assert( pPage->pBt!=0 );
   assert( pPage->pBt->db!=0 );
   assert( sqlite3_mutex_held(pPage->pBt->mutex) );
@@ -2181,8 +2154,8 @@ static int btreeInitPage(MemPage *pPage){
   assert( pPage->aData == sqlite3PagerGetData(pPage->pDbPage) );
   assert( pPage->isInit==0 );
 
-  pBt = pPage->pBt;
-  data = pPage->aData + pPage->hdrOffset;
+  BtShared *const pBt = pPage->pBt;        /* The main btree structure */
+  u8 *const data = pPage->aData + pPage->hdrOffset;  /* Equal to pPage->aData */
   /* EVIDENCE-OF: R-28594-02890 The one-byte flag at offset 0 indicating
   ** the b-tree page type. */
   if( decodeFlags(pPage, data[0]) ){
