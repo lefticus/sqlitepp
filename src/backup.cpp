@@ -561,13 +561,10 @@ int sqlite3_backup_step(sqlite3_backup *p, int nPage){
 ** Release all resources associated with an sqlite3_backup* handle.
 */
 int sqlite3_backup_finish(sqlite3_backup *p){
-  sqlite3_backup **pp;                 /* Ptr to head of pagers backup list */
-  sqlite3 *pSrcDb;                     /* Source database connection */
-  int rc;                              /* Value to return */
 
   /* Enter the mutexes */
   if( p==0 ) return SQLITE_OK;
-  pSrcDb = p->pSrcDb;
+  sqlite3 *const pSrcDb = p->pSrcDb;   /* Source database connection */
   sqlite3_mutex_enter(pSrcDb->mutex);
   sqlite3BtreeEnter(p->pSrc);
   if( p->pDestDb ){
@@ -579,7 +576,8 @@ int sqlite3_backup_finish(sqlite3_backup *p){
     p->pSrc->nBackup--;
   }
   if( p->isAttached ){
-    pp = sqlite3PagerBackupPtr(sqlite3BtreePager(p->pSrc));
+    sqlite3_backup **pp                 /* Ptr to head of pagers backup list */
+        = sqlite3PagerBackupPtr(sqlite3BtreePager(p->pSrc));
     assert( pp!=0 );
     while( *pp!=p ){
       pp = &(*pp)->pNext;
@@ -592,7 +590,7 @@ int sqlite3_backup_finish(sqlite3_backup *p){
   sqlite3BtreeRollback(p->pDest, SQLITE_OK, 0);
 
   /* Set the error code of the destination database handle. */
-  rc = (p->rc==SQLITE_DONE) ? SQLITE_OK : p->rc;
+  const int rc = (p->rc==SQLITE_DONE) ? SQLITE_OK : p->rc;
   if( p->pDestDb ){
     sqlite3Error(p->pDestDb, rc);
 
@@ -691,8 +689,7 @@ void sqlite3BackupUpdate(sqlite3_backup *pBackup, Pgno iPage, const u8 *aData){
 ** called.
 */
 void sqlite3BackupRestart(sqlite3_backup *pBackup){
-  sqlite3_backup *p;                   /* Iterator variable */
-  for(p=pBackup; p; p=p->pNext){
+  for(sqlite3_backup *p=pBackup; p; p=p->pNext){
     assert( sqlite3_mutex_held(p->pSrc->pBt->mutex) );
     p->iNext = 1;
   }

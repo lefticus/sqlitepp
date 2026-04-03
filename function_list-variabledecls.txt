@@ -62,11 +62,11 @@
 [x] src/backup.cpp::backupTruncateFile
 [x] src/backup.cpp::attachBackupObject
 [x] src/backup.cpp::sqlite3_backup_step
-[ ] src/backup.cpp::sqlite3_backup_finish
-[ ] src/backup.cpp::sqlite3_backup_remaining
-[ ] src/backup.cpp::sqlite3_backup_pagecount
-[ ] src/backup.cpp::sqlite3BackupUpdate
-[ ] src/backup.cpp::sqlite3BackupRestart
+[x] src/backup.cpp::sqlite3_backup_finish
+[x] src/backup.cpp::sqlite3_backup_remaining
+[x] src/backup.cpp::sqlite3_backup_pagecount
+[x] src/backup.cpp::sqlite3BackupUpdate
+[x] src/backup.cpp::sqlite3BackupRestart
 [ ] src/backup.cpp::sqlite3BtreeCopyFile
 [ ] src/bitvec.cpp::sqlite3BitvecCreate
 [ ] src/bitvec.cpp::sqlite3BitvecTestNotNull
