@@ -2,7 +2,7 @@
 [x] src/alter.cpp::renameFixQuotes
 [x] src/alter.cpp::renameReloadSchema
 [x] src/alter.cpp::sqlite3AlterFinishAddColumn
-[ ] src/alter.cpp::sqlite3AlterBeginAddColumn
+[x] src/alter.cpp::sqlite3AlterBeginAddColumn
 [ ] src/alter.cpp::isRealTable
 [ ] src/alter.cpp::renameTokenCheckAll
 [ ] src/alter.cpp::sqlite3RenameTokenRemap
