@@ -2293,17 +2293,13 @@ void sqlite3AlterDropColumn(Parse *pParse, SrcList *pSrc, const Token *pName){
   /* Edit rows of table on disk */
   if( pParse->nErr==0 && (pTab->aCol[iCol].colFlags & COLFLAG_VIRTUAL)==0 ){
     int i;
-    int addr;
-    int reg;
-    int regRec;
     Index *pPk = 0;
     int nField = 0;               /* Number of non-virtual columns after drop */
-    int iCur;
-    Vdbe *v = sqlite3GetVdbe(pParse);
-    iCur = pParse->nTab++;
+    Vdbe *const v = sqlite3GetVdbe(pParse);
+    const int iCur = pParse->nTab++;
     sqlite3OpenTable(pParse, iCur, iDb, pTab, OP_OpenWrite);
-    addr = sqlite3VdbeAddOp1(v, OP_Rewind, iCur); VdbeCoverage(v);
-    reg = ++pParse->nMem;
+    const int addr = sqlite3VdbeAddOp1(v, OP_Rewind, iCur); VdbeCoverage(v);
+    const int reg = ++pParse->nMem;
     if( HasRowid(pTab) ){
       sqlite3VdbeAddOp2(v, OP_Rowid, iCur, reg);
       pParse->nMem += pTab->nCol;
@@ -2315,7 +2311,7 @@ void sqlite3AlterDropColumn(Parse *pParse, SrcList *pSrc, const Token *pName){
       }
       nField = pPk->nKeyCol;
     }
-    regRec = ++pParse->nMem;
+    const int regRec = ++pParse->nMem;
     for(i=0; i<pTab->nCol; i++){
       if( i!=iCol && (pTab->aCol[i].colFlags & COLFLAG_VIRTUAL)==0 ){
         int regOut;
@@ -2389,18 +2385,18 @@ static int getWhitespace(const u8 *z){
 */
 static int getConstraint(const u8 *z){
   int iOff = 0;
-  int t = 0;
 
-  /* Now, the current constraint proceeds until the next occurence of one 
-  ** of the following tokens: 
+  /* Now, the current constraint proceeds until the next occurence of one
+  ** of the following tokens:
   **
-  **   CONSTRAINT, PRIMARY, NOT, UNIQUE, CHECK, DEFAULT, 
+  **   CONSTRAINT, PRIMARY, NOT, UNIQUE, CHECK, DEFAULT,
   **   COLLATE, REFERENCES, FOREIGN, GENERATED, AS, RP, or COMMA
   **
   ** Also exit the loop if ILLEGAL turns up.
   */
   while( 1 ){
-    int n = getConstraintToken(&z[iOff], &t);
+    int t = 0;
+    const int n = getConstraintToken(&z[iOff], &t);
     if( t==TK_CONSTRAINT || t==TK_PRIMARY || t==TK_NOT || t==TK_UNIQUE
      || t==TK_CHECK || t==TK_DEFAULT || t==TK_COLLATE || t==TK_REFERENCES
      || t==TK_FOREIGN || t==TK_RP || t==TK_COMMA || t==TK_ILLEGAL

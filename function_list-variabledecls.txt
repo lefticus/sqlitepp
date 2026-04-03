@@ -22,11 +22,11 @@
 [x] src/alter.cpp::renameParseCleanup
 [x] src/alter.cpp::renameTableExprCb
 [x] src/alter.cpp::renameTableSelectCb
-[ ] src/alter.cpp::renameQuotefixExprCb
-[ ] src/alter.cpp::getConstraintToken
-[ ] src/alter.cpp::sqlite3AlterDropColumn
-[ ] src/alter.cpp::getWhitespace
-[ ] src/alter.cpp::getConstraint
+[x] src/alter.cpp::renameQuotefixExprCb
+[x] src/alter.cpp::getConstraintToken
+[x] src/alter.cpp::sqlite3AlterDropColumn
+[x] src/alter.cpp::getWhitespace
+[x] src/alter.cpp::getConstraint
 [ ] src/alter.cpp::skipCreateTable
 [ ] src/alter.cpp::alterFindCol
 [ ] src/alter.cpp::sqlite3AlterFunctions
