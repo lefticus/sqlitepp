@@ -82,11 +82,11 @@
 [x] src/btmutex.cpp::unlockBtreeMutex
 [x] src/btmutex.cpp::sqlite3BtreeEnter
 [x] src/btmutex.cpp::btreeLockCarefully
-[ ] src/btmutex.cpp::sqlite3BtreeLeave
-[ ] src/btmutex.cpp::sqlite3BtreeHoldsMutex
-[ ] src/btmutex.cpp::btreeEnterAll
-[ ] src/btmutex.cpp::sqlite3BtreeEnterAll
-[ ] src/btmutex.cpp::btreeLeaveAll
+[x] src/btmutex.cpp::sqlite3BtreeLeave
+[x] src/btmutex.cpp::sqlite3BtreeHoldsMutex
+[x] src/btmutex.cpp::btreeEnterAll
+[x] src/btmutex.cpp::sqlite3BtreeEnterAll
+[x] src/btmutex.cpp::btreeLeaveAll
 [ ] src/btmutex.cpp::sqlite3BtreeLeaveAll
 [ ] src/btmutex.cpp::sqlite3BtreeHoldsAllMutexes
 [ ] src/btmutex.cpp::sqlite3SchemaMutexHeld

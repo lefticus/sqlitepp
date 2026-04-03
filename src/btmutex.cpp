@@ -183,12 +183,10 @@ int sqlite3BtreeHoldsMutex(Btree *p){
 ** at the same instant.
 */
 static void SQLITE_NOINLINE btreeEnterAll(sqlite3 *db){
-  int i;
   u8 skipOk = 1;
-  Btree *p;
   assert( sqlite3_mutex_held(db->mutex) );
-  for(i=0; i<db->nDb; i++){
-    p = db->aDb[i].pBt;
+  for(int i=0; i<db->nDb; i++){
+    Btree *const p = db->aDb[i].pBt;
     if( p && p->sharable ){
       sqlite3BtreeEnter(p);
       skipOk = 0;
@@ -200,11 +198,9 @@ void sqlite3BtreeEnterAll(sqlite3 *db){
   if( db->noSharedCache==0 ) btreeEnterAll(db);
 }
 static void SQLITE_NOINLINE btreeLeaveAll(sqlite3 *db){
-  int i;
-  Btree *p;
   assert( sqlite3_mutex_held(db->mutex) );
-  for(i=0; i<db->nDb; i++){
-    p = db->aDb[i].pBt;
+  for(int i=0; i<db->nDb; i++){
+    Btree *const p = db->aDb[i].pBt;
     if( p ) sqlite3BtreeLeave(p);
   }
 }
