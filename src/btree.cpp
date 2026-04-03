@@ -2405,8 +2405,7 @@ static int btreeGetUnusedPage(
 ** page to agree with the restored data.
 */
 static void pageReinit(DbPage *pData){
-  MemPage *pPage;
-  pPage = (MemPage *)sqlite3PagerGetExtra(pData);
+  MemPage *const pPage = (MemPage *)sqlite3PagerGetExtra(pData);
   assert( sqlite3PagerPageRefcount(pData)>0 );
   if( pPage->isInit ){
     assert( sqlite3_mutex_held(pPage->pBt->mutex) );
@@ -2427,7 +2426,7 @@ static void pageReinit(DbPage *pData){
 ** Invoke the busy handler for a btree.
 */
 static int btreeInvokeBusyHandler(void *pArg){
-  BtShared *pBt = (BtShared*)pArg;
+  BtShared *const pBt = (BtShared*)pArg;
   assert( pBt->db );
   assert( sqlite3_mutex_held(pBt->db->mutex) );
   return sqlite3InvokeBusyHandler(&pBt->db->busyHandler);

@@ -142,11 +142,11 @@
 [x] src/btree.cpp::btreePageLookup
 [x] src/btree.cpp::btreePagecount
 [x] src/btree.cpp::sqlite3BtreeLastPage
-[ ] src/btree.cpp::releasePageNotNull
-[ ] src/btree.cpp::releasePage
-[ ] src/btree.cpp::releasePageOne
-[ ] src/btree.cpp::pageReinit
-[ ] src/btree.cpp::btreeInvokeBusyHandler
+[x] src/btree.cpp::releasePageNotNull
+[x] src/btree.cpp::releasePage
+[x] src/btree.cpp::releasePageOne
+[x] src/btree.cpp::pageReinit
+[x] src/btree.cpp::btreeInvokeBusyHandler
 [ ] src/btree.cpp::removeFromSharingList
 [ ] src/btree.cpp::allocateTempSpace
 [ ] src/btree.cpp::freeTempSpace
