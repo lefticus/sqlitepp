@@ -80,7 +80,7 @@ struct sqlite3_backup {
 ** error message to pErrorDb.
 */
 static Btree *findBtree(sqlite3 *pErrorDb, sqlite3 *pDb, const char *zDb){
-  int i = sqlite3FindDbName(pDb, zDb);
+  const int i = sqlite3FindDbName(pDb, zDb);
 
   if( i==1 ){
     Parse sParse;
@@ -110,8 +110,7 @@ static Btree *findBtree(sqlite3 *pErrorDb, sqlite3 *pDb, const char *zDb){
 ** of the source.
 */
 static int setDestPgsz(sqlite3_backup *p){
-  int rc;
-  rc = sqlite3BtreeSetPageSize(p->pDest,sqlite3BtreeGetPageSize(p->pSrc),0,0);
+  const int rc = sqlite3BtreeSetPageSize(p->pDest,sqlite3BtreeGetPageSize(p->pSrc),0,0);
   return rc;
 }
 

@@ -52,11 +52,11 @@
 [x] src/attach.cpp::sqlite3Detach
 [x] src/attach.cpp::sqlite3Attach
 [x] src/attach.cpp::fixExprCb
-[ ] src/attach.cpp::fixSelectCb
-[ ] src/auth.cpp::sqliteAuthBadReturnCode
-[ ] src/auth.cpp::sqlite3AuthContextPop
-[ ] src/backup.cpp::findBtree
-[ ] src/backup.cpp::setDestPgsz
+[x] src/attach.cpp::fixSelectCb
+[x] src/auth.cpp::sqliteAuthBadReturnCode
+[x] src/auth.cpp::sqlite3AuthContextPop
+[x] src/backup.cpp::findBtree
+[x] src/backup.cpp::setDestPgsz
 [ ] src/backup.cpp::checkReadTransaction
 [ ] src/backup.cpp::isFatalError
 [ ] src/backup.cpp::backupTruncateFile

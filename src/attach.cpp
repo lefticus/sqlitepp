@@ -474,12 +474,12 @@ static int fixExprCb(Walker *p, Expr *pExpr){
 ** Select callback used by sqlite3FixAAAA() routines.
 */
 static int fixSelectCb(Walker *p, Select *pSelect){
-  DbFixer *pFix = p->u.pFix;
+  DbFixer *const pFix = p->u.pFix;
   int i;
   SrcItem *pItem;
-  sqlite3 *db = pFix->pParse->db;
-  int iDb = sqlite3FindDbName(db, pFix->zDb);
-  SrcList *pList = pSelect->pSrc;
+  sqlite3 *const db = pFix->pParse->db;
+  const int iDb = sqlite3FindDbName(db, pFix->zDb);
+  SrcList *const pList = pSelect->pSrc;
 
   if( NEVER(pList==0) ) return WRC_Continue;
   for(i=0, pItem=pList->a; i<pList->nSrc; i++, pItem++){
