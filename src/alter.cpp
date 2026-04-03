@@ -991,7 +991,7 @@ static int renameColumnSelectCb(Walker *pWalker, Select *p){
 ** constructed in RenameCtx object at pWalker->u.pRename.
 */
 static int renameColumnExprCb(Walker *pWalker, Expr *pExpr){
-  RenameCtx *p = pWalker->u.pRename;
+  RenameCtx *const p = pWalker->u.pRename;
   if( pExpr->op==TK_TRIGGER
    && pExpr->iColumn==p->iCol
    && pWalker->pParse->pTriggerTab==p->pTab
@@ -1018,12 +1018,11 @@ static int renameColumnExprCb(Walker *pWalker, Expr *pExpr){
 */
 static RenameToken *renameColumnTokenNext(RenameCtx *pCtx){
   RenameToken *pBest = pCtx->pList;
-  RenameToken *pToken;
-  RenameToken **pp;
 
-  for(pToken=pBest->pNext; pToken; pToken=pToken->pNext){
+  for(RenameToken *pToken=pBest->pNext; pToken; pToken=pToken->pNext){
     if( pToken->t.z>pBest->t.z ) pBest = pToken;
   }
+  RenameToken **pp;
   for(pp=&pCtx->pList; *pp!=pBest; pp=&(*pp)->pNext);
   *pp = pBest->pNext;
 
@@ -1035,11 +1034,10 @@ static RenameToken *renameColumnTokenNext(RenameCtx *pCtx){
 ** the result of formatting zFmt using printf() style formatting.
 */
 static void errorMPrintf(sqlite3_context *pCtx, const char *zFmt, ...){
-  sqlite3 *db = sqlite3_context_db_handle(pCtx);
-  char *zErr = 0;
+  sqlite3 *const db = sqlite3_context_db_handle(pCtx);
   va_list ap;
   va_start(ap, zFmt);
-  zErr = sqlite3VMPrintf(db, zFmt, ap);
+  char *const zErr = sqlite3VMPrintf(db, zFmt, ap);
   va_end(ap);
   if( zErr ){
     sqlite3_result_error(pCtx, zErr, -1);
@@ -1302,8 +1300,7 @@ static int renameEditSql(
 static void renameSetENames(ExprList *pEList, int val){
   assert( val==ENAME_NAME || val==ENAME_TAB || val==ENAME_SPAN );
   if( pEList ){
-    int i;
-    for(i=0; i<pEList->nExpr; i++){
+    for(int i=0; i<pEList->nExpr; i++){
       assert( val==ENAME_NAME || pEList->a[i].fg.eEName==ENAME_NAME );
       pEList->a[i].fg.eEName = val&0x3;
     }

@@ -12,11 +12,11 @@
 [x] src/alter.cpp::sqlite3RenameExprUnmap
 [x] src/alter.cpp::sqlite3RenameExprlistUnmap
 [x] src/alter.cpp::renameTokenFree
-[ ] src/alter.cpp::renameColumnSelectCb
-[ ] src/alter.cpp::renameColumnExprCb
-[ ] src/alter.cpp::renameColumnTokenNext
-[ ] src/alter.cpp::errorMPrintf
-[ ] src/alter.cpp::renameSetENames
+[x] src/alter.cpp::renameColumnSelectCb
+[x] src/alter.cpp::renameColumnExprCb
+[x] src/alter.cpp::renameColumnTokenNext
+[x] src/alter.cpp::errorMPrintf
+[x] src/alter.cpp::renameSetENames
 [ ] src/alter.cpp::renameResolveTrigger
 [ ] src/alter.cpp::renameWalkTrigger
 [ ] src/alter.cpp::renameParseCleanup
