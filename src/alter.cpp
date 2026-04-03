@@ -469,12 +469,16 @@ void sqlite3AlterFinishAddColumn(Parse *pParse, Token *pColDef){
 */
 void sqlite3AlterBeginAddColumn(Parse *pParse, SrcList *pSrc){
   sqlite3 *db = pParse->db;
+  Table *pTab;
+  Table *pNew;
+  int iDb;
+  int nAlloc;
 
   /* Look up the table being altered. */
   assert( pParse->pNewTable==0 );
   assert( sqlite3BtreeHoldsAllMutexes(db) );
   if( NEVER(db->mallocFailed) ) goto exit_begin_add_column;
-  Table *pTab = sqlite3LocateTableItem(pParse, 0, &pSrc->a[0]);
+  pTab = sqlite3LocateTableItem(pParse, 0, &pSrc->a[0]);
   if( !pTab ) goto exit_begin_add_column;
 
 #ifndef SQLITE_OMIT_VIRTUALTABLE
@@ -496,7 +500,7 @@ void sqlite3AlterBeginAddColumn(Parse *pParse, SrcList *pSrc){
   sqlite3MayAbort(pParse);
   assert( IsOrdinaryTable(pTab) );
   assert( pTab->u.tab.addColOffset>0 );
-  const int iDb = sqlite3SchemaToIndex(db, pTab->pSchema);
+  iDb = sqlite3SchemaToIndex(db, pTab->pSchema);
 
   /* Put a copy of the Table struct in Parse.pNewTable for the
   ** sqlite3AddColumn() function and friends to modify.  But modify
@@ -505,13 +509,13 @@ void sqlite3AlterBeginAddColumn(Parse *pParse, SrcList *pSrc){
   ** table because user table are not allowed to have the "sqlite_"
   ** prefix on their name.
   */
-  Table *pNew = (Table*)sqlite3DbMallocZero(db, sizeof(Table));
+  pNew = (Table*)sqlite3DbMallocZero(db, sizeof(Table));
   if( !pNew ) goto exit_begin_add_column;
   pParse->pNewTable = pNew;
   pNew->nTabRef = 1;
   pNew->nCol = pTab->nCol;
   assert( pNew->nCol>0 );
-  const int nAlloc = (((pNew->nCol-1)/8)*8)+8;
+  nAlloc = (((pNew->nCol-1)/8)*8)+8;
   assert( nAlloc>=pNew->nCol && nAlloc%8==0 && nAlloc-pNew->nCol<8 );
   pNew->aCol = (Column*)sqlite3DbMallocZero(db, sizeof(Column)*(u32)nAlloc);
   pNew->zName = sqlite3MPrintf(db, "sqlite_altertab_%s", pTab->zName);
