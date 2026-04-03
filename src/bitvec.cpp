@@ -253,12 +253,11 @@ void sqlite3BitvecClear(Bitvec *p, u32 i, void *pBuf){
   if( p->iSize<=BITVEC_NBIT ){
     p->u.aBitmap[i/BITVEC_SZELEM] &= ~(BITVEC_TELEM)(1<<(i&(BITVEC_SZELEM-1)));
   }else{
-    unsigned int j;
     u32 *aiValues = static_cast<u32*>(pBuf);
     memcpy(aiValues, p->u.aHash, sizeof(p->u.aHash));
     memset(p->u.aHash, 0, sizeof(p->u.aHash));
     p->nSet = 0;
-    for(j=0; j<BITVEC_NINT; j++){
+    for(unsigned int j=0; j<BITVEC_NINT; j++){
       if( aiValues[j] && aiValues[j]!=(i+1) ){
         u32 h = BITVEC_HASH(aiValues[j]-1);
         p->nSet++;
@@ -278,8 +277,7 @@ void sqlite3BitvecClear(Bitvec *p, u32 i, void *pBuf){
 void sqlite3BitvecDestroy(Bitvec *p){
   if( p==0 ) return;
   if( p->iDivisor ){
-    unsigned int i;
-    for(i=0; i<BITVEC_NPTR; i++){
+    for(unsigned int i=0; i<BITVEC_NPTR; i++){
       sqlite3BitvecDestroy(p->u.apSub[i]);
     }
   }
@@ -306,7 +304,6 @@ u32 sqlite3BitvecSize(Bitvec *p){
 ** For some Bitvec p and see a recursive view of the Bitvec's content.
 */
 static void showBitvec(Bitvec *p, int n, unsigned x){
-  unsigned i;
   if( p==0 ){
     printf("NULL\n");
     return;
@@ -315,20 +312,20 @@ static void showBitvec(Bitvec *p, int n, unsigned x){
   if( p->iSize<=BITVEC_NBIT ){
     printf(" bitmap\n");
     printf("%*s   bits:", n, "");
-    for(i=1; i<=BITVEC_NBIT; i++){
+    for(unsigned i=1; i<=BITVEC_NBIT; i++){
       if( sqlite3BitvecTest(p,i) ) printf(" %u", x+(unsigned)i);
     }
     printf("\n");
   }else if( p->iDivisor==0 ){
     printf(" hash with %u entries\n", p->nSet);
     printf("%*s   bits:", n, "");
-    for(i=0; i<BITVEC_NINT; i++){
+    for(unsigned i=0; i<BITVEC_NINT; i++){
       if( p->u.aHash[i] ) printf(" %u", x+(unsigned)p->u.aHash[i]);
     }
     printf("\n");
   }else{
     printf(" sub-bitvec with iDivisor=%u\n", p->iDivisor);
-    for(i=0; i<BITVEC_NPTR; i++){
+    for(unsigned i=0; i<BITVEC_NPTR; i++){
       if( p->u.apSub[i]==0 ) continue;
       printf("%*s   apSub[%d]=", n, "", i);
       showBitvec(p->u.apSub[i], n+4, i*p->iDivisor);

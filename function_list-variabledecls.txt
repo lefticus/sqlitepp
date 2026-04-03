@@ -72,11 +72,11 @@
 [x] src/bitvec.cpp::sqlite3BitvecTestNotNull
 [x] src/bitvec.cpp::sqlite3BitvecTest
 [x] src/bitvec.cpp::sqlite3BitvecSet
-[ ] src/bitvec.cpp::sqlite3BitvecClear
-[ ] src/bitvec.cpp::sqlite3BitvecDestroy
-[ ] src/bitvec.cpp::sqlite3BitvecSize
-[ ] src/bitvec.cpp::showBitvec
-[ ] src/bitvec.cpp::sqlite3ShowBitvec
+[x] src/bitvec.cpp::sqlite3BitvecClear
+[x] src/bitvec.cpp::sqlite3BitvecDestroy
+[x] src/bitvec.cpp::sqlite3BitvecSize
+[x] src/bitvec.cpp::showBitvec
+[x] src/bitvec.cpp::sqlite3ShowBitvec
 [ ] src/bitvec.cpp::sqlite3BitvecBuiltinTest
 [ ] src/btmutex.cpp::lockBtreeMutex
 [ ] src/btmutex.cpp::unlockBtreeMutex
