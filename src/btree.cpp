@@ -1191,16 +1191,13 @@ static SQLITE_NOINLINE void btreeParseCellAdjustSizeForOverflow(
 ** page pPage, return the number of bytes of payload stored locally.
 */
 static int btreePayloadToLocal(MemPage *pPage, i64 nPayload){
-  int maxLocal;  /* Maximum amount of payload held locally */
-  maxLocal = pPage->maxLocal;
+  const int maxLocal = pPage->maxLocal;  /* Maximum amount of payload held locally */
   assert( nPayload>=0 );
   if( nPayload<=maxLocal ){
     return (int)nPayload;
   }else{
-    int minLocal;  /* Minimum amount of payload held locally */
-    int surplus;   /* Overflow payload available for local storage */
-    minLocal = pPage->minLocal;
-    surplus = (int)(minLocal +(nPayload - minLocal)%(pPage->pBt->usableSize-4));
+    const int minLocal = pPage->minLocal;  /* Minimum amount of payload held locally */
+    const int surplus = (int)(minLocal +(nPayload - minLocal)%(pPage->pBt->usableSize-4));   /* Overflow payload available for local storage */
     return (surplus <= maxLocal) ? surplus : minLocal;
   }
 }
@@ -1387,7 +1384,6 @@ static void btreeParseCell(
 */
 static u16 cellSizePtr(MemPage *pPage, u8 *pCell){
   u8 *pIter = pCell + 4;                   /* For looping over bytes of pCell */
-  u8 *pEnd;                                /* End mark for a varint */
   u32 nSize;                               /* Size value to return */
 
 #ifdef SQLITE_DEBUG
@@ -1402,7 +1398,7 @@ static u16 cellSizePtr(MemPage *pPage, u8 *pCell){
   assert( pPage->childPtrSize==4 );
   nSize = *pIter;
   if( nSize>=0x80 ){
-    pEnd = &pIter[8];
+    u8 *const pEnd = &pIter[8];             /* End mark for a varint */
     nSize &= 0x7f;
     do{
       nSize = (nSize<<7) | (*++pIter & 0x7f);
@@ -1415,7 +1411,7 @@ static u16 cellSizePtr(MemPage *pPage, u8 *pCell){
     nSize += (u32)(pIter - pCell);
     assert( nSize>4 );
   }else{
-    int minLocal = pPage->minLocal;
+    const int minLocal = pPage->minLocal;
     nSize = minLocal + (nSize - minLocal) % (pPage->pBt->usableSize - 4);
     testcase( nSize==pPage->maxLocal );
     testcase( nSize==(u32)pPage->maxLocal+1 );
@@ -1429,7 +1425,6 @@ static u16 cellSizePtr(MemPage *pPage, u8 *pCell){
 }
 static u16 cellSizePtrIdxLeaf(MemPage *pPage, u8 *pCell){
   u8 *pIter = pCell;                       /* For looping over bytes of pCell */
-  u8 *pEnd;                                /* End mark for a varint */
   u32 nSize;                               /* Size value to return */
 
 #ifdef SQLITE_DEBUG
@@ -1444,7 +1439,7 @@ static u16 cellSizePtrIdxLeaf(MemPage *pPage, u8 *pCell){
   assert( pPage->childPtrSize==0 );
   nSize = *pIter;
   if( nSize>=0x80 ){
-    pEnd = &pIter[8];
+    u8 *const pEnd = &pIter[8];             /* End mark for a varint */
     nSize &= 0x7f;
     do{
       nSize = (nSize<<7) | (*++pIter & 0x7f);
@@ -1457,7 +1452,7 @@ static u16 cellSizePtrIdxLeaf(MemPage *pPage, u8 *pCell){
     nSize += (u32)(pIter - pCell);
     if( nSize<4 ) nSize = 4;
   }else{
-    int minLocal = pPage->minLocal;
+    const int minLocal = pPage->minLocal;
     nSize = minLocal + (nSize - minLocal) % (pPage->pBt->usableSize - 4);
     testcase( nSize==pPage->maxLocal );
     testcase( nSize==(u32)pPage->maxLocal+1 );
@@ -1471,7 +1466,6 @@ static u16 cellSizePtrIdxLeaf(MemPage *pPage, u8 *pCell){
 }
 static u16 cellSizePtrNoPayload(MemPage *pPage, u8 *pCell){
   u8 *pIter = pCell + 4; /* For looping over bytes of pCell */
-  u8 *pEnd;              /* End mark for a varint */
 
 #ifdef SQLITE_DEBUG
   /* The value returned by this function should always be the same as
@@ -1485,14 +1479,13 @@ static u16 cellSizePtrNoPayload(MemPage *pPage, u8 *pCell){
 #endif
 
   assert( pPage->childPtrSize==4 );
-  pEnd = pIter + 9;
+  u8 *const pEnd = pIter + 9;              /* End mark for a varint */
   while( (*pIter++)&0x80 && pIter<pEnd );
   assert( debuginfo.nSize==(u16)(pIter - pCell) || CORRUPT_DB );
   return (u16)(pIter - pCell);
 }
 static u16 cellSizePtrTableLeaf(MemPage *pPage, u8 *pCell){
   u8 *pIter = pCell;   /* For looping over bytes of pCell */
-  u8 *pEnd;            /* End mark for a varint */
   u32 nSize;           /* Size value to return */
 
 #ifdef SQLITE_DEBUG
@@ -1506,7 +1499,7 @@ static u16 cellSizePtrTableLeaf(MemPage *pPage, u8 *pCell){
 
   nSize = *pIter;
   if( nSize>=0x80 ){
-    pEnd = &pIter[8];
+    u8 *const pEnd = &pIter[8];      /* End mark for a varint */
     nSize &= 0x7f;
     do{
       nSize = (nSize<<7) | (*++pIter & 0x7f);
@@ -1530,7 +1523,7 @@ static u16 cellSizePtrTableLeaf(MemPage *pPage, u8 *pCell){
     nSize += (u32)(pIter - pCell);
     if( nSize<4 ) nSize = 4;
   }else{
-    int minLocal = pPage->minLocal;
+    const int minLocal = pPage->minLocal;
     nSize = minLocal + (nSize - minLocal) % (pPage->pBt->usableSize - 4);
     testcase( nSize==pPage->maxLocal );
     testcase( nSize==(u32)pPage->maxLocal+1 );

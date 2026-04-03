@@ -122,11 +122,11 @@
 [x] src/btree.cpp::ptrmapPageno
 [x] src/btree.cpp::ptrmapPut
 [x] src/btree.cpp::ptrmapGet
-[ ] src/btree.cpp::btreePayloadToLocal
-[ ] src/btree.cpp::cellSizePtr
-[ ] src/btree.cpp::cellSizePtrIdxLeaf
-[ ] src/btree.cpp::cellSizePtrNoPayload
-[ ] src/btree.cpp::cellSizePtrTableLeaf
+[x] src/btree.cpp::btreePayloadToLocal
+[x] src/btree.cpp::cellSizePtr
+[x] src/btree.cpp::cellSizePtrIdxLeaf
+[x] src/btree.cpp::cellSizePtrNoPayload
+[x] src/btree.cpp::cellSizePtrTableLeaf
 [ ] src/btree.cpp::cellSize
 [ ] src/btree.cpp::ptrmapPutOvflPtr
 [ ] src/btree.cpp::defragmentPage
