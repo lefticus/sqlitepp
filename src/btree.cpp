@@ -886,14 +886,14 @@ static int btreeMoveto(
 ** saveCursorPosition().
 */
 static int btreeRestoreCursorPosition(BtCursor *pCur){
-  int rc;
-  int skipNext = 0;
   assert( cursorOwnsBtShared(pCur) );
   assert( pCur->eState>=CURSOR_REQUIRESEEK );
   if( pCur->eState==CURSOR_FAULT ){
     return pCur->skipNext;
   }
   pCur->eState = CURSOR_INVALID;
+  int rc;
+  int skipNext = 0;
   if( sqlite3FaultSim(410) ){
     rc = SQLITE_IOERR;
   }else{
@@ -961,11 +961,9 @@ BtCursor *sqlite3BtreeFakeValidCursor(void){
 ** TRUE from sqlite3BtreeCursorHasMoved().
 */
 int sqlite3BtreeCursorRestore(BtCursor *pCur, int *pDifferentRow){
-  int rc;
-
   assert( pCur!=0 );
   assert( pCur->eState!=CURSOR_VALID );
-  rc = restoreCursorPosition(pCur);
+  const int rc = restoreCursorPosition(pCur);
   if( rc ){
     *pDifferentRow = 1;
     return rc;

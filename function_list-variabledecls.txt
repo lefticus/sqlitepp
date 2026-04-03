@@ -112,11 +112,11 @@
 [x] src/btree.cpp::saveCursorKey
 [x] src/btree.cpp::saveCursorPosition
 [x] src/btree.cpp::saveAllCursors
-[ ] src/btree.cpp::sqlite3BtreeClearCursor
-[ ] src/btree.cpp::btreeRestoreCursorPosition
-[ ] src/btree.cpp::sqlite3BtreeCursorHasMoved
-[ ] src/btree.cpp::sqlite3BtreeFakeValidCursor
-[ ] src/btree.cpp::sqlite3BtreeCursorRestore
+[x] src/btree.cpp::sqlite3BtreeClearCursor
+[x] src/btree.cpp::btreeRestoreCursorPosition
+[x] src/btree.cpp::sqlite3BtreeCursorHasMoved
+[x] src/btree.cpp::sqlite3BtreeFakeValidCursor
+[x] src/btree.cpp::sqlite3BtreeCursorRestore
 [ ] src/btree.cpp::sqlite3BtreeCursorHint
 [ ] src/btree.cpp::sqlite3BtreeCursorHintFlags
 [ ] src/btree.cpp::ptrmapPageno
