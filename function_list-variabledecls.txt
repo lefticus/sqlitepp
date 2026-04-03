@@ -92,26 +92,26 @@
 [x] src/btmutex.cpp::sqlite3SchemaMutexHeld
 [x] src/btmutex.cpp::sqlite3BtreeEnter
 [x] src/btmutex.cpp::sqlite3BtreeEnterAll
-[ ] src/btmutex.cpp::sqlite3BtreeEnterCursor
-[ ] src/btmutex.cpp::sqlite3BtreeLeaveCursor
-[ ] src/btree.cpp::sqlite3_enable_shared_cache
-[ ] src/btree.cpp::sqlite3BtreeSeekCount
-[ ] src/btree.cpp::corruptPageError
-[ ] src/btree.cpp::hasReadConflicts
-[ ] src/btree.cpp::querySharedCacheTableLock
-[ ] src/btree.cpp::setSharedCacheTableLock
-[ ] src/btree.cpp::clearAllSharedCacheTableLocks
-[ ] src/btree.cpp::downgradeAllSharedCacheTableLocks
-[ ] src/btree.cpp::cursorHoldsMutex
-[ ] src/btree.cpp::cursorOwnsBtShared
-[ ] src/btree.cpp::invalidateAllOverflowCache
-[ ] src/btree.cpp::btreeSetHasContent
-[ ] src/btree.cpp::btreeGetHasContent
-[ ] src/btree.cpp::btreeClearHasContent
-[ ] src/btree.cpp::btreeReleaseAllCursorPages
-[ ] src/btree.cpp::saveCursorKey
-[ ] src/btree.cpp::saveCursorPosition
-[ ] src/btree.cpp::saveAllCursors
+[x] src/btmutex.cpp::sqlite3BtreeEnterCursor
+[x] src/btmutex.cpp::sqlite3BtreeLeaveCursor
+[x] src/btree.cpp::sqlite3_enable_shared_cache
+[x] src/btree.cpp::sqlite3BtreeSeekCount
+[x] src/btree.cpp::corruptPageError
+[x] src/btree.cpp::hasReadConflicts
+[x] src/btree.cpp::querySharedCacheTableLock
+[x] src/btree.cpp::setSharedCacheTableLock
+[x] src/btree.cpp::clearAllSharedCacheTableLocks
+[x] src/btree.cpp::downgradeAllSharedCacheTableLocks
+[x] src/btree.cpp::cursorHoldsMutex
+[x] src/btree.cpp::cursorOwnsBtShared
+[x] src/btree.cpp::invalidateAllOverflowCache
+[x] src/btree.cpp::btreeSetHasContent
+[x] src/btree.cpp::btreeGetHasContent
+[x] src/btree.cpp::btreeClearHasContent
+[x] src/btree.cpp::btreeReleaseAllCursorPages
+[x] src/btree.cpp::saveCursorKey
+[x] src/btree.cpp::saveCursorPosition
+[x] src/btree.cpp::saveAllCursors
 [ ] src/btree.cpp::sqlite3BtreeClearCursor
 [ ] src/btree.cpp::btreeRestoreCursorPosition
 [ ] src/btree.cpp::sqlite3BtreeCursorHasMoved
