@@ -2196,10 +2196,9 @@ static int btreeInitPage(MemPage *pPage){
 ** no entries.
 */
 static void zeroPage(MemPage *pPage, int flags){
-  unsigned char *data = pPage->aData;
-  BtShared *pBt = pPage->pBt;
-  int hdr = pPage->hdrOffset;
-  int first;
+  unsigned char *const data = pPage->aData;
+  BtShared *const pBt = pPage->pBt;
+  const int hdr = pPage->hdrOffset;
 
   assert( sqlite3PagerPagenumber(pPage->pDbPage)==pPage->pgno || CORRUPT_DB );
   assert( sqlite3PagerGetExtra(pPage->pDbPage) == (void*)pPage );
@@ -2210,7 +2209,7 @@ static void zeroPage(MemPage *pPage, int flags){
     memset(&data[hdr], 0, pBt->usableSize - hdr);
   }
   data[hdr] = (char)flags;
-  first = hdr + ((flags&PTF_LEAF)==0 ? 12 : 8);
+  const int first = hdr + ((flags&PTF_LEAF)==0 ? 12 : 8);
   memset(&data[hdr+1], 0, 4);
   data[hdr+7] = 0;
   put2byte(&data[hdr+5], pBt->usableSize);
@@ -2233,7 +2232,7 @@ static void zeroPage(MemPage *pPage, int flags){
 ** the btree layer.
 */
 static MemPage *btreePageFromDbPage(DbPage *pDbPage, Pgno pgno, BtShared *pBt){
-  MemPage *pPage = static_cast<MemPage*>(sqlite3PagerGetExtra(pDbPage));
+  MemPage *const pPage = static_cast<MemPage*>(sqlite3PagerGetExtra(pDbPage));
   if( pgno!=pPage->pgno ){
     pPage->aData = static_cast<u8*>(sqlite3PagerGetData(pDbPage));
     pPage->pDbPage = pDbPage;
@@ -2279,9 +2278,8 @@ static int btreeGetPage(
 ** MemPage.aData elements if needed.
 */
 static MemPage *btreePageLookup(BtShared *pBt, Pgno pgno){
-  DbPage *pDbPage;
   assert( sqlite3_mutex_held(pBt->mutex) );
-  pDbPage = sqlite3PagerLookup(pBt->pPager, pgno);
+  DbPage *const pDbPage = sqlite3PagerLookup(pBt->pPager, pgno);
   if( pDbPage ){
     return btreePageFromDbPage(pDbPage, pgno, pBt);
   }

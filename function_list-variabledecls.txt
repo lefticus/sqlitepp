@@ -137,11 +137,11 @@
 [x] src/btree.cpp::btreeComputeFreeSpace
 [x] src/btree.cpp::btreeCellSizeCheck
 [x] src/btree.cpp::btreeInitPage
-[ ] src/btree.cpp::zeroPage
-[ ] src/btree.cpp::btreePageFromDbPage
-[ ] src/btree.cpp::btreePageLookup
-[ ] src/btree.cpp::btreePagecount
-[ ] src/btree.cpp::sqlite3BtreeLastPage
+[x] src/btree.cpp::zeroPage
+[x] src/btree.cpp::btreePageFromDbPage
+[x] src/btree.cpp::btreePageLookup
+[x] src/btree.cpp::btreePagecount
+[x] src/btree.cpp::sqlite3BtreeLastPage
 [ ] src/btree.cpp::releasePageNotNull
 [ ] src/btree.cpp::releasePage
 [ ] src/btree.cpp::releasePageOne
