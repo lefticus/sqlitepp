@@ -376,15 +376,9 @@ struct Btree {
 #define TRANS_READ  1
 #define TRANS_WRITE 2
 
-#if TRANS_NONE!=SQLITE_TXN_NONE
-# error wrong numeric code for no-transaction
-#endif
-#if TRANS_READ!=SQLITE_TXN_READ
-# error wrong numeric code for read-transaction
-#endif
-#if TRANS_WRITE!=SQLITE_TXN_WRITE
-# error wrong numeric code for write-transaction
-#endif
+static_assert(TRANS_NONE==SQLITE_TXN_NONE, "wrong numeric code for no-transaction");
+static_assert(TRANS_READ==SQLITE_TXN_READ, "wrong numeric code for read-transaction");
+static_assert(TRANS_WRITE==SQLITE_TXN_WRITE, "wrong numeric code for write-transaction");
 
 
 /*

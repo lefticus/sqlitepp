@@ -720,7 +720,7 @@ static int echoFilter(
 ** If the third argument, doFree, is true, then sqlite3_free() is
 ** also called to free the buffer pointed to by zAppend.
 */
-static void string_concat(char **pzStr, char *zAppend, int doFree, int *pRc){
+static void string_concat(char **pzStr, const char *zAppend, int doFree, int *pRc){
   char *zIn = *pzStr;
   if( !zAppend && doFree && *pRc==SQLITE_OK ){
     *pRc = SQLITE_NOMEM;
@@ -742,7 +742,7 @@ static void string_concat(char **pzStr, char *zAppend, int doFree, int *pRc){
   }
   *pzStr = zIn;
   if( doFree ){
-    sqlite3_free(zAppend);
+    sqlite3_free((void*)zAppend);
   }
 }
 
@@ -1000,7 +1000,7 @@ int echoUpdate(
     bindArgZero = 1;
 
     if( bindArgOne ){
-       string_concat(&z, sqlite3_mprintf(" SET rowid=?1 "), 1, &rc);
+       string_concat(&z, " SET rowid=?1 ", 0, &rc);
        zSep = ",";
     }
     for(i=2; i<nData; i++){
@@ -1034,7 +1034,7 @@ int echoUpdate(
     if( sqlite3_value_type(apData[1])==SQLITE_INTEGER ){
       bindArgOne = 1;
       zValues = sqlite3_mprintf("?");
-      string_concat(&zInsert, sqlite3_mprintf("rowid"), 1, &rc);
+      string_concat(&zInsert, "rowid", 0, &rc);
     }
 
     assert((pVtab->nCol+2)==nData);
@@ -1046,9 +1046,9 @@ int echoUpdate(
     }
 
     string_concat(&z, zInsert, 1, &rc);
-    string_concat(&z, sqlite3_mprintf(") VALUES("), 1, &rc);
+    string_concat(&z, ") VALUES(", 0, &rc);
     string_concat(&z, zValues, 1, &rc);
-    string_concat(&z, sqlite3_mprintf(")"), 1, &rc);
+    string_concat(&z, ")", 0, &rc);
   }
 
   /* Anything else is an error */

@@ -1707,7 +1707,7 @@ struct sqlite3 {
     unsigned orphanTrigger : 1; /* Last statement is orphaned TEMP trigger */
     unsigned imposterTable : 2; /* Building an imposter table */
     unsigned reopenMemdb : 1;   /* ATTACH is really a reopen using MemDB */
-    char **azInit;        /* "type", "name", and "tbl_name" columns */
+    const char **azInit;        /* "type", "name", and "tbl_name" columns */
   } init;
   int nVdbeActive;              /* Number of VDBEs currently running */
   int nVdbeRead;                /* Number of active VDBEs that read or write */
@@ -4710,7 +4710,7 @@ int sqlite3IsIdChar(u8);
 int sqlite3StrICmp(const char*,const char*);
 int sqlite3Strlen30(const char*);
 #define sqlite3Strlen30NN(C) (strlen(C)&0x3fffffff)
-char *sqlite3ColumnType(Column*,char*);
+char *sqlite3ColumnType(Column*,const char*);
 #define sqlite3StrNICmp sqlite3_strnicmp
 
 int sqlite3MallocInit(void);
@@ -5435,7 +5435,7 @@ extern const unsigned char sqlite3OpcodeProperty[];
 extern const char sqlite3StrBINARY[];
 extern const unsigned char sqlite3StdTypeLen[];
 extern const char sqlite3StdTypeAffinity[];
-extern char *sqlite3StdType[];
+extern const char *sqlite3StdType[];
 extern const unsigned char sqlite3UpperToLower[];
 extern const unsigned char *sqlite3aLTb;
 extern const unsigned char *sqlite3aEQb;

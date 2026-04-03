@@ -421,7 +421,7 @@ static void intTestFunc(
   int argc,
   sqlite3_value **argv
 ){
-  int rc;
+  int rc [[maybe_unused]];
   const sqlite3_tokenizer_module *p1;
   const sqlite3_tokenizer_module *p2;
   sqlite3 *db = (sqlite3 *)sqlite3_user_data(context);
@@ -448,7 +448,6 @@ static void intTestFunc(
     assert( p2==p1 );
   }
 
-  (void)rc;
   sqlite3_result_text(context, "ok", -1, SQLITE_STATIC);
 }
 

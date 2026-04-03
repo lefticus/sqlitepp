@@ -391,17 +391,11 @@ extern const char sqlite3StdTypeAffinity[] = {
   SQLITE_AFF_REAL,
   SQLITE_AFF_TEXT
 };
-static char zStdType_ANY[] = "ANY";
-static char zStdType_BLOB[] = "BLOB";
-static char zStdType_INT[] = "INT";
-static char zStdType_INTEGER[] = "INTEGER";
-static char zStdType_REAL[] = "REAL";
-static char zStdType_TEXT[] = "TEXT";
-char *sqlite3StdType[] = {
-  zStdType_ANY,
-  zStdType_BLOB,
-  zStdType_INT,
-  zStdType_INTEGER,
-  zStdType_REAL,
-  zStdType_TEXT
+const char *sqlite3StdType[] = {
+  "ANY",
+  "BLOB",
+  "INT",
+  "INTEGER",
+  "REAL",
+  "TEXT"
 };

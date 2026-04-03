@@ -140,7 +140,7 @@ int sqlite3InitCallback(void *pInit, int argc, char **argv, char **NotUsed){
       }
     }
     db->init.orphanTrigger = 0;
-    db->init.azInit = argv;
+    db->init.azInit = (const char**)argv;
     pStmt = 0;
     TESTONLY(rcp = ) sqlite3Prepare(db, argv[4], -1, 0, 0, &pStmt, 0);
     rc = db->errCode;

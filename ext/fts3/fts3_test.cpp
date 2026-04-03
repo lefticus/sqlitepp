@@ -363,7 +363,7 @@ static int testTokenizerCreate(
   UNUSED_PARAMETER(argc);
   UNUSED_PARAMETER(argv);
 
-  pNew = static_cast<test_tokenizer*>(sqlite3_malloc(sizeof(test_tokenizer)));
+  pNew = (test_tokenizer *)sqlite3_malloc(sizeof(test_tokenizer));
   if( !pNew ) return SQLITE_NOMEM;
   memset(pNew, 0, sizeof(test_tokenizer));
 
@@ -452,7 +452,7 @@ static int testTokenizerNext(
     /* Copy the token into the buffer */
     if( nToken>pCsr->nBuffer ){
       sqlite3_free(pCsr->aBuffer);
-      pCsr->aBuffer = static_cast<char*>(sqlite3_malloc64(nToken));
+      pCsr->aBuffer = (char *)sqlite3_malloc64(nToken);
     }
     if( pCsr->aBuffer==0 ){
       rc = SQLITE_NOMEM;

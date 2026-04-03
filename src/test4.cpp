@@ -40,7 +40,7 @@ struct Thread {
   int completed;        /* Number of operations completed */
   sqlite3 *db;           /* Open database */
   sqlite3_stmt *pStmt;     /* Pending operation */
-  char *zErr;           /* operation error */
+  const char *zErr;     /* operation error */
   const char *zStaticErr; /* Static error message */
   int rc;               /* operation return code */
   int argc;             /* number of columns in result */
@@ -81,8 +81,8 @@ static void *test_thread_main(void *pArg){
   while( p->opnum<=p->completed ) sched_yield();
   test_barrier();
   while( p->xOp ){
-    if( p->zErr ){
-      sqlite3_free(p->zErr);
+    if( p->zErr && p->zErr!=p->zStaticErr ){
+      sqlite3_free((void*)p->zErr);
       p->zErr = 0;
     }
     (*p->xOp)(p);
@@ -99,8 +99,8 @@ static void *test_thread_main(void *pArg){
     sqlite3_close(p->db);
     p->db = 0;
   }
-  if( p->zErr ){
-    sqlite3_free(p->zErr);
+  if( p->zErr && p->zErr!=p->zStaticErr ){
+    sqlite3_free((void*)p->zErr);
     p->zErr = 0;
   }
   test_barrier();
@@ -416,7 +416,7 @@ static int SQLITE_TCLAPI tcl_thread_error(
     return TCL_ERROR;
   }
   test_thread_wait(&threadset[i]);
-  Tcl_AppendResult(interp, threadset[i].zErr ? threadset[i].zErr : threadset[i].zStaticErr, NULL);
+  Tcl_AppendResult(interp, threadset[i].zErr, NULL);
   return TCL_OK;
 }
 
@@ -425,7 +425,7 @@ static int SQLITE_TCLAPI tcl_thread_error(
 */
 static void do_compile(Thread *p){
   if( p->db==0 ){
-    p->zStaticErr = "no database is open";
+    p->zErr = p->zStaticErr = "no database is open";
     p->rc = SQLITE_ERROR;
     return;
   }
@@ -474,7 +474,7 @@ static int SQLITE_TCLAPI tcl_thread_compile(
 static void do_step(Thread *p){
   int i;
   if( p->pStmt==0 ){
-    p->zStaticErr = "no virtual machine available";
+    p->zErr = p->zStaticErr = "no virtual machine available";
     p->rc = SQLITE_ERROR;
     return;
   }
@@ -525,7 +525,7 @@ static int SQLITE_TCLAPI tcl_thread_step(
 */
 static void do_finalize(Thread *p){
   if( p->pStmt==0 ){
-    p->zStaticErr = "no virtual machine available";
+    p->zErr = p->zStaticErr = "no virtual machine available";
     p->rc = SQLITE_ERROR;
     return;
   }

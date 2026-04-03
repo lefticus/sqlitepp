@@ -137,7 +137,7 @@ static int fts5tokDequoteArray(
       nByte += (int)(strlen(argv[i]) + 1);
     }
 
-    *pazDequote = azDequote = static_cast<char**>(sqlite3_malloc64(sizeof(char *)*argc + nByte));
+    *pazDequote = azDequote = (char **)sqlite3_malloc64(sizeof(char *)*argc + nByte);
     if( azDequote==0 ){
       rc = SQLITE_NOMEM;
     }else{
@@ -347,7 +347,7 @@ static int fts5tokCb(
   if( pCsr->nRow ){
     pRow->iPos = pRow[-1].iPos + ((tflags & FTS5_TOKEN_COLOCATED) ? 0 : 1);
   }
-  pRow->zToken = static_cast<char*>(sqlite3_malloc64((sqlite3_int64)nToken+1));
+  pRow->zToken = (char *)sqlite3_malloc64((sqlite3_int64)nToken+1);
   if( pRow->zToken==0 ) return SQLITE_NOMEM;
   memcpy(pRow->zToken, pToken, nToken);
   pRow->zToken[nToken] = 0;
@@ -374,7 +374,7 @@ static int fts5tokFilterMethod(
   if( idxNum==1 ){
     const char *zByte = (const char *)sqlite3_value_text(apVal[0]);
     sqlite3_int64 nByte = sqlite3_value_bytes(apVal[0]);
-    pCsr->zInput = static_cast<char*>(sqlite3_malloc64(nByte+1));
+    pCsr->zInput = (char *)sqlite3_malloc64(nByte+1);
     if( pCsr->zInput==0 ){
       rc = SQLITE_NOMEM;
     }else{
