@@ -7,11 +7,11 @@
 [x] src/alter.cpp::renameTokenCheckAll
 [x] src/alter.cpp::sqlite3RenameTokenRemap
 [x] src/alter.cpp::renameUnmapExprCb
-[ ] src/alter.cpp::renameWalkWith
-[ ] src/alter.cpp::renameUnmapSelectCb
-[ ] src/alter.cpp::sqlite3RenameExprUnmap
-[ ] src/alter.cpp::sqlite3RenameExprlistUnmap
-[ ] src/alter.cpp::renameTokenFree
+[x] src/alter.cpp::renameWalkWith
+[x] src/alter.cpp::renameUnmapSelectCb
+[x] src/alter.cpp::sqlite3RenameExprUnmap
+[x] src/alter.cpp::sqlite3RenameExprlistUnmap
+[x] src/alter.cpp::renameTokenFree
 [ ] src/alter.cpp::renameColumnSelectCb
 [ ] src/alter.cpp::renameColumnExprCb
 [ ] src/alter.cpp::renameColumnTokenNext

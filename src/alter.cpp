@@ -811,7 +811,6 @@ static void renameWalkWith(Walker *pWalker, Select *pSelect){
   With *pWith = pSelect->pWith;
   if( pWith ){
     Parse *pParse = pWalker->pParse;
-    int i;
     With *pCopy = 0;
     assert( pWith->nCte>0 );
     if( (pWith->a[0].pSelect->selFlags & SF_Expanded)==0 ){
@@ -823,7 +822,7 @@ static void renameWalkWith(Walker *pWalker, Select *pSelect){
       pCopy = sqlite3WithDup(pParse->db, pWith);
       pCopy = sqlite3WithPush(pParse, pCopy, 1);
     }
-    for(i=0; i<pWith->nCte; i++){
+    for(int i=0; i<pWith->nCte; i++){
       Select *p = pWith->a[i].pSelect;
       NameContext sNC;
       memset(&sNC, 0, sizeof(sNC));
@@ -858,7 +857,6 @@ static void unmapColumnIdlistNames(
 */
 static int renameUnmapSelectCb(Walker *pWalker, Select *p){
   Parse *pParse = pWalker->pParse;
-  int i;
   if( pParse->nErr ) return WRC_Abort;
   testcase( p->selFlags & SF_View );
   testcase( p->selFlags & SF_CopyCte );
@@ -867,7 +865,7 @@ static int renameUnmapSelectCb(Walker *pWalker, Select *p){
   }
   if( ALWAYS(p->pEList) ){
     ExprList *pList = p->pEList;
-    for(i=0; i<pList->nExpr; i++){
+    for(int i=0; i<pList->nExpr; i++){
       if( pList->a[i].zEName && pList->a[i].fg.eEName==ENAME_NAME ){
         sqlite3RenameTokenRemap(pParse, 0, (void*)pList->a[i].zEName);
       }
@@ -875,7 +873,7 @@ static int renameUnmapSelectCb(Walker *pWalker, Select *p){
   }
   if( ALWAYS(p->pSrc) ){  /* Every Select as a SrcList, even if it is empty */
     SrcList *pSrc = p->pSrc;
-    for(i=0; i<pSrc->nSrc; i++){
+    for(int i=0; i<pSrc->nSrc; i++){
       sqlite3RenameTokenRemap(pParse, 0, (void*)pSrc->a[i].zName);
       if( pSrc->a[i].fg.isUsing==0 ){
         sqlite3WalkExpr(pWalker, pSrc->a[i].u3.pOn);
@@ -893,7 +891,7 @@ static int renameUnmapSelectCb(Walker *pWalker, Select *p){
 ** Remove all nodes that are part of expression pExpr from the rename list.
 */
 void sqlite3RenameExprUnmap(Parse *pParse, Expr *pExpr){
-  u8 eMode = pParse->eParseMode;
+  const u8 eMode = pParse->eParseMode;
   Walker sWalker;
   memset(&sWalker, 0, sizeof(Walker));
   sWalker.pParse = pParse;
@@ -910,13 +908,12 @@ void sqlite3RenameExprUnmap(Parse *pParse, Expr *pExpr){
 */
 void sqlite3RenameExprlistUnmap(Parse *pParse, ExprList *pEList){
   if( pEList ){
-    int i;
     Walker sWalker;
     memset(&sWalker, 0, sizeof(Walker));
     sWalker.pParse = pParse;
     sWalker.xExprCallback = renameUnmapExprCb;
     sqlite3WalkExprList(&sWalker, pEList);
-    for(i=0; i<pEList->nExpr; i++){
+    for(int i=0; i<pEList->nExpr; i++){
       if( ALWAYS(pEList->a[i].fg.eEName==ENAME_NAME) ){
         sqlite3RenameTokenRemap(pParse, 0, (void*)pEList->a[i].zEName);
       }
