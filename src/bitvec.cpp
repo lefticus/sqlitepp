@@ -114,9 +114,8 @@ struct Bitvec {
 ** malloc fails.
 */
 Bitvec *sqlite3BitvecCreate(u32 iSize){
-  Bitvec *p;
-  assert( sizeof(*p)==BITVEC_SZ );
-  p = static_cast<Bitvec*>(sqlite3MallocZero( sizeof(*p) ));
+  assert( sizeof(Bitvec)==BITVEC_SZ );
+  Bitvec *const p = static_cast<Bitvec*>(sqlite3MallocZero( sizeof(*p) ));
   if( p ){
     p->iSize = iSize;
   }
@@ -168,7 +167,6 @@ int sqlite3BitvecTest(Bitvec *p, u32 i){
 ** Otherwise the behavior is undefined.
 */
 int sqlite3BitvecSet(Bitvec *p, u32 i){
-  u32 h;
   if( p==0 ) return SQLITE_OK;
   assert( i>0 );
   assert( i<=p->iSize );
@@ -186,7 +184,7 @@ int sqlite3BitvecSet(Bitvec *p, u32 i){
     p->u.aBitmap[i/BITVEC_SZELEM] |= 1 << (i&(BITVEC_SZELEM-1));
     return SQLITE_OK;
   }
-  h = BITVEC_HASH(i++);
+  u32 h = BITVEC_HASH(i++);
   /* if there wasn't a hash collision, and this doesn't */
   /* completely fill the hash, then just add it without */
   /* worrying about sub-dividing and re-hashing. */

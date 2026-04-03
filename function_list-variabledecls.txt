@@ -67,11 +67,11 @@
 [x] src/backup.cpp::sqlite3_backup_pagecount
 [x] src/backup.cpp::sqlite3BackupUpdate
 [x] src/backup.cpp::sqlite3BackupRestart
-[ ] src/backup.cpp::sqlite3BtreeCopyFile
-[ ] src/bitvec.cpp::sqlite3BitvecCreate
-[ ] src/bitvec.cpp::sqlite3BitvecTestNotNull
-[ ] src/bitvec.cpp::sqlite3BitvecTest
-[ ] src/bitvec.cpp::sqlite3BitvecSet
+[x] src/backup.cpp::sqlite3BtreeCopyFile
+[x] src/bitvec.cpp::sqlite3BitvecCreate
+[x] src/bitvec.cpp::sqlite3BitvecTestNotNull
+[x] src/bitvec.cpp::sqlite3BitvecTest
+[x] src/bitvec.cpp::sqlite3BitvecSet
 [ ] src/bitvec.cpp::sqlite3BitvecClear
 [ ] src/bitvec.cpp::sqlite3BitvecDestroy
 [ ] src/bitvec.cpp::sqlite3BitvecSize

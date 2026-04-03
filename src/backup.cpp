@@ -706,13 +706,12 @@ void sqlite3BackupRestart(sqlite3_backup *pBackup){
 */
 int sqlite3BtreeCopyFile(Btree *pTo, Btree *pFrom){
   int rc;
-  sqlite3_file *pFd;              /* File descriptor for database pTo */
   sqlite3_backup b;
   sqlite3BtreeEnter(pTo);
   sqlite3BtreeEnter(pFrom);
 
   assert( sqlite3BtreeTxnState(pTo)==SQLITE_TXN_WRITE );
-  pFd = sqlite3PagerFile(sqlite3BtreePager(pTo));
+  sqlite3_file *const pFd = sqlite3PagerFile(sqlite3BtreePager(pTo));
   if( pFd->pMethods ){
     i64 nByte = sqlite3BtreeGetPageSize(pFrom)*(i64)sqlite3BtreeLastPage(pFrom);
     rc = sqlite3OsFileControl(pFd, SQLITE_FCNTL_OVERWRITE, &nByte);
