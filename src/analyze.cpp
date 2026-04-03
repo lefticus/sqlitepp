@@ -1388,20 +1388,16 @@ static void loadAnalysis(Parse *pParse, int iDb){
 */
 static void analyzeDatabase(Parse *pParse, int iDb){
   sqlite3 *db = pParse->db;
-  Schema *pSchema = db->aDb[iDb].pSchema;    /* Schema of database iDb */
-  HashElem *k;
-  int iStatCur;
-  int iMem;
-  int iTab;
+  Schema *const pSchema = db->aDb[iDb].pSchema;    /* Schema of database iDb */
 
   sqlite3BeginWriteOperation(pParse, 0, iDb);
-  iStatCur = pParse->nTab;
+  const int iStatCur = pParse->nTab;
   pParse->nTab += 3;
   openStatTable(pParse, iDb, iStatCur, 0, 0);
-  iMem = pParse->nMem+1;
-  iTab = pParse->nTab;
+  int iMem = pParse->nMem+1;
+  const int iTab = pParse->nTab;
   assert( sqlite3SchemaMutexHeld(db, iDb, 0) );
-  for(k=sqliteHashFirst(&pSchema->tblHash); k; k=sqliteHashNext(k)){
+  for(HashElem *k=sqliteHashFirst(&pSchema->tblHash); k; k=sqliteHashNext(k)){
     Table *pTab = (Table*)sqliteHashData(k);
     analyzeOneTable(pParse, pTab, 0, iStatCur, iMem, iTab);
 #ifdef SQLITE_ENABLE_STAT4
@@ -1419,14 +1415,11 @@ static void analyzeDatabase(Parse *pParse, int iDb){
 ** in pTab that should be analyzed.
 */
 static void analyzeTable(Parse *pParse, Table *pTab, Index *pOnlyIdx){
-  int iDb;
-  int iStatCur;
-
   assert( pTab!=0 );
   assert( sqlite3BtreeHoldsAllMutexes(pParse->db) );
-  iDb = sqlite3SchemaToIndex(pParse->db, pTab->pSchema);
+  const int iDb = sqlite3SchemaToIndex(pParse->db, pTab->pSchema);
   sqlite3BeginWriteOperation(pParse, 0, iDb);
-  iStatCur = pParse->nTab;
+  const int iStatCur = pParse->nTab;
   pParse->nTab += 3;
   if( pOnlyIdx ){
     openStatTable(pParse, iDb, iStatCur, pOnlyIdx->zName, "idx");
@@ -1452,12 +1445,6 @@ static void analyzeTable(Parse *pParse, Table *pTab, Index *pOnlyIdx){
 void sqlite3Analyze(Parse *pParse, Token *pName1, Token *pName2){
   sqlite3 *db = pParse->db;
   int iDb;
-  int i;
-  char *z, *zDb;
-  Table *pTab;
-  Index *pIdx;
-  Token *pTableName;
-  Vdbe *v;
 
   /* Read the database schema. If an error occurs, leave an error message
   ** and code in pParse and return NULL. */
@@ -1469,7 +1456,7 @@ void sqlite3Analyze(Parse *pParse, Token *pName1, Token *pName2){
   assert( pName2!=0 || pName1==0 );
   if( pName1==0 ){
     /* Form 1:  Analyze everything */
-    for(i=0; i<db->nDb; i++){
+    for(int i=0; i<db->nDb; i++){
       if( i==1 ) continue;  /* Do not analyze the TEMP database */
       analyzeDatabase(pParse, i);
     }
@@ -1478,11 +1465,14 @@ void sqlite3Analyze(Parse *pParse, Token *pName1, Token *pName2){
     analyzeDatabase(pParse, iDb);
   }else{
     /* Form 3: Analyze the table or index named as an argument */
+    Token *pTableName;
     iDb = sqlite3TwoPartName(pParse, pName1, pName2, &pTableName);
     if( iDb>=0 ){
-      zDb = pName2->n ? db->aDb[iDb].zDbSName : 0;
-      z = sqlite3NameFromToken(db, pTableName);
+      char *const zDb = pName2->n ? db->aDb[iDb].zDbSName : 0;
+      char *const z = sqlite3NameFromToken(db, pTableName);
       if( z ){
+        Index *pIdx;
+        Table *pTab;
         if( (pIdx = sqlite3FindIndex(db, z, zDb))!=0 ){
           analyzeTable(pParse, pIdx->pTable, pIdx);
         }else if( (pTab = sqlite3LocateTable(pParse, 0, z, zDb))!=0 ){
@@ -1492,6 +1482,7 @@ void sqlite3Analyze(Parse *pParse, Token *pName1, Token *pName2){
       }
     }
   }
+  Vdbe *v;
   if( db->nSqlExec==0 && (v = sqlite3GetVdbe(pParse))!=0 ){
     sqlite3VdbeAddOp0(v, OP_Expire);
   }

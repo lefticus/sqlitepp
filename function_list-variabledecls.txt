@@ -37,11 +37,11 @@
 [x] src/analyze.cpp::statAccumDestructor
 [x] src/analyze.cpp::sampleInsert
 [x] src/analyze.cpp::samplePushPrevious
-[ ] src/analyze.cpp::callStatGet
-[ ] src/analyze.cpp::loadAnalysis
-[ ] src/analyze.cpp::analyzeDatabase
-[ ] src/analyze.cpp::analyzeTable
-[ ] src/analyze.cpp::sqlite3Analyze
+[x] src/analyze.cpp::callStatGet
+[x] src/analyze.cpp::loadAnalysis
+[x] src/analyze.cpp::analyzeDatabase
+[x] src/analyze.cpp::analyzeTable
+[x] src/analyze.cpp::sqlite3Analyze
 [ ] src/analyze.cpp::analysisLoader
 [ ] src/analyze.cpp::sqlite3DeleteIndexSamples
 [ ] src/analyze.cpp::initAvgEq
