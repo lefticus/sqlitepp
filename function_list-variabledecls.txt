@@ -32,11 +32,11 @@
 [x] src/alter.cpp::sqlite3AlterFunctions
 [x] src/analyze.cpp::sampleClear
 [x] src/analyze.cpp::sampleSetRowid
-[ ] src/analyze.cpp::sampleSetRowidInt64
-[ ] src/analyze.cpp::sampleCopy
-[ ] src/analyze.cpp::statAccumDestructor
-[ ] src/analyze.cpp::sampleInsert
-[ ] src/analyze.cpp::samplePushPrevious
+[x] src/analyze.cpp::sampleSetRowidInt64
+[x] src/analyze.cpp::sampleCopy
+[x] src/analyze.cpp::statAccumDestructor
+[x] src/analyze.cpp::sampleInsert
+[x] src/analyze.cpp::samplePushPrevious
 [ ] src/analyze.cpp::callStatGet
 [ ] src/analyze.cpp::loadAnalysis
 [ ] src/analyze.cpp::analyzeDatabase

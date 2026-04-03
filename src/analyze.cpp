@@ -364,12 +364,11 @@ static void sampleCopy(StatAccum *p, StatSample *pTo, StatSample *pFrom){
 ** Reclaim all memory of a StatAccum structure.
 */
 static void statAccumDestructor(void *pOld){
-  StatAccum *p = (StatAccum*)pOld;
+  StatAccum *const p = (StatAccum*)pOld;
 #ifdef SQLITE_ENABLE_STAT4
   if( p->mxSample ){
-    int i;
-    for(i=0; i<p->nCol; i++) sampleClear(p->db, p->aBest+i);
-    for(i=0; i<p->mxSample; i++) sampleClear(p->db, p->a+i);
+    for(int i=0; i<p->nCol; i++) sampleClear(p->db, p->aBest+i);
+    for(int i=0; i<p->mxSample; i++) sampleClear(p->db, p->a+i);
     sampleClear(p->db, &p->current);
   }
 #endif
@@ -557,7 +556,6 @@ static int sampleIsBetter(
 */
 static void sampleInsert(StatAccum *p, StatSample *pNew, int nEqZero){
   StatSample *pSample = 0;
-  int i;
 
   assert( IsStat4 || nEqZero==0 );
 
@@ -572,12 +570,12 @@ static void sampleInsert(StatAccum *p, StatSample *pNew, int nEqZero){
     StatSample *pUpgrade = 0;
     assert( pNew->anEq[pNew->iCol]>0 );
 
-    /* This sample is being added because the prefix that ends in column 
+    /* This sample is being added because the prefix that ends in column
     ** iCol occurs many times in the table. However, if we have already
     ** added a sample that shares this prefix, there is no need to add
     ** this one. Instead, upgrade the priority of the highest priority
     ** existing sample that shares this prefix.  */
-    for(i=p->nSample-1; i>=0; i--){
+    for(int i=p->nSample-1; i>=0; i--){
       StatSample *pOld = &p->a[i];
       if( pOld->anEq[pNew->iCol]==0 ){
         if( pOld->isPSample ) return;
@@ -628,7 +626,7 @@ static void sampleInsert(StatAccum *p, StatSample *pNew, int nEqZero){
 find_new_min:
   if( p->nSample>=p->mxSample ){
     int iMin = -1;
-    for(i=0; i<p->mxSample; i++){
+    for(int i=0; i<p->mxSample; i++){
       if( p->a[i].isPSample ) continue;
       if( iMin<0 || sampleIsBetter(p, &p->a[iMin], &p->a[i]) ){
         iMin = i;
@@ -648,11 +646,10 @@ find_new_min:
 ** correct at this point.
 */
 static void samplePushPrevious(StatAccum *p, int iChng){
-  int i;
 
   /* Check if any samples from the aBest[] array should be pushed
   ** into IndexSample.a[] at this point.  */
-  for(i=(p->nCol-2); i>=iChng; i--){
+  for(int i=(p->nCol-2); i>=iChng; i--){
     StatSample *pBest = &p->aBest[i];
     pBest->anEq[i] = p->current.anEq[i];
     if( p->nSample<p->mxSample || sampleIsBetter(p, pBest, &p->a[p->iMin]) ){
@@ -662,16 +659,14 @@ static void samplePushPrevious(StatAccum *p, int iChng){
 
   /* Check that no sample contains an anEq[] entry with an index of
   ** p->nMaxEqZero or greater set to zero. */
-  for(i=p->nSample-1; i>=0; i--){
-    int j;
-    for(j=p->nMaxEqZero; j<p->nCol; j++) assert( p->a[i].anEq[j]>0 );
+  for(int i=p->nSample-1; i>=0; i--){
+    for(int j=p->nMaxEqZero; j<p->nCol; j++) assert( p->a[i].anEq[j]>0 );
   }
 
   /* Update the anEq[] fields of any samples already collected. */
   if( iChng<p->nMaxEqZero ){
-    for(i=p->nSample-1; i>=0; i--){
-      int j;
-      for(j=iChng; j<p->nCol; j++){
+    for(int i=p->nSample-1; i>=0; i--){
+      for(int j=iChng; j<p->nCol; j++){
         if( p->a[i].anEq[j]==0 ) p->a[i].anEq[j] = p->current.anEq[j];
       }
     }
