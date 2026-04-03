@@ -1037,7 +1037,7 @@ static void analyzeOneTable(
   if( db->xPreUpdateCallback ){
     pStat1 = static_cast<Table*>(sqlite3DbMallocZero(db, sizeof(Table) + 13));
     if( pStat1==0 ) return;
-    pStat1->zName = static_cast<char*>(&pStat1[1]);
+    pStat1->zName = reinterpret_cast<char*>(&pStat1[1]);
     memcpy(pStat1->zName, "sqlite_stat1", 13);
     pStat1->nCol = 3;
     pStat1->iPKey = -1;
@@ -1518,13 +1518,13 @@ struct analysisInfo {
 ** the array aOut[].
 */
 static void decodeIntArray(
-  char *zIntArray,       /* String containing int array to decode */
+  const char *zIntArray,       /* String containing int array to decode */
   int nOut,              /* Number of slots in aOut[] */
   tRowcnt *aOut,         /* Store integers here */
   LogEst *aLog,          /* Or, if aOut==0, here */
   Index *pIndex          /* Handle extra flags for this index, if not NULL */
 ){
-  char *z = zIntArray;
+  const char *z = zIntArray;
   int c;
   int i;
   tRowcnt v;
@@ -1788,7 +1788,7 @@ static int loadStatTbl(
   while( sqlite3_step(pStmt)==SQLITE_ROW ){
     int nIdxCol = 1;              /* Number of columns in stat4 records */
 
-    char *zIndex;    /* Index name */
+    const char *zIndex;    /* Index name */
     Index *pIdx;     /* Pointer to the index object */
     int nSample;     /* Number of samples */
     i64 nByte;       /* Bytes of space required */
@@ -1796,7 +1796,7 @@ static int loadStatTbl(
     tRowcnt *pSpace; /* Available allocated memory space */
     u8 *pPtr;        /* Available memory as a u8 for easier manipulation */
 
-    zIndex = reinterpret_cast<char*>(sqlite3_column_text(pStmt, 0));
+    zIndex = reinterpret_cast<const char*>(sqlite3_column_text(pStmt, 0));
     if( zIndex==0 ) continue;
     nSample = sqlite3_column_int(pStmt, 1);
     pIdx = findIndexOrPrimaryKey(db, zIndex, zDb);
@@ -1848,11 +1848,11 @@ static int loadStatTbl(
   if( rc ) return rc;
 
   while( sqlite3_step(pStmt)==SQLITE_ROW ){
-    char *zIndex;                 /* Index name */
+    const char *zIndex;                 /* Index name */
     Index *pIdx;                  /* Pointer to the index object */
     int nCol = 1;                 /* Number of columns in index */
 
-    zIndex = reinterpret_cast<char*>(sqlite3_column_text(pStmt, 0));
+    zIndex = reinterpret_cast<const char*>(sqlite3_column_text(pStmt, 0));
     if( zIndex==0 ) continue;
     pIdx = findIndexOrPrimaryKey(db, zIndex, zDb);
     if( pIdx==0 ) continue;
@@ -1869,9 +1869,9 @@ static int loadStatTbl(
       pPrevIdx = pIdx;
     }
     pSample = &pIdx->aSample[pIdx->nSample];
-    decodeIntArray(reinterpret_cast<char*>(sqlite3_column_text(pStmt,1)),nCol,pSample->anEq,0,0);
-    decodeIntArray(reinterpret_cast<char*>(sqlite3_column_text(pStmt,2)),nCol,pSample->anLt,0,0);
-    decodeIntArray(reinterpret_cast<char*>(sqlite3_column_text(pStmt,3)),nCol,pSample->anDLt,0,0);
+    decodeIntArray(reinterpret_cast<const char*>(sqlite3_column_text(pStmt,1)),nCol,pSample->anEq,0,0);
+    decodeIntArray(reinterpret_cast<const char*>(sqlite3_column_text(pStmt,2)),nCol,pSample->anLt,0,0);
+    decodeIntArray(reinterpret_cast<const char*>(sqlite3_column_text(pStmt,3)),nCol,pSample->anDLt,0,0);
 
     /* Take a copy of the sample. Add 8 extra 0x00 bytes the end of the buffer.
     ** This is in case the sample record is corrupted. In that case, the

@@ -1501,7 +1501,7 @@ static int fts5FilterMethod(
 
         rc = fts5ExtractExprText(pConfig, apVal[i], &zText, &bFreeAndReset);
         if( rc!=SQLITE_OK ) goto filter_out;
-        if( zText==0 ) zText = "";
+        if( zText==0 ) zText = const_cast<char*>("");
         if( sqlite3_value_subtype(apVal[i])==FTS5_INSTTOKEN_SUBTYPE ){
           pConfig->bPrefixInsttoken = 1;
         }

@@ -197,7 +197,7 @@
 */
 #ifndef TH3_VERSION
   /* These bits for separate compilation as a loadable extension, only */
-  #include "sqlite3ext.h"
+  #include "sqlite3ext.hpp"
   SQLITE_EXTENSION_INIT1
   #include <stdlib.h>
   #include <string.h>
@@ -261,7 +261,7 @@ int vt02Connect(
 #define VT02_COL_LOGTAB  6
 #define VT02_COL_NONE    7
 
-  pVtab = sqlite3_malloc( sizeof(*pVtab) );
+  pVtab = static_cast<vt02_vtab*>(sqlite3_malloc( sizeof(*pVtab) ));
   if( pVtab==0 ){
     *pzErr = sqlite3_mprintf("out of memory");
     return SQLITE_NOMEM;
@@ -299,7 +299,7 @@ static void vt02ErrMsg(sqlite3_vtab *pVtab, const char *zFormat, ...){
 */
 static int vt02Open(sqlite3_vtab *pVTab, sqlite3_vtab_cursor **ppCursor){
   vt02_cur *pCur;
-  pCur = sqlite3_malloc( sizeof(*pCur) );
+  pCur = static_cast<vt02_cur*>(sqlite3_malloc( sizeof(*pCur) ));
   if( pCur==0 ){
     vt02ErrMsg(pVTab, "out of memory");
     return SQLITE_NOMEM;

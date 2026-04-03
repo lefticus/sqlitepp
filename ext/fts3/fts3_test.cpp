@@ -175,7 +175,7 @@ static int SQLITE_TCLAPI fts3_near_match_cmd(
   for(ii=3; ii<objc; ii+=2){
     enum NM_enum { NM_PHRASECOUNTS };
     struct TestnmSubcmd {
-      char *zName;
+      const char *zName;
       enum NM_enum eOpt;
     } aOpt[] = {
       { "-phrasecountvar", NM_PHRASECOUNTS },

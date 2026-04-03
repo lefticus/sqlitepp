@@ -65,7 +65,7 @@
 #define SQLITE_ENABLE_SESSION 1
 #define SQLITE_ENABLE_PREUPDATE_HOOK 1
 #define SQLITE_ENABLE_DESERIALIZE 1
-#include "sqlite3.c"
+#include "sqlite3.cpp"
 
 /* Code to populate the database */
 static const char zFillSql[] = 
@@ -691,6 +691,9 @@ static const char zHelp[] =
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#if !defined(OMIT_ZLIB) && !defined(HAVE_ZLIB)
+# define OMIT_ZLIB
+#endif
 #ifndef OMIT_ZLIB
 #include <zlib.h>
 #endif
@@ -722,8 +725,8 @@ static void sqlarUncompressFunc(
   if( sz<=0 || sz==(nData = sqlite3_value_bytes(argv[0])) ){
     sqlite3_result_value(context, argv[0]);
   }else{
-    const Bytef *pData= sqlite3_value_blob(argv[0]);
-    Bytef *pOut = sqlite3_malloc(sz);
+    const Bytef *pData= static_cast<const Bytef*>(sqlite3_value_blob(argv[0]));
+    Bytef *pOut = static_cast<Bytef*>(sqlite3_malloc(sz));
     if( Z_OK!=uncompress(pOut, &sz, pData, nData) ){
       sqlite3_result_error(context, "error in uncompress()", -1);
     }else{
@@ -802,7 +805,7 @@ static void readFile(const char *zName, void **ppData, int *pnData){
   fseek(in, 0, SEEK_END);
   nIn = ftell(in);
   rewind(in);
-  pBuf = sqlite3_malloc64( nIn+1 );
+  pBuf = static_cast<char*>(sqlite3_malloc64( nIn+1 ));
   if( pBuf==0 ){
     fprintf(stderr, "Failed to malloc %lld bytes\n", (sqlite3_int64)(nIn+1));
     exit(1);
@@ -841,7 +844,7 @@ static void db_reset(sqlite3 *db){
   int rc;
 
   nData = sizeof(aDbBytes);
-  pData = sqlite3_malloc64( nData );
+  pData = static_cast<unsigned char*>(sqlite3_malloc64( nData ));
   if( pData==0 ){
     fprintf(stderr, "could not allocate %d bytes\n", nData);
     exit(1);
@@ -944,7 +947,7 @@ int main(int argc, char **argv){
         if( !bVerbose ){ printf("%s: ", fileTail(argv[i])); fflush(stdout); }
         sqlite3_open_v2(":memory:", &db2, 
                         SQLITE_OPEN_CREATE|SQLITE_OPEN_READWRITE, "memdb");
-        sqlite3_deserialize(db2, 0, pChgset, nChgset, nChgset,
+        sqlite3_deserialize(db2, 0, static_cast<unsigned char*>(pChgset), nChgset, nChgset,
               SQLITE_DESERIALIZE_READONLY | SQLITE_DESERIALIZE_FREEONCLOSE);
         sqlite3_create_function(db2, "sqlar_uncompress", 2, SQLITE_UTF8, 0,
                                  sqlarUncompressFunc, 0, 0);        

@@ -1517,7 +1517,7 @@ static int geopolyBestIndex(sqlite3_vtab *tab, sqlite3_index_info *pIdxInfo){
 
   if( iRowidTerm>=0 ){
     pIdxInfo->idxNum = 1;
-    pIdxInfo->idxStr = "rowid";
+    pIdxInfo->idxStr = const_cast<char*>("rowid");
     pIdxInfo->aConstraintUsage[iRowidTerm].argvIndex = 1;
     pIdxInfo->aConstraintUsage[iRowidTerm].omit = 1;
     pIdxInfo->estimatedCost = 30.0;
@@ -1527,7 +1527,7 @@ static int geopolyBestIndex(sqlite3_vtab *tab, sqlite3_index_info *pIdxInfo){
   }
   if( iFuncTerm>=0 ){
     pIdxInfo->idxNum = idxNum;
-    pIdxInfo->idxStr = "rtree";
+    pIdxInfo->idxStr = const_cast<char*>("rtree");
     pIdxInfo->aConstraintUsage[iFuncTerm].argvIndex = 1;
     pIdxInfo->aConstraintUsage[iFuncTerm].omit = 0;
     pIdxInfo->estimatedCost = 300.0;
@@ -1535,7 +1535,7 @@ static int geopolyBestIndex(sqlite3_vtab *tab, sqlite3_index_info *pIdxInfo){
     return SQLITE_OK;
   }
   pIdxInfo->idxNum = 4;
-  pIdxInfo->idxStr = "fullscan";
+  pIdxInfo->idxStr = const_cast<char*>("fullscan");
   pIdxInfo->estimatedCost = 3000000.0;
   pIdxInfo->estimatedRows = 100000;
   return SQLITE_OK;

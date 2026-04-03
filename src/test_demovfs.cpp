@@ -173,7 +173,7 @@ static int demoDirectWrite(
   }
 
   nWrite = write(p->fd, zBuf, iAmt);
-  if( nWrite!=iAmt ){
+  if( nWrite!=(size_t)iAmt ){
     return SQLITE_IOERR_WRITE;
   }
 

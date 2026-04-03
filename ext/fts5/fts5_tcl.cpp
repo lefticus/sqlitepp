@@ -1701,7 +1701,7 @@ static int SQLITE_TCLAPI f5tRegisterStr(
 */
 int Fts5tcl_Init(Tcl_Interp *interp){
   static struct Cmd {
-    char *zName;
+    const char *zName;
     Tcl_ObjCmdProc *xProc;
     int bTokenizeCtx;
   } aCmd[] = {

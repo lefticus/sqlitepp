@@ -21,7 +21,7 @@
 **         the same row
 **
 */
-#include "sqlite3.h"
+#include "sqlite3.hpp"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -54,7 +54,7 @@ static void bindDebugParameters(sqlite3_stmt *pStmt){
     if( zVar==0 ) continue;
 #ifdef SQLITE_ENABLE_CARRAY
     if( strcmp(zVar,"$carray_clr")==0 ){
-      static char *azColorNames[] = {
+      static const char *azColorNames[] = {
         "azure", "black", "blue",   "brown", "cyan",   "fuchsia", "gold",
         "gray",  "green", "indigo", "khaki", "lime",   "magenta", "maroon",
         "navy",  "olive", "orange", "pink",  "purple", "red",     "silver",
@@ -75,7 +75,7 @@ static void bindDebugParameters(sqlite3_stmt *pStmt){
     }else
     if( strncmp(zVar, "$text_", 6)==0 ){
       size_t szVar = strlen(zVar);
-      char *zBuf = sqlite3_malloc64( szVar-5 );
+      char *zBuf = static_cast<char*>(sqlite3_malloc64( szVar-5 ));
       if( zBuf ){
         memcpy(zBuf, &zVar[6], szVar-5);
         sqlite3_bind_text64(pStmt, i, zBuf, szVar-6, sqlite3_free, SQLITE_UTF8);
@@ -440,9 +440,9 @@ static int sameValue(
       }
       if( e1!=SQLITE_UTF8 ){
         int len1 = sqlite3_column_bytes16(pS1,i1);
-        const unsigned char *b1 = sqlite3_column_blob(pS1,i1);
+        const unsigned char *b1 = static_cast<const unsigned char*>(sqlite3_column_blob(pS1,i1));
         int len2 = sqlite3_column_bytes16(pS2,i2);
-        const unsigned char *b2 = sqlite3_column_blob(pS2,i2);
+        const unsigned char *b2 = static_cast<const unsigned char*>(sqlite3_column_blob(pS2,i2));
         if( len1!=len2 ){
           x = 0;
         }else if( len1==0 ){
@@ -456,9 +456,9 @@ static int sameValue(
     }
     case SQLITE_BLOB: {
       int len1 = sqlite3_column_bytes(pS1,i1);
-      const unsigned char *b1 = sqlite3_column_blob(pS1,i1);
+      const unsigned char *b1 = static_cast<const unsigned char*>(sqlite3_column_blob(pS1,i1));
       int len2 = sqlite3_column_bytes(pS2,i2);
-      const unsigned char *b2 = sqlite3_column_blob(pS2,i2);
+      const unsigned char *b2 = static_cast<const unsigned char*>(sqlite3_column_blob(pS2,i2));
       if( len1!=len2 ){
         x = 0;
       }else if( len1==0 ){
@@ -510,7 +510,7 @@ static void printRow(sqlite3_stmt *pStmt, int iRow){
           case SQLITE_UTF8: {
             printf("(utf8) x'");
             n = sqlite3_column_bytes(pStmt, i);
-            data = sqlite3_column_blob(pStmt, i);
+            data = static_cast<const unsigned char*>(sqlite3_column_blob(pStmt, i));
             printHex(data, n, 35);
             printf("'\n");
             break;
@@ -518,7 +518,7 @@ static void printRow(sqlite3_stmt *pStmt, int iRow){
           case SQLITE_UTF16BE: {
             printf("(utf16be) x'");
             n = sqlite3_column_bytes16(pStmt, i);
-            data = sqlite3_column_blob(pStmt, i);
+            data = static_cast<const unsigned char*>(sqlite3_column_blob(pStmt, i));
             printHex(data, n, 35);
             printf("'\n");
             break;
@@ -526,7 +526,7 @@ static void printRow(sqlite3_stmt *pStmt, int iRow){
           case SQLITE_UTF16LE: {
             printf("(utf16le) x'");
             n = sqlite3_column_bytes16(pStmt, i);
-            data = sqlite3_column_blob(pStmt, i);
+            data = static_cast<const unsigned char*>(sqlite3_column_blob(pStmt, i));
             printHex(data, n, 35);
             printf("'\n");
             break;
@@ -541,7 +541,7 @@ static void printRow(sqlite3_stmt *pStmt, int iRow){
       }
       case SQLITE_BLOB: {
         n = sqlite3_column_bytes(pStmt, i);
-        data = sqlite3_column_blob(pStmt, i);
+        data = static_cast<const unsigned char*>(sqlite3_column_blob(pStmt, i));
         printf("(blob %d bytes) x'", n);
         printHex(data, n, 35);
         printf("'\n");

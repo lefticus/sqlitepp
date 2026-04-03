@@ -347,8 +347,8 @@ finish:
 
 static
 int registerTokenizer(
-  sqlite3 *db, 
-  char *zName, 
+  sqlite3 *db,
+  const char *zName,
   const sqlite3_tokenizer_module *p
 ){
   int rc;
@@ -370,8 +370,8 @@ int registerTokenizer(
 
 static
 int queryTokenizer(
-  sqlite3 *db, 
-  char *zName,  
+  sqlite3 *db,
+  const char *zName,
   const sqlite3_tokenizer_module **pp
 ){
   int rc;

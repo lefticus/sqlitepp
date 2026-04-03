@@ -979,7 +979,7 @@ void sqlite3TreeViewBareIdList(
     for(i=0; i<pList->nId; i++){
       char *zName = pList->a[i].zName;
       int moreToFollow = i<pList->nId - 1;
-      if( zName==0 ) zName = "(null)";
+      if( zName==0 ) zName = const_cast<char*>("(null)");
       sqlite3TreeViewPush(&pView, moreToFollow);
       sqlite3TreeViewLine(pView, 0);
       fprintf(stdout, "%s\n", zName);

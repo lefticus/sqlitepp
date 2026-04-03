@@ -1371,11 +1371,11 @@ void sqlite3FpDecode(FpDecode *p, double r, int iRound, int mxRound){
     assert( v<10 );
     zBuf[i--] = v + '0';
   }
-  assert( i>=0 && i<sizeof(p->zBuf)-1 );
-  n = sizeof(p->zBuf) - 1 - i;  /* Total number of digits extracted */
+  assert( i>=0 && i<(int)sizeof(p->zBuf)-1 );
+  n = (int)sizeof(p->zBuf) - 1 - i;  /* Total number of digits extracted */
   assert( n>0 );
-  assert( n<sizeof(p->zBuf) );
-  testcase( n==sizeof(p->zBuf)-1 );
+  assert( n<(int)sizeof(p->zBuf) );
+  testcase( n==(int)sizeof(p->zBuf)-1 );
   p->iDP = n + exp;
   if( iRound<=0 ){
     iRound = p->iDP - iRound;

@@ -4383,7 +4383,7 @@ int sqlite3_test_control(int op, ...){
     ** return value is zero.
     */
     case SQLITE_TESTCTRL_ASSERT: {
-      volatile int x = 0;
+      int x = 0;
       assert( /*side-effects-ok*/ (x = va_arg(ap,int))!=0 );
       rc = x;
 #if defined(SQLITE_DEBUG)

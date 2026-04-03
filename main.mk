@@ -990,12 +990,12 @@ FUZZCHECK_OPT += \
   -DSQLITE_STATIC_RANDOMJSON
 
 FUZZCHECK_SRC = sqlite3.cpp \
-   $(TOP)/test/fuzzcheck.c \
-   $(TOP)/test/ossfuzz.c \
-   $(TOP)/test/fuzzinvariants.c \
+   $(TOP)/test/fuzzcheck.cpp \
+   $(TOP)/test/ossfuzz.cpp \
+   $(TOP)/test/fuzzinvariants.cpp \
    $(TOP)/ext/recover/dbdata.cpp \
    $(TOP)/ext/recover/sqlite3recover.cpp \
-   $(TOP)/test/vt02.c \
+   $(TOP)/test/vt02.cpp \
    $(TOP)/ext/misc/base64.cpp \
    $(TOP)/ext/misc/base85.cpp \
    $(TOP)/ext/misc/completion.cpp \
@@ -2301,8 +2301,8 @@ ossshell$(T.exe):	$(TOP)/test/ossfuzz.c $(TOP)/test/ossshell.c sqlite3.cpp sqlit
 fuzzy: ossshell$(T.exe)
 xbin: ossshell$(T.exe)
 
-sessionfuzz$(T.exe):	$(TOP)/test/sessionfuzz.c sqlite3.cpp sqlite3.hpp
-	$(T.link) -o $@ $(TOP)/test/sessionfuzz.c $(LDFLAGS.libsqlite3)
+sessionfuzz$(T.exe):	$(TOP)/test/sessionfuzz.cpp sqlite3.cpp sqlite3.hpp
+	$(T.link) -o $@ $(TOP)/test/sessionfuzz.cpp $(LDFLAGS.libsqlite3)
 fuzzy: sessionfuzz$(T.exe)
 
 dbfuzz$(T.exe):	$(TOP)/test/dbfuzz.c sqlite3.cpp sqlite3.hpp

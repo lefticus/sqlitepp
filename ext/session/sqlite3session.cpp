@@ -1128,7 +1128,7 @@ static int sessionTableInfo(
 
   if( rc==SQLITE_OK ){
     nByte += nDbCol * (sizeof(const char *)*2 +sizeof(int)+sizeof(u8) + 1 + 1);
-    pAlloc = sessionMalloc64(pSession, nByte);
+    pAlloc = static_cast<u8*>(sessionMalloc64(pSession, nByte));
     if( pAlloc==0 ){
       rc = SQLITE_NOMEM;
     }else{
@@ -1350,7 +1350,7 @@ static void sessionUpdateOneChange(
     }
 
     nByte = nIncr + (sizeof(SessionChange) + pOld->nRecord);
-    pNew = sessionMalloc64(pSession, nByte);
+    pNew = static_cast<SessionChange*>(sessionMalloc64(pSession, nByte));
     if( pNew==0 ){
       *pRc = SQLITE_NOMEM;
       return;

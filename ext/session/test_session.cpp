@@ -137,7 +137,7 @@ static int SQLITE_TCLAPI test_sql_exec_changeset(
   }
 
   assert_changeset_is_ok(nChangeset, pChangeset);
-  Tcl_SetObjResult(interp, Tcl_NewByteArrayObj(pChangeset, nChangeset));
+  Tcl_SetObjResult(interp, Tcl_NewByteArrayObj(static_cast<const unsigned char*>(pChangeset), nChangeset));
   sqlite3_free(pChangeset);
   return TCL_OK;
 }
@@ -306,7 +306,7 @@ static int SQLITE_TCLAPI test_session_cmd(
       }
       if( rc==SQLITE_OK ){
         assert_changeset_is_ok(o.n, o.p);
-        Tcl_SetObjResult(interp, Tcl_NewByteArrayObj(o.p, o.n)); 
+        Tcl_SetObjResult(interp, Tcl_NewByteArrayObj(static_cast<const unsigned char*>(o.p), o.n));
       }
       sqlite3_free(o.p);
       if( rc!=SQLITE_OK ){
@@ -495,7 +495,7 @@ static void test_append_value(Tcl_Obj *pList, sqlite3_value *pVal){
         assert( sqlite3_value_type(pVal)==SQLITE_BLOB );
         Tcl_ListObjAppendElement(0, pList, Tcl_NewStringObj("b", 1));
         pObj = Tcl_NewByteArrayObj(
-            sqlite3_value_blob(pVal),
+            static_cast<const unsigned char*>(sqlite3_value_blob(pVal)),
             sqlite3_value_bytes(pVal)
         );
         break;
@@ -548,7 +548,7 @@ static Tcl_Obj *testIterData(sqlite3_changeset_iter *pIter){
   Tcl_ListObjAppendElement(0, pVar, Tcl_NewStringObj(zTab, -1));
   Tcl_ListObjAppendElement(0, pVar, Tcl_NewBooleanObj(bIndirect));
 
-  zPK = ckalloc(nCol+1);
+  zPK = static_cast<char*>(ckalloc(nCol+1));
   memset(zPK, 0, nCol+1);
   sqlite3changeset_pk(pIter, &abPK, &nCol2);
   assert( nCol==nCol2 );
@@ -709,7 +709,7 @@ static int test_conflict_handler(
       int i;
       Tcl_Obj *pConflict = Tcl_NewObj();
       for(i=0; i<nCol; i++){
-        int rc;
+        int rc [[maybe_unused]];
         sqlite3_value *pVal;
         rc = sqlite3changeset_conflict(pIter, i, &pVal);
         assert( rc==SQLITE_OK );
@@ -725,42 +725,42 @@ static int test_conflict_handler(
      || eConf==SQLITE_CHANGESET_NOTFOUND 
     ){
       sqlite3_value *pVal;
-      int rc = sqlite3changeset_conflict(pIter, 0, &pVal);
+      int rc [[maybe_unused]] = sqlite3changeset_conflict(pIter, 0, &pVal);
       assert( rc==SQLITE_MISUSE );
     }else{
       sqlite3_value *pVal;
-      int rc = sqlite3changeset_conflict(pIter, -1, &pVal);
+      int rc [[maybe_unused]] = sqlite3changeset_conflict(pIter, -1, &pVal);
       assert( rc==SQLITE_RANGE );
       rc = sqlite3changeset_conflict(pIter, nCol, &pVal);
       assert( rc==SQLITE_RANGE );
     }
     if( op==SQLITE_DELETE ){
       sqlite3_value *pVal;
-      int rc = sqlite3changeset_new(pIter, 0, &pVal);
+      int rc [[maybe_unused]] = sqlite3changeset_new(pIter, 0, &pVal);
       assert( rc==SQLITE_MISUSE );
     }else{
       sqlite3_value *pVal;
-      int rc = sqlite3changeset_new(pIter, -1, &pVal);
+      int rc [[maybe_unused]] = sqlite3changeset_new(pIter, -1, &pVal);
       assert( rc==SQLITE_RANGE );
       rc = sqlite3changeset_new(pIter, nCol, &pVal);
       assert( rc==SQLITE_RANGE );
     }
     if( op==SQLITE_INSERT ){
       sqlite3_value *pVal;
-      int rc = sqlite3changeset_old(pIter, 0, &pVal);
+      int rc [[maybe_unused]] = sqlite3changeset_old(pIter, 0, &pVal);
       assert( rc==SQLITE_MISUSE );
     }else{
       sqlite3_value *pVal;
-      int rc = sqlite3changeset_old(pIter, -1, &pVal);
+      int rc [[maybe_unused]] = sqlite3changeset_old(pIter, -1, &pVal);
       assert( rc==SQLITE_RANGE );
       rc = sqlite3changeset_old(pIter, nCol, &pVal);
       assert( rc==SQLITE_RANGE );
     }
     if( eConf!=SQLITE_CHANGESET_FOREIGN_KEY ){
-      /* eConf!=FOREIGN_KEY is always true at this point. The condition is 
+      /* eConf!=FOREIGN_KEY is always true at this point. The condition is
       ** just there to make it clearer what is being tested.  */
       int nDummy;
-      int rc = sqlite3changeset_fk_conflicts(pIter, &nDummy);
+      int rc [[maybe_unused]] = sqlite3changeset_fk_conflicts(pIter, &nDummy);
       assert( rc==SQLITE_MISUSE );
     }
     /* End of testing block
@@ -995,7 +995,7 @@ static int SQLITE_TCLAPI testSqlite3changesetApply(
   }else{
     Tcl_ResetResult(interp);
     if( (iVersion==2 || iVersion==3) && pRebase ){
-      Tcl_SetObjResult(interp, Tcl_NewByteArrayObj(pRebase, nRebase));
+      Tcl_SetObjResult(interp, Tcl_NewByteArrayObj(static_cast<const unsigned char*>(pRebase), nRebase));
     }
   }
   sqlite3_free(pRebase);
@@ -1254,7 +1254,7 @@ static int SQLITE_TCLAPI test_sqlite3session_foreach(
     }
 
     if( isCheckNext ){
-      int rc2 = sqlite3changeset_next(pIter);
+      int rc2 [[maybe_unused]] = sqlite3changeset_next(pIter);
       rc = sqlite3changeset_finalize(pIter);
       assert( (rc2==SQLITE_DONE && rc==SQLITE_OK) || rc2==rc );
     }else{
@@ -1345,7 +1345,7 @@ static int SQLITE_TCLAPI test_rebaser_cmd(
 
       if( rc==SQLITE_OK ){
         assert_changeset_is_ok(sOut.n, sOut.p);
-        Tcl_SetObjResult(interp, Tcl_NewByteArrayObj(sOut.p, sOut.n));
+        Tcl_SetObjResult(interp, Tcl_NewByteArrayObj(static_cast<const unsigned char*>(sOut.p), sOut.n));
       }
       sqlite3_free(sOut.p);
       break;

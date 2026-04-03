@@ -342,7 +342,7 @@ void sqlite3Fts5BufferAppendString(int *, Fts5Buffer*, const char*);
 void sqlite3Fts5BufferFree(Fts5Buffer*);
 void sqlite3Fts5BufferZero(Fts5Buffer*);
 void sqlite3Fts5BufferSet(int*, Fts5Buffer*, int, const u8*);
-void sqlite3Fts5BufferAppendPrintf(int *, Fts5Buffer*, char *zFmt, ...);
+void sqlite3Fts5BufferAppendPrintf(int *, Fts5Buffer*, const char *zFmt, ...);
 
 char *sqlite3Fts5Mprintf(int *pRc, const char *zFmt, ...);
 

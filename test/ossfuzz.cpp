@@ -8,7 +8,7 @@
 #endif
 #include <stdio.h>
 #include <string.h>
-#include "sqlite3.h"
+#include "sqlite3.hpp"
 
 #if defined(_MSC_VER)
 typedef unsigned char uint8_t;

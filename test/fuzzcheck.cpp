@@ -84,8 +84,8 @@
 #include <stdarg.h>
 #include <ctype.h>
 #include <assert.h>
-#include "sqlite3.h"
-#include "sqlite3recover.h"
+#include "sqlite3.hpp"
+#include "sqlite3recover.hpp"
 #define ISSPACE(X) isspace((unsigned char)(X))
 #define ISDIGIT(X) isdigit((unsigned char)(X))
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
@@ -169,18 +169,18 @@ static struct GlobalVars {
 /*
 ** Include various extensions.
 */
-extern int sqlite3_vt02_init(sqlite3*,char**,void*);
-extern int sqlite3_randomjson_init(sqlite3*,char**,void*);
-extern int sqlite3_series_init(sqlite3*,char**,void*);
-extern int sqlite3_base64_init(sqlite3*,char**,void*);
-extern int sqlite3_base85_init(sqlite3*,char**,void*);
-extern int sqlite3_completion_init(sqlite3*,char**,void*);
-extern int sqlite3_decimal_init(sqlite3*,char**,void*);
-extern int sqlite3_ieee_init(sqlite3*,char**,void*);
-extern int sqlite3_regexp_init(sqlite3*,char**,void*);
-extern int sqlite3_shathree_init(sqlite3*,char**,void*);
-extern int sqlite3_sha_init(sqlite3*,char**,void*);
-extern int sqlite3_stmtrand_init(sqlite3*,char**,void*);
+extern int sqlite3_vt02_init(sqlite3*,char**,const sqlite3_api_routines*);
+extern int sqlite3_randomjson_init(sqlite3*,char**,const sqlite3_api_routines*);
+extern int sqlite3_series_init(sqlite3*,char**,const sqlite3_api_routines*);
+extern int sqlite3_base64_init(sqlite3*,char**,const sqlite3_api_routines*);
+extern int sqlite3_base85_init(sqlite3*,char**,const sqlite3_api_routines*);
+extern int sqlite3_completion_init(sqlite3*,char**,const sqlite3_api_routines*);
+extern int sqlite3_decimal_init(sqlite3*,char**,const sqlite3_api_routines*);
+extern int sqlite3_ieee_init(sqlite3*,char**,const sqlite3_api_routines*);
+extern int sqlite3_regexp_init(sqlite3*,char**,const sqlite3_api_routines*);
+extern int sqlite3_shathree_init(sqlite3*,char**,const sqlite3_api_routines*);
+extern int sqlite3_sha_init(sqlite3*,char**,const sqlite3_api_routines*);
+extern int sqlite3_stmtrand_init(sqlite3*,char**,const sqlite3_api_routines*);
 
 /*
 ** Print an error message and quit.
@@ -316,14 +316,14 @@ static VFile *createVFile(const char *zName, int sz, unsigned char *pData){
   pNew = &g.aFile[i];
   if( zName ){
     int nName = (int)strlen(zName)+1;
-    pNew->zFilename = safe_realloc(0, nName);
+    pNew->zFilename = static_cast<char *>(safe_realloc(0, nName));
     memcpy(pNew->zFilename, zName, nName);
   }else{
     pNew->zFilename = 0;
   }
   pNew->nRef = 0;
   pNew->sz = sz;
-  pNew->a = safe_realloc(0, sz);
+  pNew->a = static_cast<unsigned char *>(safe_realloc(0, sz));
   if( sz>0 ) memcpy(pNew->a, pData, sz);
   return pNew;
 }
@@ -433,12 +433,12 @@ static char *readFile(const char *zFilename, long *sz){
   fseek(in, 0, SEEK_END);
   *sz = nIn = ftell(in);
   rewind(in);
-  pBuf = sqlite3_malloc64( nIn+1 );
+  pBuf = static_cast<unsigned char *>(sqlite3_malloc64( nIn+1 ));
   if( pBuf && 1==fread(pBuf, nIn, 1, in) ){
     pBuf[nIn] = 0;
     fclose(in);
     return (char*)pBuf;
-  }  
+  }
   sqlite3_free(pBuf);
   *sz = 0;
   fclose(in);
@@ -490,7 +490,7 @@ static void readtextfileFunc(
   fseek(in, 0, SEEK_END);
   nIn = ftell(in);
   rewind(in);
-  pBuf = sqlite3_malloc64( nIn+1 );
+  pBuf = static_cast<char *>(sqlite3_malloc64( nIn+1 ));
   if( pBuf && 1==fread(pBuf, nIn, 1, in) ){
     pBuf[nIn] = 0;
     sqlite3_result_text(context, pBuf, -1, sqlite3_free);
@@ -568,7 +568,7 @@ static void blobListLoadFromDb(
   p = head;
   while( SQLITE_ROW==sqlite3_step(pStmt) ){
     int sz = sqlite3_column_bytes(pStmt, 1);
-    Blob *pNew = safe_realloc(0, SZ_BLOB(sz+1));
+    Blob *pNew = static_cast<Blob *>(safe_realloc(0, SZ_BLOB(sz+1)));
     pNew->id = sqlite3_column_int(pStmt, 0);
     pNew->sz = sz;
     pNew->seq = n++;
@@ -785,7 +785,7 @@ static int decodeDatabase(
   unsigned char b = 0;
   if( nIn<4 ) return -1;
   n = (unsigned int)nIn;
-  a = sqlite3_malloc64( nAlloc );
+  a = static_cast<unsigned char *>(sqlite3_malloc64( nAlloc ));
   if( a==0 ){
     fprintf(stderr, "Out of memory!\n");
     exit(1);
@@ -821,7 +821,7 @@ static int decodeDatabase(
             }
             newSize = MX_FILE_SZ;
           }
-          aNew = sqlite3_realloc64( a, newSize );
+          aNew = static_cast<unsigned char *>(sqlite3_realloc64( a, newSize ));
           if( aNew==0 ){
             sqlite3_free(a);
             return -1;
@@ -984,7 +984,7 @@ static int block_troublesome_sql(
       };
       int first, last;
       first = 0;
-      last = sizeof(azBadFuncs)/sizeof(azBadFuncs[0]) - 1;
+      last = (int)(sizeof(azBadFuncs)/sizeof(azBadFuncs[0])) - 1;
       do{
         int mid = (first+last)/2;
         int c = sqlite3_stricmp(azBadFuncs[mid], zArg2);
@@ -1023,7 +1023,7 @@ extern int fuzz_invariant(
 );
 
 /* Implementation of sqlite_dbdata and sqlite_dbptr */
-extern int sqlite3_dbdata_init(sqlite3*,const char**,void*);
+extern int sqlite3_dbdata_init(sqlite3*,char**,const sqlite3_api_routines*);
 
 
 /*
@@ -1084,7 +1084,7 @@ static void bindDebugParameters(sqlite3_stmt *pStmt){
     if( zVar==0 ) continue;
 #ifdef SQLITE_ENABLE_CARRAY
     if( strcmp(zVar,"$carray_clr")==0 ){
-      static char *azColorNames[] = {
+      static const char *azColorNames[] = {
         "azure", "black", "blue",   "brown", "cyan",   "fuchsia", "gold",
         "gray",  "green", "indigo", "khaki", "lime",   "magenta", "maroon",
         "navy",  "olive", "orange", "pink",  "purple", "red",     "silver",
@@ -1105,7 +1105,7 @@ static void bindDebugParameters(sqlite3_stmt *pStmt){
     }else
     if( strncmp(zVar, "$text_", 6)==0 ){
       size_t szVar = strlen(zVar);
-      char *zBuf = sqlite3_malloc64( szVar-5 );
+      char *zBuf = static_cast<char *>(sqlite3_malloc64( szVar-5 ));
       if( zBuf ){
         memcpy(zBuf, &zVar[6], szVar-5);
         sqlite3_bind_text64(pStmt, i, zBuf, szVar-6, sqlite3_free, SQLITE_UTF8);
@@ -1232,7 +1232,7 @@ static int runDbSql(
 static const struct {
   unsigned int mask;
   int iSetting;
-  char *zName;
+  const char *zName;
 } aDbConfigSettings[] = {
   {  0x0001, SQLITE_DBCONFIG_ENABLE_FKEY,        "enable_fkey"        },
   {  0x0002, SQLITE_DBCONFIG_ENABLE_TRIGGER,     "enable_trigger"     },
@@ -1326,7 +1326,7 @@ int runCombinedDbSqlInput(
     return 1;
   }
   sqlite3_test_control(SQLITE_TESTCTRL_OPTIMIZATIONS, cx.db, dbOpt);
-  for(i=0; i<sizeof(aDbConfigSettings)/sizeof(aDbConfigSettings[0]); i++){
+  for(i=0; i<(int)(sizeof(aDbConfigSettings)/sizeof(aDbConfigSettings[0])); i++){
     if( dbFlags & aDbConfigSettings[i].mask ){
       toggleDbConfig(cx.db, aDbConfigSettings[i].iSetting);
     }
@@ -1421,7 +1421,7 @@ int runCombinedDbSqlInput(
     recoverDatabase(cx.db);
   }
 
-  zSql = sqlite3_malloc( nSql + 1 );
+  zSql = static_cast<char *>(sqlite3_malloc( nSql + 1 ));
   if( zSql==0 ){
     fprintf(stderr, "Out of memory!\n");
   }else{
@@ -1546,7 +1546,7 @@ static int inmemWrite(
     if( iOfst+iAmt >= MX_FILE_SZ ){
       return SQLITE_FULL;
     }
-    pVFile->a = safe_realloc(pVFile->a, (int)(iOfst+iAmt));
+    pVFile->a = static_cast<unsigned char *>(safe_realloc(pVFile->a, (int)(iOfst+iAmt)));
     if( iOfst > pVFile->sz ){
       memset(pVFile->a + pVFile->sz, 0, (int)(iOfst - pVFile->sz));
     }
@@ -1689,7 +1689,7 @@ static int inmemFullPathname(
 */
 static int inmemRandomness(sqlite3_vfs *NotUsed, int nBuf, char *zBuf){
   memset(zBuf, 0, nBuf);
-  memcpy(zBuf, &g.uRandom, nBuf<sizeof(g.uRandom) ? nBuf : sizeof(g.uRandom));
+  memcpy(zBuf, &g.uRandom, nBuf<(int)sizeof(g.uRandom) ? nBuf : (int)sizeof(g.uRandom));
   return nBuf;
 }
 
@@ -1700,7 +1700,7 @@ static void inmemVfsRegister(int makeDefault){
   static sqlite3_vfs inmemVfs;
   sqlite3_vfs *pDefault = sqlite3_vfs_find(0);
   inmemVfs.iVersion = 3;
-  inmemVfs.szOsFile = sizeof(VHandle);
+  inmemVfs.szOsFile = (int)sizeof(VHandle);
   inmemVfs.mxPathname = 200;
   inmemVfs.zName = "inmem";
   inmemVfs.xOpen = inmemOpen;
@@ -1839,7 +1839,7 @@ static int hexDigitValue(char c){
 */
 static int integerValue(const char *zArg){
   sqlite3_int64 v = 0;
-  static const struct { char *zSuffix; int iMult; } aMult[] = {
+  static const struct { const char *zSuffix; int iMult; } aMult[] = {
     { "KiB", 1024 },
     { "MiB", 1024*1024 },
     { "GiB", 1024*1024*1024 },
@@ -1871,7 +1871,7 @@ static int integerValue(const char *zArg){
       zArg++;
     }
   }
-  for(i=0; i<sizeof(aMult)/sizeof(aMult[0]); i++){
+  for(i=0; i<(int)(sizeof(aMult)/sizeof(aMult[0])); i++){
     if( sqlite3_stricmp(aMult[i].zSuffix, zArg)==0 ){
       v *= aMult[i].iMult;
       break;
@@ -1947,7 +1947,7 @@ int main(int argc, char **argv){
   int quietFlag = 0;           /* True if --quiet or -q */
   int briefFlag = 0;           /* Output summary report at the end */
   int verboseFlag = 0;         /* True if --verbose or -v */
-  char *zInsSql = 0;           /* SQL statement for --load-db or --load-sql */
+  const char *zInsSql = 0;     /* SQL statement for --load-db or --load-sql */
   int iFirstInsArg = 0;        /* First argv[] for --load-db or --load-sql */
   sqlite3 *db = 0;             /* The open database connection */
   sqlite3_stmt *pStmt;         /* A prepared statement */
@@ -1975,7 +1975,7 @@ int main(int argc, char **argv){
   int iSrcDb;                  /* Loop over all source databases */
   int nTest = 0;               /* Total number of tests performed */
   int nSliceSkip = 0;          /* Skipped due to --slice */
-  char *zDbName = "";          /* Appreviated name of a source database */
+  const char *zDbName = "";    /* Appreviated name of a source database */
   const char *zFailCode = 0;   /* Value of the TEST_FAILURE env variable */
   int cellSzCkFlag = 0;        /* --cell-size-check */
   int sqlFuzz = 0;             /* True for SQL fuzz. False for DB fuzz */
@@ -2231,7 +2231,7 @@ int main(int argc, char **argv){
       }
     }else{
       nSrcDb++;
-      azSrcDb = safe_realloc(azSrcDb, nSrcDb*sizeof(azSrcDb[0]));
+      azSrcDb = static_cast<char **>(safe_realloc(azSrcDb, nSrcDb*(int)sizeof(azSrcDb[0])));
       azSrcDb[nSrcDb-1] = argv[i];
     }
   }
@@ -2465,7 +2465,7 @@ int main(int argc, char **argv){
     blobListLoadFromDb(db, "SELECT dbid, dbcontent FROM db", firstDbid,
                        lastDbid, &g.nDb, &g.pFirstDb);
     if( g.nDb==0 ){
-      g.pFirstDb = safe_realloc(0, sizeof(Blob));
+      g.pFirstDb = static_cast<Blob *>(safe_realloc(0, (int)sizeof(Blob)));
       memset(g.pFirstDb, 0, sizeof(Blob));
       g.pFirstDb->id = 1;
       g.pFirstDb->seq = 0;

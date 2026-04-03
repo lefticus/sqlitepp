@@ -265,7 +265,7 @@ static void pthreadMutexEnter(sqlite3_mutex *p){
   {
     pthread_t self = pthread_self();
     if( p->nRef>0 && pthread_equal(p->owner, self) ){
-      p->nRef++;
+      p->nRef = p->nRef + 1;
     }else{
       pthread_mutex_lock(&p->mutex);
       assert( p->nRef==0 );
@@ -280,7 +280,7 @@ static void pthreadMutexEnter(sqlite3_mutex *p){
 #if SQLITE_MUTEX_NREF
   assert( p->nRef>0 || p->owner==0 );
   p->owner = pthread_self();
-  p->nRef++;
+  p->nRef = p->nRef + 1;
 #endif
 #endif
 
@@ -308,7 +308,7 @@ static int pthreadMutexTry(sqlite3_mutex *p){
   {
     pthread_t self = pthread_self();
     if( p->nRef>0 && pthread_equal(p->owner, self) ){
-      p->nRef++;
+      p->nRef = p->nRef + 1;
       rc = SQLITE_OK;
     }else if( pthread_mutex_trylock(&p->mutex)==0 ){
       assert( p->nRef==0 );
@@ -325,7 +325,7 @@ static int pthreadMutexTry(sqlite3_mutex *p){
   if( pthread_mutex_trylock(&p->mutex)==0 ){
 #if SQLITE_MUTEX_NREF
     p->owner = pthread_self();
-    p->nRef++;
+    p->nRef = p->nRef + 1;
 #endif
     rc = SQLITE_OK;
   }else{
@@ -350,7 +350,7 @@ static int pthreadMutexTry(sqlite3_mutex *p){
 static void pthreadMutexLeave(sqlite3_mutex *p){
   assert( pthreadMutexHeld(p) );
 #if SQLITE_MUTEX_NREF
-  p->nRef--;
+  p->nRef = p->nRef - 1;
   if( p->nRef==0 ) p->owner = 0;
 #endif
   assert( p->nRef==0 || p->id==SQLITE_MUTEX_RECURSIVE );

@@ -100,7 +100,7 @@ void sqlite3Fts5BufferAppendString(
 void sqlite3Fts5BufferAppendPrintf(
   int *pRc,
   Fts5Buffer *pBuf, 
-  char *zFmt, ...
+  const char *zFmt, ...
 ){
   if( *pRc==SQLITE_OK ){
     char *zTmp;

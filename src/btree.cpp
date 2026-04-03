@@ -8381,7 +8381,7 @@ static int balance_nonroot(
      + nMaxCells*sizeof(u16)                       /* b.szCell */
      + pBt->pageSize;                              /* aSpace1 */
 
-  assert( szScratch<=7*(int)pBt->pageSize );
+  assert( szScratch<=(u64)7*pBt->pageSize );
   b.apCell = static_cast<u8**>(sqlite3StackAllocRaw(0, szScratch ));
   if( b.apCell==0 ){
     rc = SQLITE_NOMEM_BKPT;

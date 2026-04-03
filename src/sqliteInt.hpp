@@ -5800,7 +5800,7 @@ void sqlite3Put4byte(u8*, u32);
 #endif
 
 #ifdef SQLITE_DEBUG
-  void sqlite3ParserTrace(FILE*, char *);
+  void sqlite3ParserTrace(FILE*, const char *);
 #endif
 #if defined(YYCOVERAGE)
   int sqlite3ParserCoverage(FILE*);
