@@ -216,13 +216,11 @@ void sqlite3BtreeLeaveAll(sqlite3 *db){
 ** This routine is used inside assert() statements only.
 */
 int sqlite3BtreeHoldsAllMutexes(sqlite3 *db){
-  int i;
   if( !sqlite3_mutex_held(db->mutex) ){
     return 0;
   }
-  for(i=0; i<db->nDb; i++){
-    Btree *p;
-    p = db->aDb[i].pBt;
+  for(int i=0; i<db->nDb; i++){
+    Btree *const p = db->aDb[i].pBt;
     if( p && p->sharable &&
          (p->wantToLock==0 || !sqlite3_mutex_held(p->pBt->mutex)) ){
       return 0;
@@ -245,14 +243,13 @@ int sqlite3BtreeHoldsAllMutexes(sqlite3 *db){
 ** db using sqlite3SchemaToIndex().
 */
 int sqlite3SchemaMutexHeld(sqlite3 *db, int iDb, Schema *pSchema){
-  Btree *p;
   assert( db!=0 );
   if( db->pVfs==0 && db->nDb==0 ) return 1;
   if( pSchema ) iDb = sqlite3SchemaToIndex(db, pSchema);
   assert( iDb>=0 && iDb<db->nDb );
   if( !sqlite3_mutex_held(db->mutex) ) return 0;
   if( iDb==1 ) return 1;
-  p = db->aDb[iDb].pBt;
+  Btree *const p = db->aDb[iDb].pBt;
   assert( p!=0 );
   return p->sharable==0 || p->locked==1;
 }
@@ -273,8 +270,7 @@ void sqlite3BtreeEnter(Btree *p){
   p->pBt->db = p->db;
 }
 void sqlite3BtreeEnterAll(sqlite3 *db){
-  int i;
-  for(i=0; i<db->nDb; i++){
+  for(int i=0; i<db->nDb; i++){
     Btree *p = db->aDb[i].pBt;
     if( p ){
       p->pBt->db = p->db;

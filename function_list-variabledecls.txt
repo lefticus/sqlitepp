@@ -87,11 +87,11 @@
 [x] src/btmutex.cpp::btreeEnterAll
 [x] src/btmutex.cpp::sqlite3BtreeEnterAll
 [x] src/btmutex.cpp::btreeLeaveAll
-[ ] src/btmutex.cpp::sqlite3BtreeLeaveAll
-[ ] src/btmutex.cpp::sqlite3BtreeHoldsAllMutexes
-[ ] src/btmutex.cpp::sqlite3SchemaMutexHeld
-[ ] src/btmutex.cpp::sqlite3BtreeEnter
-[ ] src/btmutex.cpp::sqlite3BtreeEnterAll
+[x] src/btmutex.cpp::sqlite3BtreeLeaveAll
+[x] src/btmutex.cpp::sqlite3BtreeHoldsAllMutexes
+[x] src/btmutex.cpp::sqlite3SchemaMutexHeld
+[x] src/btmutex.cpp::sqlite3BtreeEnter
+[x] src/btmutex.cpp::sqlite3BtreeEnterAll
 [ ] src/btmutex.cpp::sqlite3BtreeEnterCursor
 [ ] src/btmutex.cpp::sqlite3BtreeLeaveCursor
 [ ] src/btree.cpp::sqlite3_enable_shared_cache
