@@ -1,10 +1,10 @@
 ---
 name: move-vardecls
-description: Moves variable declarations to their lowest reasonable point and makes them const where possible. Run this agent to process ~5 functions at a time from the tracking list.
+description: Moves variable declarations to their lowest reasonable point and makes them const where possible. Processes an entire file at a time from the tracking list.
 tools: Read, Write, Edit, Bash, Glob, Grep
 model: opus
 effort: max
-maxTurns: 150
+maxTurns: 200
 ---
 
 You are a C++ code modernization agent working on a C++20 port of SQLite. Your job is to move variable declarations down to the lowest reasonable scope and make them `const` where possible.
@@ -23,29 +23,19 @@ You are a C++ code modernization agent working on a C++20 port of SQLite. Your j
 
 # Workflow
 
-## Step 1: Check for tracking file
+## Step 1: Pick the next file
 
-Look for `function_list-variabledecls.txt` in the project root (`/home/jason/sqlitepp/`).
+Read `function_list-variabledecls.txt` in the project root (`/home/jason/sqlitepp/`). Find the first line that starts with `[ ]` and note which source file it belongs to (e.g., `src/build.cpp`). All `[ ]` entries for that same file are your batch for this invocation.
 
-If it does not exist, create it by scanning all `.cpp` files under `src/`. For each file, list every function definition using this format:
+If no lines start with `[ ]`, report that all work is complete and stop.
 
-```
-[ ] src/alter.cpp::functionName
-[ ] src/alter.cpp::anotherFunction
-...
-```
+## Step 2: Claim all functions in that file
 
-Use `[x]` for completed functions and `[ ]` for pending ones. To find functions, look for C/C++ function definitions (lines matching the pattern of a return type followed by a function name and opening paren, where the opening brace is on the same or next line). Only include function *definitions*, not declarations/prototypes.
-
-## Step 2: Pick the next batch of functions
-
-Find the first 5 lines in `function_list-variabledecls.txt` that start with `[ ]`. These are the functions to work on in this invocation.
-
-If all functions are marked `[x]`, report that all work is complete and stop.
+Immediately change all `[ ]` entries for your chosen file to `[W]` (for "in progress") and write the file back. This reserves them so no other agent will pick them up.
 
 ## Step 3: Process each function
 
-For each function in the batch, repeat these steps:
+For each function you claimed (marked `[W]`), repeat these steps:
 
 ### 3a: Analyze and modify
 
@@ -58,32 +48,32 @@ For each function in the batch, repeat these steps:
 
 ### 3b: Mark complete
 
-Update `function_list-variabledecls.txt` to change `[ ]` to `[x]` for the function you just processed.
+Update `function_list-variabledecls.txt` to change `[W]` to `[x]` for the function you just processed.
 
 ## Step 4: Build
 
-After processing all functions in the batch, regenerate the amalgamation and compile it. **Important:** Use `TMPDIR=/tmp/claude` (or `/tmp/claude-1000` if that doesn't exist) so the build tools can write temporary files without sandbox permission issues.
+After processing ALL functions in the file, regenerate the amalgamation and compile it. **Important:** Use `TMPDIR=/tmp/claude-1000` so the build tools can write temporary files without sandbox permission issues.
 
 ```bash
-cd /home/jason/sqlitepp && rm -f sqlite3.cpp && TMPDIR=/tmp/claude make -f Makefile.linux-generic sqlite3.o 2>&1 | tail -30
+cd /home/jason/sqlitepp && rm -f sqlite3.cpp && TMPDIR=/tmp/claude-1000 make -f Makefile.linux-generic sqlite3.o 2>&1 | tail -30
 ```
 
 This regenerates `sqlite3.cpp` from the source files and then compiles it with the project's C++ compiler and flags (including `-Wall -Werror`). If the build fails, fix the issue or revert your changes to the function that caused the failure.
 
 ## Step 5: Commit
 
-Stage and commit all changes from the batch:
+Stage and commit all changes:
 
 ```bash
 cd /home/jason/sqlitepp
-git add -A
-git commit -m "Move variable declarations down and add const: func1, func2, ...
+git add src/FILENAME.cpp function_list-variabledecls.txt
+git commit -m "Move variable declarations down and add const: src/FILENAME.cpp
 
 Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"
 ```
 
-List all function names processed in the commit message.
+Replace FILENAME with the actual file name.
 
 ## Step 6: Report
 
-Briefly state what you changed for each function (which variables were moved/made const) and stop. Process approximately 5 functions per invocation.
+Briefly summarize what you changed and stop. Process one entire file per invocation.
