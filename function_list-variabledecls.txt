@@ -252,11 +252,11 @@
 [x] src/btree.cpp::sqlite3BtreeGetFilename
 [x] src/btree.cpp::sqlite3BtreeGetJournalname
 [x] src/btree.cpp::sqlite3BtreeTxnState
-[ ] src/btree.cpp::sqlite3BtreeCheckpoint
-[ ] src/btree.cpp::sqlite3BtreeIsInBackup
-[ ] src/btree.cpp::sqlite3BtreeSchema
-[ ] src/btree.cpp::sqlite3BtreeSchemaLocked
-[ ] src/btree.cpp::sqlite3BtreeLockTable
+[x] src/btree.cpp::sqlite3BtreeCheckpoint
+[x] src/btree.cpp::sqlite3BtreeIsInBackup
+[x] src/btree.cpp::sqlite3BtreeSchema
+[x] src/btree.cpp::sqlite3BtreeSchemaLocked
+[x] src/btree.cpp::sqlite3BtreeLockTable
 [ ] src/btree.cpp::sqlite3BtreePutData
 [ ] src/btree.cpp::sqlite3BtreeIncrblobCursor
 [ ] src/btree.cpp::sqlite3BtreeSetVersion

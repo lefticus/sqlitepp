@@ -11207,7 +11207,7 @@ int sqlite3BtreeIsInBackup(Btree *p){
 ** on the memory, the btree layer does that.
 */
 void *sqlite3BtreeSchema(Btree *p, int nBytes, void(*xFree)(void *)){
-  BtShared *pBt = p->pBt;
+  BtShared *const pBt = p->pBt;
   assert( nBytes==0 || nBytes==sizeof(Schema) );
   sqlite3BtreeEnter(p);
   if( !pBt->pSchema && nBytes ){
@@ -11224,11 +11224,10 @@ void *sqlite3BtreeSchema(Btree *p, int nBytes, void(*xFree)(void *)){
 ** sqlite_schema table. Otherwise SQLITE_OK.
 */
 int sqlite3BtreeSchemaLocked(Btree *p){
-  int rc;
   UNUSED_PARAMETER(p);  /* only used in DEBUG builds */
   assert( sqlite3_mutex_held(p->db->mutex) );
   sqlite3BtreeEnter(p);
-  rc = querySharedCacheTableLock(p, SCHEMA_ROOT, READ_LOCK);
+  const int rc = querySharedCacheTableLock(p, SCHEMA_ROOT, READ_LOCK);
   assert( rc==SQLITE_OK || rc==SQLITE_LOCKED_SHAREDCACHE );
   sqlite3BtreeLeave(p);
   return rc;
@@ -11245,7 +11244,7 @@ int sqlite3BtreeLockTable(Btree *p, int iTab, u8 isWriteLock){
   int rc = SQLITE_OK;
   assert( p->inTrans!=TRANS_NONE );
   if( p->sharable ){
-    u8 lockType = READ_LOCK + isWriteLock;
+    const u8 lockType = READ_LOCK + isWriteLock;
     assert( READ_LOCK+1==WRITE_LOCK );
     assert( isWriteLock==0 || isWriteLock==1 );
 
