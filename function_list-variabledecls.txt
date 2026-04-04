@@ -871,27 +871,27 @@
 [x] src/mem2.cpp::sqlite3MemdebugSync
 [x] src/mem2.cpp::sqlite3MemdebugDump
 [x] src/mem2.cpp::sqlite3MemdebugMallocCount
-[ ] src/mem3.cpp::memsys3UnlinkFromList
-[ ] src/mem3.cpp::memsys3Unlink
-[ ] src/mem3.cpp::memsys3LinkIntoList
-[ ] src/mem3.cpp::memsys3Link
-[ ] src/mem3.cpp::memsys3Enter
-[ ] src/mem3.cpp::memsys3Leave
-[ ] src/mem3.cpp::memsys3OutOfMemory
-[ ] src/mem3.cpp::memsys3Checkout
-[ ] src/mem3.cpp::memsys3FromKeyBlk
-[ ] src/mem3.cpp::memsys3Merge
-[ ] src/mem3.cpp::memsys3MallocUnsafe
-[ ] src/mem3.cpp::memsys3FreeUnsafe
-[ ] src/mem3.cpp::memsys3Size
-[ ] src/mem3.cpp::memsys3Roundup
-[ ] src/mem3.cpp::memsys3Malloc
-[ ] src/mem3.cpp::memsys3Free
-[ ] src/mem3.cpp::memsys3Realloc
-[ ] src/mem3.cpp::memsys3Init
-[ ] src/mem3.cpp::memsys3Shutdown
-[ ] src/mem3.cpp::sqlite3Memsys3Dump
-[ ] src/mem3.cpp::sqlite3MemGetMemsys3
+[x] src/mem3.cpp::memsys3UnlinkFromList
+[x] src/mem3.cpp::memsys3Unlink
+[x] src/mem3.cpp::memsys3LinkIntoList
+[x] src/mem3.cpp::memsys3Link
+[x] src/mem3.cpp::memsys3Enter
+[x] src/mem3.cpp::memsys3Leave
+[x] src/mem3.cpp::memsys3OutOfMemory
+[x] src/mem3.cpp::memsys3Checkout
+[x] src/mem3.cpp::memsys3FromKeyBlk
+[x] src/mem3.cpp::memsys3Merge
+[x] src/mem3.cpp::memsys3MallocUnsafe
+[x] src/mem3.cpp::memsys3FreeUnsafe
+[x] src/mem3.cpp::memsys3Size
+[x] src/mem3.cpp::memsys3Roundup
+[x] src/mem3.cpp::memsys3Malloc
+[x] src/mem3.cpp::memsys3Free
+[x] src/mem3.cpp::memsys3Realloc
+[x] src/mem3.cpp::memsys3Init
+[x] src/mem3.cpp::memsys3Shutdown
+[x] src/mem3.cpp::sqlite3Memsys3Dump
+[x] src/mem3.cpp::sqlite3MemGetMemsys3
 [ ] src/mem5.cpp::memsys5Unlink
 [ ] src/mem5.cpp::memsys5Link
 [ ] src/mem5.cpp::memsys5Enter
