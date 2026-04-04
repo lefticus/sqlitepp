@@ -297,11 +297,11 @@
 [x] src/build.cpp::sqlite3TableColumnToStorage
 [x] src/build.cpp::sqlite3ForceNotReadOnly
 [x] src/build.cpp::sqlite3ColumnPropertiesFromName
-[ ] src/build.cpp::sqlite3DeleteReturning
-[ ] src/build.cpp::sqlite3AddReturning
-[ ] src/build.cpp::sqlite3AddColumn
-[ ] src/build.cpp::sqlite3AddNotNull
-[ ] src/build.cpp::sqlite3AffinityType
+[x] src/build.cpp::sqlite3DeleteReturning
+[x] src/build.cpp::sqlite3AddReturning
+[x] src/build.cpp::sqlite3AddColumn
+[x] src/build.cpp::sqlite3AddNotNull
+[x] src/build.cpp::sqlite3AffinityType
 [ ] src/build.cpp::sqlite3StringToId
 [ ] src/build.cpp::makeColumnPartOfPrimaryKey
 [ ] src/build.cpp::sqlite3AddCollateType

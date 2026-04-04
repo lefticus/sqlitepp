@@ -1391,8 +1391,7 @@ void sqlite3ColumnPropertiesFromName(Table *pTab, Column *pCol){
 */
 static void sqlite3DeleteReturning(sqlite3 *db, void *pArg){
   Returning *pRet = static_cast<Returning*>(pArg);
-  Hash *pHash;
-  pHash = &(db->aDb[1].pSchema->trigHash);
+  Hash *const pHash = &(db->aDb[1].pSchema->trigHash);
   sqlite3HashInsert(pHash, pRet->zName, 0);
   sqlite3ExprListDelete(db, pRet->pReturnEL);
   sqlite3DbFree(db, pRet);
@@ -1415,8 +1414,6 @@ static void sqlite3DeleteReturning(sqlite3 *db, void *pArg){
 ** type on the first call to sqlite3TriggersExist().
 */
 void sqlite3AddReturning(Parse *pParse, ExprList *pList){
-  Returning *pRet;
-  Hash *pHash;
   sqlite3 *db = pParse->db;
   if( pParse->pNewTrigger ){
     sqlite3ErrorMsg(pParse, "cannot use RETURNING in a trigger");
@@ -1424,7 +1421,7 @@ void sqlite3AddReturning(Parse *pParse, ExprList *pList){
     assert( pParse->bReturning==0 || pParse->ifNotExists );
   }
   pParse->bReturning = 1;
-  pRet = static_cast<Returning*>(sqlite3DbMallocZero(db, sizeof(*pRet)));
+  Returning *pRet = static_cast<Returning*>(sqlite3DbMallocZero(db, sizeof(*pRet)));
   if( pRet==0 ){
     sqlite3ExprListDelete(db, pList);
     return;
@@ -1448,7 +1445,7 @@ void sqlite3AddReturning(Parse *pParse, ExprList *pList){
   pRet->retTStep.op = TK_RETURNING;
   pRet->retTStep.pTrig = &pRet->retTrig;
   pRet->retTStep.pExprList = pList;
-  pHash = &(db->aDb[1].pSchema->trigHash);
+  Hash *const pHash = &(db->aDb[1].pSchema->trigHash);
   assert( sqlite3HashFind(pHash, pRet->zName)==0
           || pParse->nErr  || pParse->ifNotExists );
   if( sqlite3HashInsert(pHash, pRet->zName, &pRet->retTrig)
@@ -1466,18 +1463,13 @@ void sqlite3AddReturning(Parse *pParse, ExprList *pList){
 ** column.
 */
 void sqlite3AddColumn(Parse *pParse, Token sName, Token sType){
-  Table *p;
-  int i;
-  char *z;
-  char *zType;
-  Column *pCol;
   sqlite3 *db = pParse->db;
-  Column *aNew;
   u8 eType = COLTYPE_CUSTOM;
   u8 szEst = 1;
   char affinity = SQLITE_AFF_BLOB;
 
-  if( (p = pParse->pNewTable)==0 ) return;
+  Table *p = pParse->pNewTable;
+  if( p==0 ) return;
   if( p->nCol+1>db->aLimit[SQLITE_LIMIT_COLUMN] ){
     sqlite3ErrorMsg(pParse, "too many columns on %s", p->zName);
     return;
@@ -1506,7 +1498,7 @@ void sqlite3AddColumn(Parse *pParse, Token sName, Token sType){
   ** the column name, in order to save space. */
   if( sType.n>=3 ){
     sqlite3DequoteToken(&sType);
-    for(i=0; i<SQLITE_N_STDTYPE; i++){
+    for(int i=0; i<SQLITE_N_STDTYPE; i++){
        if( sType.n==sqlite3StdTypeLen[i]
         && sqlite3_strnicmp(sType.z, sqlite3StdType[i], sType.n)==0
        ){
@@ -1519,7 +1511,7 @@ void sqlite3AddColumn(Parse *pParse, Token sName, Token sType){
     }
   }
 
-  z = static_cast<char*>(sqlite3DbMallocRaw(db, (i64)sName.n + 1 + (i64)sType.n + (sType.n>0) ));
+  char *z = static_cast<char*>(sqlite3DbMallocRaw(db, (i64)sName.n + 1 + (i64)sType.n + (sType.n>0) ));
   if( z==0 ) return;
   if( IN_RENAME_OBJECT ) sqlite3RenameTokenMap(pParse, static_cast<const void*>(z), &sName);
   memcpy(z, sName.z, sName.n);
@@ -1530,13 +1522,13 @@ void sqlite3AddColumn(Parse *pParse, Token sName, Token sType){
     sqlite3DbFree(db, z);
     return;
   }
-  aNew = static_cast<Column*>(sqlite3DbRealloc(db,p->aCol,((i64)p->nCol+1)*sizeof(p->aCol[0])));
+  Column *aNew = static_cast<Column*>(sqlite3DbRealloc(db,p->aCol,((i64)p->nCol+1)*sizeof(p->aCol[0])));
   if( aNew==0 ){
     sqlite3DbFree(db, z);
     return;
   }
   p->aCol = aNew;
-  pCol = &p->aCol[p->nCol];
+  Column *pCol = &p->aCol[p->nCol];
   memset(pCol, 0, sizeof(p->aCol[0]));
   pCol->zCnName = z;
   pCol->hName = sqlite3StrIHash(z);
@@ -1556,7 +1548,7 @@ void sqlite3AddColumn(Parse *pParse, Token sName, Token sType){
     }
 #endif
   }else{
-    zType = z + sqlite3Strlen30(z) + 1;
+    char *zType = z + sqlite3Strlen30(z) + 1;
     memcpy(zType, sType.z, sType.n);
     zType[sType.n] = 0;
     sqlite3Dequote(zType);
@@ -1580,11 +1572,9 @@ void sqlite3AddColumn(Parse *pParse, Token sName, Token sType){
 ** the column currently under construction.
 */
 void sqlite3AddNotNull(Parse *pParse, int onError){
-  Table *p;
-  Column *pCol;
-  p = pParse->pNewTable;
+  Table *p = pParse->pNewTable;
   if( p==0 || NEVER(p->nCol<1) ) return;
-  pCol = &p->aCol[p->nCol-1];
+  Column *pCol = &p->aCol[p->nCol-1];
   pCol->notNull = (u8)onError;
   p->tabFlags |= TF_HasNotNull;
 
