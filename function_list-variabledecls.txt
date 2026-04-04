@@ -332,11 +332,11 @@
 [x] src/build.cpp::sqlite3ReadOnlyShadowTables
 [x] src/build.cpp::tableMayNotBeDropped
 [x] src/build.cpp::sqlite3DropTable
-[ ] src/build.cpp::sqlite3DeferForeignKey
-[ ] src/build.cpp::sqlite3RefillIndex
-[ ] src/build.cpp::sqlite3HasExplicitNulls
-[ ] src/build.cpp::sqlite3DefaultRowEst
-[ ] src/build.cpp::sqlite3DropIndex
+[x] src/build.cpp::sqlite3DeferForeignKey
+[x] src/build.cpp::sqlite3RefillIndex
+[x] src/build.cpp::sqlite3HasExplicitNulls
+[x] src/build.cpp::sqlite3DefaultRowEst
+[x] src/build.cpp::sqlite3DropIndex
 [ ] src/build.cpp::sqlite3IdListAppend
 [ ] src/build.cpp::sqlite3IdListDelete
 [ ] src/build.cpp::sqlite3IdListIndex

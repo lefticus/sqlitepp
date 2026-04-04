@@ -3704,19 +3704,11 @@ void sqlite3DeferForeignKey(Parse *pParse, int isDeferred){
 ** the root page number of the index is taken from pIndex->tnum.
 */
 static void sqlite3RefillIndex(Parse *pParse, Index *pIndex, int memRootPage){
-  Table *pTab = pIndex->pTable;  /* The table that is indexed */
-  int iTab = pParse->nTab++;     /* Btree cursor used for pTab */
-  int iIdx = pParse->nTab++;     /* Btree cursor used for pIndex */
-  int iSorter;                   /* Cursor opened by OpenSorter (if in use) */
-  int addr1;                     /* Address of top of loop */
-  int addr2;                     /* Address to jump to for next iteration */
-  Pgno tnum;                     /* Root page of index */
-  int iPartIdxLabel;             /* Jump to this label to skip a row */
-  Vdbe *v;                       /* Generate code into this virtual machine */
-  KeyInfo *pKey;                 /* KeyInfo for index */
-  int regRecord;                 /* Register holding assembled index record */
-  sqlite3 *db = pParse->db;      /* The database connection */
-  int iDb = sqlite3SchemaToIndex(db, pIndex->pSchema);
+  Table *const pTab = pIndex->pTable;  /* The table that is indexed */
+  const int iTab = pParse->nTab++;     /* Btree cursor used for pTab */
+  const int iIdx = pParse->nTab++;     /* Btree cursor used for pIndex */
+  sqlite3 *const db = pParse->db;      /* The database connection */
+  const int iDb = sqlite3SchemaToIndex(db, pIndex->pSchema);
 
 #ifndef SQLITE_OMIT_AUTHORIZATION
   if( sqlite3AuthCheck(pParse, SQLITE_REINDEX, pIndex->zName, 0,
@@ -3728,28 +3720,25 @@ static void sqlite3RefillIndex(Parse *pParse, Index *pIndex, int memRootPage){
   /* Require a write-lock on the table to perform this operation */
   sqlite3TableLock(pParse, iDb, pTab->tnum, 1, pTab->zName);
 
-  v = sqlite3GetVdbe(pParse);
+  Vdbe *const v = sqlite3GetVdbe(pParse);
   if( v==0 ) return;
-  if( memRootPage>=0 ){
-    tnum = (Pgno)memRootPage;
-  }else{
-    tnum = pIndex->tnum;
-  }
-  pKey = sqlite3KeyInfoOfIndex(pParse, pIndex);
+  const Pgno tnum = memRootPage>=0 ? (Pgno)memRootPage : pIndex->tnum;
+  KeyInfo *const pKey = sqlite3KeyInfoOfIndex(pParse, pIndex);
   assert( pKey!=0 || pParse->nErr );
 
   /* Open the sorter cursor if we are to use one. */
-  iSorter = pParse->nTab++;
+  const int iSorter = pParse->nTab++;
   sqlite3VdbeAddOp4(v, OP_SorterOpen, iSorter, 0, pIndex->nKeyCol, (char*)
                     sqlite3KeyInfoRef(pKey), P4_KEYINFO);
 
   /* Open the table. Loop through all rows of the table, inserting index
   ** records into the sorter. */
   sqlite3OpenTable(pParse, iTab, iDb, pTab, OP_OpenRead);
-  addr1 = sqlite3VdbeAddOp2(v, OP_Rewind, iTab, 0); VdbeCoverage(v);
-  regRecord = sqlite3GetTempReg(pParse);
+  int addr1 = sqlite3VdbeAddOp2(v, OP_Rewind, iTab, 0); VdbeCoverage(v);
+  const int regRecord = sqlite3GetTempReg(pParse);
   sqlite3MultiWrite(pParse);
 
+  int iPartIdxLabel;             /* Jump to this label to skip a row */
   sqlite3GenerateIndexKey(pParse,pIndex,iTab,regRecord,0,&iPartIdxLabel,0,0);
   sqlite3VdbeAddOp2(v, OP_SorterInsert, iSorter, regRecord);
   sqlite3ResolvePartIdxLabel(pParse, iPartIdxLabel);
@@ -3761,8 +3750,9 @@ static void sqlite3RefillIndex(Parse *pParse, Index *pIndex, int memRootPage){
   sqlite3VdbeChangeP5(v, OPFLAG_BULKCSR|((memRootPage>=0)?OPFLAG_P2ISREG:0));
 
   addr1 = sqlite3VdbeAddOp2(v, OP_SorterSort, iSorter, 0); VdbeCoverage(v);
+  int addr2;                     /* Address to jump to for next iteration */
   if( IsUniqueIndex(pIndex) ){
-    int j2 = sqlite3VdbeGoto(v, 1);
+    const int j2 = sqlite3VdbeGoto(v, 1);
     addr2 = sqlite3VdbeCurrentAddr(v);
     sqlite3VdbeVerifyAbortable(v, OE_Abort);
     sqlite3VdbeAddOp4Int(v, OP_SorterCompare, iSorter, j2, regRecord,
@@ -3846,10 +3836,9 @@ Index *sqlite3AllocateIndexObject(
 */
 int sqlite3HasExplicitNulls(Parse *pParse, ExprList *pList){
   if( pList ){
-    int i;
-    for(i=0; i<pList->nExpr; i++){
+    for(int i=0; i<pList->nExpr; i++){
       if( pList->a[i].fg.bNulls ){
-        u8 sf = pList->a[i].fg.sortFlags;
+        const u8 sf = pList->a[i].fg.sortFlags;
         sqlite3ErrorMsg(pParse, "unsupported use of NULLS %s",
             (sf==0 || sf==3) ? "FIRST" : "LAST"
         );
@@ -4485,10 +4474,8 @@ exit_create_index:
 void sqlite3DefaultRowEst(Index *pIdx){
                /*                10,  9,  8,  7,  6 */
   static const LogEst aVal[] = { 33, 32, 30, 28, 26 };
-  LogEst *a = pIdx->aiRowLogEst;
-  LogEst x;
-  int nCopy = MIN(ArraySize(aVal), pIdx->nKeyCol);
-  int i;
+  LogEst *const a = pIdx->aiRowLogEst;
+  const int nCopy = MIN(ArraySize(aVal), pIdx->nKeyCol);
 
   /* Indexes with default row estimates should not have stat1 data */
   assert( !pIdx->hasStat1 );
@@ -4503,7 +4490,7 @@ void sqlite3DefaultRowEst(Index *pIdx){
   ** Failure to do this can cause the indexes for which we do not have
   ** stat1 data to be ignored by the query planner.
   */
-  x = pIdx->pTable->nRowLogEst;
+  LogEst x = pIdx->pTable->nRowLogEst;
   assert( 99==sqlite3LogEst(1000) );
   if( x<99 ){
     pIdx->pTable->nRowLogEst = x = 99;
@@ -4514,7 +4501,7 @@ void sqlite3DefaultRowEst(Index *pIdx){
   /* Estimate that a[1] is 10, a[2] is 9, a[3] is 8, a[4] is 7, a[5] is
   ** 6 and each subsequent value (if any) is 5.  */
   memcpy(&a[1], aVal, nCopy*sizeof(LogEst));
-  for(i=nCopy+1; i<=pIdx->nKeyCol; i++){
+  for(int i=nCopy+1; i<=pIdx->nKeyCol; i++){
     a[i] = 23;                    assert( 23==sqlite3LogEst(5) );
   }
 
@@ -4529,7 +4516,7 @@ void sqlite3DefaultRowEst(Index *pIdx){
 void sqlite3DropIndex(Parse *pParse, SrcList *pName, int ifExists){
   Index *pIndex;
   Vdbe *v;
-  sqlite3 *db = pParse->db;
+  sqlite3 *const db = pParse->db;
   int iDb;
 
   if( db->mallocFailed ){
