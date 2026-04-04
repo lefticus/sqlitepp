@@ -5088,14 +5088,12 @@ act_like_temp_file:
 ** xOpen.
 */
 sqlite3_file *sqlite3_database_file_object(const char *zName){
-  Pager *pPager;
-  const char *p;
   while( zName[-1]!=0 || zName[-2]!=0 || zName[-3]!=0 || zName[-4]!=0 ){
     zName--;
   }
-  p = zName - 4 - sizeof(Pager*);
+  const char *const p = zName - 4 - sizeof(Pager*);
   assert( EIGHT_BYTE_ALIGNMENT(p) );
-  pPager = *(Pager**)p;
+  Pager *const pPager = *(Pager**)p;
   return pPager->fd;
 }
 
@@ -6398,9 +6396,8 @@ static int pager_incr_changecounter(Pager *pPager, int isDirectMode){
 ** function returns SQLITE_OK. Otherwise, an IO error code is returned.
 */
 int sqlite3PagerSync(Pager *pPager, const char *zSuper){
-  int rc = SQLITE_OK;
-  void *pArg = (void*)zSuper;
-  rc = sqlite3OsFileControl(pPager->fd, SQLITE_FCNTL_SYNC, pArg);
+  void *const pArg = (void*)zSuper;
+  int rc = sqlite3OsFileControl(pPager->fd, SQLITE_FCNTL_SYNC, pArg);
   if( rc==SQLITE_NOTFOUND ) rc = SQLITE_OK;
   if( rc==SQLITE_OK && !pPager->noSync ){
     assert( !MEMDB );
@@ -7417,7 +7414,7 @@ int sqlite3PagerSetJournalMode(Pager *pPager, int eMode){
         sqlite3OsDelete(pPager->pVfs, pPager->zJournal, 0);
       }else{
         int rc = SQLITE_OK;
-        int state = pPager->eState;
+        const int state = pPager->eState;
         assert( state==PAGER_OPEN || state==PAGER_READER );
         if( state==PAGER_OPEN ){
           rc = sqlite3PagerSharedLock(pPager);
