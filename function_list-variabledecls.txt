@@ -327,11 +327,11 @@
 [x] src/build.cpp::sqliteViewResetAll
 [x] src/build.cpp::sqlite3RootPageMoved
 [x] src/build.cpp::destroyRootPage
-[ ] src/build.cpp::destroyTable
-[ ] src/build.cpp::sqlite3CodeDropTable
-[ ] src/build.cpp::sqlite3ReadOnlyShadowTables
-[ ] src/build.cpp::tableMayNotBeDropped
-[ ] src/build.cpp::sqlite3DropTable
+[x] src/build.cpp::destroyTable
+[x] src/build.cpp::sqlite3CodeDropTable
+[x] src/build.cpp::sqlite3ReadOnlyShadowTables
+[x] src/build.cpp::tableMayNotBeDropped
+[x] src/build.cpp::sqlite3DropTable
 [ ] src/build.cpp::sqlite3DeferForeignKey
 [ ] src/build.cpp::sqlite3RefillIndex
 [ ] src/build.cpp::sqlite3HasExplicitNulls

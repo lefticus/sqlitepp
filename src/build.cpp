@@ -3265,7 +3265,7 @@ static void destroyTable(Parse *pParse, Table *pTab){
   ** "OP_Destroy 4 0" opcode. The subsequent "OP_Destroy 5 0" would hit
   ** a free-list page.
   */
-  Pgno iTab = pTab->tnum;
+  const Pgno iTab = pTab->tnum;
   Pgno iDestroyed = 0;
 
   while( 1 ){
@@ -3321,12 +3321,10 @@ static void sqlite3ClearStatTables(
 ** Generate code to drop a table.
 */
 void sqlite3CodeDropTable(Parse *pParse, Table *pTab, int iDb, int isView){
-  Vdbe *v;
-  sqlite3 *db = pParse->db;
-  Trigger *pTrigger;
-  Db *pDb = &db->aDb[iDb];
+  sqlite3 * const db = pParse->db;
+  Db * const pDb = &db->aDb[iDb];
 
-  v = sqlite3GetVdbe(pParse);
+  Vdbe * const v = sqlite3GetVdbe(pParse);
   assert( v!=0 );
   sqlite3BeginWriteOperation(pParse, 1, iDb);
 
@@ -3340,7 +3338,7 @@ void sqlite3CodeDropTable(Parse *pParse, Table *pTab, int iDb, int isView){
   ** is generated to remove entries from sqlite_schema and/or
   ** sqlite_temp_schema if required.
   */
-  pTrigger = sqlite3TriggerList(pParse, pTab);
+  Trigger *pTrigger = sqlite3TriggerList(pParse, pTab);
   while( pTrigger ){
     assert( pTrigger->pSchema==pTab->pSchema ||
         pTrigger->pSchema==db->aDb[1].pSchema );
@@ -3431,7 +3429,7 @@ static int tableMayNotBeDropped(sqlite3 *db, Table *pTab){
 void sqlite3DropTable(Parse *pParse, SrcList *pName, int isView, int noErr){
   Table *pTab;
   Vdbe *v;
-  sqlite3 *db = pParse->db;
+  sqlite3 * const db = pParse->db;
   int iDb;
 
   if( db->mallocFailed ){
