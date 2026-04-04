@@ -1060,12 +1060,10 @@ Index *sqlite3PrimaryKeyIndex(Table *pTab){
 ** if column iCol is not used in index pIdx.
 */
 int sqlite3TableColumnToIndex(Index *pIdx, int iCol){
-  int i;
-  i16 iCol16;
   assert( iCol>=(-1) && iCol<=SQLITE_MAX_COLUMN );
   assert( pIdx->nColumn<=SQLITE_MAX_COLUMN*2 );
-  iCol16 = iCol;
-  for(i=0; i<pIdx->nColumn; i++){
+  const i16 iCol16 = iCol;
+  for(int i=0; i<pIdx->nColumn; i++){
     if( iCol16==pIdx->aiColumn[i] ){
       return i;
     }
@@ -1087,8 +1085,7 @@ int sqlite3TableColumnToIndex(Index *pIdx, int iCol){
 */
 i16 sqlite3StorageColumnToTable(Table *pTab, i16 iCol){
   if( pTab->tabFlags & TF_HasVirtual ){
-    int i;
-    for(i=0; i<=iCol; i++){
+    for(int i=0; i<=iCol; i++){
       if( pTab->aCol[i].colFlags & COLFLAG_VIRTUAL ) iCol++;
     }
   }
@@ -1160,8 +1157,8 @@ i16 sqlite3TableColumnToStorage(Table *pTab, i16 iCol){
 ** is a read-only no-op.
 */
 static void sqlite3ForceNotReadOnly(Parse *pParse){
-  int iReg = ++pParse->nMem;
-  Vdbe *v = sqlite3GetVdbe(pParse);
+  const int iReg = ++pParse->nMem;
+  Vdbe *const v = sqlite3GetVdbe(pParse);
   if( v ){
     sqlite3VdbeAddOp3(v, OP_JournalMode, 0, iReg, PAGER_JOURNALMODE_QUERY);
     sqlite3VdbeUsesBtree(v, 0);

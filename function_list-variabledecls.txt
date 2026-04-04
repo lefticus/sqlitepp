@@ -292,11 +292,11 @@
 [x] src/build.cpp::sqlite3FindDb
 [x] src/build.cpp::sqlite3WritableSchema
 [x] src/build.cpp::sqlite3PrimaryKeyIndex
-[ ] src/build.cpp::sqlite3TableColumnToIndex
-[ ] src/build.cpp::sqlite3StorageColumnToTable
-[ ] src/build.cpp::sqlite3TableColumnToStorage
-[ ] src/build.cpp::sqlite3ForceNotReadOnly
-[ ] src/build.cpp::sqlite3ColumnPropertiesFromName
+[x] src/build.cpp::sqlite3TableColumnToIndex
+[x] src/build.cpp::sqlite3StorageColumnToTable
+[x] src/build.cpp::sqlite3TableColumnToStorage
+[x] src/build.cpp::sqlite3ForceNotReadOnly
+[x] src/build.cpp::sqlite3ColumnPropertiesFromName
 [ ] src/build.cpp::sqlite3DeleteReturning
 [ ] src/build.cpp::sqlite3AddReturning
 [ ] src/build.cpp::sqlite3AddColumn
