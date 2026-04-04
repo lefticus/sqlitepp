@@ -4040,13 +4040,9 @@ static int incrVacuumStep(BtShared *pBt, Pgno nFin, Pgno iLastPg, int bCommit){
 ** size of the database in pages following an auto-vacuum operation.
 */
 static Pgno finalDbSize(BtShared *pBt, Pgno nOrig, Pgno nFree){
-  int nEntry;                     /* Number of entries on one ptrmap page */
-  Pgno nPtrmap;                   /* Number of PtrMap pages to be freed */
-  Pgno nFin;                      /* Return value */
-
-  nEntry = pBt->usableSize/5;
-  nPtrmap = (nFree-nOrig+PTRMAP_PAGENO(pBt, nOrig)+nEntry)/nEntry;
-  nFin = nOrig - nFree - nPtrmap;
+  const int nEntry = pBt->usableSize/5;                     /* Number of entries on one ptrmap page */
+  const Pgno nPtrmap = (nFree-nOrig+PTRMAP_PAGENO(pBt, nOrig)+nEntry)/nEntry;                   /* Number of PtrMap pages to be freed */
+  Pgno nFin = nOrig - nFree - nPtrmap;                      /* Return value */
   if( nOrig>PENDING_BYTE_PAGE(pBt) && nFin<PENDING_BYTE_PAGE(pBt) ){
     nFin--;
   }
@@ -4067,16 +4063,16 @@ static Pgno finalDbSize(BtShared *pBt, Pgno nOrig, Pgno nFree){
 */
 int sqlite3BtreeIncrVacuum(Btree *p){
   int rc;
-  BtShared *pBt = p->pBt;
+  BtShared * const pBt = p->pBt;
 
   sqlite3BtreeEnter(p);
   assert( pBt->inTransaction==TRANS_WRITE && p->inTrans==TRANS_WRITE );
   if( !pBt->autoVacuum ){
     rc = SQLITE_DONE;
   }else{
-    Pgno nOrig = btreePagecount(pBt);
-    Pgno nFree = get4byte(&pBt->pPage1->aData[36]);
-    Pgno nFin = finalDbSize(pBt, nOrig, nFree);
+    const Pgno nOrig = btreePagecount(pBt);
+    const Pgno nFree = get4byte(&pBt->pPage1->aData[36]);
+    const Pgno nFin = finalDbSize(pBt, nOrig, nFree);
 
     if( nOrig<nFin || nFree>=nOrig ){
       rc = SQLITE_CORRUPT_BKPT;
@@ -4104,27 +4100,18 @@ int sqlite3BtreeIncrVacuum(Btree *p){
 */
 static int autoVacuumCommit(Btree *p){
   int rc = SQLITE_OK;
-  Pager *pPager;
-  BtShared *pBt;
-  sqlite3 *db;
   VVA_ONLY( int nRef );
 
   assert( p!=0 );
-  pBt = p->pBt; 
-  pPager = pBt->pPager;
+  BtShared * const pBt = p->pBt;
+  Pager * const pPager = pBt->pPager;
   VVA_ONLY( nRef = sqlite3PagerRefcount(pPager); )
 
   assert( sqlite3_mutex_held(pBt->mutex) );
   invalidateAllOverflowCache(pBt);
   assert(pBt->autoVacuum);
   if( !pBt->incrVacuum ){
-    Pgno nFin;         /* Number of pages in database after autovacuuming */
-    Pgno nFree;        /* Number of pages on the freelist initially */
-    Pgno nVac;         /* Number of pages to vacuum */
-    Pgno iFree;        /* The next page to be freed */
-    Pgno nOrig;        /* Database size before freeing */
-
-    nOrig = btreePagecount(pBt);
+    const Pgno nOrig = btreePagecount(pBt);        /* Database size before freeing */
     if( PTRMAP_ISPAGE(pBt, nOrig) || nOrig==PENDING_BYTE_PAGE(pBt) ){
       /* It is not possible to create a database for which the final page
       ** is either a pointer-map page or the pending-byte page. If one
@@ -4133,8 +4120,9 @@ static int autoVacuumCommit(Btree *p){
       return SQLITE_CORRUPT_BKPT;
     }
 
-    nFree = get4byte(&pBt->pPage1->aData[36]);
-    db = p->db;
+    const Pgno nFree = get4byte(&pBt->pPage1->aData[36]);        /* Number of pages on the freelist initially */
+    Pgno nVac;         /* Number of pages to vacuum */
+    sqlite3 * const db = p->db;
     if( db->xAutovacPages ){
       int iDb;
       for(iDb=0; ALWAYS(iDb<db->nDb); iDb++){
@@ -4156,12 +4144,12 @@ static int autoVacuumCommit(Btree *p){
     }else{
       nVac = nFree;
     }
-    nFin = finalDbSize(pBt, nOrig, nVac);
+    const Pgno nFin = finalDbSize(pBt, nOrig, nVac);         /* Number of pages in database after autovacuuming */
     if( nFin>nOrig ) return SQLITE_CORRUPT_BKPT;
     if( nFin<nOrig ){
       rc = saveAllCursors(pBt, 0, 0);
     }
-    for(iFree=nOrig; iFree>nFin && rc==SQLITE_OK; iFree--){
+    for(Pgno iFree=nOrig; iFree>nFin && rc==SQLITE_OK; iFree--){
       rc = incrVacuumStep(pBt, nFin, iFree, nVac==nFree);
     }
     if( (rc==SQLITE_DONE || rc==SQLITE_OK) && nFree>0 ){
@@ -4216,7 +4204,7 @@ static int autoVacuumCommit(Btree *p){
 int sqlite3BtreeCommitPhaseOne(Btree *p, const char *zSuperJrnl){
   int rc = SQLITE_OK;
   if( p->inTrans==TRANS_WRITE ){
-    BtShared *pBt = p->pBt;
+    BtShared * const pBt = p->pBt;
     sqlite3BtreeEnter(p);
 #ifndef SQLITE_OMIT_AUTOVACUUM
     if( pBt->autoVacuum ){
@@ -4241,8 +4229,8 @@ int sqlite3BtreeCommitPhaseOne(Btree *p, const char *zSuperJrnl){
 ** at the conclusion of a transaction.
 */
 static void btreeEndTransaction(Btree *p){
-  BtShared *pBt = p->pBt;
-  sqlite3 *db = p->db;
+  BtShared * const pBt = p->pBt;
+  sqlite3 * const db = p->db;
   assert( sqlite3BtreeHoldsMutex(p) );
 
 #ifndef SQLITE_OMIT_AUTOVACUUM

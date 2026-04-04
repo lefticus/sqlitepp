@@ -172,11 +172,11 @@
 [x] src/btree.cpp::setChildPtrmaps
 [x] src/btree.cpp::modifyPagePointer
 [x] src/btree.cpp::incrVacuumStep
-[ ] src/btree.cpp::finalDbSize
-[ ] src/btree.cpp::sqlite3BtreeIncrVacuum
-[ ] src/btree.cpp::autoVacuumCommit
-[ ] src/btree.cpp::sqlite3BtreeCommitPhaseOne
-[ ] src/btree.cpp::btreeEndTransaction
+[x] src/btree.cpp::finalDbSize
+[x] src/btree.cpp::sqlite3BtreeIncrVacuum
+[x] src/btree.cpp::autoVacuumCommit
+[x] src/btree.cpp::sqlite3BtreeCommitPhaseOne
+[x] src/btree.cpp::btreeEndTransaction
 [ ] src/btree.cpp::sqlite3BtreeCommitPhaseTwo
 [ ] src/btree.cpp::sqlite3BtreeCommit
 [ ] src/btree.cpp::sqlite3BtreeTripAllCursors
