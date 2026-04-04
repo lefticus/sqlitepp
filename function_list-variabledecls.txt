@@ -317,11 +317,11 @@
 [x] src/build.cpp::isDupColumn
 [x] src/build.cpp::recomputeColumnsNotIndexed
 [x] src/build.cpp::convertToWithoutRowidTable
-[ ] src/build.cpp::sqlite3IsShadowTableOf
-[ ] src/build.cpp::sqlite3MarkAllShadowTablesOf
-[ ] src/build.cpp::sqlite3ShadowTableName
-[ ] src/build.cpp::markImmutableExprStep
-[ ] src/build.cpp::markExprListImmutable
+[x] src/build.cpp::sqlite3IsShadowTableOf
+[x] src/build.cpp::sqlite3MarkAllShadowTablesOf
+[x] src/build.cpp::sqlite3ShadowTableName
+[x] src/build.cpp::markImmutableExprStep
+[x] src/build.cpp::markExprListImmutable
 [ ] src/build.cpp::viewGetColumnNames
 [ ] src/build.cpp::sqlite3ViewGetColumnNames
 [ ] src/build.cpp::sqliteViewResetAll

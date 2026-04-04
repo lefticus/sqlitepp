@@ -2468,14 +2468,11 @@ static void convertToWithoutRowidTable(Parse *pParse, Table *pTab){
 ** for that virtual table.
 */
 int sqlite3IsShadowTableOf(sqlite3 *db, Table *pTab, const char *zName){
-  int nName;                    /* Length of zName */
-  Module *pMod;                 /* Module for the virtual table */
-
   if( !IsVirtual(pTab) ) return 0;
-  nName = sqlite3Strlen30(pTab->zName);
+  const int nName = sqlite3Strlen30(pTab->zName);
   if( sqlite3_strnicmp(zName, pTab->zName, nName)!=0 ) return 0;
   if( zName[nName]!='_' ) return 0;
-  pMod = static_cast<Module*>(sqlite3HashFind(&db->aModule, pTab->u.vtab.azArg[0]));
+  const auto pMod = static_cast<Module*>(sqlite3HashFind(&db->aModule, pTab->u.vtab.azArg[0]));
   if( pMod==0 ) return 0;
   if( pMod->pModule->iVersion<3 ) return 0;
   if( pMod->pModule->xShadowName==0 ) return 0;
@@ -2491,19 +2488,15 @@ int sqlite3IsShadowTableOf(sqlite3 *db, Table *pTab, const char *zName){
 ** any shadow tables seen using the TF_Shadow flag.
 */
 void sqlite3MarkAllShadowTablesOf(sqlite3 *db, Table *pTab){
-  int nName;                    /* Length of pTab->zName */
-  Module *pMod;                 /* Module for the virtual table */
-  HashElem *k;                  /* For looping through the symbol table */
-
   assert( IsVirtual(pTab) );
-  pMod = static_cast<Module*>(sqlite3HashFind(&db->aModule, pTab->u.vtab.azArg[0]));
+  const auto pMod = static_cast<Module*>(sqlite3HashFind(&db->aModule, pTab->u.vtab.azArg[0]));
   if( pMod==0 ) return;
   if( NEVER(pMod->pModule==0) ) return;
   if( pMod->pModule->iVersion<3 ) return;
   if( pMod->pModule->xShadowName==0 ) return;
   assert( pTab->zName!=0 );
-  nName = sqlite3Strlen30(pTab->zName);
-  for(k=sqliteHashFirst(&pTab->pSchema->tblHash); k; k=sqliteHashNext(k)){
+  const int nName = sqlite3Strlen30(pTab->zName);
+  for(auto *k=sqliteHashFirst(&pTab->pSchema->tblHash); k; k=sqliteHashNext(k)){
     Table *pOther = static_cast<Table*>(sqliteHashData(k));
     assert( pOther->zName!=0 );
     if( !IsOrdinaryTable(pOther) ) continue;
@@ -2527,13 +2520,10 @@ void sqlite3MarkAllShadowTablesOf(sqlite3 *db, Table *pTab){
 ** restored to its original value prior to this routine returning.
 */
 int sqlite3ShadowTableName(sqlite3 *db, const char *zName){
-  const char *zTail;            /* Pointer to the last "_" in zName */
-  Table *pTab;                  /* Table that zName is a shadow of */
-  char *zCopy;
-  zTail = strrchr(zName, '_');
+  const char *zTail = strrchr(zName, '_');
   if( zTail==0 ) return 0;
-  zCopy = sqlite3DbStrNDup(db, zName, (int)(zTail-zName));
-  pTab = zCopy ? sqlite3FindTable(db, zCopy, 0) : 0;
+  char *zCopy = sqlite3DbStrNDup(db, zName, (int)(zTail-zName));
+  Table *const pTab = zCopy ? sqlite3FindTable(db, zCopy, 0) : 0;
   sqlite3DbFree(db, zCopy);
   if( pTab==0 ) return 0;
   if( !IsVirtual(pTab) ) return 0;
