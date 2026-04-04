@@ -565,14 +565,14 @@
 [x] src/expr.cpp::sqlite3TouchRegister
 [x] src/expr.cpp::sqlite3FirstAvailableRegister
 [x] src/expr.cpp::sqlite3NoTempsInRange
-[ ] src/fault.cpp::sqlite3BeginBenignMalloc
-[ ] src/fault.cpp::sqlite3EndBenignMalloc
-[ ] src/fkey.cpp::sqlite3FkReferences
-[ ] src/fkey.cpp::fkTriggerDelete
-[ ] src/fkey.cpp::sqlite3FkClearTriggerCache
-[ ] src/fkey.cpp::sqlite3FkDropTable
-[ ] src/fkey.cpp::isSetNullAction
-[ ] src/fkey.cpp::sqlite3FkDelete
+[x] src/fault.cpp::sqlite3BeginBenignMalloc
+[x] src/fault.cpp::sqlite3EndBenignMalloc
+[x] src/fkey.cpp::sqlite3FkReferences
+[x] src/fkey.cpp::fkTriggerDelete
+[x] src/fkey.cpp::sqlite3FkClearTriggerCache
+[x] src/fkey.cpp::sqlite3FkDropTable
+[x] src/fkey.cpp::isSetNullAction
+[x] src/fkey.cpp::sqlite3FkDelete
 [ ] src/func.cpp::sqlite3GetFuncCollSeq
 [ ] src/func.cpp::sqlite3SkipAccumulatorLoad
 [ ] src/func.cpp::absFunc

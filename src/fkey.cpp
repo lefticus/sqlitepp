@@ -687,7 +687,7 @@ FKey *sqlite3FkReferences(Table *pTab){
 */
 static void fkTriggerDelete(sqlite3 *dbMem, Trigger *p){
   if( p ){
-    TriggerStep *pStep = p->step_list;
+    TriggerStep *const pStep = p->step_list;
     sqlite3SrcListDelete(dbMem, pStep->pSrc);
     sqlite3ExprDelete(dbMem, pStep->pWhere);
     sqlite3ExprListDelete(dbMem, pStep->pExprList);
@@ -703,13 +703,11 @@ static void fkTriggerDelete(sqlite3 *dbMem, Trigger *p){
 ** changes.
 */
 void sqlite3FkClearTriggerCache(sqlite3 *db, int iDb){
-  HashElem *k;
-  Hash *pHash = &db->aDb[iDb].pSchema->tblHash;
-  for(k=sqliteHashFirst(pHash); k; k=sqliteHashNext(k)){
+  Hash *const pHash = &db->aDb[iDb].pSchema->tblHash;
+  for(HashElem *k=sqliteHashFirst(pHash); k; k=sqliteHashNext(k)){
     Table *pTab = static_cast<Table*>(sqliteHashData(k));
-    FKey *pFKey;
     if( !IsOrdinaryTable(pTab) ) continue;
-    for(pFKey=pTab->u.tab.pFKey; pFKey; pFKey=pFKey->pNextFrom){
+    for(FKey *pFKey=pTab->u.tab.pFKey; pFKey; pFKey=pFKey->pNextFrom){
       fkTriggerDelete(db, pFKey->apTrigger[0]); pFKey->apTrigger[0] = 0;
       fkTriggerDelete(db, pFKey->apTrigger[1]); pFKey->apTrigger[1] = 0;
     }
@@ -737,7 +735,7 @@ void sqlite3FkDropTable(Parse *pParse, SrcList *pName, Table *pTab){
   sqlite3 *db = pParse->db;
   if( (db->flags&SQLITE_ForeignKeys) && IsOrdinaryTable(pTab) ){
     int iSkip = 0;
-    Vdbe *v = sqlite3GetVdbe(pParse);
+    Vdbe *const v = sqlite3GetVdbe(pParse);
 
     assert( v );                  /* VDBE has already been allocated */
     assert( IsOrdinaryTable(pTab) );
@@ -853,9 +851,9 @@ static int fkParentIsModified(
 ** to trigger pFKey.
 */
 static int isSetNullAction(Parse *pParse, FKey *pFKey){
-  Parse *pTop = sqlite3ParseToplevel(pParse);
+  Parse *const pTop = sqlite3ParseToplevel(pParse);
   if( pTop->pTriggerPrg ){
-    Trigger *p = pTop->pTriggerPrg->pTrigger;
+    const Trigger *p = pTop->pTriggerPrg->pTrigger;
     if( (p==pFKey->apTrigger[0] && pFKey->aAction[0]==OE_SetNull)
      || (p==pFKey->apTrigger[1] && pFKey->aAction[1]==OE_SetNull)
     ){
