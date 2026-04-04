@@ -30,9 +30,8 @@
 */
 Table *sqlite3SrcListLookup(Parse *pParse, SrcList *pSrc){
   SrcItem *pItem = pSrc->a;
-  Table *pTab;
   assert( pItem && pSrc->nSrc>=1 );
-  pTab = sqlite3LocateTableItem(pParse, 0, pItem);
+  Table *pTab = sqlite3LocateTableItem(pParse, 0, pItem);
   if( pItem->pSTab ) sqlite3DeleteTable(pParse->db, pItem->pSTab);
   pItem->pSTab = pTab;
   pItem->fg.notCte = 1;
@@ -96,12 +95,11 @@ static int vtabIsReadOnly(Parse *pParse, Table *pTab){
   return 0;
 }
 static int tabIsReadOnly(Parse *pParse, Table *pTab){
-  sqlite3 *db;
   if( IsVirtual(pTab) ){
     return vtabIsReadOnly(pParse, pTab);
   }
   if( (pTab->tabFlags & (TF_Readonly|TF_Shadow))==0 ) return 0;
-  db = pParse->db;
+  sqlite3 *const db = pParse->db;
   if( (pTab->tabFlags & TF_Readonly)!=0 ){
     return sqlite3WritableSchema(db)==0 && pParse->nested==0;
   }

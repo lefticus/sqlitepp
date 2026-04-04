@@ -430,12 +430,12 @@
 [x] src/dbstat.cpp::statRowid
 [x] src/dbstat.cpp::sqlite3DbstatRegister
 [x] src/dbstat.cpp::sqlite3DbstatRegister
-[ ] src/delete.cpp::sqlite3SrcListLookup
-[ ] src/delete.cpp::sqlite3CodeChangeCount
-[ ] src/delete.cpp::vtabIsReadOnly
-[ ] src/delete.cpp::tabIsReadOnly
-[ ] src/delete.cpp::sqlite3IsReadOnly
-[ ] src/delete.cpp::sqlite3ResolvePartIdxLabel
+[x] src/delete.cpp::sqlite3SrcListLookup
+[x] src/delete.cpp::sqlite3CodeChangeCount
+[x] src/delete.cpp::vtabIsReadOnly
+[x] src/delete.cpp::tabIsReadOnly
+[x] src/delete.cpp::sqlite3IsReadOnly
+[x] src/delete.cpp::sqlite3ResolvePartIdxLabel
 [x] src/expr.cpp::sqlite3TableColumnAffinity
 [x] src/expr.cpp::sqlite3ExprAffinity
 [x] src/expr.cpp::sqlite3ExprDataType
