@@ -835,14 +835,14 @@
 [x] src/malloc.cpp::sqlite3OomClear
 [x] src/malloc.cpp::apiHandleError
 [x] src/malloc.cpp::sqlite3ApiExit
-[ ] src/mem0.cpp::sqlite3MemMalloc
-[ ] src/mem0.cpp::sqlite3MemFree
-[ ] src/mem0.cpp::sqlite3MemRealloc
-[ ] src/mem0.cpp::sqlite3MemSize
-[ ] src/mem0.cpp::sqlite3MemRoundup
-[ ] src/mem0.cpp::sqlite3MemInit
-[ ] src/mem0.cpp::sqlite3MemShutdown
-[ ] src/mem0.cpp::sqlite3MemSetDefault
+[x] src/mem0.cpp::sqlite3MemMalloc
+[x] src/mem0.cpp::sqlite3MemFree
+[x] src/mem0.cpp::sqlite3MemRealloc
+[x] src/mem0.cpp::sqlite3MemSize
+[x] src/mem0.cpp::sqlite3MemRoundup
+[x] src/mem0.cpp::sqlite3MemInit
+[x] src/mem0.cpp::sqlite3MemShutdown
+[x] src/mem0.cpp::sqlite3MemSetDefault
 [ ] src/mem1.cpp::sqlite3MemMalloc
 [ ] src/mem1.cpp::sqlite3MemFree
 [ ] src/mem1.cpp::sqlite3MemSize
