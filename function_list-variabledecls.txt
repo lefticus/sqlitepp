@@ -625,25 +625,25 @@
 [x] src/hash.cpp::rehash
 [x] src/hash.cpp::sqlite3HashFind
 [x] src/hash.cpp::sqlite3HashInsert
-[ ] src/insert.cpp::computeIndexAffStr
-[ ] src/insert.cpp::sqlite3IndexAffinityStr
-[ ] src/insert.cpp::sqlite3TableAffinityStr
-[ ] src/insert.cpp::sqlite3TableAffinity
-[ ] src/insert.cpp::readsTable
-[ ] src/insert.cpp::exprColumnFlagUnion
-[ ] src/insert.cpp::sqlite3AutoincrementBegin
-[ ] src/insert.cpp::autoIncStep
-[ ] src/insert.cpp::autoIncrementEnd
-[ ] src/insert.cpp::sqlite3AutoincrementEnd
-[ ] src/insert.cpp::sqlite3MultiValuesEnd
-[ ] src/insert.cpp::exprListIsConstant
-[ ] src/insert.cpp::exprListIsNoAffinity
-[ ] src/insert.cpp::sqlite3MultiValues
-[ ] src/insert.cpp::checkConstraintExprNode
-[ ] src/insert.cpp::indexIteratorFirst
-[ ] src/insert.cpp::indexIteratorNext
-[ ] src/insert.cpp::sqlite3SetMakeRecordP5
-[ ] src/insert.cpp::xferCompatibleIndex
+[x] src/insert.cpp::computeIndexAffStr
+[x] src/insert.cpp::sqlite3IndexAffinityStr
+[x] src/insert.cpp::sqlite3TableAffinityStr
+[x] src/insert.cpp::sqlite3TableAffinity
+[x] src/insert.cpp::readsTable
+[x] src/insert.cpp::exprColumnFlagUnion
+[x] src/insert.cpp::sqlite3AutoincrementBegin
+[x] src/insert.cpp::autoIncStep
+[x] src/insert.cpp::autoIncrementEnd
+[x] src/insert.cpp::sqlite3AutoincrementEnd
+[x] src/insert.cpp::sqlite3MultiValuesEnd
+[x] src/insert.cpp::exprListIsConstant
+[x] src/insert.cpp::exprListIsNoAffinity
+[x] src/insert.cpp::sqlite3MultiValues
+[x] src/insert.cpp::checkConstraintExprNode
+[x] src/insert.cpp::indexIteratorFirst
+[x] src/insert.cpp::indexIteratorNext
+[x] src/insert.cpp::sqlite3SetMakeRecordP5
+[x] src/insert.cpp::xferCompatibleIndex
 [ ] src/json.cpp::jsonCacheDelete
 [ ] src/json.cpp::jsonCacheDeleteGeneric
 [ ] src/json.cpp::jsonStringZero

@@ -81,13 +81,13 @@ static SQLITE_NOINLINE const char *computeIndexAffStr(sqlite3 *db, Index *pIdx){
   ** sqliteDeleteIndex() when the Index structure itself is cleaned
   ** up.
   */
-  int n;
-  Table *pTab = pIdx->pTable;
+  Table *const pTab = pIdx->pTable;
   pIdx->zColAff = (char *)sqlite3DbMallocRaw(0, pIdx->nColumn+1);
   if( !pIdx->zColAff ){
     sqlite3OomFault(db);
     return 0;
   }
+  int n;
   for(n=0; n<pIdx->nColumn; n++){
     i16 x = pIdx->aiColumn[n];
     char aff;
@@ -120,8 +120,7 @@ const char *sqlite3IndexAffinityStr(sqlite3 *db, Index *pIdx){
 ** the space when done.
 */
 char *sqlite3TableAffinityStr(sqlite3 *db, const Table *pTab){
-  char *zColAff;
-  zColAff = (char *)sqlite3DbMallocRaw(db, pTab->nCol+1);
+  char *zColAff = (char *)sqlite3DbMallocRaw(db, pTab->nCol+1);
   if( zColAff ){
     int i, j;
     for(i=j=0; i<pTab->nCol; i++){
@@ -177,21 +176,17 @@ char *sqlite3TableAffinityStr(sqlite3 *db, const Table *pTab){
 ** Apply the type checking to that array of registers.
 */
 void sqlite3TableAffinity(Vdbe *v, Table *pTab, int iReg){
-  int i;
-  char *zColAff;
   if( pTab->tabFlags & TF_Strict ){
     if( iReg==0 ){
       /* Move the previous opcode (which should be OP_MakeRecord) forward
       ** by one slot and insert a new OP_TypeCheck where the current
       ** OP_MakeRecord is found */
-      VdbeOp *pPrev;
-      int p3;
       sqlite3VdbeAppendP4(v, pTab, P4_TABLE);
-      pPrev = sqlite3VdbeGetLastOp(v);
+      VdbeOp *pPrev = sqlite3VdbeGetLastOp(v);
       assert( pPrev!=0 );
       assert( pPrev->opcode==OP_MakeRecord || sqlite3VdbeDb(v)->mallocFailed );
       pPrev->opcode = OP_TypeCheck;
-      p3 = pPrev->p3;
+      const int p3 = pPrev->p3;
       pPrev->p3 = 0;
       sqlite3VdbeAddOp3(v, OP_MakeRecord, pPrev->p1, pPrev->p2, p3);
     }else{
@@ -201,7 +196,7 @@ void sqlite3TableAffinity(Vdbe *v, Table *pTab, int iReg){
     }
     return;
   }
-  zColAff = pTab->zColAff;
+  char *zColAff = pTab->zColAff;
   if( zColAff==0 ){
     zColAff = sqlite3TableAffinityStr(0, pTab);
     if( !zColAff ){
@@ -211,7 +206,7 @@ void sqlite3TableAffinity(Vdbe *v, Table *pTab, int iReg){
     pTab->zColAff = zColAff;
   }
   assert( zColAff!=0 );
-  i = sqlite3Strlen30NN(zColAff);
+  const int i = sqlite3Strlen30NN(zColAff);
   if( i ){
     if( iReg ){
       sqlite3VdbeAddOp4(v, OP_Affinity, iReg, i, 0, zColAff, i);
@@ -230,19 +225,18 @@ void sqlite3TableAffinity(Vdbe *v, Table *pTab, int iReg){
 ** run without using a temporary table for the results of the SELECT.
 */
 static int readsTable(Parse *p, int iDb, Table *pTab){
-  Vdbe *v = sqlite3GetVdbe(p);
-  int i;
-  int iEnd = sqlite3VdbeCurrentAddr(v);
+  Vdbe *const v = sqlite3GetVdbe(p);
+  const int iEnd = sqlite3VdbeCurrentAddr(v);
 #ifndef SQLITE_OMIT_VIRTUALTABLE
-  VTable *pVTab = IsVirtual(pTab) ? sqlite3GetVTable(p->db, pTab) : 0;
+  VTable *const pVTab = IsVirtual(pTab) ? sqlite3GetVTable(p->db, pTab) : 0;
 #endif
 
-  for(i=1; i<iEnd; i++){
+  for(int i=1; i<iEnd; i++){
     VdbeOp *pOp = sqlite3VdbeGetOp(v, i);
     assert( pOp!=0 );
     if( pOp->opcode==OP_OpenRead && pOp->p3==iDb ){
       Index *pIndex;
-      Pgno tnum = pOp->p2;
+      const Pgno tnum = pOp->p2;
       if( tnum==pTab->tnum ){
         return 1;
       }
@@ -458,11 +452,8 @@ static int autoIncBegin(
 ** used by the autoincrement tracker. 
 */
 void sqlite3AutoincrementBegin(Parse *pParse){
-  AutoincInfo *p;            /* Information about an AUTOINCREMENT */
-  sqlite3 *db = pParse->db;  /* The database connection */
-  Db *pDb;                   /* Database only autoinc table */
-  int memId;                 /* Register holding max rowid */
-  Vdbe *v = pParse->pVdbe;   /* VDBE under construction */
+  sqlite3 *const db = pParse->db;  /* The database connection */
+  Vdbe *const v = pParse->pVdbe;   /* VDBE under construction */
 
   /* This routine is never called during trigger-generation.  It is
   ** only called from the top-level */
@@ -470,7 +461,7 @@ void sqlite3AutoincrementBegin(Parse *pParse){
   assert( sqlite3IsToplevel(pParse) );
 
   assert( v );   /* We failed long ago if this is not so */
-  for(p = pParse->pAinc; p; p = p->pNext){
+  for(AutoincInfo *p = pParse->pAinc; p; p = p->pNext){
     static const int iLn = VDBE_OFFSET_LINENO(2);
     static const VdbeOpList autoInc[] = {
       /* 0  */ {OP_Null,    0,  0, 0},
@@ -486,13 +477,12 @@ void sqlite3AutoincrementBegin(Parse *pParse){
       /* 10 */ {OP_Integer, 0,  0, 0},
       /* 11 */ {OP_Close,   0,  0, 0}
     };
-    VdbeOp *aOp;
-    pDb = &db->aDb[p->iDb];
-    memId = p->regCtr;
+    Db *const pDb = &db->aDb[p->iDb];
+    const int memId = p->regCtr;
     assert( sqlite3SchemaMutexHeld(db, 0, pDb->pSchema) );
     sqlite3OpenTable(pParse, 0, p->iDb, pDb->pSchema->pSeqTab, OP_OpenRead);
     sqlite3VdbeLoadString(v, memId-1, p->pTab->zName);
-    aOp = sqlite3VdbeAddOpList(v, ArraySize(autoInc), autoInc, iLn);
+    VdbeOp *aOp = sqlite3VdbeAddOpList(v, ArraySize(autoInc), autoInc, iLn);
     if( aOp==0 ) break;
     aOp[0].p2 = memId;
     aOp[0].p3 = memId+2;
@@ -532,12 +522,11 @@ static void autoIncStep(Parse *pParse, int memId, int regRowid){
 ** routine just before the "exit" code.
 */
 static SQLITE_NOINLINE void autoIncrementEnd(Parse *pParse){
-  AutoincInfo *p;
-  Vdbe *v = pParse->pVdbe;
-  sqlite3 *db = pParse->db;
+  Vdbe *const v = pParse->pVdbe;
+  sqlite3 *const db = pParse->db;
 
   assert( v );
-  for(p = pParse->pAinc; p; p = p->pNext){
+  for(AutoincInfo *p = pParse->pAinc; p; p = p->pNext){
     static const int iLn = VDBE_OFFSET_LINENO(2);
     static const VdbeOpList autoIncEnd[] = {
       /* 0 */ {OP_NotNull,     0, 2, 0},
@@ -546,17 +535,14 @@ static SQLITE_NOINLINE void autoIncrementEnd(Parse *pParse){
       /* 3 */ {OP_Insert,      0, 0, 0},
       /* 4 */ {OP_Close,       0, 0, 0}
     };
-    VdbeOp *aOp;
-    Db *pDb = &db->aDb[p->iDb];
-    int iRec;
-    int memId = p->regCtr;
-
-    iRec = sqlite3GetTempReg(pParse);
+    Db *const pDb = &db->aDb[p->iDb];
+    const int memId = p->regCtr;
+    const int iRec = sqlite3GetTempReg(pParse);
     assert( sqlite3SchemaMutexHeld(db, 0, pDb->pSchema) );
     sqlite3VdbeAddOp3(v, OP_Le, memId+2, sqlite3VdbeCurrentAddr(v)+7, memId);
     VdbeCoverage(v);
     sqlite3OpenTable(pParse, 0, p->iDb, pDb->pSchema->pSeqTab, OP_OpenWrite);
-    aOp = sqlite3VdbeAddOpList(v, ArraySize(autoIncEnd), autoIncEnd, iLn);
+    VdbeOp *aOp = sqlite3VdbeAddOpList(v, ArraySize(autoIncEnd), autoIncEnd, iLn);
     if( aOp==0 ) break;
     aOp[0].p1 = memId+1;
     aOp[1].p2 = memId+1;
@@ -601,8 +587,7 @@ void sqlite3MultiValuesEnd(Parse *pParse, Select *pVal){
 ** only argument are constant.
 */
 static int exprListIsConstant(Parse *pParse, ExprList *pRow){
-  int ii;
-  for(ii=0; ii<pRow->nExpr; ii++){
+  for(int ii=0; ii<pRow->nExpr; ii++){
     if( 0==sqlite3ExprIsConstant(pParse, pRow->a[ii].pExpr) ) return 0;
   }
   return 1;
@@ -613,10 +598,9 @@ static int exprListIsConstant(Parse *pParse, ExprList *pRow){
 ** only argument are both constant and have no affinity.
 */
 static int exprListIsNoAffinity(Parse *pParse, ExprList *pRow){
-  int ii;
   if( exprListIsConstant(pParse,pRow)==0 ) return 0;
-  for(ii=0; ii<pRow->nExpr; ii++){
-    Expr *pExpr = pRow->a[ii].pExpr;
+  for(int ii=0; ii<pRow->nExpr; ii++){
+    Expr *const pExpr = pRow->a[ii].pExpr;
     assert( pExpr->op!=TK_RAISE );
     assert( pExpr->affExpr==0 );
     if( 0!=sqlite3ExprAffinity(pExpr) ) return 0;
@@ -1787,7 +1771,7 @@ static Index *indexIteratorFirst(IndexIterator *pIter, int *pIx){
 /* Return the next index from the list.  Return NULL when out of indexes */
 static Index *indexIteratorNext(IndexIterator *pIter, int *pIx){
   if( pIter->eType ){
-    int i = ++pIter->i;
+    const int i = ++pIter->i;
     if( i>=pIter->u.ax.nIdx ){
       *pIx = i;
       return 0;
@@ -2730,12 +2714,12 @@ void sqlite3GenerateConstraintChecks(
 ** Or if no columns of pTab may be NULL-trimmed, leave P5 at zero.
 */
 void sqlite3SetMakeRecordP5(Vdbe *v, Table *pTab){
-  u16 i;
 
   /* Records with omitted columns are only allowed for schema format
   ** version 2 and later (SQLite version 3.1.4, 2005-02-20). */
   if( pTab->pSchema->file_format<2 ) return;
 
+  u16 i;
   for(i=pTab->nCol-1; i>0; i--){
     if( pTab->aCol[i].iDflt!=0 ) break;
     if( pTab->aCol[i].colFlags & COLFLAG_PRIMKEY ) break;
@@ -2949,7 +2933,6 @@ int sqlite3_xferopt_count;
 **    *   The index has the exact same WHERE clause
 */
 static int xferCompatibleIndex(Index *pDest, Index *pSrc){
-  int i;
   assert( pDest && pSrc );
   assert( pDest->pTable!=pSrc->pTable );
   if( pDest->nKeyCol!=pSrc->nKeyCol || pDest->nColumn!=pSrc->nColumn ){
@@ -2958,7 +2941,7 @@ static int xferCompatibleIndex(Index *pDest, Index *pSrc){
   if( pDest->onError!=pSrc->onError ){
     return 0;   /* Different conflict resolution strategies */
   }
-  for(i=0; i<pSrc->nKeyCol; i++){
+  for(int i=0; i<pSrc->nKeyCol; i++){
     if( pSrc->aiColumn[i]!=pDest->aiColumn[i] ){
       return 0;   /* Different columns indexed */
     }
