@@ -267,11 +267,11 @@
 [x] src/btree.cpp::sqlite3BtreeSharable
 [x] src/btree.cpp::sqlite3BtreeConnectionCount
 [x] src/build.cpp::codeTableLocks
-[ ] src/build.cpp::sqlite3DbMaskAllZero
-[ ] src/build.cpp::sqlite3FinishCoding
-[ ] src/build.cpp::sqlite3NestedParse
-[ ] src/build.cpp::sqlite3FindTable
-[ ] src/build.cpp::sqlite3PreferredTableName
+[x] src/build.cpp::sqlite3DbMaskAllZero
+[x] src/build.cpp::sqlite3FinishCoding
+[x] src/build.cpp::sqlite3NestedParse
+[x] src/build.cpp::sqlite3FindTable
+[x] src/build.cpp::sqlite3PreferredTableName
 [ ] src/build.cpp::sqlite3FindIndex
 [ ] src/build.cpp::sqlite3FreeIndex
 [ ] src/build.cpp::sqlite3UnlinkAndDeleteIndex

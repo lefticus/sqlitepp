@@ -120,8 +120,7 @@ static void codeTableLocks(Parse *pParse){
 */
 #if SQLITE_MAX_ATTACHED>30
 int sqlite3DbMaskAllZero(yDbMask m){
-  int i;
-  for(i=0; i<sizeof(yDbMask); i++) if( m[i] ) return 0;
+  for(int i=0; i<sizeof(yDbMask); i++) if( m[i] ) return 0;
   return 1;
 }
 #endif
@@ -137,12 +136,8 @@ int sqlite3DbMaskAllZero(yDbMask m){
 ** no VDBE code was generated.
 */
 void sqlite3FinishCoding(Parse *pParse){
-  sqlite3 *db;
-  Vdbe *v;
-  int iDb, i;
-
   assert( pParse->pToplevel==0 );
-  db = pParse->db;
+  sqlite3 *const db = pParse->db;
   assert( db->pParse==pParse );
   if( pParse->nested ) return;
   if( pParse->nErr ){
@@ -154,7 +149,7 @@ void sqlite3FinishCoding(Parse *pParse){
   /* Begin by generating some termination code at the end of the
   ** vdbe program
   */
-  v = pParse->pVdbe;
+  Vdbe *v = pParse->pVdbe;
   if( v==0 ){
     if( db->init.busy ){
       pParse->rc = SQLITE_DONE;
@@ -179,6 +174,7 @@ void sqlite3FinishCoding(Parse *pParse){
            sqlite3VdbeAddOp1(v, OP_Rewind, pReturning->iRetCur);
         VdbeCoverage(v);
         reg = pReturning->iRetReg;
+        int i;
         for(i=0; i<pReturning->nRetCol; i++){
           sqlite3VdbeAddOp3(v, OP_Column, pReturning->iRetCur, i, reg+i);
         }
@@ -199,7 +195,7 @@ void sqlite3FinishCoding(Parse *pParse){
     assert( pParse->nErr>0 || sqlite3VdbeGetOp(v, 0)->opcode==OP_Init );
     sqlite3VdbeJumpHere(v, 0);
     assert( db->nDb>0 );
-    iDb = 0;
+    int iDb = 0;
     do{
       Schema *pSchema;
       if( DbMaskTest(pParse->cookieMask, iDb)==0 ) continue;
@@ -217,7 +213,7 @@ void sqlite3FinishCoding(Parse *pParse){
             "usesStmtJournal=%d", pParse->mayAbort && pParse->isMultiWrite));
     }while( ++iDb<db->nDb );
 #ifndef SQLITE_OMIT_VIRTUALTABLE
-    for(i=0; i<pParse->nVtabLock; i++){
+    for(int i=0; i<pParse->nVtabLock; i++){
       char *vtab = reinterpret_cast<char*>(sqlite3GetVTable(db, pParse->apVtabLock[i]));
       sqlite3VdbeAddOp4(v, OP_VBegin, 0, 0, 0, vtab, P4_VTAB);
     }
@@ -241,7 +237,7 @@ void sqlite3FinishCoding(Parse *pParse){
     if( pParse->pConstExpr ){
       ExprList *pEL = pParse->pConstExpr;
       pParse->okConstFactor = 0;
-      for(i=0; i<pEL->nExpr; i++){
+      for(int i=0; i<pEL->nExpr; i++){
         assert( pEL->a[i].u.iConstExprReg>0 );
         sqlite3ExprCode(pParse, pEL->a[i].pExpr, pEL->a[i].u.iConstExprReg);
       }
@@ -289,17 +285,14 @@ void sqlite3FinishCoding(Parse *pParse){
 **      built-in function.
 */
 void sqlite3NestedParse(Parse *pParse, const char *zFormat, ...){
-  va_list ap;
-  char *zSql;
-  sqlite3 *db = pParse->db;
-  u32 savedDbFlags = db->mDbFlags;
-  char saveBuf[PARSE_TAIL_SZ];
+  sqlite3 *const db = pParse->db;
 
   if( pParse->nErr ) return;
   if( pParse->eParseMode ) return;
   assert( pParse->nested<10 );  /* Nesting should only be of limited depth */
+  va_list ap;
   va_start(ap, zFormat);
-  zSql = sqlite3VMPrintf(db, zFormat, ap);
+  char *const zSql = sqlite3VMPrintf(db, zFormat, ap);
   va_end(ap);
   if( zSql==0 ){
     /* This can result either from an OOM or because the formatted string
@@ -310,6 +303,8 @@ void sqlite3NestedParse(Parse *pParse, const char *zFormat, ...){
     return;
   }
   pParse->nested++;
+  const u32 savedDbFlags = db->mDbFlags;
+  char saveBuf[PARSE_TAIL_SZ];
   memcpy(saveBuf, PARSE_TAIL(pParse), PARSE_TAIL_SZ);
   memset(PARSE_TAIL(pParse), 0, PARSE_TAIL_SZ);
   db->mDbFlags |= DBFLAG_PreferBuiltin;
@@ -334,11 +329,11 @@ void sqlite3NestedParse(Parse *pParse, const char *zFormat, ...){
 */
 Table *sqlite3FindTable(sqlite3 *db, const char *zName, const char *zDatabase){
   Table *p = 0;
-  int i;
 
   /* All mutexes are required for schema access.  Make sure we hold them. */
   assert( zDatabase!=0 || sqlite3BtreeHoldsAllMutexes(db) );
   if( zDatabase ){
+    int i;
     for(i=0; i<db->nDb; i++){
       if( sqlite3StrICmp(zDatabase, db->aDb[i].zDbSName)==0 ) break;
     }
@@ -376,7 +371,7 @@ Table *sqlite3FindTable(sqlite3 *db, const char *zName, const char *zDatabase){
     p = static_cast<Table*>(sqlite3HashFind(&db->aDb[0].pSchema->tblHash, zName));
     if( p ) return p;
     /* Attached databases are in order of attachment */
-    for(i=2; i<db->nDb; i++){
+    for(int i=2; i<db->nDb; i++){
       assert( sqlite3SchemaMutexHeld(db, i, 0) );
       p = static_cast<Table*>(sqlite3HashFind(&db->aDb[i].pSchema->tblHash, zName));
       if( p ) break;
