@@ -11271,12 +11271,11 @@ int sqlite3BtreeLockTable(Btree *p, int iTab, u8 isWriteLock){
 ** no modifications are made and SQLITE_CORRUPT is returned.
 */
 int sqlite3BtreePutData(BtCursor *pCsr, u32 offset, u32 amt, void *z){
-  int rc;
   assert( cursorOwnsBtShared(pCsr) );
   assert( sqlite3_mutex_held(pCsr->pBtree->db->mutex) );
   assert( pCsr->curFlags & BTCF_Incrblob );
 
-  rc = restoreCursorPosition(pCsr);
+  int rc = restoreCursorPosition(pCsr);
   if( rc!=SQLITE_OK ){
     return rc;
   }
@@ -11331,7 +11330,6 @@ void sqlite3BtreeIncrblobCursor(BtCursor *pCur){
 */
 int sqlite3BtreeSetVersion(Btree *pBtree, int iVersion){
   BtShared *pBt = pBtree->pBt;
-  int rc;                         /* Return code */
 
   assert( iVersion==1 || iVersion==2 );
 
@@ -11341,7 +11339,7 @@ int sqlite3BtreeSetVersion(Btree *pBtree, int iVersion){
   pBt->btsFlags &= ~BTS_NO_WAL;
   if( iVersion==1 ) pBt->btsFlags |= BTS_NO_WAL;
 
-  rc = sqlite3BtreeBeginTrans(pBtree, 0, 0);
+  int rc = sqlite3BtreeBeginTrans(pBtree, 0, 0);
   if( rc==SQLITE_OK ){
     u8 *aData = pBt->pPage1->aData;
     if( aData[18]!=(u8)iVersion || aData[19]!=(u8)iVersion ){
@@ -11385,7 +11383,7 @@ int sqlite3HeaderSizeBtree(void){ return ROUND8(sizeof(MemPage)); }
 ** the in-memory pager cache.
 */
 void sqlite3BtreeClearCache(Btree *p){
-  BtShared *pBt = p->pBt;
+  BtShared *const pBt = p->pBt;
   if( pBt->inTransaction==TRANS_NONE ){
     sqlite3PagerClearCache(pBt->pPager);
   }

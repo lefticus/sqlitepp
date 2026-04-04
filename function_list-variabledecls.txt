@@ -257,11 +257,11 @@
 [x] src/btree.cpp::sqlite3BtreeSchema
 [x] src/btree.cpp::sqlite3BtreeSchemaLocked
 [x] src/btree.cpp::sqlite3BtreeLockTable
-[ ] src/btree.cpp::sqlite3BtreePutData
-[ ] src/btree.cpp::sqlite3BtreeIncrblobCursor
-[ ] src/btree.cpp::sqlite3BtreeSetVersion
-[ ] src/btree.cpp::sqlite3BtreeCursorHasHint
-[ ] src/btree.cpp::sqlite3BtreeIsReadonly
+[x] src/btree.cpp::sqlite3BtreePutData
+[x] src/btree.cpp::sqlite3BtreeIncrblobCursor
+[x] src/btree.cpp::sqlite3BtreeSetVersion
+[x] src/btree.cpp::sqlite3BtreeCursorHasHint
+[x] src/btree.cpp::sqlite3BtreeIsReadonly
 [ ] src/btree.cpp::sqlite3HeaderSizeBtree
 [ ] src/btree.cpp::sqlite3BtreeClearCache
 [ ] src/btree.cpp::sqlite3BtreeSharable
