@@ -213,7 +213,6 @@ static int statDisconnect(sqlite3_vtab *pVtab){
 **      0x08           Output should be ordered by name and path
 */
 static int statBestIndex(sqlite3_vtab *tab, sqlite3_index_info *pIdxInfo){
-  int i;
   int iSchema = -1;
   int iName = -1;
   int iAgg = -1;
@@ -224,7 +223,7 @@ static int statBestIndex(sqlite3_vtab *tab, sqlite3_index_info *pIdxInfo){
   ** lower the cost estimate to encourage the constrained version to be
   ** used.
   */
-  for(i=0; i<pIdxInfo->nConstraint; i++){
+  for(int i=0; i<pIdxInfo->nConstraint; i++){
     if( pIdxInfo->aConstraint[i].op!=SQLITE_INDEX_CONSTRAINT_EQ ) continue;
     if( pIdxInfo->aConstraint[i].usable==0 ){
       /* Force DBSTAT table should always be the right-most table in a join */
@@ -245,7 +244,7 @@ static int statBestIndex(sqlite3_vtab *tab, sqlite3_index_info *pIdxInfo){
       }
     }
   }
-  i = 0;
+  int i = 0;
   if( iSchema>=0 ){
     pIdxInfo->aConstraintUsage[iSchema].argvIndex = ++i;
     pIdxInfo->aConstraintUsage[iSchema].omit = 1;
@@ -288,7 +287,7 @@ static int statBestIndex(sqlite3_vtab *tab, sqlite3_index_info *pIdxInfo){
 ** Open a new DBSTAT cursor.
 */
 static int statOpen(sqlite3_vtab *pVTab, sqlite3_vtab_cursor **ppCursor){
-  StatTable *pTab = (StatTable *)pVTab;
+  const StatTable *pTab = (StatTable *)pVTab;
   StatCursor *pCsr;
 
   pCsr = (StatCursor *)sqlite3_malloc64(sizeof(StatCursor));
@@ -305,9 +304,8 @@ static int statOpen(sqlite3_vtab *pVTab, sqlite3_vtab_cursor **ppCursor){
 }
 
 static void statClearCells(StatPage *p){
-  int i;
   if( p->aCell ){
-    for(i=0; i<p->nCell; i++){
+    for(int i=0; i<p->nCell; i++){
       sqlite3_free(p->aCell[i].aOvfl);
     }
     sqlite3_free(p->aCell);
@@ -317,7 +315,7 @@ static void statClearCells(StatPage *p){
 }
 
 static void statClearPage(StatPage *p){
-  u8 *aPg = p->aPg;
+  u8 *const aPg = p->aPg;
   statClearCells(p);
   sqlite3_free(p->zPath);
   memset(p, 0, sizeof(StatPage));
@@ -325,12 +323,11 @@ static void statClearPage(StatPage *p){
 }
 
 static void statResetCsr(StatCursor *pCsr){
-  int i;
   /* In some circumstances, specifically if an OOM has occurred, the call
   ** to sqlite3_reset() may cause the pager to be reset (emptied). It is
   ** important that statClearPage() is called to free any page refs before
   ** this happens. dbsqlfuzz 9ed3e4e3816219d3509d711636c38542bf3f40b1. */
-  for(i=0; i<ArraySize(pCsr->aPage); i++){
+  for(int i=0; i<ArraySize(pCsr->aPage); i++){
     statClearPage(&pCsr->aPage[i]);
     sqlite3_free(pCsr->aPage[i].aPg);
     pCsr->aPage[i].aPg = 0;
@@ -400,8 +397,8 @@ static int statDecodePage(Btree *pBt, StatPage *p){
   int isLeaf;
   int szPage;
 
-  u8 *aData = p->aPg;
-  u8 *aHdr = &aData[p->iPgno==1 ? 100 : 0];
+  u8 *const aData = p->aPg;
+  u8 *const aHdr = &aData[p->iPgno==1 ? 100 : 0];
 
   p->flags = aHdr[0];
   if( p->flags==0x0A || p->flags==0x0D ){
@@ -433,17 +430,14 @@ static int statDecodePage(Btree *pBt, StatPage *p){
   p->iRightChildPg = isLeaf ? 0 : sqlite3Get4byte(&aHdr[8]);
 
   if( p->nCell ){
-    int i;                        /* Used to iterate through cells */
-    int nUsable;                  /* Usable bytes per page */
-
     sqlite3BtreeEnter(pBt);
-    nUsable = szPage - sqlite3BtreeGetReserveNoMutex(pBt);
+    const int nUsable = szPage - sqlite3BtreeGetReserveNoMutex(pBt);
     sqlite3BtreeLeave(pBt);
     p->aCell = static_cast<StatCell *>(sqlite3_malloc64((p->nCell+1) * sizeof(StatCell)));
     if( p->aCell==0 ) return SQLITE_NOMEM_BKPT;
     memset(p->aCell, 0, (p->nCell+1) * sizeof(StatCell));
 
-    for(i=0; i<p->nCell; i++){
+    for(int i=0; i<p->nCell; i++){
       StatCell *pCell = &p->aCell[i];
 
       iOff = get2byte(&aData[nHdr+i*2]);
@@ -469,8 +463,7 @@ static int statDecodePage(Btree *pBt, StatPage *p){
         assert( nPayload>=(u32)nLocal );
         assert( nLocal<=(nUsable-35) );
         if( nPayload>(u32)nLocal ){
-          int j;
-          int nOvfl = ((nPayload - nLocal) + nUsable-4 - 1) / (nUsable - 4);
+          const int nOvfl = ((nPayload - nLocal) + nUsable-4 - 1) / (nUsable - 4);
           if( iOff+nLocal+4>nUsable || nPayload>0x7fffffff ){
             goto statPageIsCorrupt;
           }
@@ -479,11 +472,10 @@ static int statDecodePage(Btree *pBt, StatPage *p){
           pCell->aOvfl = static_cast<u32 *>(sqlite3_malloc64(sizeof(u32)*nOvfl));
           if( pCell->aOvfl==0 ) return SQLITE_NOMEM_BKPT;
           pCell->aOvfl[0] = sqlite3Get4byte(&aData[iOff+nLocal]);
-          for(j=1; j<nOvfl; j++){
-            int rc;
-            u32 iPrev = pCell->aOvfl[j-1];
+          for(int j=1; j<nOvfl; j++){
+            const u32 iPrev = pCell->aOvfl[j-1];
             DbPage *pPg = 0;
-            rc = sqlite3PagerGet(sqlite3BtreePager(pBt), iPrev, &pPg, 0);
+            const int rc = sqlite3PagerGet(sqlite3BtreePager(pBt), iPrev, &pPg, 0);
             if( rc!=SQLITE_OK ){
               assert( pPg==0 );
               return rc;
@@ -509,16 +501,15 @@ statPageIsCorrupt:
 ** the current value of pCsr->iPageno.
 */
 static void statSizeAndOffset(StatCursor *pCsr){
-  StatTable *pTab = (StatTable *)((sqlite3_vtab_cursor *)pCsr)->pVtab;
-  Btree *pBt = pTab->db->aDb[pTab->iDb].pBt;
-  Pager *pPager = sqlite3BtreePager(pBt);
-  sqlite3_file *fd;
+  const StatTable *pTab = (StatTable *)((sqlite3_vtab_cursor *)pCsr)->pVtab;
+  Btree *const pBt = pTab->db->aDb[pTab->iDb].pBt;
+  Pager *const pPager = sqlite3BtreePager(pBt);
   sqlite3_int64 x[2];
 
   /* If connected to a ZIPVFS backend, find the page size and
   ** offset from ZIPVFS.
   */
-  fd = sqlite3PagerFile(pPager);
+  sqlite3_file *const fd = sqlite3PagerFile(pPager);
   x[0] = pCsr->iPageno;
   if( sqlite3OsFileControl(fd, 230440, &x)==SQLITE_OK ){
     pCsr->iOffset = x[0];
@@ -569,7 +560,6 @@ static int statGetPage(
 */
 static int statNext(sqlite3_vtab_cursor *pCursor){
   int rc;
-  int nPayload;
   char *z;
   StatCursor *pCsr = (StatCursor *)pCursor;
   StatTable *pTab = (StatTable *)pCursor->pVtab;
@@ -612,9 +602,8 @@ statNextRestart:
     while( p->iCell<p->nCell ){
       StatCell *pCell = &p->aCell[p->iCell];
       while( pCell->iOvfl<pCell->nOvfl ){
-        int nUsable, iOvfl;
         sqlite3BtreeEnter(pBt);
-        nUsable = sqlite3BtreeGetPageSize(pBt) - 
+        const int nUsable = sqlite3BtreeGetPageSize(pBt) -
                         sqlite3BtreeGetReserveNoMutex(pBt);
         sqlite3BtreeLeave(pBt);
         pCsr->nPage++;
@@ -625,7 +614,7 @@ statNextRestart:
           pCsr->nPayload += pCell->nLastOvfl;
           pCsr->nUnused += nUsable - 4 - pCell->nLastOvfl;
         }
-        iOvfl = pCell->iOvfl;
+        const int iOvfl = pCell->iOvfl;
         pCell->iOvfl++;
         if( !pCsr->isAgg ){
           pCsr->zName = (char *)sqlite3_column_text(pCsr->pStmt, 0);
@@ -678,8 +667,7 @@ statNextRestart:
   ** by the xColumn() and xRowid() methods.
   */
   if( rc==SQLITE_OK ){
-    int i;
-    StatPage *p = &pCsr->aPage[pCsr->iPage];
+    StatPage *const p = &pCsr->aPage[pCsr->iPage];
     pCsr->zName = (char *)sqlite3_column_text(pCsr->pStmt, 0);
     pCsr->iPageno = p->iPgno;
 
@@ -707,8 +695,8 @@ statNextRestart:
         pCsr->zPath = z = sqlite3_mprintf("%s", p->zPath);
         if( z==0 ) rc = SQLITE_NOMEM_BKPT;
       }
-      nPayload = 0;
-      for(i=0; i<p->nCell; i++){
+      int nPayload = 0;
+      for(int i=0; i<p->nCell; i++){
         nPayload += p->aCell[i].nLocal;
       }
       pCsr->nPayload += nPayload;
@@ -724,7 +712,7 @@ statNextRestart:
 }
 
 static int statEof(sqlite3_vtab_cursor *pCursor){
-  StatCursor *pCsr = (StatCursor *)pCursor;
+  const StatCursor *pCsr = (StatCursor *)pCursor;
   return pCsr->isEof;
 }
 
@@ -863,7 +851,7 @@ static int statColumn(
 }
 
 static int statRowid(sqlite3_vtab_cursor *pCursor, sqlite_int64 *pRowid){
-  StatCursor *pCsr = (StatCursor *)pCursor;
+  const StatCursor *pCsr = (StatCursor *)pCursor;
   *pRowid = pCsr->iPageno;
   return SQLITE_OK;
 }

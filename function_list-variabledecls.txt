@@ -415,21 +415,21 @@
 [x] src/dbpage.cpp::dbpageRollbackTo
 [x] src/dbpage.cpp::sqlite3DbpageRegister
 [x] src/dbpage.cpp::sqlite3DbpageRegister
-[ ] src/dbstat.cpp::statDisconnect
-[ ] src/dbstat.cpp::statBestIndex
-[ ] src/dbstat.cpp::statOpen
-[ ] src/dbstat.cpp::statClearCells
-[ ] src/dbstat.cpp::statClearPage
-[ ] src/dbstat.cpp::statResetCsr
-[ ] src/dbstat.cpp::statResetCounts
-[ ] src/dbstat.cpp::statClose
-[ ] src/dbstat.cpp::statDecodePage
-[ ] src/dbstat.cpp::statSizeAndOffset
-[ ] src/dbstat.cpp::statNext
-[ ] src/dbstat.cpp::statEof
-[ ] src/dbstat.cpp::statRowid
-[ ] src/dbstat.cpp::sqlite3DbstatRegister
-[ ] src/dbstat.cpp::sqlite3DbstatRegister
+[x] src/dbstat.cpp::statDisconnect
+[x] src/dbstat.cpp::statBestIndex
+[x] src/dbstat.cpp::statOpen
+[x] src/dbstat.cpp::statClearCells
+[x] src/dbstat.cpp::statClearPage
+[x] src/dbstat.cpp::statResetCsr
+[x] src/dbstat.cpp::statResetCounts
+[x] src/dbstat.cpp::statClose
+[x] src/dbstat.cpp::statDecodePage
+[x] src/dbstat.cpp::statSizeAndOffset
+[x] src/dbstat.cpp::statNext
+[x] src/dbstat.cpp::statEof
+[x] src/dbstat.cpp::statRowid
+[x] src/dbstat.cpp::sqlite3DbstatRegister
+[x] src/dbstat.cpp::sqlite3DbstatRegister
 [ ] src/delete.cpp::sqlite3SrcListLookup
 [ ] src/delete.cpp::sqlite3CodeChangeCount
 [ ] src/delete.cpp::vtabIsReadOnly
