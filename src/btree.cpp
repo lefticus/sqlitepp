@@ -8954,8 +8954,7 @@ static int balance_deeper(MemPage *pRoot, MemPage **ppChild){
 ** first SQL table, violating invariants on the first insert.
 */
 static int anotherValidCursor(BtCursor *pCur){
-  BtCursor *pOther;
-  for(pOther=pCur->pBt->pCursor; pOther; pOther=pOther->pNext){
+  for(BtCursor *pOther=pCur->pBt->pCursor; pOther; pOther=pOther->pNext){
     if( pOther!=pCur
      && pOther->eState==CURSOR_VALID
      && pOther->pPage==pCur->pPage
@@ -9206,8 +9205,8 @@ static SQLITE_NOINLINE int btreeOverwriteOverflowCell(
 ** contained in pX.
 */
 static int btreeOverwriteCell(BtCursor *pCur, const BtreePayload *pX){
-  int nTotal = pX->nData + pX->nZero; /* Total bytes of to write */
-  MemPage *pPage = pCur->pPage;       /* Page being written */
+  const int nTotal = pX->nData + pX->nZero; /* Total bytes of to write */
+  MemPage * const pPage = pCur->pPage;       /* Page being written */
 
   if( pCur->info.pPayload + pCur->info.nLocal > pPage->aDataEnd
    || pCur->info.pPayload < pPage->aData + pPage->cellOffset
@@ -9574,11 +9573,8 @@ end_insert:
 ** SQLITE_OK is returned if successful, or an SQLite error code otherwise.
 */
 int sqlite3BtreeTransferRow(BtCursor *pDest, BtCursor *pSrc, i64 iKey){
-  BtShared *pBt = pDest->pBt;
+  BtShared * const pBt = pDest->pBt;
   u8 *aOut = pBt->pTmpSpace;    /* Pointer to next output buffer */
-  const u8 *aIn;                /* Pointer to next input buffer */
-  u32 nIn;                      /* Size of input buffer aIn[] */
-  u32 nRem;                     /* Bytes of data still to copy */
 
   getCellInfo(pSrc);
   if( pSrc->info.nPayload<0x80 ){
@@ -9587,19 +9583,19 @@ int sqlite3BtreeTransferRow(BtCursor *pDest, BtCursor *pSrc, i64 iKey){
     aOut += sqlite3PutVarint(aOut, pSrc->info.nPayload);
   }
   if( pDest->pKeyInfo==0 ) aOut += putVarint(aOut, iKey);
-  nIn = pSrc->info.nLocal;
-  aIn = pSrc->info.pPayload;
+  u32 nIn = pSrc->info.nLocal;              /* Size of input buffer aIn[] */
+  const u8 *aIn = pSrc->info.pPayload;      /* Pointer to next input buffer */
   if( aIn+nIn>pSrc->pPage->aDataEnd ){
     return SQLITE_CORRUPT_PAGE(pSrc->pPage);
   }
-  nRem = pSrc->info.nPayload;
+  u32 nRem = pSrc->info.nPayload;             /* Bytes of data still to copy */
   if( nIn==nRem && nIn<pDest->pPage->maxLocal ){
     memcpy(aOut, aIn, nIn);
     pBt->nPreformatSize = nIn + (int)(aOut - pBt->pTmpSpace);
     return SQLITE_OK;
   }else{
     int rc = SQLITE_OK;
-    Pager *pSrcPager = pSrc->pBt->pPager;
+    Pager * const pSrcPager = pSrc->pBt->pPager;
     u8 *pPgnoOut = 0;
     Pgno ovflIn = 0;
     DbPage *pPageIn = 0;
@@ -9688,15 +9684,9 @@ int sqlite3BtreeTransferRow(BtCursor *pDest, BtCursor *pSrc, i64 iKey){
 ** but which might be used by alternative storage engines.
 */
 int sqlite3BtreeDelete(BtCursor *pCur, u8 flags){
-  Btree *p = pCur->pBtree;
-  BtShared *pBt = p->pBt;             
+  Btree * const p = pCur->pBtree;
+  BtShared * const pBt = p->pBt;
   int rc;                    /* Return code */
-  MemPage *pPage;            /* Page to delete cell from */
-  unsigned char *pCell;      /* Pointer to cell to delete */
-  int iCellIdx;              /* Index of cell to delete */
-  int iCellDepth;            /* Depth of node containing pCell */
-  CellInfo info;             /* Size of the cell being deleted */
-  u8 bPreserve;              /* Keep cursor valid.  2 for CURSOR_SKIPNEXT */
 
   assert( cursorOwnsBtShared(pCur) );
   assert( pBt->inTransaction==TRANS_WRITE );
@@ -9716,13 +9706,13 @@ int sqlite3BtreeDelete(BtCursor *pCur, u8 flags){
   }
   assert( pCur->eState==CURSOR_VALID );
 
-  iCellDepth = pCur->iPage;
-  iCellIdx = pCur->ix;
-  pPage = pCur->pPage;
+  const int iCellDepth = pCur->iPage;  /* Depth of node containing pCell */
+  const int iCellIdx = pCur->ix;        /* Index of cell to delete */
+  MemPage * const pPage = pCur->pPage;  /* Page to delete cell from */
   if( pPage->nCell<=iCellIdx ){
     return SQLITE_CORRUPT_PAGE(pPage);
   }
-  pCell = findCell(pPage, iCellIdx);
+  unsigned char *pCell = findCell(pPage, iCellIdx);  /* Pointer to cell to delete */
   if( pPage->nFree<0 && btreeComputeFreeSpace(pPage) ){
     return SQLITE_CORRUPT_PAGE(pPage);
   }
@@ -9746,7 +9736,7 @@ int sqlite3BtreeDelete(BtCursor *pCur, u8 flags){
   **    bPreserve==1         Use CURSOR_REQUIRESEEK to save the cursor position
   **    bPreserve==2         Cursor won't move.  Set CURSOR_SKIPNEXT.
   */
-  bPreserve = (flags & BTREE_SAVEPOSITION)!=0;
+  u8 bPreserve = (flags & BTREE_SAVEPOSITION)!=0;  /* Keep cursor valid.  2 for CURSOR_SKIPNEXT */
   if( bPreserve ){
     if( !pPage->leaf
      || (pPage->nFree+pPage->xCellSize(pPage,pCell)+2) >
@@ -9793,6 +9783,7 @@ int sqlite3BtreeDelete(BtCursor *pCur, u8 flags){
   ** itself from within the page.  */
   rc = sqlite3PagerWrite(pPage->pDbPage);
   if( rc ) return rc;
+  CellInfo info;             /* Size of the cell being deleted */
   BTREE_CLEAR_CELL(rc, pPage, pCell, info);
   dropCell(pPage, iCellIdx, info.nSize, &rc);
   if( rc ) return rc;

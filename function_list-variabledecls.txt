@@ -227,11 +227,11 @@
 [x] src/btree.cpp::ptrmapCheckPages
 [x] src/btree.cpp::copyNodeContent
 [x] src/btree.cpp::balance_deeper
-[ ] src/btree.cpp::anotherValidCursor
-[ ] src/btree.cpp::balance
-[ ] src/btree.cpp::btreeOverwriteCell
-[ ] src/btree.cpp::sqlite3BtreeTransferRow
-[ ] src/btree.cpp::sqlite3BtreeDelete
+[x] src/btree.cpp::anotherValidCursor
+[x] src/btree.cpp::balance
+[x] src/btree.cpp::btreeOverwriteCell
+[x] src/btree.cpp::sqlite3BtreeTransferRow
+[x] src/btree.cpp::sqlite3BtreeDelete
 [ ] src/btree.cpp::btreeCreateTable
 [ ] src/btree.cpp::sqlite3BtreeCreateTable
 [ ] src/btree.cpp::sqlite3BtreeClearTable
