@@ -262,11 +262,11 @@
 [x] src/btree.cpp::sqlite3BtreeSetVersion
 [x] src/btree.cpp::sqlite3BtreeCursorHasHint
 [x] src/btree.cpp::sqlite3BtreeIsReadonly
-[ ] src/btree.cpp::sqlite3HeaderSizeBtree
-[ ] src/btree.cpp::sqlite3BtreeClearCache
-[ ] src/btree.cpp::sqlite3BtreeSharable
-[ ] src/btree.cpp::sqlite3BtreeConnectionCount
-[ ] src/build.cpp::codeTableLocks
+[x] src/btree.cpp::sqlite3HeaderSizeBtree
+[x] src/btree.cpp::sqlite3BtreeClearCache
+[x] src/btree.cpp::sqlite3BtreeSharable
+[x] src/btree.cpp::sqlite3BtreeConnectionCount
+[x] src/build.cpp::codeTableLocks
 [ ] src/build.cpp::sqlite3DbMaskAllZero
 [ ] src/build.cpp::sqlite3FinishCoding
 [ ] src/build.cpp::sqlite3NestedParse
