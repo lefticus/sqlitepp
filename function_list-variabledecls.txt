@@ -232,11 +232,11 @@
 [x] src/btree.cpp::btreeOverwriteCell
 [x] src/btree.cpp::sqlite3BtreeTransferRow
 [x] src/btree.cpp::sqlite3BtreeDelete
-[ ] src/btree.cpp::btreeCreateTable
-[ ] src/btree.cpp::sqlite3BtreeCreateTable
-[ ] src/btree.cpp::sqlite3BtreeClearTable
-[ ] src/btree.cpp::sqlite3BtreeClearTableOfCursor
-[ ] src/btree.cpp::btreeDropTable
+[x] src/btree.cpp::btreeCreateTable
+[x] src/btree.cpp::sqlite3BtreeCreateTable
+[x] src/btree.cpp::sqlite3BtreeClearTable
+[x] src/btree.cpp::sqlite3BtreeClearTableOfCursor
+[x] src/btree.cpp::btreeDropTable
 [ ] src/btree.cpp::sqlite3BtreeDropTable
 [ ] src/btree.cpp::sqlite3BtreeGetMeta
 [ ] src/btree.cpp::sqlite3BtreeUpdateMeta

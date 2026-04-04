@@ -9892,11 +9892,10 @@ int sqlite3BtreeDelete(BtCursor *pCur, u8 flags){
 **     BTREE_ZERODATA                  Used for SQL indices
 */
 static int btreeCreateTable(Btree *p, Pgno *piTable, int createTabFlags){
-  BtShared *pBt = p->pBt;
+  BtShared *const pBt = p->pBt;
   MemPage *pRoot;
   Pgno pgnoRoot;
   int rc;
-  int ptfFlags;          /* Page-type flags for the root page of new table */
 
   assert( sqlite3BtreeHoldsMutex(p) );
   assert( pBt->inTransaction==TRANS_WRITE );
@@ -10025,11 +10024,9 @@ static int btreeCreateTable(Btree *p, Pgno *piTable, int createTabFlags){
   }
 #endif
   assert( sqlite3PagerIswriteable(pRoot->pDbPage) );
-  if( createTabFlags & BTREE_INTKEY ){
-    ptfFlags = PTF_INTKEY | PTF_LEAFDATA | PTF_LEAF;
-  }else{
-    ptfFlags = PTF_ZERODATA | PTF_LEAF;
-  }
+  const int ptfFlags = (createTabFlags & BTREE_INTKEY)  /* Page-type flags for the root page of new table */
+    ? (PTF_INTKEY | PTF_LEAFDATA | PTF_LEAF)
+    : (PTF_ZERODATA | PTF_LEAF);
   zeroPage(pRoot, ptfFlags);
   sqlite3PagerUnref(pRoot->pDbPage);
   assert( (pBt->openFlags & BTREE_SINGLE)==0 || pgnoRoot==2 );
@@ -10037,9 +10034,8 @@ static int btreeCreateTable(Btree *p, Pgno *piTable, int createTabFlags){
   return SQLITE_OK;
 }
 int sqlite3BtreeCreateTable(Btree *p, Pgno *piTable, int flags){
-  int rc;
   sqlite3BtreeEnter(p);
-  rc = btreeCreateTable(p, piTable, flags);
+  const int rc = btreeCreateTable(p, piTable, flags);
   sqlite3BtreeLeave(p);
   return rc;
 }
@@ -10116,12 +10112,11 @@ cleardatabasepage_out:
 ** is incremented by the number of entries in the table.
 */
 int sqlite3BtreeClearTable(Btree *p, int iTable, i64 *pnChange){
-  int rc;
-  BtShared *pBt = p->pBt;
+  BtShared *const pBt = p->pBt;
   sqlite3BtreeEnter(p);
   assert( p->inTrans==TRANS_WRITE );
 
-  rc = saveAllCursors(pBt, (Pgno)iTable, 0);
+  int rc = saveAllCursors(pBt, (Pgno)iTable, 0);
 
   if( SQLITE_OK==rc ){
     /* Invalidate all incrblob cursors open on table iTable (assuming iTable
@@ -10166,9 +10161,8 @@ int sqlite3BtreeClearTableOfCursor(BtCursor *pCur){
 ** meta[3] is updated by this procedure.
 */
 static int btreeDropTable(Btree *p, Pgno iTable, int *piMoved){
-  int rc;
   MemPage *pPage = 0;
-  BtShared *pBt = p->pBt;
+  BtShared *const pBt = p->pBt;
 
   assert( sqlite3BtreeHoldsMutex(p) );
   assert( p->inTrans==TRANS_WRITE );
@@ -10177,7 +10171,7 @@ static int btreeDropTable(Btree *p, Pgno iTable, int *piMoved){
     return SQLITE_CORRUPT_PGNO(iTable);
   }
 
-  rc = sqlite3BtreeClearTable(p, iTable, 0);
+  int rc = sqlite3BtreeClearTable(p, iTable, 0);
   if( rc ) return rc;
   rc = btreeGetPage(pBt, (Pgno)iTable, &pPage, 0);
   if( NEVER(rc) ){
