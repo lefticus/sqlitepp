@@ -10245,9 +10245,8 @@ static int btreeDropTable(Btree *p, Pgno iTable, int *piMoved){
   return rc; 
 }
 int sqlite3BtreeDropTable(Btree *p, int iTable, int *piMoved){
-  int rc;
   sqlite3BtreeEnter(p);
-  rc = btreeDropTable(p, iTable, piMoved);
+  const int rc = btreeDropTable(p, iTable, piMoved);
   sqlite3BtreeLeave(p);
   return rc;
 }
@@ -10274,7 +10273,7 @@ int sqlite3BtreeDropTable(Btree *p, int iTable, int *piMoved){
 ** read it from this routine.
 */
 void sqlite3BtreeGetMeta(Btree *p, int idx, u32 *pMeta){
-  BtShared *pBt = p->pBt;
+  BtShared *const pBt = p->pBt;
 
   sqlite3BtreeEnter(p);
   assert( p->inTrans>TRANS_NONE );
@@ -10304,15 +10303,13 @@ void sqlite3BtreeGetMeta(Btree *p, int idx, u32 *pMeta){
 ** read-only and may not be written.
 */
 int sqlite3BtreeUpdateMeta(Btree *p, int idx, u32 iMeta){
-  BtShared *pBt = p->pBt;
-  unsigned char *pP1;
-  int rc;
+  BtShared *const pBt = p->pBt;
   assert( idx>=1 && idx<=15 );
   sqlite3BtreeEnter(p);
   assert( p->inTrans==TRANS_WRITE );
   assert( pBt->pPage1!=0 );
-  pP1 = pBt->pPage1->aData;
-  rc = sqlite3PagerWrite(pBt->pPage1->pDbPage);
+  unsigned char *const pP1 = pBt->pPage1->aData;
+  const int rc = sqlite3PagerWrite(pBt->pPage1->pDbPage);
   if( rc==SQLITE_OK ){
     put4byte(&pP1[36 + idx*4], iMeta);
 #ifndef SQLITE_OMIT_AUTOVACUUM
@@ -10349,14 +10346,11 @@ int sqlite3BtreeCount(sqlite3 *db, BtCursor *pCur, i64 *pnEntry){
   ** page in the B-Tree structure (not including overflow pages).
   */
   while( rc==SQLITE_OK && !AtomicLoad(&db->u1.isInterrupted) ){
-    int iIdx;                          /* Index of child node in parent */
-    MemPage *pPage;                    /* Current page of the b-tree */
-
     /* If this is a leaf page or the tree is not an int-key tree, then
     ** this page contains countable entries. Increment the entry counter
     ** accordingly.
     */
-    pPage = pCur->pPage;
+    MemPage *pPage = pCur->pPage;     /* Current page of the b-tree */
     if( pPage->leaf || !pPage->intKey ){
       nEntry += pPage->nCell;
     }
@@ -10388,7 +10382,7 @@ int sqlite3BtreeCount(sqlite3 *db, BtCursor *pCur, i64 *pnEntry){
     /* Descend to the child node of the cell that the cursor currently
     ** points at. This is the right-child if (iIdx==pPage->nCell).
     */
-    iIdx = pCur->ix;
+    const int iIdx = pCur->ix;        /* Index of child node in parent */
     if( iIdx==pPage->nCell ){
       rc = moveToChild(pCur, get4byte(&pPage->aData[pPage->hdrOffset+8]));
     }else{

@@ -237,11 +237,11 @@
 [x] src/btree.cpp::sqlite3BtreeClearTable
 [x] src/btree.cpp::sqlite3BtreeClearTableOfCursor
 [x] src/btree.cpp::btreeDropTable
-[ ] src/btree.cpp::sqlite3BtreeDropTable
-[ ] src/btree.cpp::sqlite3BtreeGetMeta
-[ ] src/btree.cpp::sqlite3BtreeUpdateMeta
-[ ] src/btree.cpp::sqlite3BtreeCount
-[ ] src/btree.cpp::sqlite3BtreePager
+[x] src/btree.cpp::sqlite3BtreeDropTable
+[x] src/btree.cpp::sqlite3BtreeGetMeta
+[x] src/btree.cpp::sqlite3BtreeUpdateMeta
+[x] src/btree.cpp::sqlite3BtreeCount
+[x] src/btree.cpp::sqlite3BtreePager
 [ ] src/btree.cpp::checkOom
 [ ] src/btree.cpp::checkProgress
 [ ] src/btree.cpp::getPageReferenced
