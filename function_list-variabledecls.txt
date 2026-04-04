@@ -202,11 +202,11 @@
 [x] src/btree.cpp::moveToChild
 [x] src/btree.cpp::assertParentIndex
 [x] src/btree.cpp::moveToParent
-[ ] src/btree.cpp::moveToRoot
-[ ] src/btree.cpp::moveToLeftmost
-[ ] src/btree.cpp::moveToRightmost
-[ ] src/btree.cpp::sqlite3BtreeFirst
-[ ] src/btree.cpp::sqlite3BtreeIsEmpty
+[x] src/btree.cpp::moveToRoot
+[x] src/btree.cpp::moveToLeftmost
+[x] src/btree.cpp::moveToRightmost
+[x] src/btree.cpp::sqlite3BtreeFirst
+[x] src/btree.cpp::sqlite3BtreeIsEmpty
 [ ] src/btree.cpp::cursorIsAtLastEntry
 [ ] src/btree.cpp::btreeLast
 [ ] src/btree.cpp::sqlite3BtreeLast

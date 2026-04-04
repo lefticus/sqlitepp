@@ -5516,7 +5516,6 @@ skip_init:
 ** in ascending order.
 */
 static int moveToLeftmost(BtCursor *pCur){
-  Pgno pgno;
   int rc = SQLITE_OK;
   MemPage *pPage;
 
@@ -5524,7 +5523,7 @@ static int moveToLeftmost(BtCursor *pCur){
   assert( pCur->eState==CURSOR_VALID );
   while( rc==SQLITE_OK && !(pPage = pCur->pPage)->leaf ){
     assert( pCur->ix<pPage->nCell );
-    pgno = get4byte(findCell(pPage, pCur->ix));
+    const Pgno pgno = get4byte(findCell(pPage, pCur->ix));
     rc = moveToChild(pCur, pgno);
   }
   return rc;
@@ -5541,16 +5540,14 @@ static int moveToLeftmost(BtCursor *pCur){
 ** key in ascending order.
 */
 static int moveToRightmost(BtCursor *pCur){
-  Pgno pgno;
-  int rc = SQLITE_OK;
   MemPage *pPage = 0;
 
   assert( cursorOwnsBtShared(pCur) );
   assert( pCur->eState==CURSOR_VALID );
   while( !(pPage = pCur->pPage)->leaf ){
-    pgno = get4byte(&pPage->aData[pPage->hdrOffset+8]);
+    const Pgno pgno = get4byte(&pPage->aData[pPage->hdrOffset+8]);
     pCur->ix = pPage->nCell;
-    rc = moveToChild(pCur, pgno);
+    const int rc = moveToChild(pCur, pgno);
     if( rc ) return rc;
   }
   pCur->ix = pPage->nCell-1;
@@ -5564,11 +5561,9 @@ static int moveToRightmost(BtCursor *pCur){
 ** or set *pRes to 1 if the table is empty.
 */
 int sqlite3BtreeFirst(BtCursor *pCur, int *pRes){
-  int rc;
-
   assert( cursorOwnsBtShared(pCur) );
   assert( sqlite3_mutex_held(pCur->pBtree->db->mutex) );
-  rc = moveToRoot(pCur);
+  int rc = moveToRoot(pCur);
   if( rc==SQLITE_OK ){
     assert( pCur->pPage->nCell>0 );
     *pRes = 0;
@@ -5587,15 +5582,13 @@ int sqlite3BtreeFirst(BtCursor *pCur, int *pRes){
 ** something goes wrong.
 */
 int sqlite3BtreeIsEmpty(BtCursor *pCur, int *pRes){
-  int rc;
-
   assert( cursorOwnsBtShared(pCur) );
   assert( sqlite3_mutex_held(pCur->pBtree->db->mutex) );
   if( NEVER(pCur->eState==CURSOR_VALID) ){
     *pRes = 0;
     return SQLITE_OK;
   }
-  rc = moveToRoot(pCur);
+  int rc = moveToRoot(pCur);
   if( rc==SQLITE_EMPTY ){
     *pRes = 1;
     rc = SQLITE_OK;
