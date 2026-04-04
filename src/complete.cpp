@@ -103,7 +103,6 @@ extern const char sqlite3IsEbcdicIdChar[];
 */
 int sqlite3_complete(const char *zSql){
   u8 state = 0;   /* Current state, using numbers defined in header comment */
-  u8 token;       /* Value of the next token */
 
 #ifndef SQLITE_OMIT_TRIGGER
   /* A complex statement machine used to detect the end of a CREATE TRIGGER
@@ -142,6 +141,7 @@ int sqlite3_complete(const char *zSql){
 #endif
 
   while( *zSql ){
+    u8 token;       /* Value of the next token */
     switch( *zSql ){
       case ';': {  /* A semicolon */
         token = tkSEMI;
@@ -267,17 +267,15 @@ int sqlite3_complete(const char *zSql){
 ** UTF-8.
 */
 int sqlite3_complete16(const void *zSql){
-  sqlite3_value *pVal;
-  char const *zSql8;
   int rc;
 
 #ifndef SQLITE_OMIT_AUTOINIT
   rc = sqlite3_initialize();
   if( rc ) return rc;
 #endif
-  pVal = sqlite3ValueNew(0);
+  sqlite3_value *const pVal = sqlite3ValueNew(0);
   sqlite3ValueSetStr(pVal, -1, zSql, SQLITE_UTF16NATIVE, SQLITE_STATIC);
-  zSql8 = static_cast<const char*>(sqlite3ValueText(pVal, SQLITE_UTF8));
+  const char *const zSql8 = static_cast<const char*>(sqlite3ValueText(pVal, SQLITE_UTF8));
   if( zSql8 ){
     rc = sqlite3_complete(zSql8);
   }else{

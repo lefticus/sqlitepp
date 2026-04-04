@@ -380,8 +380,8 @@
 [x] src/carray.cpp::carrayEof
 [x] src/carray.cpp::carrayBindDel
 [x] src/carray.cpp::sqlite3CarrayRegister
-[ ] src/complete.cpp::sqlite3_complete
-[ ] src/complete.cpp::sqlite3_complete16
+[x] src/complete.cpp::sqlite3_complete
+[x] src/complete.cpp::sqlite3_complete16
 [ ] src/date.cpp::getDigits
 [ ] src/date.cpp::parseTimezone
 [ ] src/date.cpp::parseHhMmSs
