@@ -5332,7 +5332,6 @@ const void *sqlite3BtreePayloadFetch(BtCursor *pCur, u32 *pAmt){
 ** vice-versa).
 */
 static int moveToChild(BtCursor *pCur, u32 newPgno){
-  int rc;
   assert( cursorOwnsBtShared(pCur) );
   assert( pCur->eState==CURSOR_VALID );
   assert( pCur->iPage<BTCURSOR_MAX_DEPTH );
@@ -5346,7 +5345,7 @@ static int moveToChild(BtCursor *pCur, u32 newPgno){
   pCur->apPage[pCur->iPage] = pCur->pPage;
   pCur->ix = 0;
   pCur->iPage++;
-  rc = getAndInitPage(pCur->pBt, newPgno, &pCur->pPage, pCur->curPagerFlags);
+  int rc = getAndInitPage(pCur->pBt, newPgno, &pCur->pPage, pCur->curPagerFlags);
   assert( pCur->pPage!=0 || rc!=SQLITE_OK );
   if( rc==SQLITE_OK
    && (pCur->pPage->nCell<1 || pCur->pPage->intKey!=pCur->curIntKey)
@@ -5391,7 +5390,6 @@ static void assertParentIndex(MemPage *pParent, int iIdx, Pgno iChild){
 ** the largest cell index.
 */
 static void moveToParent(BtCursor *pCur){
-  MemPage *pLeaf;
   assert( cursorOwnsBtShared(pCur) );
   assert( pCur->eState==CURSOR_VALID );
   assert( pCur->iPage>0 );
@@ -5405,7 +5403,7 @@ static void moveToParent(BtCursor *pCur){
   pCur->info.nSize = 0;
   pCur->curFlags &= ~(BTCF_ValidNKey|BTCF_ValidOvfl);
   pCur->ix = pCur->aiIdx[pCur->iPage-1];
-  pLeaf = pCur->pPage;
+  MemPage *const pLeaf = pCur->pPage;
   pCur->pPage = pCur->apPage[--pCur->iPage];
   releasePageNotNull(pLeaf);
 }

@@ -187,21 +187,21 @@
 [x] src/btree.cpp::sqlite3BtreeCursorSize
 [x] src/btree.cpp::sqlite3BtreeCursorZero
 [x] src/btree.cpp::sqlite3BtreeCloseCursor
-[ ] src/btree.cpp::getCellInfo
-[ ] src/btree.cpp::sqlite3BtreeCursorIsValid
-[ ] src/btree.cpp::sqlite3BtreeCursorIsValidNN
-[ ] src/btree.cpp::sqlite3BtreeIntegerKey
-[ ] src/btree.cpp::sqlite3BtreeCursorPin
-[ ] src/btree.cpp::sqlite3BtreeCursorUnpin
-[ ] src/btree.cpp::sqlite3BtreeOffset
-[ ] src/btree.cpp::sqlite3BtreePayloadSize
-[ ] src/btree.cpp::sqlite3BtreeMaxRecordSize
-[ ] src/btree.cpp::sqlite3BtreePayload
-[ ] src/btree.cpp::sqlite3BtreePayloadChecked
-[ ] src/btree.cpp::sqlite3BtreePayloadFetch
-[ ] src/btree.cpp::moveToChild
-[ ] src/btree.cpp::assertParentIndex
-[ ] src/btree.cpp::moveToParent
+[x] src/btree.cpp::getCellInfo
+[x] src/btree.cpp::sqlite3BtreeCursorIsValid
+[x] src/btree.cpp::sqlite3BtreeCursorIsValidNN
+[x] src/btree.cpp::sqlite3BtreeIntegerKey
+[x] src/btree.cpp::sqlite3BtreeCursorPin
+[x] src/btree.cpp::sqlite3BtreeCursorUnpin
+[x] src/btree.cpp::sqlite3BtreeOffset
+[x] src/btree.cpp::sqlite3BtreePayloadSize
+[x] src/btree.cpp::sqlite3BtreeMaxRecordSize
+[x] src/btree.cpp::sqlite3BtreePayload
+[x] src/btree.cpp::sqlite3BtreePayloadChecked
+[x] src/btree.cpp::sqlite3BtreePayloadFetch
+[x] src/btree.cpp::moveToChild
+[x] src/btree.cpp::assertParentIndex
+[x] src/btree.cpp::moveToParent
 [ ] src/btree.cpp::moveToRoot
 [ ] src/btree.cpp::moveToLeftmost
 [ ] src/btree.cpp::moveToRightmost
