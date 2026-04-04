@@ -851,26 +851,26 @@
 [x] src/mem1.cpp::sqlite3MemInit
 [x] src/mem1.cpp::sqlite3MemShutdown
 [x] src/mem1.cpp::sqlite3MemSetDefault
-[ ] src/mem2.cpp::adjustStats
-[ ] src/mem2.cpp::sqlite3MemsysGetHeader
-[ ] src/mem2.cpp::sqlite3MemSize
-[ ] src/mem2.cpp::sqlite3MemInit
-[ ] src/mem2.cpp::sqlite3MemShutdown
-[ ] src/mem2.cpp::sqlite3MemRoundup
-[ ] src/mem2.cpp::randomFill
-[ ] src/mem2.cpp::sqlite3MemMalloc
-[ ] src/mem2.cpp::sqlite3MemFree
-[ ] src/mem2.cpp::sqlite3MemRealloc
-[ ] src/mem2.cpp::sqlite3MemSetDefault
-[ ] src/mem2.cpp::sqlite3MemdebugSetType
-[ ] src/mem2.cpp::sqlite3MemdebugHasType
-[ ] src/mem2.cpp::sqlite3MemdebugNoType
-[ ] src/mem2.cpp::sqlite3MemdebugBacktrace
-[ ] src/mem2.cpp::sqlite3MemdebugBacktraceCallback
-[ ] src/mem2.cpp::sqlite3MemdebugSettitle
-[ ] src/mem2.cpp::sqlite3MemdebugSync
-[ ] src/mem2.cpp::sqlite3MemdebugDump
-[ ] src/mem2.cpp::sqlite3MemdebugMallocCount
+[x] src/mem2.cpp::adjustStats
+[x] src/mem2.cpp::sqlite3MemsysGetHeader
+[x] src/mem2.cpp::sqlite3MemSize
+[x] src/mem2.cpp::sqlite3MemInit
+[x] src/mem2.cpp::sqlite3MemShutdown
+[x] src/mem2.cpp::sqlite3MemRoundup
+[x] src/mem2.cpp::randomFill
+[x] src/mem2.cpp::sqlite3MemMalloc
+[x] src/mem2.cpp::sqlite3MemFree
+[x] src/mem2.cpp::sqlite3MemRealloc
+[x] src/mem2.cpp::sqlite3MemSetDefault
+[x] src/mem2.cpp::sqlite3MemdebugSetType
+[x] src/mem2.cpp::sqlite3MemdebugHasType
+[x] src/mem2.cpp::sqlite3MemdebugNoType
+[x] src/mem2.cpp::sqlite3MemdebugBacktrace
+[x] src/mem2.cpp::sqlite3MemdebugBacktraceCallback
+[x] src/mem2.cpp::sqlite3MemdebugSettitle
+[x] src/mem2.cpp::sqlite3MemdebugSync
+[x] src/mem2.cpp::sqlite3MemdebugDump
+[x] src/mem2.cpp::sqlite3MemdebugMallocCount
 [ ] src/mem3.cpp::memsys3UnlinkFromList
 [ ] src/mem3.cpp::memsys3Unlink
 [ ] src/mem3.cpp::memsys3LinkIntoList
