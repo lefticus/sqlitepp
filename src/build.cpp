@@ -3030,23 +3030,15 @@ create_view_fail:
 ** in pParse->zErrMsg.
 */
 static SQLITE_NOINLINE int viewGetColumnNames(Parse *pParse, Table *pTable){
-  Table *pSelTab;   /* A fake table from which we get the result set */
-  Select *pSel;     /* Copy of the SELECT that implements the view */
   int nErr = 0;     /* Number of errors encountered */
-  sqlite3 *db = pParse->db;  /* Database connection for malloc errors */
-#ifndef SQLITE_OMIT_VIRTUALTABLE
-  int rc;
-#endif
-#ifndef SQLITE_OMIT_AUTHORIZATION
-  sqlite3_xauth xAuth;       /* Saved xAuth pointer */
-#endif
+  sqlite3 *const db = pParse->db;  /* Database connection for malloc errors */
 
   assert( pTable );
 
 #ifndef SQLITE_OMIT_VIRTUALTABLE
   if( IsVirtual(pTable) ){
     db->nSchemaLock++;
-    rc = sqlite3VtabCallConnect(pParse, pTable);
+    const int rc = sqlite3VtabCallConnect(pParse, pTable);
     db->nSchemaLock--;
     return rc;
   }
@@ -3088,17 +3080,18 @@ static SQLITE_NOINLINE int viewGetColumnNames(Parse *pParse, Table *pTable){
   ** statement that defines the view.
   */
   assert( IsView(pTable) );
-  pSel = sqlite3SelectDup(db, pTable->u.view.pSelect, 0);
+  Select *const pSel = sqlite3SelectDup(db, pTable->u.view.pSelect, 0);
   if( pSel ){
-    u8 eParseMode = pParse->eParseMode;
-    int nTab = pParse->nTab;
-    int nSelect = pParse->nSelect;
+    const u8 eParseMode = pParse->eParseMode;
+    const int nTab = pParse->nTab;
+    const int nSelect = pParse->nSelect;
     pParse->eParseMode = PARSE_MODE_NORMAL;
     sqlite3SrcListAssignCursors(pParse, pSel->pSrc);
     pTable->nCol = -1;
     DisableLookaside;
+    Table *pSelTab;
 #ifndef SQLITE_OMIT_AUTHORIZATION
-    xAuth = db->xAuth;
+    sqlite3_xauth const xAuth = db->xAuth;
     db->xAuth = 0;
     pSelTab = sqlite3ResultSetOfSelect(pParse, pSel, SQLITE_AFF_NONE);
     db->xAuth = xAuth;
@@ -3164,10 +3157,9 @@ int sqlite3ViewGetColumnNames(Parse *pParse, Table *pTable){
 ** Clear the column names from every VIEW in database idx.
 */
 static void sqliteViewResetAll(sqlite3 *db, int idx){
-  HashElem *i;
   assert( sqlite3SchemaMutexHeld(db, idx, 0) );
   if( !DbHasProperty(db, idx, DB_UnresetViews) ) return;
-  for(i=sqliteHashFirst(&db->aDb[idx].pSchema->tblHash); i;i=sqliteHashNext(i)){
+  for(HashElem *i=sqliteHashFirst(&db->aDb[idx].pSchema->tblHash); i;i=sqliteHashNext(i)){
     Table *pTab = static_cast<Table*>(sqliteHashData(i));
     if( IsView(pTab) ){
       sqlite3DeleteColumnNames(db, pTab);
@@ -3200,10 +3192,9 @@ static void sqliteViewResetAll(sqlite3 *db, int idx){
 void sqlite3RootPageMoved(sqlite3 *db, int iDb, Pgno iFrom, Pgno iTo){
   HashElem *pElem;
   Hash *pHash;
-  Db *pDb;
 
   assert( sqlite3SchemaMutexHeld(db, iDb, 0) );
-  pDb = &db->aDb[iDb];
+  Db *const pDb = &db->aDb[iDb];
   pHash = &pDb->pSchema->tblHash;
   for(pElem=sqliteHashFirst(pHash); pElem; pElem=sqliteHashNext(pElem)){
     Table *pTab = static_cast<Table*>(sqliteHashData(pElem));
@@ -3228,8 +3219,8 @@ void sqlite3RootPageMoved(sqlite3 *db, int iDb, Pgno iFrom, Pgno iTo){
 ** erasing iTable (this can happen with an auto-vacuum database).
 */
 static void destroyRootPage(Parse *pParse, int iTable, int iDb){
-  Vdbe *v = sqlite3GetVdbe(pParse);
-  int r1 = sqlite3GetTempReg(pParse);
+  Vdbe *const v = sqlite3GetVdbe(pParse);
+  const int r1 = sqlite3GetTempReg(pParse);
   if( iTable<2 ) sqlite3ErrorMsg(pParse, "corrupt schema");
   sqlite3VdbeAddOp3(v, OP_Destroy, iTable, r1, iDb);
   sqlite3MayAbort(pParse);

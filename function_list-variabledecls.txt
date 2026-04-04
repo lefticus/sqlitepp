@@ -322,11 +322,11 @@
 [x] src/build.cpp::sqlite3ShadowTableName
 [x] src/build.cpp::markImmutableExprStep
 [x] src/build.cpp::markExprListImmutable
-[ ] src/build.cpp::viewGetColumnNames
-[ ] src/build.cpp::sqlite3ViewGetColumnNames
-[ ] src/build.cpp::sqliteViewResetAll
-[ ] src/build.cpp::sqlite3RootPageMoved
-[ ] src/build.cpp::destroyRootPage
+[x] src/build.cpp::viewGetColumnNames
+[x] src/build.cpp::sqlite3ViewGetColumnNames
+[x] src/build.cpp::sqliteViewResetAll
+[x] src/build.cpp::sqlite3RootPageMoved
+[x] src/build.cpp::destroyRootPage
 [ ] src/build.cpp::destroyTable
 [ ] src/build.cpp::sqlite3CodeDropTable
 [ ] src/build.cpp::sqlite3ReadOnlyShadowTables
