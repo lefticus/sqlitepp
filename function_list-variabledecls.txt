@@ -242,11 +242,11 @@
 [x] src/btree.cpp::sqlite3BtreeUpdateMeta
 [x] src/btree.cpp::sqlite3BtreeCount
 [x] src/btree.cpp::sqlite3BtreePager
-[ ] src/btree.cpp::checkOom
-[ ] src/btree.cpp::checkProgress
-[ ] src/btree.cpp::getPageReferenced
-[ ] src/btree.cpp::setPageReferenced
-[ ] src/btree.cpp::checkRef
+[x] src/btree.cpp::checkOom
+[x] src/btree.cpp::checkProgress
+[x] src/btree.cpp::getPageReferenced
+[x] src/btree.cpp::setPageReferenced
+[x] src/btree.cpp::checkRef
 [ ] src/btree.cpp::btreeHeapInsert
 [ ] src/btree.cpp::btreeHeapPull
 [ ] src/btree.cpp::sqlite3BtreeGetFilename

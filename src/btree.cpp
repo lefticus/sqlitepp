@@ -10417,7 +10417,7 @@ static void checkOom(IntegrityCk *pCheck){
 ** interrupt.
 */
 static void checkProgress(IntegrityCk *pCheck){
-  sqlite3 *db = pCheck->db;
+  sqlite3 *const db = pCheck->db;
   if( AtomicLoad(&db->u1.isInterrupted) ){
     pCheck->rc = SQLITE_INTERRUPT;
     pCheck->nErr++;
