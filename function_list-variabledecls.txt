@@ -382,26 +382,26 @@
 [x] src/carray.cpp::sqlite3CarrayRegister
 [x] src/complete.cpp::sqlite3_complete
 [x] src/complete.cpp::sqlite3_complete16
-[ ] src/date.cpp::getDigits
-[ ] src/date.cpp::parseTimezone
-[ ] src/date.cpp::parseHhMmSs
-[ ] src/date.cpp::datetimeError
-[ ] src/date.cpp::computeJD
-[ ] src/date.cpp::computeFloor
-[ ] src/date.cpp::parseYyyyMmDd
-[ ] src/date.cpp::setDateTimeToCurrent
-[ ] src/date.cpp::setRawDateNumber
-[ ] src/date.cpp::validJulianDay
-[ ] src/date.cpp::computeYMD
-[ ] src/date.cpp::computeHMS
-[ ] src/date.cpp::computeYMD_HMS
-[ ] src/date.cpp::clearYMD_HMS_TZ
-[ ] src/date.cpp::osLocaltime
-[ ] src/date.cpp::autoAdjustDate
-[ ] src/date.cpp::daysAfterJan01
-[ ] src/date.cpp::daysAfterMonday
-[ ] src/date.cpp::daysAfterSunday
-[ ] src/date.cpp::sqlite3RegisterDateTimeFunctions
+[x] src/date.cpp::getDigits
+[x] src/date.cpp::parseTimezone
+[x] src/date.cpp::parseHhMmSs
+[x] src/date.cpp::datetimeError
+[x] src/date.cpp::computeJD
+[x] src/date.cpp::computeFloor
+[x] src/date.cpp::parseYyyyMmDd
+[x] src/date.cpp::setDateTimeToCurrent
+[x] src/date.cpp::setRawDateNumber
+[x] src/date.cpp::validJulianDay
+[x] src/date.cpp::computeYMD
+[x] src/date.cpp::computeHMS
+[x] src/date.cpp::computeYMD_HMS
+[x] src/date.cpp::clearYMD_HMS_TZ
+[x] src/date.cpp::osLocaltime
+[x] src/date.cpp::autoAdjustDate
+[x] src/date.cpp::daysAfterJan01
+[x] src/date.cpp::daysAfterMonday
+[x] src/date.cpp::daysAfterSunday
+[x] src/date.cpp::sqlite3RegisterDateTimeFunctions
 [ ] src/dbpage.cpp::dbpageDisconnect
 [ ] src/dbpage.cpp::dbpageBestIndex
 [ ] src/dbpage.cpp::dbpageOpen

@@ -119,12 +119,11 @@ static int getDigits(const char *zDate, const char *zFormat, ...){
   va_start(ap, zFormat);
   do{
     char N = zFormat[0] - '0';
-    char min = zFormat[1] - '0';
+    const char min = zFormat[1] - '0';
     int val = 0;
-    u16 max;
 
     assert( zFormat[2]>='a' && zFormat[2]<='f' );
-    max = aMx[zFormat[2] - 'a'];
+    const u16 max = aMx[zFormat[2] - 'a'];
     nextC = zFormat[3];
     val = 0;
     while( N-- ){
@@ -165,11 +164,9 @@ end_getDigits:
 */
 static int parseTimezone(const char *zDate, DateTime *p){
   int sgn = 0;
-  int nHr, nMn;
-  int c;
   while( sqlite3Isspace(*zDate) ){ zDate++; }
   p->tz = 0;
-  c = *zDate;
+  const int c = *zDate;
   if( c=='-' ){
     sgn = -1;
   }else if( c=='+' ){
@@ -183,6 +180,7 @@ static int parseTimezone(const char *zDate, DateTime *p){
     return c!=0;
   }
   zDate++;
+  int nHr, nMn;
   if( getDigits(zDate, "20b:20e", &nHr, &nMn)!=2 ){
     return 1;
   }
@@ -258,7 +256,7 @@ static void datetimeError(DateTime *p){
 ** Reference:  Meeus page 61
 */
 static void computeJD(DateTime *p){
-  int Y, M, D, A, B, X1, X2;
+  int Y, M, D;
 
   if( p->validJD ) return;
   if( p->validYMD ){
@@ -278,10 +276,10 @@ static void computeJD(DateTime *p){
     Y--;
     M += 12;
   }
-  A = (Y+4800)/100;
-  B = 38 - A + (A/4);
-  X1 = 36525*(Y+4716)/100;
-  X2 = 306001*(M+1)/10000;
+  const int A = (Y+4800)/100;
+  const int B = 38 - A + (A/4);
+  const int X1 = 36525*(Y+4716)/100;
+  const int X2 = 306001*(M+1)/10000;
   p->iJD = (sqlite3_int64)((X1 + X2 + D + B - 1524.5 ) * 86400000);
   p->validJD = 1;
   if( p->validHMS ){
@@ -463,7 +461,6 @@ static int validJulianDay(sqlite3_int64 iJD){
 ** Compute the Year, Month, and Day from the julian day number.
 */
 static void computeYMD(DateTime *p){
-  int Z, alpha, A, B, C, D, E, X1;
   if( p->validYMD ) return;
   if( !p->validJD ){
     p->Y = 2000;
@@ -473,14 +470,14 @@ static void computeYMD(DateTime *p){
     datetimeError(p);
     return;
   }else{
-    Z = (int)((p->iJD + 43200000)/86400000);
-    alpha = (int)((Z + 32044.75)/36524.25) - 52;
-    A = Z + 1 + alpha - ((alpha+100)/4) + 25;
-    B = A + 1524;
-    C = (int)((B - 122.1)/365.25);
-    D = (36525*(C&32767))/100;
-    E = (int)((B-D)/30.6001);
-    X1 = (int)(30.6001*E);
+    const int Z = (int)((p->iJD + 43200000)/86400000);
+    const int alpha = (int)((Z + 32044.75)/36524.25) - 52;
+    const int A = Z + 1 + alpha - ((alpha+100)/4) + 25;
+    const int B = A + 1524;
+    const int C = (int)((B - 122.1)/365.25);
+    const int D = (36525*(C&32767))/100;
+    const int E = (int)((B-D)/30.6001);
+    const int X1 = (int)(30.6001*E);
     p->D = B - D - X1;
     p->M = E<14 ? E-1 : E-13;
     p->Y = p->M>2 ? C - 4716 : C - 4715;
@@ -492,12 +489,11 @@ static void computeYMD(DateTime *p){
 ** Compute the Hour, Minute, and Seconds from the julian day number.
 */
 static void computeHMS(DateTime *p){
-  int day_ms, day_min; /* milliseconds, minutes into the day */
   if( p->validHMS ) return;
   computeJD(p);
-  day_ms = (int)((p->iJD + 43200000) % 86400000);
+  const int day_ms = (int)((p->iJD + 43200000) % 86400000);
   p->s = (day_ms % 60000)/1000.0;
-  day_min = day_ms/60000;
+  const int day_min = day_ms/60000;
   p->m = day_min % 60;
   p->h = day_min / 60;
   p->rawS = 0;
