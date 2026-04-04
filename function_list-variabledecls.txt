@@ -312,11 +312,11 @@
 [x] src/build.cpp::createTableStmt
 [x] src/build.cpp::resizeIndexObject
 [x] src/build.cpp::estimateTableWidth
-[ ] src/build.cpp::estimateIndexWidth
-[ ] src/build.cpp::hasColumn
-[ ] src/build.cpp::isDupColumn
-[ ] src/build.cpp::recomputeColumnsNotIndexed
-[ ] src/build.cpp::convertToWithoutRowidTable
+[x] src/build.cpp::estimateIndexWidth
+[x] src/build.cpp::hasColumn
+[x] src/build.cpp::isDupColumn
+[x] src/build.cpp::recomputeColumnsNotIndexed
+[x] src/build.cpp::convertToWithoutRowidTable
 [ ] src/build.cpp::sqlite3IsShadowTableOf
 [ ] src/build.cpp::sqlite3MarkAllShadowTablesOf
 [ ] src/build.cpp::sqlite3ShadowTableName

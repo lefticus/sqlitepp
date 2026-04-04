@@ -2194,10 +2194,9 @@ static void estimateTableWidth(Table *pTab){
 */
 static void estimateIndexWidth(Index *pIdx){
   unsigned wIndex = 0;
-  int i;
-  const Column *aCol = pIdx->pTable->aCol;
-  for(i=0; i<pIdx->nColumn; i++){
-    i16 x = pIdx->aiColumn[i];
+  const Column *const aCol = pIdx->pTable->aCol;
+  for(int i=0; i<pIdx->nColumn; i++){
+    const i16 x = pIdx->aiColumn[i];
     assert( x<pIdx->pTable->nCol );
     wIndex += x<0 ? 1 : aCol[x].szEst;
   }
@@ -2231,16 +2230,15 @@ static int hasColumn(const i16 *aiCol, int nCol, int x){
 ** the column name must match.
 */
 static int isDupColumn(Index *pIdx, int nKey, Index *pPk, int iCol){
-  int i, j;
   assert( nKey<=pIdx->nColumn );
   assert( iCol<MAX(pPk->nColumn,pPk->nKeyCol) );
   assert( pPk->idxType==SQLITE_IDXTYPE_PRIMARYKEY );
   assert( pPk->pTable->tabFlags & TF_WithoutRowid );
   assert( pPk->pTable==pIdx->pTable );
   testcase( pPk==pIdx );
-  j = pPk->aiColumn[iCol];
+  const int j = pPk->aiColumn[iCol];
   assert( j!=XN_ROWID && j!=XN_EXPR );
-  for(i=0; i<nKey; i++){
+  for(int i=0; i<nKey; i++){
     assert( pIdx->aiColumn[i]>=0 || j>=0 );
     if( pIdx->aiColumn[i]==j
      && sqlite3StrICmp(pIdx->azColl[i], pPk->azColl[iCol])==0
@@ -2272,10 +2270,9 @@ static int isDupColumn(Index *pIdx, int nKey, Index *pPk, int iCol){
 */
 static void recomputeColumnsNotIndexed(Index *pIdx){
   Bitmask m = 0;
-  int j;
-  Table *pTab = pIdx->pTable;
-  for(j=pIdx->nColumn-1; j>=0; j--){
-    int x = pIdx->aiColumn[j];
+  Table *const pTab = pIdx->pTable;
+  for(int j=pIdx->nColumn-1; j>=0; j--){
+    const int x = pIdx->aiColumn[j];
     if( x>=0 && (pTab->aCol[x].colFlags & COLFLAG_VIRTUAL)==0 ){
       testcase( x==BMS-1 );
       testcase( x==BMS-2 );
@@ -2311,18 +2308,13 @@ static void recomputeColumnsNotIndexed(Index *pIdx){
 ** For virtual tables, only (1) is performed.
 */
 static void convertToWithoutRowidTable(Parse *pParse, Table *pTab){
-  Index *pIdx;
   Index *pPk;
-  int nPk;
-  int nExtra;
-  int i, j;
-  sqlite3 *db = pParse->db;
-  Vdbe *v = pParse->pVdbe;
+  sqlite3 *const db = pParse->db;
 
   /* Mark every PRIMARY KEY column as NOT NULL (except for imposter tables)
   */
   if( !db->init.imposterTable ){
-    for(i=0; i<pTab->nCol; i++){
+    for(int i=0; i<pTab->nCol; i++){
       if( (pTab->aCol[i].colFlags & COLFLAG_PRIMKEY)!=0
        && (pTab->aCol[i].notNull==OE_None)
       ){
@@ -2335,6 +2327,7 @@ static void convertToWithoutRowidTable(Parse *pParse, Table *pTab){
   /* Convert the P3 operand of the OP_CreateBtree opcode from BTREE_INTKEY
   ** into BTREE_BLOBKEY.
   */
+  Vdbe *const v = pParse->pVdbe;
   assert( !pParse->bReturning );
   if( pParse->u1.cr.addrCrTab ){
     assert( v );
@@ -2378,7 +2371,8 @@ static void convertToWithoutRowidTable(Parse *pParse, Table *pTab){
     ** "PRIMARY KEY(a,b,a,b,c,b,c,d)" into just "PRIMARY KEY(a,b,c,d)".  Later
     ** code assumes the PRIMARY KEY contains no repeated columns.
     */
-    for(i=j=1; i<pPk->nKeyCol; i++){
+    int j = 1;
+    for(int i=1; i<pPk->nKeyCol; i++){
       if( isDupColumn(pPk, j, pPk, i) ){
         pPk->nColumn--;
       }else{
@@ -2393,7 +2387,7 @@ static void convertToWithoutRowidTable(Parse *pParse, Table *pTab){
   assert( pPk!=0 );
   pPk->isCovering = 1;
   if( !db->init.imposterTable ) pPk->uniqNotNull = 1;
-  nPk = pPk->nColumn = pPk->nKeyCol;
+  const int nPk = pPk->nColumn = pPk->nKeyCol;
 
   /* Bypass the creation of the PRIMARY KEY btree and the sqlite_schema
   ** table entry. This is only required if currently generating VDBE
@@ -2410,10 +2404,10 @@ static void convertToWithoutRowidTable(Parse *pParse, Table *pTab){
   /* Update the in-memory representation of all UNIQUE indices by converting
   ** the final rowid column into one or more columns of the PRIMARY KEY.
   */
-  for(pIdx=pTab->pIndex; pIdx; pIdx=pIdx->pNext){
+  for(Index *pIdx=pTab->pIndex; pIdx; pIdx=pIdx->pNext){
     int n;
     if( IsPrimaryKeyIndex(pIdx) ) continue;
-    for(i=n=0; i<nPk; i++){
+    for(int i=n=0; i<nPk; i++){
       if( !isDupColumn(pIdx, pIdx->nKeyCol, pPk, i) ){
         testcase( hasColumn(pIdx->aiColumn, pIdx->nKeyCol, pPk->aiColumn[i]) );
         n++;
@@ -2425,7 +2419,8 @@ static void convertToWithoutRowidTable(Parse *pParse, Table *pTab){
       continue;
     }
     if( resizeIndexObject(pParse, pIdx, pIdx->nKeyCol+n) ) return;
-    for(i=0, j=pIdx->nKeyCol; i<nPk; i++){
+    int j = pIdx->nKeyCol;
+    for(int i=0; i<nPk; i++){
       if( !isDupColumn(pIdx, pIdx->nKeyCol, pPk, i) ){
         testcase( hasColumn(pIdx->aiColumn, pIdx->nKeyCol, pPk->aiColumn[i]) );
         pIdx->aiColumn[j] = pPk->aiColumn[i];
@@ -2443,13 +2438,14 @@ static void convertToWithoutRowidTable(Parse *pParse, Table *pTab){
 
   /* Add all table columns to the PRIMARY KEY index
   */
-  nExtra = 0;
-  for(i=0; i<pTab->nCol; i++){
+  int nExtra = 0;
+  for(int i=0; i<pTab->nCol; i++){
     if( !hasColumn(pPk->aiColumn, nPk, i)
      && (pTab->aCol[i].colFlags & COLFLAG_VIRTUAL)==0 ) nExtra++;
   }
   if( resizeIndexObject(pParse, pPk, nPk+nExtra) ) return;
-  for(i=0, j=nPk; i<pTab->nCol; i++){
+  int j = nPk;
+  for(int i=0; i<pTab->nCol; i++){
     if( !hasColumn(pPk->aiColumn, j, i)
      && (pTab->aCol[i].colFlags & COLFLAG_VIRTUAL)==0
     ){
