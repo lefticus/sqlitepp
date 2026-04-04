@@ -899,14 +899,12 @@ sqlite3_mutex *sqlite3_db_mutex(sqlite3 *db){
 ** connection.
 */
 int sqlite3_db_release_memory(sqlite3 *db){
-  int i;
-
 #ifdef SQLITE_ENABLE_API_ARMOR
   if( !sqlite3SafetyCheckOk(db) ) return SQLITE_MISUSE_BKPT;
 #endif
   sqlite3_mutex_enter(db->mutex);
   sqlite3BtreeEnterAll(db);
-  for(i=0; i<db->nDb; i++){
+  for(int i=0; i<db->nDb; i++){
     Btree *pBt = db->aDb[i].pBt;
     if( pBt ){
       Pager *pPager = sqlite3BtreePager(pBt);
@@ -923,7 +921,6 @@ int sqlite3_db_release_memory(sqlite3 *db){
 ** to disk.
 */
 int sqlite3_db_cacheflush(sqlite3 *db){
-  int i;
   int rc = SQLITE_OK;
   int bSeenBusy = 0;
 
@@ -932,7 +929,7 @@ int sqlite3_db_cacheflush(sqlite3 *db){
 #endif
   sqlite3_mutex_enter(db->mutex);
   sqlite3BtreeEnterAll(db);
-  for(i=0; rc==SQLITE_OK && i<db->nDb; i++){
+  for(int i=0; rc==SQLITE_OK && i<db->nDb; i++){
     Btree *pBt = db->aDb[i].pBt;
     if( pBt && sqlite3BtreeTxnState(pBt)==SQLITE_TXN_WRITE ){
       Pager *pPager = sqlite3BtreePager(pBt);
@@ -1194,9 +1191,8 @@ void sqlite3CloseSavepoints(sqlite3 *db){
 ** with SQLITE_ANY as the encoding.
 */
 static void functionDestroy(sqlite3 *db, FuncDef *p){
-  FuncDestructor *pDestructor;
   assert( (p->funcFlags & SQLITE_FUNC_BUILTIN)==0 );
-  pDestructor = p->u.pDestructor;
+  FuncDestructor *pDestructor = p->u.pDestructor;
   if( pDestructor ){
     pDestructor->nRef--;
     if( pDestructor->nRef==0 ){
@@ -1212,19 +1208,17 @@ static void functionDestroy(sqlite3 *db, FuncDef *p){
 */
 static void disconnectAllVtab(sqlite3 *db){
 #ifndef SQLITE_OMIT_VIRTUALTABLE
-  int i;
-  HashElem *p;
   sqlite3BtreeEnterAll(db);
-  for(i=0; i<db->nDb; i++){
+  for(int i=0; i<db->nDb; i++){
     Schema *pSchema = db->aDb[i].pSchema;
     if( pSchema ){
-      for(p=sqliteHashFirst(&pSchema->tblHash); p; p=sqliteHashNext(p)){
+      for(HashElem *p=sqliteHashFirst(&pSchema->tblHash); p; p=sqliteHashNext(p)){
         Table *pTab = (Table *)sqliteHashData(p);
         if( IsVirtual(pTab) ) sqlite3VtabDisconnect(db, pTab);
       }
     }
   }
-  for(p=sqliteHashFirst(&db->aModule); p; p=sqliteHashNext(p)){
+  for(HashElem *p=sqliteHashFirst(&db->aModule); p; p=sqliteHashNext(p)){
     Module *pMod = (Module *)sqliteHashData(p);
     if( pMod->pEpoTab ){
       sqlite3VtabDisconnect(db, pMod->pEpoTab);
@@ -1242,10 +1236,9 @@ static void disconnectAllVtab(sqlite3 *db){
 ** statements or unfinished sqlite3_backup objects. 
 */
 static int connectionIsBusy(sqlite3 *db){
-  int j;
   assert( sqlite3_mutex_held(db->mutex) );
   if( db->pVdbe ) return 1;
-  for(j=0; j<db->nDb; j++){
+  for(int j=0; j<db->nDb; j++){
     Btree *pBt = db->aDb[j].pBt;
     if( pBt && sqlite3BtreeIsInBackup(pBt) ) return 1;
   }
@@ -1365,9 +1358,6 @@ int sqlite3_close_v2(sqlite3 *db){ return sqlite3Close(db,1); }
 ** finished, then free all resources.
 */
 void sqlite3LeaveMutexAndCloseZombie(sqlite3 *db){
-  HashElem *i;                    /* Hash table iterator */
-  int j;
-
   /* If there are outstanding sqlite3_stmt or sqlite3_backup objects
   ** or if the connection has not yet been closed by sqlite3_close_v2(),
   ** then just leave the mutex and return.
@@ -1393,7 +1383,7 @@ void sqlite3LeaveMutexAndCloseZombie(sqlite3 *db){
   sqlite3CloseSavepoints(db);
 
   /* Close all database connections */
-  for(j=0; j<db->nDb; j++){
+  for(int j=0; j<db->nDb; j++){
     struct Db *pDb = &db->aDb[j];
     if( pDb->pBt ){
       sqlite3BtreeClose(pDb->pBt);
@@ -1420,7 +1410,7 @@ void sqlite3LeaveMutexAndCloseZombie(sqlite3 *db){
   */
   sqlite3ConnectionClosed(db);
 
-  for(i=sqliteHashFirst(&db->aFunc); i; i=sqliteHashNext(i)){
+  for(HashElem *i=sqliteHashFirst(&db->aFunc); i; i=sqliteHashNext(i)){
     FuncDef *pNext, *p;
     p = static_cast<FuncDef*>(sqliteHashData(i));
     do{
@@ -1431,10 +1421,10 @@ void sqlite3LeaveMutexAndCloseZombie(sqlite3 *db){
     }while( p );
   }
   sqlite3HashClear(&db->aFunc);
-  for(i=sqliteHashFirst(&db->aCollSeq); i; i=sqliteHashNext(i)){
+  for(HashElem *i=sqliteHashFirst(&db->aCollSeq); i; i=sqliteHashNext(i)){
     CollSeq *pColl = (CollSeq *)sqliteHashData(i);
     /* Invoke any destructors registered for collation sequence user data. */
-    for(j=0; j<3; j++){
+    for(int j=0; j<3; j++){
       if( pColl[j].xDel ){
         pColl[j].xDel(pColl[j].pUser);
       }
@@ -1443,7 +1433,7 @@ void sqlite3LeaveMutexAndCloseZombie(sqlite3 *db){
   }
   sqlite3HashClear(&db->aCollSeq);
 #ifndef SQLITE_OMIT_VIRTUALTABLE
-  for(i=sqliteHashFirst(&db->aModule); i; i=sqliteHashNext(i)){
+  for(HashElem *i=sqliteHashFirst(&db->aModule); i; i=sqliteHashNext(i)){
     Module *pMod = (Module *)sqliteHashData(i);
     sqlite3VtabEponymousTableClear(db, pMod);
     sqlite3VtabModuleUnref(db, pMod);
@@ -1485,9 +1475,7 @@ void sqlite3LeaveMutexAndCloseZombie(sqlite3 *db){
 ** but are "saved" in case the table pages are moved around.
 */
 void sqlite3RollbackAll(sqlite3 *db, int tripCode){
-  int i;
   int inTrans = 0;
-  int schemaChange;
   assert( sqlite3_mutex_held(db->mutex) );
   sqlite3BeginBenignMalloc();
 
@@ -1498,9 +1486,9 @@ void sqlite3RollbackAll(sqlite3 *db, int tripCode){
   ** the database rollback and schema reset, which can cause false
   ** corruption reports in some cases.  */
   sqlite3BtreeEnterAll(db);
-  schemaChange = (db->mDbFlags & DBFLAG_SchemaChange)!=0 && db->init.busy==0;
+  const int schemaChange = (db->mDbFlags & DBFLAG_SchemaChange)!=0 && db->init.busy==0;
 
-  for(i=0; i<db->nDb; i++){
+  for(int i=0; i<db->nDb; i++){
     Btree *p = db->aDb[i].pBt;
     if( p ){
       if( sqlite3BtreeTxnState(p)==SQLITE_TXN_WRITE ){
@@ -1536,8 +1524,8 @@ void sqlite3RollbackAll(sqlite3 *db, int tripCode){
 #if defined(SQLITE_NEED_ERR_NAME)
 const char *sqlite3ErrName(int rc){
   const char *zName = 0;
-  int i, origRc = rc;
-  for(i=0; i<2 && zName==0; i++, rc &= 0xff){
+  const int origRc = rc;
+  for(int i=0; i<2 && zName==0; i++, rc &= 0xff){
     switch( rc ){
       case SQLITE_OK:                 zName = "SQLITE_OK";                break;
       case SQLITE_ERROR:              zName = "SQLITE_ERROR";             break;
@@ -1772,9 +1760,8 @@ static int sqliteDefaultBusyCallback(
 ** returns 0, the operation aborts with an SQLITE_BUSY error.
 */
 int sqlite3InvokeBusyHandler(BusyHandler *p){
-  int rc;
   if( p->xBusyHandler==0 || p->nBusy<0 ) return 0;
-  rc = p->xBusyHandler(p->pBusyArg, p->nBusy);
+  const int rc = p->xBusyHandler(p->pBusyArg, p->nBusy);
   if( rc==0 ){
     p->nBusy = -1;
   }else{
@@ -1865,20 +1852,17 @@ int sqlite3_busy_timeout(sqlite3 *db, int ms){
 ** Set the setlk timeout value.
 */
 int sqlite3_setlk_timeout(sqlite3 *db, int ms, int flags){
-#ifdef SQLITE_ENABLE_SETLK_TIMEOUT
-  int iDb;
-  int bBOC = ((flags & SQLITE_SETLK_BLOCK_ON_CONNECT) ? 1 : 0);
-#endif
 #ifdef SQLITE_ENABLE_API_ARMOR
   if( !sqlite3SafetyCheckOk(db) ) return SQLITE_MISUSE_BKPT;
 #endif
   if( ms<-1 ) return SQLITE_RANGE;
 #ifdef SQLITE_ENABLE_SETLK_TIMEOUT
+  const int bBOC = ((flags & SQLITE_SETLK_BLOCK_ON_CONNECT) ? 1 : 0);
   sqlite3_mutex_enter(db->mutex);
   db->setlkTimeout = ms;
   db->setlkFlags = flags;
   sqlite3BtreeEnterAll(db);
-  for(iDb=0; iDb<db->nDb; iDb++){
+  for(int iDb=0; iDb<db->nDb; iDb++){
     Btree *pBt = db->aDb[iDb].pBt;
     if( pBt ){
       sqlite3_file *fd = sqlite3PagerFile(sqlite3BtreePager(pBt));
@@ -2647,7 +2631,6 @@ int sqlite3_wal_checkpoint(sqlite3 *db, const char *zDb){
 */
 int sqlite3Checkpoint(sqlite3 *db, int iDb, int eMode, int *pnLog, int *pnCkpt){
   int rc = SQLITE_OK;             /* Return code */
-  int i;                          /* Used to iterate through attached dbs */
   int bBusy = 0;                  /* True if SQLITE_BUSY has been encountered */
 
   assert( sqlite3_mutex_held(db->mutex) );
@@ -2656,7 +2639,7 @@ int sqlite3Checkpoint(sqlite3 *db, int iDb, int eMode, int *pnLog, int *pnCkpt){
   testcase( iDb==SQLITE_MAX_ATTACHED ); /* See forum post a006d86f72 */
   testcase( iDb==SQLITE_MAX_DB );
 
-  for(i=0; i<db->nDb && rc==SQLITE_OK; i++){
+  for(int i=0; i<db->nDb && rc==SQLITE_OK; i++){
     if( i==iDb || iDb==SQLITE_MAX_DB ){
       rc = sqlite3BtreeCheckpoint(db->aDb[i].pBt, eMode, pnLog, pnCkpt);
       pnLog = 0;
@@ -2998,8 +2981,6 @@ static const int aHardLimit[] = {
 ** from forming.
 */
 int sqlite3_limit(sqlite3 *db, int limitId, int newLimit){
-  int oldLimit;
-
 #ifdef SQLITE_ENABLE_API_ARMOR
   if( !sqlite3SafetyCheckOk(db) ){
     (void)SQLITE_MISUSE_BKPT;
@@ -3032,7 +3013,7 @@ int sqlite3_limit(sqlite3 *db, int limitId, int newLimit){
   if( limitId<0 || limitId>=SQLITE_N_LIMIT ){
     return -1;
   }
-  oldLimit = db->aLimit[limitId];
+  const int oldLimit = db->aLimit[limitId];
   if( newLimit>=0 ){                   /* IMP: R-52476-28732 */
     if( newLimit>aHardLimit[limitId] ){
       newLimit = aHardLimit[limitId];  /* IMP: R-51463-25634 */
@@ -3858,7 +3839,6 @@ int sqlite3_collation_needed16(
 ** Find existing client data.
 */
 void *sqlite3_get_clientdata(sqlite3 *db, const char *zName){
-  DbClientData *p;
 #ifdef SQLITE_ENABLE_API_ARMOR
   if( !zName || !sqlite3SafetyCheckOk(db) ){
     (void)SQLITE_MISUSE_BKPT;
@@ -3866,7 +3846,7 @@ void *sqlite3_get_clientdata(sqlite3 *db, const char *zName){
   }
 #endif
   sqlite3_mutex_enter(db->mutex);
-  for(p=db->pDbData; p; p=p->pNext){
+  for(DbClientData *p=db->pDbData; p; p=p->pNext){
     if( strcmp(p->zName, zName)==0 ){
       void *pResult = p->pData;
       sqlite3_mutex_leave(db->mutex);
@@ -4128,15 +4108,13 @@ error_out:
 ** Sleep for a little while.  Return the amount of time slept.
 */
 int sqlite3_sleep(int ms){
-  sqlite3_vfs *pVfs;
-  int rc;
-  pVfs = sqlite3_vfs_find(0);
+  sqlite3_vfs *const pVfs = sqlite3_vfs_find(0);
   if( pVfs==0 ) return 0;
 
   /* This function works in milliseconds, but the underlying OsSleep()
   ** API uses microseconds. Hence the 1000's.
   */
-  rc = (sqlite3OsSleep(pVfs, ms<0 ? 0 : 1000*ms)/1000);
+  const int rc = (sqlite3OsSleep(pVfs, ms<0 ? 0 : 1000*ms)/1000);
   return rc;
 }
 
@@ -4158,13 +4136,12 @@ int sqlite3_extended_result_codes(sqlite3 *db, int onoff){
 */
 int sqlite3_file_control(sqlite3 *db, const char *zDbName, int op, void *pArg){
   int rc = SQLITE_ERROR;
-  Btree *pBtree;
 
 #ifdef SQLITE_ENABLE_API_ARMOR
   if( !sqlite3SafetyCheckOk(db) ) return SQLITE_MISUSE_BKPT;
 #endif
   sqlite3_mutex_enter(db->mutex);
-  pBtree = sqlite3DbNameToBtree(db, zDbName);
+  Btree *const pBtree = sqlite3DbNameToBtree(db, zDbName);
   if( pBtree ){
     Pager *pPager;
     sqlite3_file *fd;
@@ -4989,14 +4966,13 @@ const char *sqlite3_db_name(sqlite3 *db, int N){
 ** connection.
 */
 const char *sqlite3_db_filename(sqlite3 *db, const char *zDbName){
-  Btree *pBt;
 #ifdef SQLITE_ENABLE_API_ARMOR
   if( !sqlite3SafetyCheckOk(db) ){
     (void)SQLITE_MISUSE_BKPT;
     return 0;
   }
 #endif
-  pBt = sqlite3DbNameToBtree(db, zDbName);
+  Btree *const pBt = sqlite3DbNameToBtree(db, zDbName);
   return pBt ? sqlite3BtreeGetFilename(pBt) : 0;
 }
 
@@ -5005,14 +4981,13 @@ const char *sqlite3_db_filename(sqlite3 *db, const char *zDbName){
 ** no such database exists.
 */
 int sqlite3_db_readonly(sqlite3 *db, const char *zDbName){
-  Btree *pBt;
 #ifdef SQLITE_ENABLE_API_ARMOR
   if( !sqlite3SafetyCheckOk(db) ){
     (void)SQLITE_MISUSE_BKPT;
     return -1;
   }
 #endif
-  pBt = sqlite3DbNameToBtree(db, zDbName);
+  Btree *const pBt = sqlite3DbNameToBtree(db, zDbName);
   return pBt ? sqlite3BtreeIsReadonly(pBt) : -1;
 }
 
@@ -5120,7 +5095,6 @@ int sqlite3_snapshot_open(
 int sqlite3_snapshot_recover(sqlite3 *db, const char *zDb){
   int rc = SQLITE_ERROR;
 #ifndef SQLITE_OMIT_WAL
-  int iDb;
 
 #ifdef SQLITE_ENABLE_API_ARMOR
   if( !sqlite3SafetyCheckOk(db) ){
@@ -5129,7 +5103,7 @@ int sqlite3_snapshot_recover(sqlite3 *db, const char *zDb){
 #endif
 
   sqlite3_mutex_enter(db->mutex);
-  iDb = sqlite3FindDbName(db, zDb);
+  const int iDb = sqlite3FindDbName(db, zDb);
   if( iDb==0 || iDb>1 ){
     Btree *pBt = db->aDb[iDb].pBt;
     if( SQLITE_TXN_NONE==sqlite3BtreeTxnState(pBt) ){
@@ -5162,10 +5136,6 @@ void sqlite3_snapshot_free(sqlite3_snapshot *pSnapshot){
 ** is not required for a match.
 */
 int sqlite3_compileoption_used(const char *zOptName){
-  int i, n;
-  int nOpt;
-  const char **azCompileOpt;
-
 #ifdef SQLITE_ENABLE_API_ARMOR
   if( zOptName==0 ){
     (void)SQLITE_MISUSE_BKPT;
@@ -5173,14 +5143,15 @@ int sqlite3_compileoption_used(const char *zOptName){
   }
 #endif
 
-  azCompileOpt = sqlite3CompileOptions(&nOpt);
+  int nOpt;
+  const char **const azCompileOpt = sqlite3CompileOptions(&nOpt);
 
   if( sqlite3StrNICmp(zOptName, "SQLITE_", 7)==0 ) zOptName += 7;
-  n = sqlite3Strlen30(zOptName);
+  const int n = sqlite3Strlen30(zOptName);
 
   /* Since nOpt is normally in single digits, a linear search is
   ** adequate. No need for a binary search. */
-  for(i=0; i<nOpt; i++){
+  for(int i=0; i<nOpt; i++){
     if( sqlite3StrNICmp(zOptName, azCompileOpt[i], n)==0
      && sqlite3IsIdChar((unsigned char)azCompileOpt[i][n])==0
     ){
@@ -5196,8 +5167,7 @@ int sqlite3_compileoption_used(const char *zOptName){
 */
 const char *sqlite3_compileoption_get(int N){
   int nOpt;
-  const char **azCompileOpt;
-  azCompileOpt = sqlite3CompileOptions(&nOpt);
+  const char **const azCompileOpt = sqlite3CompileOptions(&nOpt);
   if( N>=0 && N<nOpt ){
     return azCompileOpt[N];
   }

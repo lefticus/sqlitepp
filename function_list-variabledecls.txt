@@ -706,90 +706,90 @@
 [x] src/loadext.cpp::sqlite3_enable_load_extension
 [x] src/loadext.cpp::sqlite3_reset_auto_extension
 [x] src/loadext.cpp::sqlite3AutoLoadExtensions
-[ ] src/main.cpp::sqlite3TestExtInit
-[ ] src/main.cpp::int
-[ ] src/main.cpp::sqlite3_libversion
-[ ] src/main.cpp::sqlite3_sourceid
-[ ] src/main.cpp::sqlite3_libversion_number
-[ ] src/main.cpp::sqlite3_threadsafe
-[ ] src/main.cpp::sqlite3_initialize
-[ ] src/main.cpp::sqlite3_shutdown
-[ ] src/main.cpp::sqlite3_config
-[ ] src/main.cpp::sqlite3_db_mutex
-[ ] src/main.cpp::sqlite3_db_release_memory
-[ ] src/main.cpp::sqlite3_db_cacheflush
-[ ] src/main.cpp::sqlite3_db_config
-[ ] src/main.cpp::sqlite3IsBinary
-[ ] src/main.cpp::sqlite3_last_insert_rowid
-[ ] src/main.cpp::sqlite3_set_last_insert_rowid
-[ ] src/main.cpp::sqlite3_changes64
-[ ] src/main.cpp::sqlite3_changes
-[ ] src/main.cpp::sqlite3_total_changes64
-[ ] src/main.cpp::sqlite3_total_changes
-[ ] src/main.cpp::sqlite3CloseSavepoints
-[ ] src/main.cpp::functionDestroy
-[ ] src/main.cpp::disconnectAllVtab
-[ ] src/main.cpp::connectionIsBusy
-[ ] src/main.cpp::sqlite3Close
-[ ] src/main.cpp::sqlite3_txn_state
-[ ] src/main.cpp::sqlite3_close
-[ ] src/main.cpp::sqlite3_close_v2
-[ ] src/main.cpp::sqlite3LeaveMutexAndCloseZombie
-[ ] src/main.cpp::sqlite3RollbackAll
-[ ] src/main.cpp::sqlite3ErrName
-[ ] src/main.cpp::sqlite3ErrStr
-[ ] src/main.cpp::sqlite3InvokeBusyHandler
-[ ] src/main.cpp::sqlite3_busy_timeout
-[ ] src/main.cpp::sqlite3_setlk_timeout
-[ ] src/main.cpp::sqlite3_interrupt
-[ ] src/main.cpp::sqlite3_is_interrupted
-[ ] src/main.cpp::sqlite3_trace
-[ ] src/main.cpp::sqlite3_wal_autocheckpoint
-[ ] src/main.cpp::sqlite3_wal_checkpoint
-[ ] src/main.cpp::sqlite3Checkpoint
-[ ] src/main.cpp::sqlite3TempInMemory
-[ ] src/main.cpp::sqlite3_errmsg
-[ ] src/main.cpp::sqlite3_set_errmsg
-[ ] src/main.cpp::sqlite3_error_offset
-[ ] src/main.cpp::sqlite3_errmsg16
-[ ] src/main.cpp::sqlite3_errcode
-[ ] src/main.cpp::sqlite3_extended_errcode
-[ ] src/main.cpp::sqlite3_system_errno
-[ ] src/main.cpp::sqlite3_errstr
-[ ] src/main.cpp::sqlite3_limit
-[ ] src/main.cpp::uriParameter
-[ ] src/main.cpp::sqlite3_get_clientdata
-[ ] src/main.cpp::sqlite3_global_recover
-[ ] src/main.cpp::sqlite3_get_autocommit
-[ ] src/main.cpp::sqlite3ReportError
-[ ] src/main.cpp::sqlite3CorruptError
-[ ] src/main.cpp::sqlite3MisuseError
-[ ] src/main.cpp::sqlite3CantopenError
-[ ] src/main.cpp::sqlite3CorruptPgnoError
-[ ] src/main.cpp::sqlite3NomemError
-[ ] src/main.cpp::sqlite3IoerrnomemError
-[ ] src/main.cpp::sqlite3_thread_cleanup
-[ ] src/main.cpp::sqlite3_sleep
-[ ] src/main.cpp::sqlite3_extended_result_codes
-[ ] src/main.cpp::sqlite3_file_control
-[ ] src/main.cpp::sqlite3_test_control
-[ ] src/main.cpp::databaseName
-[ ] src/main.cpp::appendText
-[ ] src/main.cpp::sqlite3_free_filename
-[ ] src/main.cpp::sqlite3_uri_parameter
-[ ] src/main.cpp::sqlite3_uri_key
-[ ] src/main.cpp::sqlite3_uri_boolean
-[ ] src/main.cpp::sqlite3_filename_database
-[ ] src/main.cpp::sqlite3_filename_journal
-[ ] src/main.cpp::sqlite3_filename_wal
-[ ] src/main.cpp::sqlite3DbNameToBtree
-[ ] src/main.cpp::sqlite3_db_name
-[ ] src/main.cpp::sqlite3_db_filename
-[ ] src/main.cpp::sqlite3_db_readonly
-[ ] src/main.cpp::sqlite3_snapshot_recover
-[ ] src/main.cpp::sqlite3_snapshot_free
-[ ] src/main.cpp::sqlite3_compileoption_used
-[ ] src/main.cpp::sqlite3_compileoption_get
+[x] src/main.cpp::sqlite3TestExtInit
+[x] src/main.cpp::int
+[x] src/main.cpp::sqlite3_libversion
+[x] src/main.cpp::sqlite3_sourceid
+[x] src/main.cpp::sqlite3_libversion_number
+[x] src/main.cpp::sqlite3_threadsafe
+[x] src/main.cpp::sqlite3_initialize
+[x] src/main.cpp::sqlite3_shutdown
+[x] src/main.cpp::sqlite3_config
+[x] src/main.cpp::sqlite3_db_mutex
+[x] src/main.cpp::sqlite3_db_release_memory
+[x] src/main.cpp::sqlite3_db_cacheflush
+[x] src/main.cpp::sqlite3_db_config
+[x] src/main.cpp::sqlite3IsBinary
+[x] src/main.cpp::sqlite3_last_insert_rowid
+[x] src/main.cpp::sqlite3_set_last_insert_rowid
+[x] src/main.cpp::sqlite3_changes64
+[x] src/main.cpp::sqlite3_changes
+[x] src/main.cpp::sqlite3_total_changes64
+[x] src/main.cpp::sqlite3_total_changes
+[x] src/main.cpp::sqlite3CloseSavepoints
+[x] src/main.cpp::functionDestroy
+[x] src/main.cpp::disconnectAllVtab
+[x] src/main.cpp::connectionIsBusy
+[x] src/main.cpp::sqlite3Close
+[x] src/main.cpp::sqlite3_txn_state
+[x] src/main.cpp::sqlite3_close
+[x] src/main.cpp::sqlite3_close_v2
+[x] src/main.cpp::sqlite3LeaveMutexAndCloseZombie
+[x] src/main.cpp::sqlite3RollbackAll
+[x] src/main.cpp::sqlite3ErrName
+[x] src/main.cpp::sqlite3ErrStr
+[x] src/main.cpp::sqlite3InvokeBusyHandler
+[x] src/main.cpp::sqlite3_busy_timeout
+[x] src/main.cpp::sqlite3_setlk_timeout
+[x] src/main.cpp::sqlite3_interrupt
+[x] src/main.cpp::sqlite3_is_interrupted
+[x] src/main.cpp::sqlite3_trace
+[x] src/main.cpp::sqlite3_wal_autocheckpoint
+[x] src/main.cpp::sqlite3_wal_checkpoint
+[x] src/main.cpp::sqlite3Checkpoint
+[x] src/main.cpp::sqlite3TempInMemory
+[x] src/main.cpp::sqlite3_errmsg
+[x] src/main.cpp::sqlite3_set_errmsg
+[x] src/main.cpp::sqlite3_error_offset
+[x] src/main.cpp::sqlite3_errmsg16
+[x] src/main.cpp::sqlite3_errcode
+[x] src/main.cpp::sqlite3_extended_errcode
+[x] src/main.cpp::sqlite3_system_errno
+[x] src/main.cpp::sqlite3_errstr
+[x] src/main.cpp::sqlite3_limit
+[x] src/main.cpp::uriParameter
+[x] src/main.cpp::sqlite3_get_clientdata
+[x] src/main.cpp::sqlite3_global_recover
+[x] src/main.cpp::sqlite3_get_autocommit
+[x] src/main.cpp::sqlite3ReportError
+[x] src/main.cpp::sqlite3CorruptError
+[x] src/main.cpp::sqlite3MisuseError
+[x] src/main.cpp::sqlite3CantopenError
+[x] src/main.cpp::sqlite3CorruptPgnoError
+[x] src/main.cpp::sqlite3NomemError
+[x] src/main.cpp::sqlite3IoerrnomemError
+[x] src/main.cpp::sqlite3_thread_cleanup
+[x] src/main.cpp::sqlite3_sleep
+[x] src/main.cpp::sqlite3_extended_result_codes
+[x] src/main.cpp::sqlite3_file_control
+[x] src/main.cpp::sqlite3_test_control
+[x] src/main.cpp::databaseName
+[x] src/main.cpp::appendText
+[x] src/main.cpp::sqlite3_free_filename
+[x] src/main.cpp::sqlite3_uri_parameter
+[x] src/main.cpp::sqlite3_uri_key
+[x] src/main.cpp::sqlite3_uri_boolean
+[x] src/main.cpp::sqlite3_filename_database
+[x] src/main.cpp::sqlite3_filename_journal
+[x] src/main.cpp::sqlite3_filename_wal
+[x] src/main.cpp::sqlite3DbNameToBtree
+[x] src/main.cpp::sqlite3_db_name
+[x] src/main.cpp::sqlite3_db_filename
+[x] src/main.cpp::sqlite3_db_readonly
+[x] src/main.cpp::sqlite3_snapshot_recover
+[x] src/main.cpp::sqlite3_snapshot_free
+[x] src/main.cpp::sqlite3_compileoption_used
+[x] src/main.cpp::sqlite3_compileoption_get
 [ ] src/malloc.cpp::sqlite3_release_memory
 [ ] src/malloc.cpp::sqlite3MallocMutex
 [ ] src/malloc.cpp::sqlite3_soft_heap_limit64
