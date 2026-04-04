@@ -372,14 +372,14 @@
 [x] src/callback.cpp::sqlite3LocateCollSeq
 [x] src/callback.cpp::sqlite3SchemaClear
 [x] src/callback.cpp::sqlite3SchemaGet
-[ ] src/carray.cpp::carrayDisconnect
-[ ] src/carray.cpp::carrayOpen
-[ ] src/carray.cpp::carrayClose
-[ ] src/carray.cpp::carrayNext
-[ ] src/carray.cpp::carrayRowid
-[ ] src/carray.cpp::carrayEof
-[ ] src/carray.cpp::carrayBindDel
-[ ] src/carray.cpp::sqlite3CarrayRegister
+[x] src/carray.cpp::carrayDisconnect
+[x] src/carray.cpp::carrayOpen
+[x] src/carray.cpp::carrayClose
+[x] src/carray.cpp::carrayNext
+[x] src/carray.cpp::carrayRowid
+[x] src/carray.cpp::carrayEof
+[x] src/carray.cpp::carrayBindDel
+[x] src/carray.cpp::sqlite3CarrayRegister
 [ ] src/complete.cpp::sqlite3_complete
 [ ] src/complete.cpp::sqlite3_complete16
 [ ] src/date.cpp::getDigits

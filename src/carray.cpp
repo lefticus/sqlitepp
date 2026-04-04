@@ -232,7 +232,7 @@ static int carrayColumn(
 ** rowid is the same as the output value.
 */
 static int carrayRowid(sqlite3_vtab_cursor *cur, sqlite_int64 *pRowid){
-  carray_cursor *pCur = (carray_cursor*)cur;
+  const carray_cursor *pCur = (carray_cursor*)cur;
   *pRowid = pCur->iRowid;
   return SQLITE_OK;
 }
@@ -242,7 +242,7 @@ static int carrayRowid(sqlite3_vtab_cursor *cur, sqlite_int64 *pRowid){
 ** row of output.
 */
 static int carrayEof(sqlite3_vtab_cursor *cur){
-  carray_cursor *pCur = (carray_cursor*)cur;
+  const carray_cursor *pCur = (carray_cursor*)cur;
   return pCur->iRowid>pCur->iCnt;
 }
 
