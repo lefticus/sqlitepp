@@ -843,14 +843,14 @@
 [x] src/mem0.cpp::sqlite3MemInit
 [x] src/mem0.cpp::sqlite3MemShutdown
 [x] src/mem0.cpp::sqlite3MemSetDefault
-[ ] src/mem1.cpp::sqlite3MemMalloc
-[ ] src/mem1.cpp::sqlite3MemFree
-[ ] src/mem1.cpp::sqlite3MemSize
-[ ] src/mem1.cpp::sqlite3MemRealloc
-[ ] src/mem1.cpp::sqlite3MemRoundup
-[ ] src/mem1.cpp::sqlite3MemInit
-[ ] src/mem1.cpp::sqlite3MemShutdown
-[ ] src/mem1.cpp::sqlite3MemSetDefault
+[x] src/mem1.cpp::sqlite3MemMalloc
+[x] src/mem1.cpp::sqlite3MemFree
+[x] src/mem1.cpp::sqlite3MemSize
+[x] src/mem1.cpp::sqlite3MemRealloc
+[x] src/mem1.cpp::sqlite3MemRoundup
+[x] src/mem1.cpp::sqlite3MemInit
+[x] src/mem1.cpp::sqlite3MemShutdown
+[x] src/mem1.cpp::sqlite3MemSetDefault
 [ ] src/mem2.cpp::adjustStats
 [ ] src/mem2.cpp::sqlite3MemsysGetHeader
 [ ] src/mem2.cpp::sqlite3MemSize

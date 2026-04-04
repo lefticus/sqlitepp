@@ -127,19 +127,17 @@ static malloc_zone_t* _sqliteZone_;
 */
 static void *sqlite3MemMalloc(int nByte){
 #ifdef SQLITE_MALLOCSIZE
-  void *p;
   testcase( ROUND8(nByte)==nByte );
-  p = SQLITE_MALLOC( nByte );
+  void *p = SQLITE_MALLOC( nByte );
   if( p==0 ){
     testcase( sqlite3GlobalConfig.xLog!=0 );
     sqlite3_log(SQLITE_NOMEM, "failed to allocate %u bytes of memory", nByte);
   }
   return p;
 #else
-  sqlite3_int64 *p;
   assert( nByte>0 );
   testcase( ROUND8(nByte)!=nByte );
-  p = static_cast<sqlite3_int64*>(SQLITE_MALLOC( nByte+8 ));
+  sqlite3_int64 *p = static_cast<sqlite3_int64*>(SQLITE_MALLOC( nByte+8 ));
   if( p ){
     p[0] = nByte;
     p++;
@@ -179,9 +177,8 @@ static int sqlite3MemSize(void *pPrior){
   assert( pPrior!=0 );
   return (int)SQLITE_MALLOCSIZE(pPrior);
 #else
-  sqlite3_int64 *p;
   assert( pPrior!=0 );
-  p = (sqlite3_int64*)pPrior;
+  sqlite3_int64 *p = (sqlite3_int64*)pPrior;
   p--;
   return (int)p[0];
 #endif
@@ -239,11 +236,10 @@ static int sqlite3MemRoundup(int n){
 static int sqlite3MemInit(void *NotUsed){
 #if defined(__APPLE__) && !defined(SQLITE_WITHOUT_ZONEMALLOC)
   int cpuCount;
-  size_t len;
   if( _sqliteZone_ ){
     return SQLITE_OK;
   }
-  len = sizeof(cpuCount);
+  size_t len = sizeof(cpuCount);
   /* One usually wants to use hw.activecpu for MT decisions, but not here */
   sysctlbyname("hw.ncpu", &cpuCount, &len, NULL, 0);
   if( cpuCount>1 ){
