@@ -790,51 +790,51 @@
 [x] src/main.cpp::sqlite3_snapshot_free
 [x] src/main.cpp::sqlite3_compileoption_used
 [x] src/main.cpp::sqlite3_compileoption_get
-[ ] src/malloc.cpp::sqlite3_release_memory
-[ ] src/malloc.cpp::sqlite3MallocMutex
-[ ] src/malloc.cpp::sqlite3_soft_heap_limit64
-[ ] src/malloc.cpp::sqlite3_soft_heap_limit
-[ ] src/malloc.cpp::sqlite3_hard_heap_limit64
-[ ] src/malloc.cpp::sqlite3MallocInit
-[ ] src/malloc.cpp::sqlite3HeapNearlyFull
-[ ] src/malloc.cpp::sqlite3MallocEnd
-[ ] src/malloc.cpp::sqlite3_memory_used
-[ ] src/malloc.cpp::sqlite3_memory_highwater
-[ ] src/malloc.cpp::sqlite3MallocAlarm
-[ ] src/malloc.cpp::test_oom_breakpoint
-[ ] src/malloc.cpp::mallocWithAlarm
-[ ] src/malloc.cpp::sqlite3Malloc
-[ ] src/malloc.cpp::sqlite3_malloc
-[ ] src/malloc.cpp::sqlite3_malloc64
-[ ] src/malloc.cpp::isLookaside
-[ ] src/malloc.cpp::sqlite3MallocSize
-[ ] src/malloc.cpp::lookasideMallocSize
-[ ] src/malloc.cpp::sqlite3DbMallocSize
-[ ] src/malloc.cpp::sqlite3_msize
-[ ] src/malloc.cpp::sqlite3_free
-[ ] src/malloc.cpp::measureAllocationSize
-[ ] src/malloc.cpp::sqlite3DbFreeNN
-[ ] src/malloc.cpp::sqlite3DbNNFreeNN
-[ ] src/malloc.cpp::sqlite3DbFree
-[ ] src/malloc.cpp::sqlite3Realloc
-[ ] src/malloc.cpp::sqlite3_realloc
-[ ] src/malloc.cpp::sqlite3_realloc64
-[ ] src/malloc.cpp::sqlite3MallocZero
-[ ] src/malloc.cpp::sqlite3DbMallocZero
-[ ] src/malloc.cpp::dbMallocRawFinish
-[ ] src/malloc.cpp::sqlite3DbMallocRaw
-[ ] src/malloc.cpp::sqlite3DbMallocRawNN
-[ ] src/malloc.cpp::sqlite3DbRealloc
-[ ] src/malloc.cpp::dbReallocFinish
-[ ] src/malloc.cpp::sqlite3DbReallocOrFree
-[ ] src/malloc.cpp::sqlite3DbStrDup
-[ ] src/malloc.cpp::sqlite3DbStrNDup
-[ ] src/malloc.cpp::sqlite3DbSpanDup
-[ ] src/malloc.cpp::sqlite3SetString
-[ ] src/malloc.cpp::sqlite3OomFault
-[ ] src/malloc.cpp::sqlite3OomClear
-[ ] src/malloc.cpp::apiHandleError
-[ ] src/malloc.cpp::sqlite3ApiExit
+[x] src/malloc.cpp::sqlite3_release_memory
+[x] src/malloc.cpp::sqlite3MallocMutex
+[x] src/malloc.cpp::sqlite3_soft_heap_limit64
+[x] src/malloc.cpp::sqlite3_soft_heap_limit
+[x] src/malloc.cpp::sqlite3_hard_heap_limit64
+[x] src/malloc.cpp::sqlite3MallocInit
+[x] src/malloc.cpp::sqlite3HeapNearlyFull
+[x] src/malloc.cpp::sqlite3MallocEnd
+[x] src/malloc.cpp::sqlite3_memory_used
+[x] src/malloc.cpp::sqlite3_memory_highwater
+[x] src/malloc.cpp::sqlite3MallocAlarm
+[x] src/malloc.cpp::test_oom_breakpoint
+[x] src/malloc.cpp::mallocWithAlarm
+[x] src/malloc.cpp::sqlite3Malloc
+[x] src/malloc.cpp::sqlite3_malloc
+[x] src/malloc.cpp::sqlite3_malloc64
+[x] src/malloc.cpp::isLookaside
+[x] src/malloc.cpp::sqlite3MallocSize
+[x] src/malloc.cpp::lookasideMallocSize
+[x] src/malloc.cpp::sqlite3DbMallocSize
+[x] src/malloc.cpp::sqlite3_msize
+[x] src/malloc.cpp::sqlite3_free
+[x] src/malloc.cpp::measureAllocationSize
+[x] src/malloc.cpp::sqlite3DbFreeNN
+[x] src/malloc.cpp::sqlite3DbNNFreeNN
+[x] src/malloc.cpp::sqlite3DbFree
+[x] src/malloc.cpp::sqlite3Realloc
+[x] src/malloc.cpp::sqlite3_realloc
+[x] src/malloc.cpp::sqlite3_realloc64
+[x] src/malloc.cpp::sqlite3MallocZero
+[x] src/malloc.cpp::sqlite3DbMallocZero
+[x] src/malloc.cpp::dbMallocRawFinish
+[x] src/malloc.cpp::sqlite3DbMallocRaw
+[x] src/malloc.cpp::sqlite3DbMallocRawNN
+[x] src/malloc.cpp::sqlite3DbRealloc
+[x] src/malloc.cpp::dbReallocFinish
+[x] src/malloc.cpp::sqlite3DbReallocOrFree
+[x] src/malloc.cpp::sqlite3DbStrDup
+[x] src/malloc.cpp::sqlite3DbStrNDup
+[x] src/malloc.cpp::sqlite3DbSpanDup
+[x] src/malloc.cpp::sqlite3SetString
+[x] src/malloc.cpp::sqlite3OomFault
+[x] src/malloc.cpp::sqlite3OomClear
+[x] src/malloc.cpp::apiHandleError
+[x] src/malloc.cpp::sqlite3ApiExit
 [ ] src/mem0.cpp::sqlite3MemMalloc
 [ ] src/mem0.cpp::sqlite3MemFree
 [ ] src/mem0.cpp::sqlite3MemRealloc
