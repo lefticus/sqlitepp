@@ -277,11 +277,11 @@
 [x] src/build.cpp::sqlite3UnlinkAndDeleteIndex
 [x] src/build.cpp::sqlite3CollapseDatabaseArray
 [x] src/build.cpp::sqlite3ResetOneSchema
-[ ] src/build.cpp::sqlite3ResetAllSchemasOfConnection
-[ ] src/build.cpp::sqlite3CommitInternalChanges
-[ ] src/build.cpp::sqlite3ColumnExpr
-[ ] src/build.cpp::sqlite3ColumnColl
-[ ] src/build.cpp::sqlite3DeleteColumnNames
+[x] src/build.cpp::sqlite3ResetAllSchemasOfConnection
+[x] src/build.cpp::sqlite3CommitInternalChanges
+[x] src/build.cpp::sqlite3ColumnExpr
+[x] src/build.cpp::sqlite3ColumnColl
+[x] src/build.cpp::sqlite3DeleteColumnNames
 [ ] src/build.cpp::deleteTable
 [ ] src/build.cpp::sqlite3DeleteTable
 [ ] src/build.cpp::sqlite3DeleteTableGeneric

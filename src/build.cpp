@@ -636,9 +636,8 @@ void sqlite3ResetOneSchema(sqlite3 *db, int iDb){
 ** "main" and "temp") for a single database connection.
 */
 void sqlite3ResetAllSchemasOfConnection(sqlite3 *db){
-  int i;
   sqlite3BtreeEnterAll(db);
-  for(i=0; i<db->nDb; i++){
+  for(int i=0; i<db->nDb; i++){
     Db *pDb = &db->aDb[i];
     if( pDb->pSchema ){
       if( db->nSchemaLock==0 ){
@@ -746,12 +745,11 @@ const char *sqlite3ColumnColl(Column *pCol){
 ** Table.aCol[] array).
 */
 void sqlite3DeleteColumnNames(sqlite3 *db, Table *pTable){
-  int i;
   Column *pCol;
   assert( pTable!=0 );
   assert( db!=0 );
   if( (pCol = pTable->aCol)!=0 ){
-    for(i=0; i<pTable->nCol; i++, pCol++){
+    for(int i=0; i<pTable->nCol; i++, pCol++){
       assert( pCol->zCnName==0 || pCol->hName==sqlite3StrIHash(pCol->zCnName) );
       sqlite3DbFree(db, pCol->zCnName);
     }
