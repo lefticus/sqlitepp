@@ -932,10 +932,8 @@ int sqlite3FindDbName(sqlite3 *db, const char *zName){
 ** does not exist.
 */
 int sqlite3FindDb(sqlite3 *db, Token *pName){
-  int i;                               /* Database number */
-  char *zName;                         /* Name we are searching for */
-  zName = sqlite3NameFromToken(db, pName);
-  i = sqlite3FindDbName(db, zName);
+  char *zName = sqlite3NameFromToken(db, pName);
+  const int i = sqlite3FindDbName(db, zName);
   sqlite3DbFree(db, zName);
   return i;
 }
