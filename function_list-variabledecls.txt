@@ -337,34 +337,34 @@
 [x] src/build.cpp::sqlite3HasExplicitNulls
 [x] src/build.cpp::sqlite3DefaultRowEst
 [x] src/build.cpp::sqlite3DropIndex
-[ ] src/build.cpp::sqlite3IdListAppend
-[ ] src/build.cpp::sqlite3IdListDelete
-[ ] src/build.cpp::sqlite3IdListIndex
-[ ] src/build.cpp::sqlite3SrcListAssignCursors
-[ ] src/build.cpp::sqlite3SubqueryDelete
-[ ] src/build.cpp::sqlite3SubqueryDetach
-[ ] src/build.cpp::sqlite3SrcListDelete
-[ ] src/build.cpp::sqlite3SrcListIndexedBy
-[ ] src/build.cpp::sqlite3SrcListAppendList
-[ ] src/build.cpp::sqlite3SrcListFuncArgs
-[ ] src/build.cpp::sqlite3SrcListShiftJoinType
-[ ] src/build.cpp::sqlite3BeginTransaction
-[ ] src/build.cpp::sqlite3EndTransaction
-[ ] src/build.cpp::sqlite3Savepoint
-[ ] src/build.cpp::sqlite3OpenTempDatabase
-[ ] src/build.cpp::sqlite3CodeVerifySchemaAtToplevel
-[ ] src/build.cpp::sqlite3CodeVerifySchema
-[ ] src/build.cpp::sqlite3CodeVerifyNamedSchema
-[ ] src/build.cpp::sqlite3BeginWriteOperation
-[ ] src/build.cpp::sqlite3MultiWrite
-[ ] src/build.cpp::sqlite3MayAbort
-[ ] src/build.cpp::collationMatch
-[ ] src/build.cpp::sqlite3Reindex
-[ ] src/build.cpp::sqlite3KeyInfoOfIndex
-[ ] src/build.cpp::cteClear
-[ ] src/build.cpp::sqlite3CteDelete
-[ ] src/build.cpp::sqlite3WithDelete
-[ ] src/build.cpp::sqlite3WithDeleteGeneric
+[x] src/build.cpp::sqlite3IdListAppend
+[x] src/build.cpp::sqlite3IdListDelete
+[x] src/build.cpp::sqlite3IdListIndex
+[x] src/build.cpp::sqlite3SrcListAssignCursors
+[x] src/build.cpp::sqlite3SubqueryDelete
+[x] src/build.cpp::sqlite3SubqueryDetach
+[x] src/build.cpp::sqlite3SrcListDelete
+[x] src/build.cpp::sqlite3SrcListIndexedBy
+[x] src/build.cpp::sqlite3SrcListAppendList
+[x] src/build.cpp::sqlite3SrcListFuncArgs
+[x] src/build.cpp::sqlite3SrcListShiftJoinType
+[x] src/build.cpp::sqlite3BeginTransaction
+[x] src/build.cpp::sqlite3EndTransaction
+[x] src/build.cpp::sqlite3Savepoint
+[x] src/build.cpp::sqlite3OpenTempDatabase
+[x] src/build.cpp::sqlite3CodeVerifySchemaAtToplevel
+[x] src/build.cpp::sqlite3CodeVerifySchema
+[x] src/build.cpp::sqlite3CodeVerifyNamedSchema
+[x] src/build.cpp::sqlite3BeginWriteOperation
+[x] src/build.cpp::sqlite3MultiWrite
+[x] src/build.cpp::sqlite3MayAbort
+[x] src/build.cpp::collationMatch
+[x] src/build.cpp::sqlite3Reindex
+[x] src/build.cpp::sqlite3KeyInfoOfIndex
+[x] src/build.cpp::cteClear
+[x] src/build.cpp::sqlite3CteDelete
+[x] src/build.cpp::sqlite3WithDelete
+[x] src/build.cpp::sqlite3WithDeleteGeneric
 [ ] src/callback.cpp::callCollNeeded
 [ ] src/callback.cpp::synthCollSeq
 [ ] src/callback.cpp::sqlite3CheckCollSeq

@@ -4629,8 +4629,7 @@ void *sqlite3ArrayAllocate(
 ** A new IdList is returned, or NULL if malloc() fails.
 */
 IdList *sqlite3IdListAppend(Parse *pParse, IdList *pList, Token *pToken){
-  sqlite3 *db = pParse->db;
-  int i;
+  sqlite3 *const db = pParse->db;
   if( pList==0 ){
     pList = static_cast<IdList*>(sqlite3DbMallocZero(db, SZ_IDLIST(1)));
     if( pList==0 ) return 0;
@@ -4643,7 +4642,7 @@ IdList *sqlite3IdListAppend(Parse *pParse, IdList *pList, Token *pToken){
     }
     pList = pNew;
   }
-  i = pList->nId++;
+  const int i = pList->nId++;
   pList->a[i].zName = sqlite3NameFromToken(db, pToken);
   if( IN_RENAME_OBJECT && pList->a[i].zName ){
     sqlite3RenameTokenMap(pParse, static_cast<const void*>(pList->a[i].zName), pToken);
@@ -4876,10 +4875,9 @@ void sqlite3SubqueryDelete(sqlite3 *db, Subquery *pSubq){
 ** The returned Select becomes the responsibility of the caller.
 */
 Select *sqlite3SubqueryDetach(sqlite3 *db, SrcItem *pItem){
-  Select *pSel;
   assert( pItem!=0 );
   assert( pItem->fg.isSubquery );
-  pSel = pItem->u4.pSubq->pSelect;
+  Select *const pSel = pItem->u4.pSubq->pSelect;
   sqlite3DbFree(db, pItem->u4.pSubq);
   pItem->u4.pSubq = 0;
   pItem->fg.isSubquery = 0;
@@ -5053,9 +5051,8 @@ append_from_error:
 void sqlite3SrcListIndexedBy(Parse *pParse, SrcList *p, Token *pIndexedBy){
   assert( pIndexedBy!=0 );
   if( p && pIndexedBy->n>0 ){
-    SrcItem *pItem;
     assert( p->nSrc>0 );
-    pItem = &p->a[p->nSrc-1];
+    SrcItem *const pItem = &p->a[p->nSrc-1];
     assert( pItem->fg.notIndexed==0 );
     assert( pItem->fg.isIndexedBy==0 );
     assert( pItem->fg.isTabFunc==0 );
@@ -5104,7 +5101,7 @@ SrcList *sqlite3SrcListAppendList(Parse *pParse, SrcList *p1, SrcList *p2){
 */
 void sqlite3SrcListFuncArgs(Parse *pParse, SrcList *p, ExprList *pList){
   if( p ){
-    SrcItem *pItem = &p->a[p->nSrc-1];
+    SrcItem *const pItem = &p->a[p->nSrc-1];
     assert( pItem->fg.notIndexed==0 );
     assert( pItem->fg.isIndexedBy==0 );
     assert( pItem->fg.isTabFunc==0 );
@@ -5164,20 +5161,16 @@ void sqlite3SrcListShiftJoinType(Parse *pParse, SrcList *p){
 ** Generate VDBE code for a BEGIN statement.
 */
 void sqlite3BeginTransaction(Parse *pParse, int type){
-  sqlite3 *db;
-  Vdbe *v;
-  int i;
-
   assert( pParse!=0 );
-  db = pParse->db;
+  sqlite3 *const db = pParse->db;
   assert( db!=0 );
   if( sqlite3AuthCheck(pParse, SQLITE_TRANSACTION, "BEGIN", 0, 0) ){
     return;
   }
-  v = sqlite3GetVdbe(pParse);
+  Vdbe *const v = sqlite3GetVdbe(pParse);
   if( !v ) return;
   if( type!=TK_DEFERRED ){
-    for(i=0; i<db->nDb; i++){
+    for(int i=0; i<db->nDb; i++){
       int eTxnType;
       Btree *pBt = db->aDb[i].pBt;
       if( pBt && sqlite3BtreeIsReadonly(pBt) ){
@@ -5200,18 +5193,15 @@ void sqlite3BeginTransaction(Parse *pParse, int type){
 ** code is generated for a COMMIT.
 */
 void sqlite3EndTransaction(Parse *pParse, int eType){
-  Vdbe *v;
-  int isRollback;
-
   assert( pParse!=0 );
   assert( pParse->db!=0 );
   assert( eType==TK_COMMIT || eType==TK_END || eType==TK_ROLLBACK );
-  isRollback = eType==TK_ROLLBACK;
+  const int isRollback = eType==TK_ROLLBACK;
   if( sqlite3AuthCheck(pParse, SQLITE_TRANSACTION,
        isRollback ? "ROLLBACK" : "COMMIT", 0, 0) ){
     return;
   }
-  v = sqlite3GetVdbe(pParse);
+  Vdbe *const v = sqlite3GetVdbe(pParse);
   if( v ){
     sqlite3VdbeAddOp2(v, OP_AutoCommit, 1, isRollback);
   }
@@ -5242,7 +5232,7 @@ void sqlite3Savepoint(Parse *pParse, int op, Token *pName){
 ** the number of errors.  Leave any error messages in the pParse structure.
 */
 int sqlite3OpenTempDatabase(Parse *pParse){
-  sqlite3 *db = pParse->db;
+  sqlite3 *const db = pParse->db;
   if( db->aDb[1].pBt==0 && !pParse->explain ){
     int rc;
     Btree *pBt;
@@ -5298,9 +5288,8 @@ void sqlite3CodeVerifySchema(Parse *pParse, int iDb){
 ** attached database. Otherwise, invoke it for the database named zDb only.
 */
 void sqlite3CodeVerifyNamedSchema(Parse *pParse, const char *zDb){
-  sqlite3 *db = pParse->db;
-  int i;
-  for(i=0; i<db->nDb; i++){
+  sqlite3 *const db = pParse->db;
+  for(int i=0; i<db->nDb; i++){
     Db *pDb = &db->aDb[i];
     if( pDb->pBt && (!zDb || 0==sqlite3StrICmp(zDb, pDb->zDbSName)) ){
       sqlite3CodeVerifySchema(pParse, i);
@@ -5322,7 +5311,7 @@ void sqlite3CodeVerifyNamedSchema(Parse *pParse, const char *zDb){
 ** necessary to undo a write and the checkpoint should not be set.
 */
 void sqlite3BeginWriteOperation(Parse *pParse, int setStatement, int iDb){
-  Parse *pToplevel = sqlite3ParseToplevel(pParse);
+  Parse *const pToplevel = sqlite3ParseToplevel(pParse);
   sqlite3CodeVerifySchemaAtToplevel(pToplevel, iDb);
   DbMaskSet(pToplevel->writeMask, iDb);
   pToplevel->isMultiWrite |= setStatement;
@@ -5336,7 +5325,7 @@ void sqlite3BeginWriteOperation(Parse *pParse, int setStatement, int iDb){
 ** be necessary to undo the completed writes.
 */
 void sqlite3MultiWrite(Parse *pParse){
-  Parse *pToplevel = sqlite3ParseToplevel(pParse);
+  Parse *const pToplevel = sqlite3ParseToplevel(pParse);
   pToplevel->isMultiWrite = 1;
 }
 
@@ -5357,7 +5346,7 @@ void sqlite3MultiWrite(Parse *pParse){
 ** to take the safe route and skip the optimization.
 */
 void sqlite3MayAbort(Parse *pParse){
-  Parse *pToplevel = sqlite3ParseToplevel(pParse);
+  Parse *const pToplevel = sqlite3ParseToplevel(pParse);
   pToplevel->mayAbort = 1;
 }
 
@@ -5487,7 +5476,7 @@ void sqlite3Reindex(Parse *pParse, Token *pName1, Token *pName2){
   char *z = 0;                /* Name of a table or index or collation */
   const char *zDb = 0;        /* Name of the database */
   int iReDb = -1;             /* The database index number */
-  sqlite3 *db = pParse->db;   /* The database connection */
+  sqlite3 *const db = pParse->db;   /* The database connection */
   Token *pObjName;            /* Name of the table or index to be reindexed */
   int bMatch = 0;             /* At least one name match */
   const char *zColl = 0;      /* Rebuild indexes using this collation */
@@ -5573,9 +5562,8 @@ void sqlite3Reindex(Parse *pParse, Token *pName1, Token *pName2){
 ** when it has finished using it.
 */
 KeyInfo *sqlite3KeyInfoOfIndex(Parse *pParse, Index *pIdx){
-  int i;
-  int nCol = pIdx->nColumn;
-  int nKey = pIdx->nKeyCol;
+  const int nCol = pIdx->nColumn;
+  const int nKey = pIdx->nKeyCol;
   KeyInfo *pKey;
   if( pParse->nErr ) return 0;
   if( pIdx->uniqNotNull ){
@@ -5585,7 +5573,7 @@ KeyInfo *sqlite3KeyInfoOfIndex(Parse *pParse, Index *pIdx){
   }
   if( pKey ){
     assert( sqlite3KeyInfoIsWriteable(pKey) );
-    for(i=0; i<nCol; i++){
+    for(int i=0; i<nCol; i++){
       const char *zColl = pIdx->azColl[i];
       pKey->aColl[i] = zColl==sqlite3StrBINARY ? 0 :
                         sqlite3LocateCollSeq(pParse, zColl);
@@ -5720,8 +5708,7 @@ With *sqlite3WithAdd(
 */
 void sqlite3WithDelete(sqlite3 *db, With *pWith){
   if( pWith ){
-    int i;
-    for(i=0; i<pWith->nCte; i++){
+    for(int i=0; i<pWith->nCte; i++){
       cteClear(db, &pWith->a[i]);
     }
     sqlite3DbFree(db, pWith);
