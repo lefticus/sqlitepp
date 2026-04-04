@@ -7883,7 +7883,6 @@ static int balance_quick(MemPage *pParent, MemPage *pPage, u8 *pSpace){
     u8 *pOut = &pSpace[4];
     u8 *pCell = pPage->apOvfl[0];
     u16 szCell = pPage->xCellSize(pPage, pCell);
-    u8 *pStop;
     CellArray b;
 
     assert( sqlite3PagerIswriteable(pNew->pDbPage) );
@@ -7933,7 +7932,7 @@ static int balance_quick(MemPage *pParent, MemPage *pPage, u8 *pSpace){
     ** cell on pPage into the pSpace buffer.
     */
     pCell = findCell(pPage, pPage->nCell-1);
-    pStop = &pCell[9];
+    u8 *pStop = &pCell[9];
     while( (*(pCell++)&0x80) && pCell<pStop );
     pStop = &pCell[9];
     while( ((*(pOut++) = *(pCell++))&0x80) && pCell<pStop );
@@ -7962,19 +7961,17 @@ static int balance_quick(MemPage *pParent, MemPage *pPage, u8 *pSpace){
 ** for setting pointer-map entries.
 */
 static int ptrmapCheckPages(MemPage **apPage, int nPage){
-  int i, j;
-  for(i=0; i<nPage; i++){
+  for(int i=0; i<nPage; i++){
     Pgno n;
     u8 e;
-    MemPage *pPage = apPage[i];
-    BtShared *pBt = pPage->pBt;
+    MemPage *const pPage = apPage[i];
+    BtShared *const pBt = pPage->pBt;
     assert( pPage->isInit );
 
-    for(j=0; j<pPage->nCell; j++){
+    for(int j=0; j<pPage->nCell; j++){
       CellInfo info;
-      u8 *z;
-    
-      z = findCell(pPage, j);
+
+      u8 *const z = findCell(pPage, j);
       pPage->xParseCell(pPage, z, &info);
       if( info.nLocal<info.nPayload ){
         Pgno ovfl = get4byte(&z[info.nSize-4]);
@@ -8021,16 +8018,14 @@ static void copyNodeContent(MemPage *pFrom, MemPage *pTo, int *pRC){
     u8 * const aTo = pTo->aData;
     int const iFromHdr = pFrom->hdrOffset;
     int const iToHdr = ((pTo->pgno==1) ? 100 : 0);
-    int rc;
-    int iData;
- 
- 
+
+
     assert( pFrom->isInit );
     assert( pFrom->nFree>=iToHdr );
     assert( get2byte(&aFrom[iFromHdr+5]) <= (int)pBt->usableSize );
- 
+
     /* Copy the b-tree node content from page pFrom to page pTo. */
-    iData = get2byte(&aFrom[iFromHdr+5]);
+    int const iData = get2byte(&aFrom[iFromHdr+5]);
     memcpy(&aTo[iData], &aFrom[iData], pBt->usableSize-iData);
     memcpy(&aTo[iToHdr], &aFrom[iFromHdr], pFrom->cellOffset + 2*pFrom->nCell);
  
@@ -8040,7 +8035,7 @@ static void copyNodeContent(MemPage *pFrom, MemPage *pTo, int *pRC){
     ** page pFrom.
     */
     pTo->isInit = 0;
-    rc = btreeInitPage(pTo);
+    int rc = btreeInitPage(pTo);
     if( rc==SQLITE_OK ) rc = btreeComputeFreeSpace(pTo);
     if( rc!=SQLITE_OK ){
       *pRC = rc;
@@ -8904,7 +8899,7 @@ static int balance_deeper(MemPage *pRoot, MemPage **ppChild){
   int rc;                        /* Return value from subprocedures */
   MemPage *pChild = 0;           /* Pointer to a new child page */
   Pgno pgnoChild = 0;            /* Page number of the new child page */
-  BtShared *pBt = pRoot->pBt;    /* The BTree */
+  BtShared *const pBt = pRoot->pBt;    /* The BTree */
 
   assert( pRoot->nOverflow>0 );
   assert( sqlite3_mutex_held(pBt->mutex) );
