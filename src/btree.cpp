@@ -4323,9 +4323,8 @@ int sqlite3BtreeCommitPhaseTwo(Btree *p, int bCleanup){
 ** Do both phases of a commit.
 */
 int sqlite3BtreeCommit(Btree *p){
-  int rc;
   sqlite3BtreeEnter(p);
-  rc = sqlite3BtreeCommitPhaseOne(p, 0);
+  int rc = sqlite3BtreeCommitPhaseOne(p, 0);
   if( rc==SQLITE_OK ){
     rc = sqlite3BtreeCommitPhaseTwo(p, 0);
   }
@@ -4360,13 +4359,12 @@ int sqlite3BtreeCommit(Btree *p){
 ** saving a cursor position, an SQLite error code.
 */
 int sqlite3BtreeTripAllCursors(Btree *pBtree, int errCode, int writeOnly){
-  BtCursor *p;
   int rc = SQLITE_OK;
 
   assert( (writeOnly==0 || writeOnly==1) && BTCF_WriteFlag==1 );
   if( pBtree ){
     sqlite3BtreeEnter(pBtree);
-    for(p=pBtree->pBt->pCursor; p; p=p->pNext){
+    for(BtCursor *p=pBtree->pBt->pCursor; p; p=p->pNext){
       if( writeOnly && (p->curFlags & BTCF_WriteFlag)==0 ){
         if( p->eState==CURSOR_VALID || p->eState==CURSOR_SKIPNEXT ){
           rc = saveCursorPosition(p);
@@ -4412,8 +4410,7 @@ static void btreeSetNPage(BtShared *pBt, MemPage *pPage1){
 */
 int sqlite3BtreeRollback(Btree *p, int tripCode, int writeOnly){
   int rc;
-  BtShared *pBt = p->pBt;
-  MemPage *pPage1;
+  BtShared * const pBt = p->pBt;
 
   assert( writeOnly==1 || writeOnly==0 );
   assert( tripCode==SQLITE_ABORT_ROLLBACK || tripCode==SQLITE_OK );
@@ -4443,6 +4440,7 @@ int sqlite3BtreeRollback(Btree *p, int tripCode, int writeOnly){
     /* The rollback may have destroyed the pPage1->aData value.  So
     ** call btreeGetPage() on page 1 again to make
     ** sure pPage1->aData is set correctly. */
+    MemPage *pPage1;
     if( btreeGetPage(pBt, 1, &pPage1, 0)==SQLITE_OK ){
       btreeSetNPage(pBt, pPage1);
       releasePageOne(pPage1);

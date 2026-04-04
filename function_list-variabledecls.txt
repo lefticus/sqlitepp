@@ -177,11 +177,11 @@
 [x] src/btree.cpp::autoVacuumCommit
 [x] src/btree.cpp::sqlite3BtreeCommitPhaseOne
 [x] src/btree.cpp::btreeEndTransaction
-[ ] src/btree.cpp::sqlite3BtreeCommitPhaseTwo
-[ ] src/btree.cpp::sqlite3BtreeCommit
-[ ] src/btree.cpp::sqlite3BtreeTripAllCursors
-[ ] src/btree.cpp::btreeSetNPage
-[ ] src/btree.cpp::sqlite3BtreeRollback
+[x] src/btree.cpp::sqlite3BtreeCommitPhaseTwo
+[x] src/btree.cpp::sqlite3BtreeCommit
+[x] src/btree.cpp::sqlite3BtreeTripAllCursors
+[x] src/btree.cpp::btreeSetNPage
+[x] src/btree.cpp::sqlite3BtreeRollback
 [ ] src/btree.cpp::sqlite3BtreeBeginStmt
 [ ] src/btree.cpp::sqlite3BtreeSavepoint
 [ ] src/btree.cpp::sqlite3BtreeCursorSize
