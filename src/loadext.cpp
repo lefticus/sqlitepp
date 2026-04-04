@@ -744,9 +744,8 @@ int sqlite3_load_extension(
 ** to clean up loaded extensions
 */
 void sqlite3CloseExtensions(sqlite3 *db){
-  int i;
   assert( sqlite3_mutex_held(db->mutex) );
-  for(i=0; i<db->nExtension; i++){
+  for(int i=0; i<db->nExtension; i++){
     sqlite3OsDlClose(db->pVfs, db->aExtension[i]);
   }
   sqlite3DbFree(db, db->aExtension);
@@ -906,17 +905,13 @@ void sqlite3_reset_auto_extension(void){
 ** If anything goes wrong, set an error in the database connection.
 */
 void sqlite3AutoLoadExtensions(sqlite3 *db){
-  u32 i;
-  int go = 1;
-  int rc;
-  sqlite3_loadext_entry xInit;
-
   wsdAutoextInit;
   if( wsdAutoext.nExt==0 ){
     /* Common case: early out without every having to acquire a mutex */
     return;
   }
-  for(i=0; go; i++){
+  int go = 1;
+  for(u32 i=0; go; i++){
     char *zErrmsg;
 #if SQLITE_THREADSAFE
     sqlite3_mutex *mutex = sqlite3MutexAlloc(SQLITE_MUTEX_STATIC_MAIN);
@@ -926,6 +921,7 @@ void sqlite3AutoLoadExtensions(sqlite3 *db){
 #else
     const sqlite3_api_routines *pThunk = &sqlite3Apis;
 #endif
+    sqlite3_loadext_entry xInit;
     sqlite3_mutex_enter(mutex);
     if( i>=wsdAutoext.nExt ){
       xInit = 0;
@@ -935,6 +931,7 @@ void sqlite3AutoLoadExtensions(sqlite3 *db){
     }
     sqlite3_mutex_leave(mutex);
     zErrmsg = 0;
+    int rc;
     if( xInit && (rc = xInit(db, &zErrmsg, pThunk))!=0 ){
       sqlite3ErrorWithMsg(db, rc,
             "automatic extension loading failed: %s", zErrmsg);

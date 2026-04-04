@@ -702,10 +702,10 @@
 [x] src/json.cpp::jsonEachRowid
 [x] src/json.cpp::sqlite3RegisterJsonFunctions
 [x] src/json.cpp::sqlite3JsonVtabRegister
-[ ] src/loadext.cpp::sqlite3CloseExtensions
-[ ] src/loadext.cpp::sqlite3_enable_load_extension
-[ ] src/loadext.cpp::sqlite3_reset_auto_extension
-[ ] src/loadext.cpp::sqlite3AutoLoadExtensions
+[x] src/loadext.cpp::sqlite3CloseExtensions
+[x] src/loadext.cpp::sqlite3_enable_load_extension
+[x] src/loadext.cpp::sqlite3_reset_auto_extension
+[x] src/loadext.cpp::sqlite3AutoLoadExtensions
 [ ] src/main.cpp::sqlite3TestExtInit
 [ ] src/main.cpp::int
 [ ] src/main.cpp::sqlite3_libversion
