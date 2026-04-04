@@ -302,11 +302,11 @@
 [x] src/build.cpp::sqlite3AddColumn
 [x] src/build.cpp::sqlite3AddNotNull
 [x] src/build.cpp::sqlite3AffinityType
-[ ] src/build.cpp::sqlite3StringToId
-[ ] src/build.cpp::makeColumnPartOfPrimaryKey
-[ ] src/build.cpp::sqlite3AddCollateType
-[ ] src/build.cpp::sqlite3AddGenerated
-[ ] src/build.cpp::sqlite3ChangeCookie
+[x] src/build.cpp::sqlite3StringToId
+[x] src/build.cpp::makeColumnPartOfPrimaryKey
+[x] src/build.cpp::sqlite3AddCollateType
+[x] src/build.cpp::sqlite3AddGenerated
+[x] src/build.cpp::sqlite3ChangeCookie
 [ ] src/build.cpp::identLength
 [ ] src/build.cpp::identPut
 [ ] src/build.cpp::createTableStmt

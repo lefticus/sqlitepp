@@ -1904,15 +1904,11 @@ void sqlite3AddCheckConstraint(
 ** to the CollSeq given.
 */
 void sqlite3AddCollateType(Parse *pParse, Token *pToken){
-  Table *p;
-  int i;
-  char *zColl;              /* Dequoted name of collation sequence */
-  sqlite3 *db;
-
-  if( (p = pParse->pNewTable)==0 || IN_RENAME_OBJECT ) return;
-  i = p->nCol-1;
-  db = pParse->db;
-  zColl = sqlite3NameFromToken(db, pToken);
+  Table *const p = pParse->pNewTable;
+  if( p==0 || IN_RENAME_OBJECT ) return;
+  const int i = p->nCol-1;
+  sqlite3 *const db = pParse->db;
+  char *zColl = sqlite3NameFromToken(db, pToken);              /* Dequoted name of collation sequence */
   if( !zColl ) return;
 
   if( sqlite3LocateCollSeq(pParse, zColl) ){
@@ -2013,8 +2009,8 @@ generated_done:
 ** the schema-version whenever the schema changes.
 */
 void sqlite3ChangeCookie(Parse *pParse, int iDb){
-  sqlite3 *db = pParse->db;
-  Vdbe *v = pParse->pVdbe;
+  sqlite3 *const db = pParse->db;
+  Vdbe *const v = pParse->pVdbe;
   assert( sqlite3SchemaMutexHeld(db, iDb, 0) );
   sqlite3VdbeAddOp3(v, OP_SetCookie, iDb, BTREE_SCHEMA_VERSION,
                    (int)(1+(unsigned)db->aDb[iDb].pSchema->schema_cookie));
