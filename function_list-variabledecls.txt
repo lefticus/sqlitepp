@@ -436,135 +436,135 @@
 [ ] src/delete.cpp::tabIsReadOnly
 [ ] src/delete.cpp::sqlite3IsReadOnly
 [ ] src/delete.cpp::sqlite3ResolvePartIdxLabel
-[ ] src/expr.cpp::sqlite3TableColumnAffinity
-[ ] src/expr.cpp::sqlite3ExprAffinity
-[ ] src/expr.cpp::sqlite3ExprDataType
-[ ] src/expr.cpp::sqlite3ExprSkipCollate
-[ ] src/expr.cpp::sqlite3ExprSkipCollateAndLikely
-[ ] src/expr.cpp::sqlite3ExprCollSeq
-[ ] src/expr.cpp::sqlite3ExprNNCollSeq
-[ ] src/expr.cpp::sqlite3ExprCollSeqMatch
-[ ] src/expr.cpp::sqlite3CompareAffinity
-[ ] src/expr.cpp::comparisonAffinity
-[ ] src/expr.cpp::sqlite3IndexAffinityOk
-[ ] src/expr.cpp::sqlite3ExprCompareCollSeq
-[ ] src/expr.cpp::sqlite3ExprIsVector
-[ ] src/expr.cpp::sqlite3ExprVectorSize
-[ ] src/expr.cpp::sqlite3VectorFieldSubexpr
-[ ] src/expr.cpp::exprCodeSubselect
-[ ] src/expr.cpp::sqlite3ExprCheckHeight
-[ ] src/expr.cpp::heightOfExpr
-[ ] src/expr.cpp::heightOfExprList
-[ ] src/expr.cpp::heightOfSelect
-[ ] src/expr.cpp::exprSetHeight
-[ ] src/expr.cpp::sqlite3ExprSetHeightAndFlags
-[ ] src/expr.cpp::sqlite3SelectExprHeight
-[ ] src/expr.cpp::sqlite3ExprSetHeightAndFlags
-[ ] src/expr.cpp::sqlite3ExprSetErrorOffset
-[ ] src/expr.cpp::sqlite3ExprInt32
-[ ] src/expr.cpp::sqlite3PExprAddSelect
-[ ] src/expr.cpp::sqlite3ExprListToValues
-[ ] src/expr.cpp::sqlite3ExprAnd
-[ ] src/expr.cpp::sqlite3ExprOrderByAggregateError
-[ ] src/expr.cpp::sqlite3ExprAssignVarNumber
-[ ] src/expr.cpp::sqlite3ExprDeleteNN
-[ ] src/expr.cpp::sqlite3ExprDelete
-[ ] src/expr.cpp::sqlite3ExprDeleteGeneric
-[ ] src/expr.cpp::sqlite3ClearOnOrUsing
-[ ] src/expr.cpp::sqlite3ExprDeferredDelete
-[ ] src/expr.cpp::sqlite3ExprUnmapAndDelete
-[ ] src/expr.cpp::exprStructSize
-[ ] src/expr.cpp::dupedExprStructSize
-[ ] src/expr.cpp::dupedExprNodeSize
-[ ] src/expr.cpp::dupedExprSize
-[ ] src/expr.cpp::sqlite3WithDup
-[ ] src/expr.cpp::gatherSelectWindowsCallback
-[ ] src/expr.cpp::gatherSelectWindowsSelectCallback
-[ ] src/expr.cpp::gatherSelectWindows
-[ ] src/expr.cpp::sqlite3ExprDup
-[ ] src/expr.cpp::sqlite3ExprListDup
-[ ] src/expr.cpp::sqlite3SrcListDup
-[ ] src/expr.cpp::sqlite3IdListDup
-[ ] src/expr.cpp::sqlite3SelectDup
-[ ] src/expr.cpp::sqlite3SelectDup
-[ ] src/expr.cpp::sqlite3ExprListSetSortOrder
-[ ] src/expr.cpp::exprListDeleteNN
-[ ] src/expr.cpp::sqlite3ExprListDelete
-[ ] src/expr.cpp::sqlite3ExprListDeleteGeneric
-[ ] src/expr.cpp::sqlite3ExprListFlags
-[ ] src/expr.cpp::sqlite3SelectWalkFail
-[ ] src/expr.cpp::sqlite3IsTrueOrFalse
-[ ] src/expr.cpp::sqlite3ExprIdToTrueFalse
-[ ] src/expr.cpp::sqlite3ExprTruthValue
-[ ] src/expr.cpp::sqlite3ExprSimplifiedAndOr
-[ ] src/expr.cpp::exprEvalRhsFirst
-[ ] src/expr.cpp::exprNodeIsConstant
-[ ] src/expr.cpp::exprIsConst
-[ ] src/expr.cpp::sqlite3ExprIsConstant
-[ ] src/expr.cpp::sqlite3ExprIsConstantNotJoin
-[ ] src/expr.cpp::exprSelectWalkTableConstant
-[ ] src/expr.cpp::sqlite3ExprIsTableConstant
-[ ] src/expr.cpp::exprNodeIsConstantOrGroupBy
-[ ] src/expr.cpp::sqlite3ExprIsConstantOrGroupBy
-[ ] src/expr.cpp::sqlite3ExprIsConstantOrFunction
-[ ] src/expr.cpp::sqlite3ExprContainsSubquery
-[ ] src/expr.cpp::sqlite3ExprIsInteger
-[ ] src/expr.cpp::sqlite3ExprCanBeNull
-[ ] src/expr.cpp::sqlite3ExprNeedsNoAffinityChange
-[ ] src/expr.cpp::sqlite3IsRowid
-[ ] src/expr.cpp::sqlite3RowidAlias
-[ ] src/expr.cpp::isCandidateForInOpt
-[ ] src/expr.cpp::sqlite3SetHasNullFlag
-[ ] src/expr.cpp::sqlite3InRhsIsConstant
-[ ] src/expr.cpp::exprINAffinity
-[ ] src/expr.cpp::sqlite3SubselectError
-[ ] src/expr.cpp::sqlite3VectorErrorMsg
-[ ] src/expr.cpp::sqlite3CodeSubselect
-[ ] src/expr.cpp::sqlite3ExprCheckIN
-[ ] src/expr.cpp::codeReal
-[ ] src/expr.cpp::codeInteger
-[ ] src/expr.cpp::sqlite3ExprCodeMove
-[ ] src/expr.cpp::sqlite3ExprToRegister
-[ ] src/expr.cpp::exprCodeVector
-[ ] src/expr.cpp::setDoNotMergeFlagOnCopy
-[ ] src/expr.cpp::exprNodeCanReturnSubtype
-[ ] src/expr.cpp::sqlite3ExprCanReturnSubtype
-[ ] src/expr.cpp::exprPartidxExprLookup
-[ ] src/expr.cpp::sqlite3ExprCodeTarget
-[ ] src/expr.cpp::sqlite3ExprCodeTemp
-[ ] src/expr.cpp::sqlite3ExprCode
-[ ] src/expr.cpp::sqlite3ExprCodeCopy
-[ ] src/expr.cpp::sqlite3ExprCodeFactorable
-[ ] src/expr.cpp::sqlite3ExprIfTrue
-[ ] src/expr.cpp::sqlite3ExprIfFalse
-[ ] src/expr.cpp::sqlite3ExprIfFalseDup
-[ ] src/expr.cpp::sqlite3ExprListCompare
-[ ] src/expr.cpp::sqlite3ExprCompareSkip
-[ ] src/expr.cpp::sqlite3ExprIsNotTrue
-[ ] src/expr.cpp::sqlite3ExprIsIIF
-[ ] src/expr.cpp::bothImplyNotNullRow
-[ ] src/expr.cpp::impliesNotNullRow
-[ ] src/expr.cpp::sqlite3ExprImpliesNonNullRow
-[ ] src/expr.cpp::exprIdxCover
-[ ] src/expr.cpp::selectRefEnter
-[ ] src/expr.cpp::selectRefLeave
-[ ] src/expr.cpp::exprRefToSrcList
-[ ] src/expr.cpp::sqlite3ReferencesSrcList
-[ ] src/expr.cpp::agginfoPersistExprCb
-[ ] src/expr.cpp::sqlite3AggInfoPersistWalkerInit
-[ ] src/expr.cpp::addAggInfoColumn
-[ ] src/expr.cpp::addAggInfoFunc
-[ ] src/expr.cpp::analyzeAggregate
-[ ] src/expr.cpp::sqlite3ExprAnalyzeAggregates
-[ ] src/expr.cpp::sqlite3ExprAnalyzeAggList
-[ ] src/expr.cpp::sqlite3GetTempReg
-[ ] src/expr.cpp::sqlite3ReleaseTempReg
-[ ] src/expr.cpp::sqlite3GetTempRange
-[ ] src/expr.cpp::sqlite3ReleaseTempRange
-[ ] src/expr.cpp::sqlite3ClearTempRegCache
-[ ] src/expr.cpp::sqlite3TouchRegister
-[ ] src/expr.cpp::sqlite3FirstAvailableRegister
-[ ] src/expr.cpp::sqlite3NoTempsInRange
+[x] src/expr.cpp::sqlite3TableColumnAffinity
+[x] src/expr.cpp::sqlite3ExprAffinity
+[x] src/expr.cpp::sqlite3ExprDataType
+[x] src/expr.cpp::sqlite3ExprSkipCollate
+[x] src/expr.cpp::sqlite3ExprSkipCollateAndLikely
+[x] src/expr.cpp::sqlite3ExprCollSeq
+[x] src/expr.cpp::sqlite3ExprNNCollSeq
+[x] src/expr.cpp::sqlite3ExprCollSeqMatch
+[x] src/expr.cpp::sqlite3CompareAffinity
+[x] src/expr.cpp::comparisonAffinity
+[x] src/expr.cpp::sqlite3IndexAffinityOk
+[x] src/expr.cpp::sqlite3ExprCompareCollSeq
+[x] src/expr.cpp::sqlite3ExprIsVector
+[x] src/expr.cpp::sqlite3ExprVectorSize
+[x] src/expr.cpp::sqlite3VectorFieldSubexpr
+[x] src/expr.cpp::exprCodeSubselect
+[x] src/expr.cpp::sqlite3ExprCheckHeight
+[x] src/expr.cpp::heightOfExpr
+[x] src/expr.cpp::heightOfExprList
+[x] src/expr.cpp::heightOfSelect
+[x] src/expr.cpp::exprSetHeight
+[x] src/expr.cpp::sqlite3ExprSetHeightAndFlags
+[x] src/expr.cpp::sqlite3SelectExprHeight
+[x] src/expr.cpp::sqlite3ExprSetHeightAndFlags
+[x] src/expr.cpp::sqlite3ExprSetErrorOffset
+[x] src/expr.cpp::sqlite3ExprInt32
+[x] src/expr.cpp::sqlite3PExprAddSelect
+[x] src/expr.cpp::sqlite3ExprListToValues
+[x] src/expr.cpp::sqlite3ExprAnd
+[x] src/expr.cpp::sqlite3ExprOrderByAggregateError
+[x] src/expr.cpp::sqlite3ExprAssignVarNumber
+[x] src/expr.cpp::sqlite3ExprDeleteNN
+[x] src/expr.cpp::sqlite3ExprDelete
+[x] src/expr.cpp::sqlite3ExprDeleteGeneric
+[x] src/expr.cpp::sqlite3ClearOnOrUsing
+[x] src/expr.cpp::sqlite3ExprDeferredDelete
+[x] src/expr.cpp::sqlite3ExprUnmapAndDelete
+[x] src/expr.cpp::exprStructSize
+[x] src/expr.cpp::dupedExprStructSize
+[x] src/expr.cpp::dupedExprNodeSize
+[x] src/expr.cpp::dupedExprSize
+[x] src/expr.cpp::sqlite3WithDup
+[x] src/expr.cpp::gatherSelectWindowsCallback
+[x] src/expr.cpp::gatherSelectWindowsSelectCallback
+[x] src/expr.cpp::gatherSelectWindows
+[x] src/expr.cpp::sqlite3ExprDup
+[x] src/expr.cpp::sqlite3ExprListDup
+[x] src/expr.cpp::sqlite3SrcListDup
+[x] src/expr.cpp::sqlite3IdListDup
+[x] src/expr.cpp::sqlite3SelectDup
+[x] src/expr.cpp::sqlite3SelectDup
+[x] src/expr.cpp::sqlite3ExprListSetSortOrder
+[x] src/expr.cpp::exprListDeleteNN
+[x] src/expr.cpp::sqlite3ExprListDelete
+[x] src/expr.cpp::sqlite3ExprListDeleteGeneric
+[x] src/expr.cpp::sqlite3ExprListFlags
+[x] src/expr.cpp::sqlite3SelectWalkFail
+[x] src/expr.cpp::sqlite3IsTrueOrFalse
+[x] src/expr.cpp::sqlite3ExprIdToTrueFalse
+[x] src/expr.cpp::sqlite3ExprTruthValue
+[x] src/expr.cpp::sqlite3ExprSimplifiedAndOr
+[x] src/expr.cpp::exprEvalRhsFirst
+[x] src/expr.cpp::exprNodeIsConstant
+[x] src/expr.cpp::exprIsConst
+[x] src/expr.cpp::sqlite3ExprIsConstant
+[x] src/expr.cpp::sqlite3ExprIsConstantNotJoin
+[x] src/expr.cpp::exprSelectWalkTableConstant
+[x] src/expr.cpp::sqlite3ExprIsTableConstant
+[x] src/expr.cpp::exprNodeIsConstantOrGroupBy
+[x] src/expr.cpp::sqlite3ExprIsConstantOrGroupBy
+[x] src/expr.cpp::sqlite3ExprIsConstantOrFunction
+[x] src/expr.cpp::sqlite3ExprContainsSubquery
+[x] src/expr.cpp::sqlite3ExprIsInteger
+[x] src/expr.cpp::sqlite3ExprCanBeNull
+[x] src/expr.cpp::sqlite3ExprNeedsNoAffinityChange
+[x] src/expr.cpp::sqlite3IsRowid
+[x] src/expr.cpp::sqlite3RowidAlias
+[x] src/expr.cpp::isCandidateForInOpt
+[x] src/expr.cpp::sqlite3SetHasNullFlag
+[x] src/expr.cpp::sqlite3InRhsIsConstant
+[x] src/expr.cpp::exprINAffinity
+[x] src/expr.cpp::sqlite3SubselectError
+[x] src/expr.cpp::sqlite3VectorErrorMsg
+[x] src/expr.cpp::sqlite3CodeSubselect
+[x] src/expr.cpp::sqlite3ExprCheckIN
+[x] src/expr.cpp::codeReal
+[x] src/expr.cpp::codeInteger
+[x] src/expr.cpp::sqlite3ExprCodeMove
+[x] src/expr.cpp::sqlite3ExprToRegister
+[x] src/expr.cpp::exprCodeVector
+[x] src/expr.cpp::setDoNotMergeFlagOnCopy
+[x] src/expr.cpp::exprNodeCanReturnSubtype
+[x] src/expr.cpp::sqlite3ExprCanReturnSubtype
+[x] src/expr.cpp::exprPartidxExprLookup
+[x] src/expr.cpp::sqlite3ExprCodeTarget
+[x] src/expr.cpp::sqlite3ExprCodeTemp
+[x] src/expr.cpp::sqlite3ExprCode
+[x] src/expr.cpp::sqlite3ExprCodeCopy
+[x] src/expr.cpp::sqlite3ExprCodeFactorable
+[x] src/expr.cpp::sqlite3ExprIfTrue
+[x] src/expr.cpp::sqlite3ExprIfFalse
+[x] src/expr.cpp::sqlite3ExprIfFalseDup
+[x] src/expr.cpp::sqlite3ExprListCompare
+[x] src/expr.cpp::sqlite3ExprCompareSkip
+[x] src/expr.cpp::sqlite3ExprIsNotTrue
+[x] src/expr.cpp::sqlite3ExprIsIIF
+[x] src/expr.cpp::bothImplyNotNullRow
+[x] src/expr.cpp::impliesNotNullRow
+[x] src/expr.cpp::sqlite3ExprImpliesNonNullRow
+[x] src/expr.cpp::exprIdxCover
+[x] src/expr.cpp::selectRefEnter
+[x] src/expr.cpp::selectRefLeave
+[x] src/expr.cpp::exprRefToSrcList
+[x] src/expr.cpp::sqlite3ReferencesSrcList
+[x] src/expr.cpp::agginfoPersistExprCb
+[x] src/expr.cpp::sqlite3AggInfoPersistWalkerInit
+[x] src/expr.cpp::addAggInfoColumn
+[x] src/expr.cpp::addAggInfoFunc
+[x] src/expr.cpp::analyzeAggregate
+[x] src/expr.cpp::sqlite3ExprAnalyzeAggregates
+[x] src/expr.cpp::sqlite3ExprAnalyzeAggList
+[x] src/expr.cpp::sqlite3GetTempReg
+[x] src/expr.cpp::sqlite3ReleaseTempReg
+[x] src/expr.cpp::sqlite3GetTempRange
+[x] src/expr.cpp::sqlite3ReleaseTempRange
+[x] src/expr.cpp::sqlite3ClearTempRegCache
+[x] src/expr.cpp::sqlite3TouchRegister
+[x] src/expr.cpp::sqlite3FirstAvailableRegister
+[x] src/expr.cpp::sqlite3NoTempsInRange
 [ ] src/fault.cpp::sqlite3BeginBenignMalloc
 [ ] src/fault.cpp::sqlite3EndBenignMalloc
 [ ] src/fkey.cpp::sqlite3FkReferences
@@ -1081,117 +1081,117 @@
 [ ] src/os_kv.cpp::sqlite3_os_init
 [ ] src/os_kv.cpp::sqlite3_os_end
 [ ] src/os_kv.cpp::sqlite3KvvfsInit
-[ ] src/os_unix.cpp::posixOpen
-[ ] src/os_unix.cpp::robustFchown
-[ ] src/os_unix.cpp::unixNextSystemCall
-[ ] src/os_unix.cpp::robust_open
-[ ] src/os_unix.cpp::unixEnterMutex
-[ ] src/os_unix.cpp::unixLeaveMutex
-[ ] src/os_unix.cpp::unixMutexHeld
-[ ] src/os_unix.cpp::azFileLock
-[ ] src/os_unix.cpp::lockTrace
-[ ] src/os_unix.cpp::robust_ftruncate
-[ ] src/os_unix.cpp::sqliteErrorFromPosixError
-[ ] src/os_unix.cpp::vxworksSimplifyName
-[ ] src/os_unix.cpp::vxworksFindFileId
-[ ] src/os_unix.cpp::vxworksReleaseFileId
-[ ] src/os_unix.cpp::unixFileMutexHeld
-[ ] src/os_unix.cpp::unixFileMutexNotheld
-[ ] src/os_unix.cpp::robust_close
-[ ] src/os_unix.cpp::storeLastErrno
-[ ] src/os_unix.cpp::closePendingFds
-[ ] src/os_unix.cpp::releaseInodeInfo
-[ ] src/os_unix.cpp::fileHasMoved
-[ ] src/os_unix.cpp::verifyDbFile
-[ ] src/os_unix.cpp::unixCheckReservedLock
-[ ] src/os_unix.cpp::unixFileLock
-[ ] src/os_unix.cpp::unixLock
-[ ] src/os_unix.cpp::setPendingFd
-[ ] src/os_unix.cpp::posixUnlock
-[ ] src/os_unix.cpp::unixUnlock
-[ ] src/os_unix.cpp::closeUnixFile
-[ ] src/os_unix.cpp::unixClose
-[ ] src/os_unix.cpp::nolockCheckReservedLock
-[ ] src/os_unix.cpp::nolockLock
-[ ] src/os_unix.cpp::nolockUnlock
-[ ] src/os_unix.cpp::nolockClose
-[ ] src/os_unix.cpp::dotlockCheckReservedLock
-[ ] src/os_unix.cpp::dotlockLock
-[ ] src/os_unix.cpp::dotlockUnlock
-[ ] src/os_unix.cpp::dotlockClose
-[ ] src/os_unix.cpp::robust_flock
-[ ] src/os_unix.cpp::flockCheckReservedLock
-[ ] src/os_unix.cpp::flockLock
-[ ] src/os_unix.cpp::flockUnlock
-[ ] src/os_unix.cpp::flockClose
-[ ] src/os_unix.cpp::semXCheckReservedLock
-[ ] src/os_unix.cpp::semXLock
-[ ] src/os_unix.cpp::semXUnlock
-[ ] src/os_unix.cpp::semXClose
-[ ] src/os_unix.cpp::afpCheckReservedLock
-[ ] src/os_unix.cpp::afpLock
-[ ] src/os_unix.cpp::afpUnlock
-[ ] src/os_unix.cpp::afpClose
-[ ] src/os_unix.cpp::nfsUnlock
-[ ] src/os_unix.cpp::seekAndRead
-[ ] src/os_unix.cpp::seekAndWrite
-[ ] src/os_unix.cpp::full_fsync
-[ ] src/os_unix.cpp::openDirectory
-[ ] src/os_unix.cpp::unixSync
-[ ] src/os_unix.cpp::unixTruncate
-[ ] src/os_unix.cpp::unixFileSize
-[ ] src/os_unix.cpp::fcntlSizeHint
-[ ] src/os_unix.cpp::unixModeBit
-[ ] src/os_unix.cpp::unixFileControl
-[ ] src/os_unix.cpp::setDeviceCharacteristics
-[ ] src/os_unix.cpp::setDeviceCharacteristics
-[ ] src/os_unix.cpp::unixSectorSize
-[ ] src/os_unix.cpp::unixDeviceCharacteristics
-[ ] src/os_unix.cpp::unixGetpagesize
-[ ] src/os_unix.cpp::unixDescribeShm
-[ ] src/os_unix.cpp::unixFcntlExternalReader
-[ ] src/os_unix.cpp::unixIsSharingShmNode
-[ ] src/os_unix.cpp::unixShmRegionPerMap
-[ ] src/os_unix.cpp::unixShmPurge
-[ ] src/os_unix.cpp::unixLockSharedMemory
-[ ] src/os_unix.cpp::unixOpenSharedMemory
-[ ] src/os_unix.cpp::assertLockingArrayOk
-[ ] src/os_unix.cpp::unixUnmapfile
-[ ] src/os_unix.cpp::unixMapfile
-[ ] src/os_unix.cpp::unixFetch
-[ ] src/os_unix.cpp::unixUnfetch
-[ ] src/os_unix.cpp::FINDER##Impl
-[ ] src/os_unix.cpp::unixTempFileInit
-[ ] src/os_unix.cpp::unixTempFileDir
-[ ] src/os_unix.cpp::unixGetTempname
-[ ] src/os_unix.cpp::findReusableFd
-[ ] src/os_unix.cpp::unixDlOpen
-[ ] src/os_unix.cpp::unixDlError
-[ ] src/os_unix.cpp::void
-[ ] src/os_unix.cpp::unixDlClose
-[ ] src/os_unix.cpp::unixRandomness
-[ ] src/os_unix.cpp::unixSleep
-[ ] src/os_unix.cpp::unixCurrentTimeInt64
-[ ] src/os_unix.cpp::unixCurrentTime
-[ ] src/os_unix.cpp::unixGetLastError
-[ ] src/os_unix.cpp::proxyGetLockPath
-[ ] src/os_unix.cpp::proxyCreateLockPath
-[ ] src/os_unix.cpp::proxyGetHostID
-[ ] src/os_unix.cpp::proxyBreakConchLock
-[ ] src/os_unix.cpp::proxyConchLock
-[ ] src/os_unix.cpp::proxyTakeConch
-[ ] src/os_unix.cpp::proxyReleaseConch
-[ ] src/os_unix.cpp::proxyCreateConchPathname
-[ ] src/os_unix.cpp::switchLockProxyPath
-[ ] src/os_unix.cpp::proxyGetDbPathForUnixFile
-[ ] src/os_unix.cpp::proxyTransformUnixFile
-[ ] src/os_unix.cpp::proxyFileControl
-[ ] src/os_unix.cpp::proxyCheckReservedLock
-[ ] src/os_unix.cpp::proxyLock
-[ ] src/os_unix.cpp::proxyUnlock
-[ ] src/os_unix.cpp::proxyClose
-[ ] src/os_unix.cpp::sqlite3_os_init
-[ ] src/os_unix.cpp::sqlite3_os_end
+[U] src/os_unix.cpp::posixOpen
+[U] src/os_unix.cpp::robustFchown
+[U] src/os_unix.cpp::unixNextSystemCall
+[U] src/os_unix.cpp::robust_open
+[U] src/os_unix.cpp::unixEnterMutex
+[U] src/os_unix.cpp::unixLeaveMutex
+[U] src/os_unix.cpp::unixMutexHeld
+[U] src/os_unix.cpp::azFileLock
+[U] src/os_unix.cpp::lockTrace
+[U] src/os_unix.cpp::robust_ftruncate
+[U] src/os_unix.cpp::sqliteErrorFromPosixError
+[U] src/os_unix.cpp::vxworksSimplifyName
+[U] src/os_unix.cpp::vxworksFindFileId
+[U] src/os_unix.cpp::vxworksReleaseFileId
+[U] src/os_unix.cpp::unixFileMutexHeld
+[U] src/os_unix.cpp::unixFileMutexNotheld
+[U] src/os_unix.cpp::robust_close
+[U] src/os_unix.cpp::storeLastErrno
+[U] src/os_unix.cpp::closePendingFds
+[U] src/os_unix.cpp::releaseInodeInfo
+[U] src/os_unix.cpp::fileHasMoved
+[U] src/os_unix.cpp::verifyDbFile
+[U] src/os_unix.cpp::unixCheckReservedLock
+[U] src/os_unix.cpp::unixFileLock
+[U] src/os_unix.cpp::unixLock
+[U] src/os_unix.cpp::setPendingFd
+[U] src/os_unix.cpp::posixUnlock
+[U] src/os_unix.cpp::unixUnlock
+[U] src/os_unix.cpp::closeUnixFile
+[U] src/os_unix.cpp::unixClose
+[U] src/os_unix.cpp::nolockCheckReservedLock
+[U] src/os_unix.cpp::nolockLock
+[U] src/os_unix.cpp::nolockUnlock
+[U] src/os_unix.cpp::nolockClose
+[U] src/os_unix.cpp::dotlockCheckReservedLock
+[U] src/os_unix.cpp::dotlockLock
+[U] src/os_unix.cpp::dotlockUnlock
+[U] src/os_unix.cpp::dotlockClose
+[U] src/os_unix.cpp::robust_flock
+[U] src/os_unix.cpp::flockCheckReservedLock
+[U] src/os_unix.cpp::flockLock
+[U] src/os_unix.cpp::flockUnlock
+[U] src/os_unix.cpp::flockClose
+[U] src/os_unix.cpp::semXCheckReservedLock
+[U] src/os_unix.cpp::semXLock
+[U] src/os_unix.cpp::semXUnlock
+[U] src/os_unix.cpp::semXClose
+[U] src/os_unix.cpp::afpCheckReservedLock
+[U] src/os_unix.cpp::afpLock
+[U] src/os_unix.cpp::afpUnlock
+[U] src/os_unix.cpp::afpClose
+[U] src/os_unix.cpp::nfsUnlock
+[U] src/os_unix.cpp::seekAndRead
+[U] src/os_unix.cpp::seekAndWrite
+[U] src/os_unix.cpp::full_fsync
+[U] src/os_unix.cpp::openDirectory
+[U] src/os_unix.cpp::unixSync
+[U] src/os_unix.cpp::unixTruncate
+[U] src/os_unix.cpp::unixFileSize
+[U] src/os_unix.cpp::fcntlSizeHint
+[U] src/os_unix.cpp::unixModeBit
+[U] src/os_unix.cpp::unixFileControl
+[U] src/os_unix.cpp::setDeviceCharacteristics
+[U] src/os_unix.cpp::setDeviceCharacteristics
+[U] src/os_unix.cpp::unixSectorSize
+[U] src/os_unix.cpp::unixDeviceCharacteristics
+[U] src/os_unix.cpp::unixGetpagesize
+[U] src/os_unix.cpp::unixDescribeShm
+[U] src/os_unix.cpp::unixFcntlExternalReader
+[U] src/os_unix.cpp::unixIsSharingShmNode
+[U] src/os_unix.cpp::unixShmRegionPerMap
+[U] src/os_unix.cpp::unixShmPurge
+[U] src/os_unix.cpp::unixLockSharedMemory
+[U] src/os_unix.cpp::unixOpenSharedMemory
+[U] src/os_unix.cpp::assertLockingArrayOk
+[U] src/os_unix.cpp::unixUnmapfile
+[U] src/os_unix.cpp::unixMapfile
+[U] src/os_unix.cpp::unixFetch
+[U] src/os_unix.cpp::unixUnfetch
+[U] src/os_unix.cpp::FINDER##Impl
+[U] src/os_unix.cpp::unixTempFileInit
+[U] src/os_unix.cpp::unixTempFileDir
+[U] src/os_unix.cpp::unixGetTempname
+[U] src/os_unix.cpp::findReusableFd
+[U] src/os_unix.cpp::unixDlOpen
+[U] src/os_unix.cpp::unixDlError
+[U] src/os_unix.cpp::void
+[U] src/os_unix.cpp::unixDlClose
+[U] src/os_unix.cpp::unixRandomness
+[U] src/os_unix.cpp::unixSleep
+[U] src/os_unix.cpp::unixCurrentTimeInt64
+[U] src/os_unix.cpp::unixCurrentTime
+[U] src/os_unix.cpp::unixGetLastError
+[U] src/os_unix.cpp::proxyGetLockPath
+[U] src/os_unix.cpp::proxyCreateLockPath
+[U] src/os_unix.cpp::proxyGetHostID
+[U] src/os_unix.cpp::proxyBreakConchLock
+[U] src/os_unix.cpp::proxyConchLock
+[U] src/os_unix.cpp::proxyTakeConch
+[U] src/os_unix.cpp::proxyReleaseConch
+[U] src/os_unix.cpp::proxyCreateConchPathname
+[U] src/os_unix.cpp::switchLockProxyPath
+[U] src/os_unix.cpp::proxyGetDbPathForUnixFile
+[U] src/os_unix.cpp::proxyTransformUnixFile
+[U] src/os_unix.cpp::proxyFileControl
+[U] src/os_unix.cpp::proxyCheckReservedLock
+[U] src/os_unix.cpp::proxyLock
+[U] src/os_unix.cpp::proxyUnlock
+[U] src/os_unix.cpp::proxyClose
+[U] src/os_unix.cpp::sqlite3_os_init
+[U] src/os_unix.cpp::sqlite3_os_end
 [ ] src/os_win.cpp::winNextSystemCall
 [ ] src/os_win.cpp::sqlite3_win32_compact_heap
 [ ] src/os_win.cpp::sqlite3_win32_reset_heap
@@ -1278,139 +1278,139 @@
 [ ] src/os_win.cpp::winGetLastError
 [ ] src/os_win.cpp::sqlite3_os_init
 [ ] src/os_win.cpp::sqlite3_os_end
-[ ] src/pager.cpp::sqlite3PagerDirectReadOk
-[ ] src/pager.cpp::assert_pager_state
-[ ] src/pager.cpp::print_pager_state
-[ ] src/pager.cpp::setGetterMethod
-[ ] src/pager.cpp::subjRequiresPage
-[ ] src/pager.cpp::pageInJournal
-[ ] src/pager.cpp::read32bits
-[ ] src/pager.cpp::write32bits
-[ ] src/pager.cpp::pagerUnlockDb
-[ ] src/pager.cpp::pagerLockDb
-[ ] src/pager.cpp::jrnlBufferSize
-[ ] src/pager.cpp::pager_datahash
-[ ] src/pager.cpp::pager_pagehash
-[ ] src/pager.cpp::pager_set_pagehash
-[ ] src/pager.cpp::checkPage
-[ ] src/pager.cpp::readSuperJournal
-[ ] src/pager.cpp::journalHdrOffset
-[ ] src/pager.cpp::zeroJournalHdr
-[ ] src/pager.cpp::writeJournalHdr
-[ ] src/pager.cpp::writeSuperJournal
-[ ] src/pager.cpp::pager_reset
-[ ] src/pager.cpp::sqlite3PagerDataVersion
-[ ] src/pager.cpp::releaseAllSavepoints
-[ ] src/pager.cpp::addToSavepointBitvecs
-[ ] src/pager.cpp::pager_unlock
-[ ] src/pager.cpp::pager_error
-[ ] src/pager.cpp::pagerFlushOnCommit
-[ ] src/pager.cpp::pager_end_transaction
-[ ] src/pager.cpp::pagerUnlockAndRollback
-[ ] src/pager.cpp::pager_cksum
-[ ] src/pager.cpp::pager_delsuper
-[ ] src/pager.cpp::pager_truncate
-[ ] src/pager.cpp::sqlite3SectorSize
-[ ] src/pager.cpp::setSectorSize
-[ ] src/pager.cpp::pager_playback
-[ ] src/pager.cpp::readDbPage
-[ ] src/pager.cpp::pager_write_changecounter
-[ ] src/pager.cpp::pagerUndoCallback
-[ ] src/pager.cpp::pagerRollbackWal
-[ ] src/pager.cpp::pagerBeginReadTransaction
-[ ] src/pager.cpp::pagerPagecount
-[ ] src/pager.cpp::pagerOpenWalIfPresent
-[ ] src/pager.cpp::pagerPlaybackSavepoint
-[ ] src/pager.cpp::sqlite3PagerSetCachesize
-[ ] src/pager.cpp::sqlite3PagerSetSpillsize
-[ ] src/pager.cpp::pagerFixMaplimit
-[ ] src/pager.cpp::sqlite3PagerSetMmapLimit
-[ ] src/pager.cpp::sqlite3PagerShrink
-[ ] src/pager.cpp::sqlite3PagerSetPagesize
-[ ] src/pager.cpp::sqlite3PagerTempSpace
-[ ] src/pager.cpp::sqlite3PagerMaxPageCount
-[ ] src/pager.cpp::disable_simulated_io_errors
-[ ] src/pager.cpp::enable_simulated_io_errors
-[ ] src/pager.cpp::sqlite3PagerReadFileheader
-[ ] src/pager.cpp::sqlite3PagerPagecount
-[ ] src/pager.cpp::pager_wait_on_lock
-[ ] src/pager.cpp::assertTruncateConstraintCb
-[ ] src/pager.cpp::assertTruncateConstraint
-[ ] src/pager.cpp::sqlite3PagerTruncateImage
-[ ] src/pager.cpp::pagerSyncHotJournal
-[ ] src/pager.cpp::pagerReleaseMapPage
-[ ] src/pager.cpp::pagerFreeMapHdrs
-[ ] src/pager.cpp::databaseIsUnmoved
-[ ] src/pager.cpp::sqlite3PagerClose
-[ ] src/pager.cpp::sqlite3PagerPagenumber
-[ ] src/pager.cpp::sqlite3PagerRef
-[ ] src/pager.cpp::syncJournal
-[ ] src/pager.cpp::pager_write_pagelist
-[ ] src/pager.cpp::openSubJournal
-[ ] src/pager.cpp::subjournalPage
-[ ] src/pager.cpp::subjournalPageIfRequired
-[ ] src/pager.cpp::pagerStress
-[ ] src/pager.cpp::sqlite3PagerFlush
-[ ] src/pager.cpp::sqlite3_database_file_object
-[ ] src/pager.cpp::hasHotJournal
-[ ] src/pager.cpp::sqlite3PagerSharedLock
-[ ] src/pager.cpp::pagerUnlockIfUnused
-[ ] src/pager.cpp::sqlite3PagerLookup
-[ ] src/pager.cpp::sqlite3PagerUnrefNotNull
-[ ] src/pager.cpp::sqlite3PagerUnref
-[ ] src/pager.cpp::sqlite3PagerUnrefPageOne
-[ ] src/pager.cpp::pager_open_journal
-[ ] src/pager.cpp::sqlite3PagerBegin
-[ ] src/pager.cpp::pagerAddPageToRollbackJournal
-[ ] src/pager.cpp::pager_write
-[ ] src/pager.cpp::pagerWriteLargeSector
-[ ] src/pager.cpp::sqlite3PagerWrite
-[ ] src/pager.cpp::sqlite3PagerIswriteable
-[ ] src/pager.cpp::sqlite3PagerDontWrite
-[ ] src/pager.cpp::pager_incr_changecounter
-[ ] src/pager.cpp::sqlite3PagerSync
-[ ] src/pager.cpp::sqlite3PagerExclusiveLock
-[ ] src/pager.cpp::sqlite3PagerCommitPhaseTwo
-[ ] src/pager.cpp::sqlite3PagerRollback
-[ ] src/pager.cpp::sqlite3PagerIsreadonly
-[ ] src/pager.cpp::sqlite3PagerRefcount
-[ ] src/pager.cpp::sqlite3PagerMemUsed
-[ ] src/pager.cpp::sqlite3PagerPageRefcount
-[ ] src/pager.cpp::sqlite3PagerStats
-[ ] src/pager.cpp::sqlite3PagerCacheStat
-[ ] src/pager.cpp::sqlite3PagerIsMemdb
-[ ] src/pager.cpp::pagerOpenSavepoint
-[ ] src/pager.cpp::sqlite3PagerOpenSavepoint
-[ ] src/pager.cpp::sqlite3PagerSavepoint
-[ ] src/pager.cpp::sqlite3PagerFilename
-[ ] src/pager.cpp::sqlite3PagerVfs
-[ ] src/pager.cpp::sqlite3PagerFile
-[ ] src/pager.cpp::sqlite3PagerJrnlFile
-[ ] src/pager.cpp::sqlite3PagerJournalname
-[ ] src/pager.cpp::sqlite3PagerMovepage
-[ ] src/pager.cpp::sqlite3PagerRekey
-[ ] src/pager.cpp::sqlite3PagerGetData
-[ ] src/pager.cpp::sqlite3PagerGetExtra
-[ ] src/pager.cpp::sqlite3PagerLockingMode
-[ ] src/pager.cpp::sqlite3PagerSetJournalMode
-[ ] src/pager.cpp::sqlite3PagerGetJournalMode
-[ ] src/pager.cpp::sqlite3PagerOkToChangeJournalMode
-[ ] src/pager.cpp::sqlite3PagerJournalSizeLimit
-[ ] src/pager.cpp::sqlite3PagerBackupPtr
-[ ] src/pager.cpp::sqlite3PagerClearCache
-[ ] src/pager.cpp::sqlite3PagerWalCallback
-[ ] src/pager.cpp::sqlite3PagerWalSupported
-[ ] src/pager.cpp::pagerExclusiveLock
-[ ] src/pager.cpp::pagerOpenWal
-[ ] src/pager.cpp::sqlite3PagerCloseWal
-[ ] src/pager.cpp::sqlite3PagerWalWriteLock
-[ ] src/pager.cpp::sqlite3PagerWalDb
-[ ] src/pager.cpp::sqlite3PagerSnapshotGet
-[ ] src/pager.cpp::sqlite3PagerSnapshotRecover
-[ ] src/pager.cpp::sqlite3PagerSnapshotCheck
-[ ] src/pager.cpp::sqlite3PagerSnapshotUnlock
-[ ] src/pager.cpp::sqlite3PagerWalFramesize
-[ ] src/pager.cpp::sqlite3PagerWalSystemErrno
+[P] src/pager.cpp::sqlite3PagerDirectReadOk
+[P] src/pager.cpp::assert_pager_state
+[P] src/pager.cpp::print_pager_state
+[P] src/pager.cpp::setGetterMethod
+[P] src/pager.cpp::subjRequiresPage
+[P] src/pager.cpp::pageInJournal
+[P] src/pager.cpp::read32bits
+[P] src/pager.cpp::write32bits
+[P] src/pager.cpp::pagerUnlockDb
+[P] src/pager.cpp::pagerLockDb
+[P] src/pager.cpp::jrnlBufferSize
+[P] src/pager.cpp::pager_datahash
+[P] src/pager.cpp::pager_pagehash
+[P] src/pager.cpp::pager_set_pagehash
+[P] src/pager.cpp::checkPage
+[P] src/pager.cpp::readSuperJournal
+[P] src/pager.cpp::journalHdrOffset
+[P] src/pager.cpp::zeroJournalHdr
+[P] src/pager.cpp::writeJournalHdr
+[P] src/pager.cpp::writeSuperJournal
+[P] src/pager.cpp::pager_reset
+[P] src/pager.cpp::sqlite3PagerDataVersion
+[P] src/pager.cpp::releaseAllSavepoints
+[P] src/pager.cpp::addToSavepointBitvecs
+[P] src/pager.cpp::pager_unlock
+[P] src/pager.cpp::pager_error
+[P] src/pager.cpp::pagerFlushOnCommit
+[P] src/pager.cpp::pager_end_transaction
+[P] src/pager.cpp::pagerUnlockAndRollback
+[P] src/pager.cpp::pager_cksum
+[P] src/pager.cpp::pager_delsuper
+[P] src/pager.cpp::pager_truncate
+[P] src/pager.cpp::sqlite3SectorSize
+[P] src/pager.cpp::setSectorSize
+[P] src/pager.cpp::pager_playback
+[P] src/pager.cpp::readDbPage
+[P] src/pager.cpp::pager_write_changecounter
+[P] src/pager.cpp::pagerUndoCallback
+[P] src/pager.cpp::pagerRollbackWal
+[P] src/pager.cpp::pagerBeginReadTransaction
+[P] src/pager.cpp::pagerPagecount
+[P] src/pager.cpp::pagerOpenWalIfPresent
+[P] src/pager.cpp::pagerPlaybackSavepoint
+[P] src/pager.cpp::sqlite3PagerSetCachesize
+[P] src/pager.cpp::sqlite3PagerSetSpillsize
+[P] src/pager.cpp::pagerFixMaplimit
+[P] src/pager.cpp::sqlite3PagerSetMmapLimit
+[P] src/pager.cpp::sqlite3PagerShrink
+[P] src/pager.cpp::sqlite3PagerSetPagesize
+[P] src/pager.cpp::sqlite3PagerTempSpace
+[P] src/pager.cpp::sqlite3PagerMaxPageCount
+[P] src/pager.cpp::disable_simulated_io_errors
+[P] src/pager.cpp::enable_simulated_io_errors
+[P] src/pager.cpp::sqlite3PagerReadFileheader
+[P] src/pager.cpp::sqlite3PagerPagecount
+[P] src/pager.cpp::pager_wait_on_lock
+[P] src/pager.cpp::assertTruncateConstraintCb
+[P] src/pager.cpp::assertTruncateConstraint
+[P] src/pager.cpp::sqlite3PagerTruncateImage
+[P] src/pager.cpp::pagerSyncHotJournal
+[P] src/pager.cpp::pagerReleaseMapPage
+[P] src/pager.cpp::pagerFreeMapHdrs
+[P] src/pager.cpp::databaseIsUnmoved
+[P] src/pager.cpp::sqlite3PagerClose
+[P] src/pager.cpp::sqlite3PagerPagenumber
+[P] src/pager.cpp::sqlite3PagerRef
+[P] src/pager.cpp::syncJournal
+[P] src/pager.cpp::pager_write_pagelist
+[P] src/pager.cpp::openSubJournal
+[P] src/pager.cpp::subjournalPage
+[P] src/pager.cpp::subjournalPageIfRequired
+[P] src/pager.cpp::pagerStress
+[P] src/pager.cpp::sqlite3PagerFlush
+[P] src/pager.cpp::sqlite3_database_file_object
+[P] src/pager.cpp::hasHotJournal
+[P] src/pager.cpp::sqlite3PagerSharedLock
+[P] src/pager.cpp::pagerUnlockIfUnused
+[P] src/pager.cpp::sqlite3PagerLookup
+[P] src/pager.cpp::sqlite3PagerUnrefNotNull
+[P] src/pager.cpp::sqlite3PagerUnref
+[P] src/pager.cpp::sqlite3PagerUnrefPageOne
+[P] src/pager.cpp::pager_open_journal
+[P] src/pager.cpp::sqlite3PagerBegin
+[P] src/pager.cpp::pagerAddPageToRollbackJournal
+[P] src/pager.cpp::pager_write
+[P] src/pager.cpp::pagerWriteLargeSector
+[P] src/pager.cpp::sqlite3PagerWrite
+[P] src/pager.cpp::sqlite3PagerIswriteable
+[P] src/pager.cpp::sqlite3PagerDontWrite
+[P] src/pager.cpp::pager_incr_changecounter
+[P] src/pager.cpp::sqlite3PagerSync
+[P] src/pager.cpp::sqlite3PagerExclusiveLock
+[P] src/pager.cpp::sqlite3PagerCommitPhaseTwo
+[P] src/pager.cpp::sqlite3PagerRollback
+[P] src/pager.cpp::sqlite3PagerIsreadonly
+[P] src/pager.cpp::sqlite3PagerRefcount
+[P] src/pager.cpp::sqlite3PagerMemUsed
+[P] src/pager.cpp::sqlite3PagerPageRefcount
+[P] src/pager.cpp::sqlite3PagerStats
+[P] src/pager.cpp::sqlite3PagerCacheStat
+[P] src/pager.cpp::sqlite3PagerIsMemdb
+[P] src/pager.cpp::pagerOpenSavepoint
+[P] src/pager.cpp::sqlite3PagerOpenSavepoint
+[P] src/pager.cpp::sqlite3PagerSavepoint
+[P] src/pager.cpp::sqlite3PagerFilename
+[P] src/pager.cpp::sqlite3PagerVfs
+[P] src/pager.cpp::sqlite3PagerFile
+[P] src/pager.cpp::sqlite3PagerJrnlFile
+[P] src/pager.cpp::sqlite3PagerJournalname
+[P] src/pager.cpp::sqlite3PagerMovepage
+[P] src/pager.cpp::sqlite3PagerRekey
+[P] src/pager.cpp::sqlite3PagerGetData
+[P] src/pager.cpp::sqlite3PagerGetExtra
+[P] src/pager.cpp::sqlite3PagerLockingMode
+[P] src/pager.cpp::sqlite3PagerSetJournalMode
+[P] src/pager.cpp::sqlite3PagerGetJournalMode
+[P] src/pager.cpp::sqlite3PagerOkToChangeJournalMode
+[P] src/pager.cpp::sqlite3PagerJournalSizeLimit
+[P] src/pager.cpp::sqlite3PagerBackupPtr
+[P] src/pager.cpp::sqlite3PagerClearCache
+[P] src/pager.cpp::sqlite3PagerWalCallback
+[P] src/pager.cpp::sqlite3PagerWalSupported
+[P] src/pager.cpp::pagerExclusiveLock
+[P] src/pager.cpp::pagerOpenWal
+[P] src/pager.cpp::sqlite3PagerCloseWal
+[P] src/pager.cpp::sqlite3PagerWalWriteLock
+[P] src/pager.cpp::sqlite3PagerWalDb
+[P] src/pager.cpp::sqlite3PagerSnapshotGet
+[P] src/pager.cpp::sqlite3PagerSnapshotRecover
+[P] src/pager.cpp::sqlite3PagerSnapshotCheck
+[P] src/pager.cpp::sqlite3PagerSnapshotUnlock
+[P] src/pager.cpp::sqlite3PagerWalFramesize
+[P] src/pager.cpp::sqlite3PagerWalSystemErrno
 [ ] src/pcache.cpp::pageOnDirtyList
 [ ] src/pcache.cpp::pageNotOnDirtyList
 [ ] src/pcache.cpp::sqlite3PcachePageSanity
@@ -2401,244 +2401,244 @@
 [ ] src/vdbe.cpp::out2Prerelease
 [ ] src/vdbe.cpp::filterHash
 [ ] src/vdbe.cpp::vdbeMemTypeName
-[ ] src/vdbeapi.cpp::sqlite3_expired
-[ ] src/vdbeapi.cpp::vdbeSafety
-[ ] src/vdbeapi.cpp::vdbeSafetyNotNull
-[ ] src/vdbeapi.cpp::invokeProfileCallback
-[ ] src/vdbeapi.cpp::sqlite3_finalize
-[ ] src/vdbeapi.cpp::sqlite3_reset
-[ ] src/vdbeapi.cpp::sqlite3_clear_bindings
-[ ] src/vdbeapi.cpp::sqlite3_value_blob
-[ ] src/vdbeapi.cpp::sqlite3_value_bytes
-[ ] src/vdbeapi.cpp::sqlite3_value_bytes16
-[ ] src/vdbeapi.cpp::sqlite3_value_double
-[ ] src/vdbeapi.cpp::sqlite3_value_int
-[ ] src/vdbeapi.cpp::sqlite3_value_int64
-[ ] src/vdbeapi.cpp::sqlite3_value_subtype
-[ ] src/vdbeapi.cpp::sqlite3_value_pointer
-[ ] src/vdbeapi.cpp::sqlite3_value_text
-[ ] src/vdbeapi.cpp::sqlite3_value_text16
-[ ] src/vdbeapi.cpp::sqlite3_value_text16be
-[ ] src/vdbeapi.cpp::sqlite3_value_text16le
-[ ] src/vdbeapi.cpp::sqlite3_value_type
-[ ] src/vdbeapi.cpp::sqlite3_value_encoding
-[ ] src/vdbeapi.cpp::sqlite3_value_nochange
-[ ] src/vdbeapi.cpp::sqlite3_value_frombind
-[ ] src/vdbeapi.cpp::sqlite3_value_dup
-[ ] src/vdbeapi.cpp::sqlite3_value_free
-[ ] src/vdbeapi.cpp::sqlite3_result_double
-[ ] src/vdbeapi.cpp::sqlite3_result_error
-[ ] src/vdbeapi.cpp::sqlite3_result_error16
-[ ] src/vdbeapi.cpp::sqlite3_result_int
-[ ] src/vdbeapi.cpp::sqlite3_result_int64
-[ ] src/vdbeapi.cpp::sqlite3_result_null
-[ ] src/vdbeapi.cpp::sqlite3_result_subtype
-[ ] src/vdbeapi.cpp::sqlite3_result_value
-[ ] src/vdbeapi.cpp::sqlite3_result_zeroblob
-[ ] src/vdbeapi.cpp::sqlite3_result_zeroblob64
-[ ] src/vdbeapi.cpp::sqlite3_result_error_code
-[ ] src/vdbeapi.cpp::sqlite3_result_error_toobig
-[ ] src/vdbeapi.cpp::sqlite3_result_error_nomem
-[ ] src/vdbeapi.cpp::sqlite3ResultIntReal
-[ ] src/vdbeapi.cpp::doWalCallbacks
-[ ] src/vdbeapi.cpp::sqlite3Step
-[ ] src/vdbeapi.cpp::sqlite3_step
-[ ] src/vdbeapi.cpp::sqlite3_user_data
-[ ] src/vdbeapi.cpp::sqlite3_context_db_handle
-[ ] src/vdbeapi.cpp::sqlite3_vtab_nochange
-[ ] src/vdbeapi.cpp::sqlite3VdbeValueListFree
-[ ] src/vdbeapi.cpp::sqlite3_vtab_in_first
-[ ] src/vdbeapi.cpp::sqlite3_vtab_in_next
-[ ] src/vdbeapi.cpp::sqlite3StmtCurrentTime
-[ ] src/vdbeapi.cpp::createAggContext
-[ ] src/vdbeapi.cpp::sqlite3_aggregate_context
-[ ] src/vdbeapi.cpp::sqlite3_get_auxdata
-[ ] src/vdbeapi.cpp::sqlite3_aggregate_count
-[ ] src/vdbeapi.cpp::sqlite3_column_count
-[ ] src/vdbeapi.cpp::sqlite3_data_count
-[ ] src/vdbeapi.cpp::columnNullValue
-[ ] src/vdbeapi.cpp::columnMem
-[ ] src/vdbeapi.cpp::columnMallocFailure
-[ ] src/vdbeapi.cpp::sqlite3_column_blob
-[ ] src/vdbeapi.cpp::sqlite3_column_bytes
-[ ] src/vdbeapi.cpp::sqlite3_column_bytes16
-[ ] src/vdbeapi.cpp::sqlite3_column_double
-[ ] src/vdbeapi.cpp::sqlite3_column_int
-[ ] src/vdbeapi.cpp::sqlite3_column_int64
-[ ] src/vdbeapi.cpp::sqlite3_column_text
-[ ] src/vdbeapi.cpp::sqlite3_column_value
-[ ] src/vdbeapi.cpp::sqlite3_column_text16
-[ ] src/vdbeapi.cpp::sqlite3_column_type
-[ ] src/vdbeapi.cpp::sqlite3_column_name
-[ ] src/vdbeapi.cpp::sqlite3_column_name16
-[ ] src/vdbeapi.cpp::sqlite3_column_decltype
-[ ] src/vdbeapi.cpp::sqlite3_column_decltype16
-[ ] src/vdbeapi.cpp::sqlite3_column_database_name
-[ ] src/vdbeapi.cpp::sqlite3_column_database_name16
-[ ] src/vdbeapi.cpp::sqlite3_column_table_name
-[ ] src/vdbeapi.cpp::sqlite3_column_table_name16
-[ ] src/vdbeapi.cpp::sqlite3_column_origin_name
-[ ] src/vdbeapi.cpp::sqlite3_column_origin_name16
-[ ] src/vdbeapi.cpp::vdbeUnbind
-[ ] src/vdbeapi.cpp::sqlite3_bind_double
-[ ] src/vdbeapi.cpp::sqlite3_bind_int
-[ ] src/vdbeapi.cpp::sqlite3_bind_int64
-[ ] src/vdbeapi.cpp::sqlite3_bind_null
-[ ] src/vdbeapi.cpp::sqlite3_bind_value
-[ ] src/vdbeapi.cpp::sqlite3_bind_zeroblob
-[ ] src/vdbeapi.cpp::sqlite3_bind_zeroblob64
-[ ] src/vdbeapi.cpp::sqlite3_bind_parameter_count
-[ ] src/vdbeapi.cpp::sqlite3_bind_parameter_name
-[ ] src/vdbeapi.cpp::sqlite3VdbeParameterIndex
-[ ] src/vdbeapi.cpp::sqlite3_bind_parameter_index
-[ ] src/vdbeapi.cpp::sqlite3TransferBindings
-[ ] src/vdbeapi.cpp::sqlite3_transfer_bindings
-[ ] src/vdbeapi.cpp::sqlite3_db_handle
-[ ] src/vdbeapi.cpp::sqlite3_stmt_readonly
-[ ] src/vdbeapi.cpp::sqlite3_stmt_isexplain
-[ ] src/vdbeapi.cpp::sqlite3_stmt_explain
-[ ] src/vdbeapi.cpp::sqlite3_stmt_busy
-[ ] src/vdbeapi.cpp::sqlite3_next_stmt
-[ ] src/vdbeapi.cpp::sqlite3_stmt_status
-[ ] src/vdbeapi.cpp::sqlite3_sql
-[ ] src/vdbeapi.cpp::sqlite3_expanded_sql
-[ ] src/vdbeapi.cpp::sqlite3_normalized_sql
-[ ] src/vdbeapi.cpp::sqlite3_preupdate_old
-[ ] src/vdbeapi.cpp::sqlite3_preupdate_count
-[ ] src/vdbeapi.cpp::sqlite3_preupdate_depth
-[ ] src/vdbeapi.cpp::sqlite3_preupdate_blobwrite
-[ ] src/vdbeapi.cpp::sqlite3_preupdate_new
-[ ] src/vdbeapi.cpp::sqlite3_stmt_scanstatus_reset
-[ ] src/vdbeaux.cpp::sqlite3VdbeCreate
-[ ] src/vdbeaux.cpp::sqlite3VdbeParser
-[ ] src/vdbeaux.cpp::sqlite3VdbeError
-[ ] src/vdbeaux.cpp::sqlite3VdbeSetSql
-[ ] src/vdbeaux.cpp::sqlite3VdbeAddDblquoteStr
-[ ] src/vdbeaux.cpp::sqlite3VdbeSwap
-[ ] src/vdbeaux.cpp::growOpArray
-[ ] src/vdbeaux.cpp::test_addop_breakpoint
-[ ] src/vdbeaux.cpp::growOp3
-[ ] src/vdbeaux.cpp::sqlite3VdbeAddOp0
-[ ] src/vdbeaux.cpp::sqlite3VdbeAddOp1
-[ ] src/vdbeaux.cpp::sqlite3VdbeAddOp2
-[ ] src/vdbeaux.cpp::sqlite3VdbeAddOp3
-[ ] src/vdbeaux.cpp::sqlite3VdbeGoto
-[ ] src/vdbeaux.cpp::sqlite3VdbeLoadString
-[ ] src/vdbeaux.cpp::sqlite3VdbeMultiLoad
-[ ] src/vdbeaux.cpp::sqlite3VdbeExplainParent
-[ ] src/vdbeaux.cpp::sqlite3ExplainBreakpoint
-[ ] src/vdbeaux.cpp::sqlite3VdbeExplain
-[ ] src/vdbeaux.cpp::sqlite3VdbeExplainPop
-[ ] src/vdbeaux.cpp::sqlite3VdbeAddParseSchemaOp
-[ ] src/vdbeaux.cpp::sqlite3VdbeEndCoroutine
-[ ] src/vdbeaux.cpp::sqlite3VdbeMakeLabel
-[ ] src/vdbeaux.cpp::resizeResolveLabel
-[ ] src/vdbeaux.cpp::sqlite3VdbeResolveLabel
-[ ] src/vdbeaux.cpp::sqlite3VdbeRunOnlyOnce
-[ ] src/vdbeaux.cpp::sqlite3VdbeReusable
-[ ] src/vdbeaux.cpp::opIterNext
-[ ] src/vdbeaux.cpp::sqlite3VdbeAssertMayAbort
-[ ] src/vdbeaux.cpp::sqlite3VdbeIncrWriteCounter
-[ ] src/vdbeaux.cpp::sqlite3VdbeAssertAbortable
-[ ] src/vdbeaux.cpp::resolveP2Values
-[ ] src/vdbeaux.cpp::sqlite3VdbeCurrentAddr
-[ ] src/vdbeaux.cpp::sqlite3VdbeVerifyNoMallocRequired
-[ ] src/vdbeaux.cpp::sqlite3VdbeVerifyNoResultRow
-[ ] src/vdbeaux.cpp::sqlite3VdbeVerifyAbortable
-[ ] src/vdbeaux.cpp::sqlite3VdbeTakeOpArray
-[ ] src/vdbeaux.cpp::sqlite3VdbeChangeOpcode
-[ ] src/vdbeaux.cpp::sqlite3VdbeChangeP1
-[ ] src/vdbeaux.cpp::sqlite3VdbeChangeP2
-[ ] src/vdbeaux.cpp::sqlite3VdbeChangeP3
-[ ] src/vdbeaux.cpp::sqlite3VdbeChangeP5
-[ ] src/vdbeaux.cpp::sqlite3VdbeTypeofColumn
-[ ] src/vdbeaux.cpp::sqlite3VdbeJumpHere
-[ ] src/vdbeaux.cpp::sqlite3VdbeJumpHereOrPopInst
-[ ] src/vdbeaux.cpp::freeEphemeralFunction
-[ ] src/vdbeaux.cpp::freeP4Mem
-[ ] src/vdbeaux.cpp::freeP4FuncCtx
-[ ] src/vdbeaux.cpp::freeP4
-[ ] src/vdbeaux.cpp::vdbeFreeOpArray
-[ ] src/vdbeaux.cpp::sqlite3VdbeLinkSubProgram
-[ ] src/vdbeaux.cpp::sqlite3VdbeHasSubProgram
-[ ] src/vdbeaux.cpp::sqlite3VdbeChangeToNoop
-[ ] src/vdbeaux.cpp::sqlite3VdbeDeletePriorOpcode
-[ ] src/vdbeaux.cpp::sqlite3VdbeChangeP4
-[ ] src/vdbeaux.cpp::sqlite3VdbeAppendP4
-[ ] src/vdbeaux.cpp::sqlite3VdbeSetP4KeyInfo
-[ ] src/vdbeaux.cpp::vdbeVComment
-[ ] src/vdbeaux.cpp::sqlite3VdbeComment
-[ ] src/vdbeaux.cpp::sqlite3VdbeNoopComment
-[ ] src/vdbeaux.cpp::sqlite3VdbeSetLineNumber
-[ ] src/vdbeaux.cpp::sqlite3VdbeGetOp
-[ ] src/vdbeaux.cpp::sqlite3VdbeGetLastOp
-[ ] src/vdbeaux.cpp::translateP
-[ ] src/vdbeaux.cpp::displayP4Expr
-[ ] src/vdbeaux.cpp::sqlite3VdbeDisplayP4
-[ ] src/vdbeaux.cpp::sqlite3VdbeUsesBtree
-[ ] src/vdbeaux.cpp::sqlite3VdbeEnter
-[ ] src/vdbeaux.cpp::vdbeLeave
-[ ] src/vdbeaux.cpp::sqlite3VdbeLeave
-[ ] src/vdbeaux.cpp::sqlite3VdbePrintOp
-[ ] src/vdbeaux.cpp::initMemArray
-[ ] src/vdbeaux.cpp::releaseMemArray
-[ ] src/vdbeaux.cpp::sqlite3VdbeFrameIsValid
-[ ] src/vdbeaux.cpp::sqlite3VdbeFrameMemDel
-[ ] src/vdbeaux.cpp::sqlite3VdbeFrameDelete
-[ ] src/vdbeaux.cpp::sqlite3VdbePrintSql
-[ ] src/vdbeaux.cpp::sqlite3VdbeIOTraceSql
-[ ] src/vdbeaux.cpp::sqlite3VdbeRewind
-[ ] src/vdbeaux.cpp::sqlite3VdbeFreeCursor
-[ ] src/vdbeaux.cpp::freeCursorWithCache
-[ ] src/vdbeaux.cpp::sqlite3VdbeFreeCursorNN
-[ ] src/vdbeaux.cpp::closeCursorsInFrame
-[ ] src/vdbeaux.cpp::sqlite3VdbeFrameRestore
-[ ] src/vdbeaux.cpp::closeAllCursors
-[ ] src/vdbeaux.cpp::sqlite3VdbeSetNumCols
-[ ] src/vdbeaux.cpp::vdbeCommit
-[ ] src/vdbeaux.cpp::checkActiveVdbeCnt
-[ ] src/vdbeaux.cpp::vdbeCloseStatement
-[ ] src/vdbeaux.cpp::sqlite3VdbeCloseStatement
-[ ] src/vdbeaux.cpp::vdbeFkError
-[ ] src/vdbeaux.cpp::sqlite3VdbeCheckFkImmediate
-[ ] src/vdbeaux.cpp::sqlite3VdbeCheckFkDeferred
-[ ] src/vdbeaux.cpp::sqlite3VdbeHalt
-[ ] src/vdbeaux.cpp::sqlite3VdbeResetStepResult
-[ ] src/vdbeaux.cpp::sqlite3VdbeTransferError
-[ ] src/vdbeaux.cpp::vdbeInvokeSqllog
-[ ] src/vdbeaux.cpp::sqlite3VdbeReset
-[ ] src/vdbeaux.cpp::sqlite3VdbeFinalize
-[ ] src/vdbeaux.cpp::sqlite3VdbeDeleteAuxData
-[ ] src/vdbeaux.cpp::sqlite3VdbeClearObject
-[ ] src/vdbeaux.cpp::sqlite3VdbeDelete
-[ ] src/vdbeaux.cpp::sqlite3VdbeFinishMoveto
-[ ] src/vdbeaux.cpp::sqlite3VdbeHandleMovedCursor
-[ ] src/vdbeaux.cpp::sqlite3VdbeCursorRestore
-[ ] src/vdbeaux.cpp::sqlite3VdbeSerialType
-[ ] src/vdbeaux.cpp::sqlite3VdbeSerialTypeLen
-[ ] src/vdbeaux.cpp::sqlite3VdbeOneByteSerialTypeLen
-[ ] src/vdbeaux.cpp::sqlite3FloatSwap
-[ ] src/vdbeaux.cpp::isAllZero
-[ ] src/vdbeaux.cpp::sqlite3BlobCompare
-[ ] src/vdbeaux.cpp::doubleLt
-[ ] src/vdbeaux.cpp::doubleEq
-[ ] src/vdbeaux.cpp::sqlite3IntFloatCompare
-[ ] src/vdbeaux.cpp::sqlite3MemCompare
-[ ] src/vdbeaux.cpp::vdbeRecordDecodeInt
-[ ] src/vdbeaux.cpp::sqlite3VdbeFindCompare
-[ ] src/vdbeaux.cpp::sqlite3VdbeIdxRowid
-[ ] src/vdbeaux.cpp::sqlite3VdbeSetChanges
-[ ] src/vdbeaux.cpp::sqlite3VdbeCountChanges
-[ ] src/vdbeaux.cpp::sqlite3ExpirePreparedStatements
-[ ] src/vdbeaux.cpp::sqlite3VdbeDb
-[ ] src/vdbeaux.cpp::sqlite3VdbePrepareFlags
-[ ] src/vdbeaux.cpp::sqlite3VdbeGetBoundValue
-[ ] src/vdbeaux.cpp::sqlite3VdbeSetVarmask
-[ ] src/vdbeaux.cpp::sqlite3NotPureFunc
-[ ] src/vdbeaux.cpp::sqlite3CursorRangeHintExprCheck
-[ ] src/vdbeaux.cpp::sqlite3VtabImportErrmsg
-[ ] src/vdbeaux.cpp::vdbeFreeUnpacked
-[ ] src/vdbeaux.cpp::sqlite3VdbeFuncName
+[A] src/vdbeapi.cpp::sqlite3_expired
+[A] src/vdbeapi.cpp::vdbeSafety
+[A] src/vdbeapi.cpp::vdbeSafetyNotNull
+[A] src/vdbeapi.cpp::invokeProfileCallback
+[A] src/vdbeapi.cpp::sqlite3_finalize
+[A] src/vdbeapi.cpp::sqlite3_reset
+[A] src/vdbeapi.cpp::sqlite3_clear_bindings
+[A] src/vdbeapi.cpp::sqlite3_value_blob
+[A] src/vdbeapi.cpp::sqlite3_value_bytes
+[A] src/vdbeapi.cpp::sqlite3_value_bytes16
+[A] src/vdbeapi.cpp::sqlite3_value_double
+[A] src/vdbeapi.cpp::sqlite3_value_int
+[A] src/vdbeapi.cpp::sqlite3_value_int64
+[A] src/vdbeapi.cpp::sqlite3_value_subtype
+[A] src/vdbeapi.cpp::sqlite3_value_pointer
+[A] src/vdbeapi.cpp::sqlite3_value_text
+[A] src/vdbeapi.cpp::sqlite3_value_text16
+[A] src/vdbeapi.cpp::sqlite3_value_text16be
+[A] src/vdbeapi.cpp::sqlite3_value_text16le
+[A] src/vdbeapi.cpp::sqlite3_value_type
+[A] src/vdbeapi.cpp::sqlite3_value_encoding
+[A] src/vdbeapi.cpp::sqlite3_value_nochange
+[A] src/vdbeapi.cpp::sqlite3_value_frombind
+[A] src/vdbeapi.cpp::sqlite3_value_dup
+[A] src/vdbeapi.cpp::sqlite3_value_free
+[A] src/vdbeapi.cpp::sqlite3_result_double
+[A] src/vdbeapi.cpp::sqlite3_result_error
+[A] src/vdbeapi.cpp::sqlite3_result_error16
+[A] src/vdbeapi.cpp::sqlite3_result_int
+[A] src/vdbeapi.cpp::sqlite3_result_int64
+[A] src/vdbeapi.cpp::sqlite3_result_null
+[A] src/vdbeapi.cpp::sqlite3_result_subtype
+[A] src/vdbeapi.cpp::sqlite3_result_value
+[A] src/vdbeapi.cpp::sqlite3_result_zeroblob
+[A] src/vdbeapi.cpp::sqlite3_result_zeroblob64
+[A] src/vdbeapi.cpp::sqlite3_result_error_code
+[A] src/vdbeapi.cpp::sqlite3_result_error_toobig
+[A] src/vdbeapi.cpp::sqlite3_result_error_nomem
+[A] src/vdbeapi.cpp::sqlite3ResultIntReal
+[A] src/vdbeapi.cpp::doWalCallbacks
+[A] src/vdbeapi.cpp::sqlite3Step
+[A] src/vdbeapi.cpp::sqlite3_step
+[A] src/vdbeapi.cpp::sqlite3_user_data
+[A] src/vdbeapi.cpp::sqlite3_context_db_handle
+[A] src/vdbeapi.cpp::sqlite3_vtab_nochange
+[A] src/vdbeapi.cpp::sqlite3VdbeValueListFree
+[A] src/vdbeapi.cpp::sqlite3_vtab_in_first
+[A] src/vdbeapi.cpp::sqlite3_vtab_in_next
+[A] src/vdbeapi.cpp::sqlite3StmtCurrentTime
+[A] src/vdbeapi.cpp::createAggContext
+[A] src/vdbeapi.cpp::sqlite3_aggregate_context
+[A] src/vdbeapi.cpp::sqlite3_get_auxdata
+[A] src/vdbeapi.cpp::sqlite3_aggregate_count
+[A] src/vdbeapi.cpp::sqlite3_column_count
+[A] src/vdbeapi.cpp::sqlite3_data_count
+[A] src/vdbeapi.cpp::columnNullValue
+[A] src/vdbeapi.cpp::columnMem
+[A] src/vdbeapi.cpp::columnMallocFailure
+[A] src/vdbeapi.cpp::sqlite3_column_blob
+[A] src/vdbeapi.cpp::sqlite3_column_bytes
+[A] src/vdbeapi.cpp::sqlite3_column_bytes16
+[A] src/vdbeapi.cpp::sqlite3_column_double
+[A] src/vdbeapi.cpp::sqlite3_column_int
+[A] src/vdbeapi.cpp::sqlite3_column_int64
+[A] src/vdbeapi.cpp::sqlite3_column_text
+[A] src/vdbeapi.cpp::sqlite3_column_value
+[A] src/vdbeapi.cpp::sqlite3_column_text16
+[A] src/vdbeapi.cpp::sqlite3_column_type
+[A] src/vdbeapi.cpp::sqlite3_column_name
+[A] src/vdbeapi.cpp::sqlite3_column_name16
+[A] src/vdbeapi.cpp::sqlite3_column_decltype
+[A] src/vdbeapi.cpp::sqlite3_column_decltype16
+[A] src/vdbeapi.cpp::sqlite3_column_database_name
+[A] src/vdbeapi.cpp::sqlite3_column_database_name16
+[A] src/vdbeapi.cpp::sqlite3_column_table_name
+[A] src/vdbeapi.cpp::sqlite3_column_table_name16
+[A] src/vdbeapi.cpp::sqlite3_column_origin_name
+[A] src/vdbeapi.cpp::sqlite3_column_origin_name16
+[A] src/vdbeapi.cpp::vdbeUnbind
+[A] src/vdbeapi.cpp::sqlite3_bind_double
+[A] src/vdbeapi.cpp::sqlite3_bind_int
+[A] src/vdbeapi.cpp::sqlite3_bind_int64
+[A] src/vdbeapi.cpp::sqlite3_bind_null
+[A] src/vdbeapi.cpp::sqlite3_bind_value
+[A] src/vdbeapi.cpp::sqlite3_bind_zeroblob
+[A] src/vdbeapi.cpp::sqlite3_bind_zeroblob64
+[A] src/vdbeapi.cpp::sqlite3_bind_parameter_count
+[A] src/vdbeapi.cpp::sqlite3_bind_parameter_name
+[A] src/vdbeapi.cpp::sqlite3VdbeParameterIndex
+[A] src/vdbeapi.cpp::sqlite3_bind_parameter_index
+[A] src/vdbeapi.cpp::sqlite3TransferBindings
+[A] src/vdbeapi.cpp::sqlite3_transfer_bindings
+[A] src/vdbeapi.cpp::sqlite3_db_handle
+[A] src/vdbeapi.cpp::sqlite3_stmt_readonly
+[A] src/vdbeapi.cpp::sqlite3_stmt_isexplain
+[A] src/vdbeapi.cpp::sqlite3_stmt_explain
+[A] src/vdbeapi.cpp::sqlite3_stmt_busy
+[A] src/vdbeapi.cpp::sqlite3_next_stmt
+[A] src/vdbeapi.cpp::sqlite3_stmt_status
+[A] src/vdbeapi.cpp::sqlite3_sql
+[A] src/vdbeapi.cpp::sqlite3_expanded_sql
+[A] src/vdbeapi.cpp::sqlite3_normalized_sql
+[A] src/vdbeapi.cpp::sqlite3_preupdate_old
+[A] src/vdbeapi.cpp::sqlite3_preupdate_count
+[A] src/vdbeapi.cpp::sqlite3_preupdate_depth
+[A] src/vdbeapi.cpp::sqlite3_preupdate_blobwrite
+[A] src/vdbeapi.cpp::sqlite3_preupdate_new
+[A] src/vdbeapi.cpp::sqlite3_stmt_scanstatus_reset
+[V] src/vdbeaux.cpp::sqlite3VdbeCreate
+[V] src/vdbeaux.cpp::sqlite3VdbeParser
+[V] src/vdbeaux.cpp::sqlite3VdbeError
+[V] src/vdbeaux.cpp::sqlite3VdbeSetSql
+[V] src/vdbeaux.cpp::sqlite3VdbeAddDblquoteStr
+[V] src/vdbeaux.cpp::sqlite3VdbeSwap
+[V] src/vdbeaux.cpp::growOpArray
+[V] src/vdbeaux.cpp::test_addop_breakpoint
+[V] src/vdbeaux.cpp::growOp3
+[V] src/vdbeaux.cpp::sqlite3VdbeAddOp0
+[V] src/vdbeaux.cpp::sqlite3VdbeAddOp1
+[V] src/vdbeaux.cpp::sqlite3VdbeAddOp2
+[V] src/vdbeaux.cpp::sqlite3VdbeAddOp3
+[V] src/vdbeaux.cpp::sqlite3VdbeGoto
+[V] src/vdbeaux.cpp::sqlite3VdbeLoadString
+[V] src/vdbeaux.cpp::sqlite3VdbeMultiLoad
+[V] src/vdbeaux.cpp::sqlite3VdbeExplainParent
+[V] src/vdbeaux.cpp::sqlite3ExplainBreakpoint
+[V] src/vdbeaux.cpp::sqlite3VdbeExplain
+[V] src/vdbeaux.cpp::sqlite3VdbeExplainPop
+[V] src/vdbeaux.cpp::sqlite3VdbeAddParseSchemaOp
+[V] src/vdbeaux.cpp::sqlite3VdbeEndCoroutine
+[V] src/vdbeaux.cpp::sqlite3VdbeMakeLabel
+[V] src/vdbeaux.cpp::resizeResolveLabel
+[V] src/vdbeaux.cpp::sqlite3VdbeResolveLabel
+[V] src/vdbeaux.cpp::sqlite3VdbeRunOnlyOnce
+[V] src/vdbeaux.cpp::sqlite3VdbeReusable
+[V] src/vdbeaux.cpp::opIterNext
+[V] src/vdbeaux.cpp::sqlite3VdbeAssertMayAbort
+[V] src/vdbeaux.cpp::sqlite3VdbeIncrWriteCounter
+[V] src/vdbeaux.cpp::sqlite3VdbeAssertAbortable
+[V] src/vdbeaux.cpp::resolveP2Values
+[V] src/vdbeaux.cpp::sqlite3VdbeCurrentAddr
+[V] src/vdbeaux.cpp::sqlite3VdbeVerifyNoMallocRequired
+[V] src/vdbeaux.cpp::sqlite3VdbeVerifyNoResultRow
+[V] src/vdbeaux.cpp::sqlite3VdbeVerifyAbortable
+[V] src/vdbeaux.cpp::sqlite3VdbeTakeOpArray
+[V] src/vdbeaux.cpp::sqlite3VdbeChangeOpcode
+[V] src/vdbeaux.cpp::sqlite3VdbeChangeP1
+[V] src/vdbeaux.cpp::sqlite3VdbeChangeP2
+[V] src/vdbeaux.cpp::sqlite3VdbeChangeP3
+[V] src/vdbeaux.cpp::sqlite3VdbeChangeP5
+[V] src/vdbeaux.cpp::sqlite3VdbeTypeofColumn
+[V] src/vdbeaux.cpp::sqlite3VdbeJumpHere
+[V] src/vdbeaux.cpp::sqlite3VdbeJumpHereOrPopInst
+[V] src/vdbeaux.cpp::freeEphemeralFunction
+[V] src/vdbeaux.cpp::freeP4Mem
+[V] src/vdbeaux.cpp::freeP4FuncCtx
+[V] src/vdbeaux.cpp::freeP4
+[V] src/vdbeaux.cpp::vdbeFreeOpArray
+[V] src/vdbeaux.cpp::sqlite3VdbeLinkSubProgram
+[V] src/vdbeaux.cpp::sqlite3VdbeHasSubProgram
+[V] src/vdbeaux.cpp::sqlite3VdbeChangeToNoop
+[V] src/vdbeaux.cpp::sqlite3VdbeDeletePriorOpcode
+[V] src/vdbeaux.cpp::sqlite3VdbeChangeP4
+[V] src/vdbeaux.cpp::sqlite3VdbeAppendP4
+[V] src/vdbeaux.cpp::sqlite3VdbeSetP4KeyInfo
+[V] src/vdbeaux.cpp::vdbeVComment
+[V] src/vdbeaux.cpp::sqlite3VdbeComment
+[V] src/vdbeaux.cpp::sqlite3VdbeNoopComment
+[V] src/vdbeaux.cpp::sqlite3VdbeSetLineNumber
+[V] src/vdbeaux.cpp::sqlite3VdbeGetOp
+[V] src/vdbeaux.cpp::sqlite3VdbeGetLastOp
+[V] src/vdbeaux.cpp::translateP
+[V] src/vdbeaux.cpp::displayP4Expr
+[V] src/vdbeaux.cpp::sqlite3VdbeDisplayP4
+[V] src/vdbeaux.cpp::sqlite3VdbeUsesBtree
+[V] src/vdbeaux.cpp::sqlite3VdbeEnter
+[V] src/vdbeaux.cpp::vdbeLeave
+[V] src/vdbeaux.cpp::sqlite3VdbeLeave
+[V] src/vdbeaux.cpp::sqlite3VdbePrintOp
+[V] src/vdbeaux.cpp::initMemArray
+[V] src/vdbeaux.cpp::releaseMemArray
+[V] src/vdbeaux.cpp::sqlite3VdbeFrameIsValid
+[V] src/vdbeaux.cpp::sqlite3VdbeFrameMemDel
+[V] src/vdbeaux.cpp::sqlite3VdbeFrameDelete
+[V] src/vdbeaux.cpp::sqlite3VdbePrintSql
+[V] src/vdbeaux.cpp::sqlite3VdbeIOTraceSql
+[V] src/vdbeaux.cpp::sqlite3VdbeRewind
+[V] src/vdbeaux.cpp::sqlite3VdbeFreeCursor
+[V] src/vdbeaux.cpp::freeCursorWithCache
+[V] src/vdbeaux.cpp::sqlite3VdbeFreeCursorNN
+[V] src/vdbeaux.cpp::closeCursorsInFrame
+[V] src/vdbeaux.cpp::sqlite3VdbeFrameRestore
+[V] src/vdbeaux.cpp::closeAllCursors
+[V] src/vdbeaux.cpp::sqlite3VdbeSetNumCols
+[V] src/vdbeaux.cpp::vdbeCommit
+[V] src/vdbeaux.cpp::checkActiveVdbeCnt
+[V] src/vdbeaux.cpp::vdbeCloseStatement
+[V] src/vdbeaux.cpp::sqlite3VdbeCloseStatement
+[V] src/vdbeaux.cpp::vdbeFkError
+[V] src/vdbeaux.cpp::sqlite3VdbeCheckFkImmediate
+[V] src/vdbeaux.cpp::sqlite3VdbeCheckFkDeferred
+[V] src/vdbeaux.cpp::sqlite3VdbeHalt
+[V] src/vdbeaux.cpp::sqlite3VdbeResetStepResult
+[V] src/vdbeaux.cpp::sqlite3VdbeTransferError
+[V] src/vdbeaux.cpp::vdbeInvokeSqllog
+[V] src/vdbeaux.cpp::sqlite3VdbeReset
+[V] src/vdbeaux.cpp::sqlite3VdbeFinalize
+[V] src/vdbeaux.cpp::sqlite3VdbeDeleteAuxData
+[V] src/vdbeaux.cpp::sqlite3VdbeClearObject
+[V] src/vdbeaux.cpp::sqlite3VdbeDelete
+[V] src/vdbeaux.cpp::sqlite3VdbeFinishMoveto
+[V] src/vdbeaux.cpp::sqlite3VdbeHandleMovedCursor
+[V] src/vdbeaux.cpp::sqlite3VdbeCursorRestore
+[V] src/vdbeaux.cpp::sqlite3VdbeSerialType
+[V] src/vdbeaux.cpp::sqlite3VdbeSerialTypeLen
+[V] src/vdbeaux.cpp::sqlite3VdbeOneByteSerialTypeLen
+[V] src/vdbeaux.cpp::sqlite3FloatSwap
+[V] src/vdbeaux.cpp::isAllZero
+[V] src/vdbeaux.cpp::sqlite3BlobCompare
+[V] src/vdbeaux.cpp::doubleLt
+[V] src/vdbeaux.cpp::doubleEq
+[V] src/vdbeaux.cpp::sqlite3IntFloatCompare
+[V] src/vdbeaux.cpp::sqlite3MemCompare
+[V] src/vdbeaux.cpp::vdbeRecordDecodeInt
+[V] src/vdbeaux.cpp::sqlite3VdbeFindCompare
+[V] src/vdbeaux.cpp::sqlite3VdbeIdxRowid
+[V] src/vdbeaux.cpp::sqlite3VdbeSetChanges
+[V] src/vdbeaux.cpp::sqlite3VdbeCountChanges
+[V] src/vdbeaux.cpp::sqlite3ExpirePreparedStatements
+[V] src/vdbeaux.cpp::sqlite3VdbeDb
+[V] src/vdbeaux.cpp::sqlite3VdbePrepareFlags
+[V] src/vdbeaux.cpp::sqlite3VdbeGetBoundValue
+[V] src/vdbeaux.cpp::sqlite3VdbeSetVarmask
+[V] src/vdbeaux.cpp::sqlite3NotPureFunc
+[V] src/vdbeaux.cpp::sqlite3CursorRangeHintExprCheck
+[V] src/vdbeaux.cpp::sqlite3VtabImportErrmsg
+[V] src/vdbeaux.cpp::vdbeFreeUnpacked
+[V] src/vdbeaux.cpp::sqlite3VdbeFuncName
 [ ] src/vdbeblob.cpp::blobSeekToRow
 [ ] src/vdbeblob.cpp::sqlite3_blob_close
 [ ] src/vdbeblob.cpp::sqlite3_blob_read
