@@ -307,11 +307,11 @@
 [x] src/build.cpp::sqlite3AddCollateType
 [x] src/build.cpp::sqlite3AddGenerated
 [x] src/build.cpp::sqlite3ChangeCookie
-[ ] src/build.cpp::identLength
-[ ] src/build.cpp::identPut
-[ ] src/build.cpp::createTableStmt
-[ ] src/build.cpp::resizeIndexObject
-[ ] src/build.cpp::estimateTableWidth
+[x] src/build.cpp::identLength
+[x] src/build.cpp::identPut
+[x] src/build.cpp::createTableStmt
+[x] src/build.cpp::resizeIndexObject
+[x] src/build.cpp::estimateTableWidth
 [ ] src/build.cpp::estimateIndexWidth
 [ ] src/build.cpp::hasColumn
 [ ] src/build.cpp::isDupColumn

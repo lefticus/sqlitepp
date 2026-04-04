@@ -2025,8 +2025,8 @@ void sqlite3ChangeCookie(Parse *pParse, int iDb){
 ** really needed.
 */
 static i64 identLength(const char *z){
-  i64 n;
-  for(n=0; *z; n++, z++){
+  i64 n = 0;
+  for(; *z; n++, z++){
     if( *z=='"' ){ n++; }
   }
   return n + 2;
@@ -2047,13 +2047,13 @@ static i64 identLength(const char *z){
 */
 static void identPut(char *z, int *pIdx, char *zSignedIdent){
   unsigned char *zIdent = (unsigned char*)zSignedIdent;
-  int i, j, needQuote;
-  i = *pIdx;
+  int i = *pIdx;
+  int j;
 
   for(j=0; zIdent[j]; j++){
     if( !sqlite3Isalnum(zIdent[j]) && zIdent[j]!='_' ) break;
   }
-  needQuote = sqlite3Isdigit(zIdent[0])
+  const int needQuote = sqlite3Isdigit(zIdent[0])
             || sqlite3KeywordCode(zIdent, j)!=TK_ID
             || zIdent[j]!=0
             || j==0;
@@ -2074,12 +2074,10 @@ static void identPut(char *z, int *pIdx, char *zSignedIdent){
 ** from sqliteMalloc() and must be freed by the calling function.
 */
 static char *createTableStmt(sqlite3 *db, Table *p){
-  int i, k, len;
-  i64 n;
-  char *zStmt;
+  int i, len;
   const char *zSep, *zSep2, *zEnd;
   Column *pCol;
-  n = 0;
+  i64 n = 0;
   for(pCol = p->aCol, i=0; i<p->nCol; i++, pCol++){
     n += identLength(pCol->zCnName) + 5;
   }
@@ -2094,14 +2092,14 @@ static char *createTableStmt(sqlite3 *db, Table *p){
     zEnd = "\n)";
   }
   n += 35 + 6*p->nCol;
-  zStmt = static_cast<char*>(sqlite3DbMallocRaw(0, n));
+  char *zStmt = static_cast<char*>(sqlite3DbMallocRaw(0, n));
   if( zStmt==0 ){
     sqlite3OomFault(db);
     return 0;
   }
   assert( n>14 && n<=0x7fffffff );
   memcpy(zStmt, "CREATE TABLE ", 13);
-  k = 13;
+  int k = 13;
   identPut(zStmt, &k, p->zName);
   zStmt[k++] = '(';
   for(pCol=p->aCol, i=0; i<p->nCol; i++, pCol++){
@@ -2152,17 +2150,14 @@ static char *createTableStmt(sqlite3 *db, Table *p){
 ** on success and SQLITE_NOMEM on an OOM error.
 */
 static int resizeIndexObject(Parse *pParse, Index *pIdx, int N){
-  char *zExtra;
-  u64 nByte;
-  sqlite3 *db;
   if( pIdx->nColumn>=N ) return SQLITE_OK;
-  db = pParse->db;
+  sqlite3 * const db = pParse->db;
   assert( N>0 );
   assert( N <= SQLITE_MAX_COLUMN*2 /* tag-20250221-1 */ );
   testcase( N==2*pParse->db->aLimit[SQLITE_LIMIT_COLUMN] );
   assert( pIdx->isResized==0 );
-  nByte = (sizeof(char*) + sizeof(LogEst) + sizeof(i16) + 1)*(u64)N;
-  zExtra = static_cast<char*>(sqlite3DbMallocZero(db, nByte));
+  const u64 nByte = (sizeof(char*) + sizeof(LogEst) + sizeof(i16) + 1)*(u64)N;
+  char *zExtra = static_cast<char*>(sqlite3DbMallocZero(db, nByte));
   if( zExtra==0 ) return SQLITE_NOMEM_BKPT;
   memcpy(zExtra, pIdx->azColl, sizeof(char*)*pIdx->nColumn);
   pIdx->azColl = (const char**)zExtra;
