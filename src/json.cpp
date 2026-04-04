@@ -419,8 +419,7 @@ static u32 jsonUnescapeOneChar(const char*, u32, u32*);
 ** Free a JsonCache object.
 */
 static void jsonCacheDelete(JsonCache *p){
-  int i;
-  for(i=0; i<p->nUsed; i++){
+  for(int i=0; i<p->nUsed; i++){
     jsonParseFree(p->a[i]);
   }
   sqlite3DbFree(p->db, p);
@@ -576,10 +575,9 @@ static void jsonStringTooDeep(JsonString *p){
 */
 static int jsonStringGrow(JsonString *p, u32 N){
   u64 nTotal = N<p->nAlloc ? p->nAlloc*2 : p->nAlloc+N+10;
-  char *zNew;
   if( p->bStatic ){
     if( p->eErr ) return 1;
-    zNew = sqlite3RCStrNew(nTotal);
+    char *zNew = sqlite3RCStrNew(nTotal);
     if( zNew==0 ){
       jsonStringOom(p);
       return SQLITE_NOMEM;
@@ -680,9 +678,8 @@ static int jsonStringTerminate(JsonString *p){
 ** character is not '[' or '{'.
 */
 static void jsonAppendSeparator(JsonString *p){
-  char c;
   if( p->nUsed==0 ) return;
-  c = p->zBuf[p->nUsed-1];
+  const char c = p->zBuf[p->nUsed-1];
   if( c=='[' || c=='{' ) return;
   jsonAppendChar(p, ',');
 }
@@ -958,8 +955,7 @@ static u8 jsonHexToInt(int h){
 ** Convert a 4-byte hex string into an integer
 */
 static u32 jsonHexToInt4(const char *z){
-  u32 v;
-  v = (jsonHexToInt(z[0])<<12)
+  const u32 v = (jsonHexToInt(z[0])<<12)
     + (jsonHexToInt(z[1])<<8)
     + (jsonHexToInt(z[2])<<4)
     + jsonHexToInt(z[3]);
@@ -1151,16 +1147,15 @@ static void jsonWrongNumArgs(
 ** Return the number of errors.
 */
 static int jsonBlobExpand(JsonParse *pParse, u32 N){
-  u8 *aNew;
-  u64 t;
   assert( N>pParse->nBlobAlloc );
+  u64 t;
   if( pParse->nBlobAlloc==0 ){
     t = 100;
   }else{
     t = pParse->nBlobAlloc*2;
   }
   if( t<N ) t = N+100;
-  aNew = static_cast<u8 *>(sqlite3DbRealloc(pParse->db, pParse->aBlob, t));
+  u8 *const aNew = static_cast<u8 *>(sqlite3DbRealloc(pParse->db, pParse->aBlob, t));
   if( aNew==0 ){ pParse->oom = 1; return 1; }
   assert( t<0x7fffffff );
   pParse->aBlob = aNew;
@@ -1177,13 +1172,11 @@ static int jsonBlobExpand(JsonParse *pParse, u32 N){
 ** Return true on success.  Return false on OOM.
 */
 static int jsonBlobMakeEditable(JsonParse *pParse, u32 nExtra){
-  u8 *aOld;
-  u32 nSize;
   assert( !pParse->bReadOnly );
   if( pParse->oom ) return 0;
   if( pParse->nBlobAlloc>0 ) return 1;
-  aOld = pParse->aBlob;
-  nSize = pParse->nBlob + nExtra;
+  u8 *const aOld = pParse->aBlob;
+  const u32 nSize = pParse->nBlob + nExtra;
   pParse->aBlob = 0;
   if( jsonBlobExpand(pParse, nSize) ){
     return 0;
@@ -2121,11 +2114,10 @@ static void jsonReturnStringAsBlob(JsonString *pStr){
 ** beginning of the payload.  Return 0 on error.
 */
 static u32 jsonbPayloadSize(const JsonParse *pParse, u32 i, u32 *pSz){
-  u8 x;
   u32 sz;
   u32 n;
   assert( i<=pParse->nBlob );
-  x = pParse->aBlob[i]>>4;
+  const u8 x = pParse->aBlob[i]>>4;
   if( x<=11 ){
     sz = x;
     n = 1;
@@ -2426,8 +2418,7 @@ struct JsonPretty {
 
 /* Append indentation to the pretty JSON under construction */
 static void jsonPrettyIndent(JsonPretty *pPretty){
-  u32 jj;
-  for(jj=0; jj<pPretty->nIndent; jj++){
+  for(u32 jj=0; jj<pPretty->nIndent; jj++){
     jsonAppendRaw(pPretty->pOut, pPretty->zIndent, pPretty->szIndent);
   }
 }
@@ -2530,11 +2521,11 @@ static u32 jsonTranslateBlobToPrettyText(
 ** the number of entries in that array.
 */
 static u32 jsonbArrayCount(JsonParse *pParse, u32 iRoot){
-  u32 n, sz, i, iEnd;
+  u32 sz;
   u32 k = 0;
-  n = jsonbPayloadSize(pParse, iRoot, &sz);
-  iEnd = iRoot+n+sz;
-  for(i=iRoot+n; n>0 && i<iEnd; i+=sz+n, k++){
+  u32 n = jsonbPayloadSize(pParse, iRoot, &sz);
+  const u32 iEnd = iRoot+n+sz;
+  for(u32 i=iRoot+n; n>0 && i<iEnd; i+=sz+n, k++){
     n = jsonbPayloadSize(pParse, i, &sz);
   }
   return k;
@@ -2546,10 +2537,9 @@ static u32 jsonbArrayCount(JsonParse *pParse, u32 iRoot){
 */
 static void jsonAfterEditSizeAdjust(JsonParse *pParse, u32 iRoot){
   u32 sz = 0;
-  u32 nBlob;
   assert( pParse->delta!=0 );
   assert( pParse->nBlobAlloc >= pParse->nBlob );
-  nBlob = pParse->nBlob;
+  const u32 nBlob = pParse->nBlob;
   pParse->nBlob = pParse->nBlobAlloc;
   (void)jsonbPayloadSize(pParse, iRoot, &sz);
   pParse->nBlob = nBlob;
@@ -4846,9 +4836,8 @@ static void jsonArrayStep(
   }
 }
 static void jsonArrayCompute(sqlite3_context *ctx, int isFinal){
-  JsonString *pStr;
-  int flags = SQLITE_PTR_TO_INT(sqlite3_user_data(ctx));
-  pStr = static_cast<JsonString*>(sqlite3_aggregate_context(ctx, 0));
+  const int flags = SQLITE_PTR_TO_INT(sqlite3_user_data(ctx));
+  JsonString *const pStr = static_cast<JsonString*>(sqlite3_aggregate_context(ctx, 0));
   if( pStr ){
     pStr->pCtx = ctx;
     jsonAppendRawNZ(pStr, "]", 2);
@@ -4971,9 +4960,8 @@ static void jsonObjectStep(
   }
 }
 static void jsonObjectCompute(sqlite3_context *ctx, int isFinal){
-  JsonString *pStr;
-  int flags = SQLITE_PTR_TO_INT(sqlite3_user_data(ctx));
-  pStr = static_cast<JsonString*>(sqlite3_aggregate_context(ctx, 0));
+  const int flags = SQLITE_PTR_TO_INT(sqlite3_user_data(ctx));
+  JsonString *const pStr = static_cast<JsonString*>(sqlite3_aggregate_context(ctx, 0));
   if( pStr ){
     jsonAppendRawNZ(pStr, "}", 2);
     jsonStringTrimOneChar(pStr);
@@ -5101,18 +5089,17 @@ static int jsonEachConnect(
 
 /* destructor for json_each virtual table */
 static int jsonEachDisconnect(sqlite3_vtab *pVtab){
-  JsonEachConnection *p = (JsonEachConnection*)pVtab;
+  JsonEachConnection *const p = (JsonEachConnection*)pVtab;
   sqlite3DbFree(p->db, pVtab);
   return SQLITE_OK;
 }
 
 /* constructor for a JsonEachCursor object for json_each()/json_tree(). */
 static int jsonEachOpen(sqlite3_vtab *p, sqlite3_vtab_cursor **ppCursor){
-  JsonEachConnection *pVtab = (JsonEachConnection*)p;
-  JsonEachCursor *pCur;
+  JsonEachConnection *const pVtab = (JsonEachConnection*)p;
 
   UNUSED_PARAMETER(p);
-  pCur = static_cast<JsonEachCursor *>(sqlite3DbMallocZero(pVtab->db, sizeof(*pCur)));
+  JsonEachCursor *const pCur = static_cast<JsonEachCursor *>(sqlite3DbMallocZero(pVtab->db, sizeof(*pCur)));
   if( pCur==0 ) return SQLITE_NOMEM;
   pCur->db = pVtab->db;
   pCur->eMode = pVtab->eMode;
@@ -5139,7 +5126,7 @@ static void jsonEachCursorReset(JsonEachCursor *p){
 
 /* Destructor for a jsonEachCursor object */
 static int jsonEachClose(sqlite3_vtab_cursor *cur){
-  JsonEachCursor *p = (JsonEachCursor*)cur;
+  JsonEachCursor *const p = (JsonEachCursor*)cur;
   jsonEachCursorReset(p);
   
   sqlite3DbFree(p->db, cur);
@@ -5149,7 +5136,7 @@ static int jsonEachClose(sqlite3_vtab_cursor *cur){
 /* Return TRUE if the jsonEachCursor object has been advanced off the end
 ** of the JSON object */
 static int jsonEachEof(sqlite3_vtab_cursor *cur){
-  JsonEachCursor *p = (JsonEachCursor*)cur;
+  const JsonEachCursor *const p = (const JsonEachCursor*)cur;
   return p->i >= p->iEnd;
 }
 
@@ -5177,16 +5164,15 @@ static void jsonAppendPathName(JsonEachCursor *p){
   if( p->eType==JSONB_ARRAY ){
     jsonPrintf(30, &p->path, "[%lld]", p->aParent[p->nParent-1].iKey);
   }else{
-    u32 n, sz = 0, k, i;
-    const char *z;
+    u32 sz = 0;
+    const u32 n = jsonbPayloadSize(&p->sParse, p->i, &sz);
+    const u32 k = p->i + n;
+    const char *const z = (const char*)&p->sParse.aBlob[k];
     int needQuote = 0;
-    n = jsonbPayloadSize(&p->sParse, p->i, &sz);
-    k = p->i + n;
-    z = (const char*)&p->sParse.aBlob[k];
     if( sz==0 || !sqlite3Isalpha(z[0]) ){
       needQuote = 1;
     }else{
-      for(i=0; i<sz; i++){
+      for(u32 i=0; i<sz; i++){
         if( !sqlite3Isalnum(z[i]) ){
           needQuote = 1;
           break;
@@ -5203,15 +5189,14 @@ static void jsonAppendPathName(JsonEachCursor *p){
 
 /* Advance the cursor to the next element for json_tree() */
 static int jsonEachNext(sqlite3_vtab_cursor *cur){
-  JsonEachCursor *p = (JsonEachCursor*)cur;
+  JsonEachCursor *const p = (JsonEachCursor*)cur;
   int rc = SQLITE_OK;
   if( p->bRecursive ){
-    u8 x;
     u8 levelChange = 0;
-    u32 n, sz = 0;
-    u32 i = jsonSkipLabel(p);
-    x = p->sParse.aBlob[i] & 0x0f;
-    n = jsonbPayloadSize(&p->sParse, i, &sz);
+    u32 sz = 0;
+    const u32 i = jsonSkipLabel(p);
+    const u8 x = p->sParse.aBlob[i] & 0x0f;
+    const u32 n = jsonbPayloadSize(&p->sParse, i, &sz);
     if( x==JSONB_OBJECT || x==JSONB_ARRAY ){
       JsonParent *pParent;
       if( p->nParent>=p->nParentAlloc ){
@@ -5254,9 +5239,9 @@ static int jsonEachNext(sqlite3_vtab_cursor *cur){
       }
     }
   }else{
-    u32 n, sz = 0;
-    u32 i = jsonSkipLabel(p);
-    n = jsonbPayloadSize(&p->sParse, i, &sz);
+    u32 sz = 0;
+    const u32 i = jsonSkipLabel(p);
+    const u32 n = jsonbPayloadSize(&p->sParse, i, &sz);
     p->i = i + n + sz;
   }
   if( p->eType==JSONB_ARRAY && p->nParent ){
@@ -5388,7 +5373,7 @@ static int jsonEachColumn(
 
 /* Return the current rowid value */
 static int jsonEachRowid(sqlite3_vtab_cursor *cur, sqlite_int64 *pRowid){
-  JsonEachCursor *p = (JsonEachCursor*)cur;
+  const JsonEachCursor *const p = (const JsonEachCursor*)cur;
   *pRowid = p->iRowid;
   return SQLITE_OK;
 }
@@ -5665,12 +5650,11 @@ void sqlite3RegisterJsonFunctions(void){
 ** pointer to its Module object.  Return NULL if something goes wrong.
 */
 Module *sqlite3JsonVtabRegister(sqlite3 *db, const char *zName){
-  unsigned int i;
   static const char *azModule[] = {
     "json_each", "json_tree", "jsonb_each", "jsonb_tree"
   };
   assert( sqlite3HashFind(&db->aModule, zName)==0 );
-  for(i=0; i<sizeof(azModule)/sizeof(azModule[0]); i++){
+  for(unsigned int i=0; i<sizeof(azModule)/sizeof(azModule[0]); i++){
     if( sqlite3StrICmp(azModule[i],zName)==0 ){
       return sqlite3VtabCreateModule(db, azModule[i], &jsonEachModule, 0, 0);
     }

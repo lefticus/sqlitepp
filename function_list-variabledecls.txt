@@ -644,64 +644,64 @@
 [x] src/insert.cpp::indexIteratorNext
 [x] src/insert.cpp::sqlite3SetMakeRecordP5
 [x] src/insert.cpp::xferCompatibleIndex
-[ ] src/json.cpp::jsonCacheDelete
-[ ] src/json.cpp::jsonCacheDeleteGeneric
-[ ] src/json.cpp::jsonStringZero
-[ ] src/json.cpp::jsonStringInit
-[ ] src/json.cpp::jsonStringReset
-[ ] src/json.cpp::jsonStringOom
-[ ] src/json.cpp::jsonStringTooDeep
-[ ] src/json.cpp::jsonStringGrow
-[ ] src/json.cpp::jsonAppendRaw
-[ ] src/json.cpp::jsonAppendRawNZ
-[ ] src/json.cpp::jsonPrintf
-[ ] src/json.cpp::jsonAppendCharExpand
-[ ] src/json.cpp::jsonAppendChar
-[ ] src/json.cpp::jsonStringTrimOneChar
-[ ] src/json.cpp::jsonStringTerminate
-[ ] src/json.cpp::jsonAppendSeparator
-[ ] src/json.cpp::jsonAppendControlChar
-[ ] src/json.cpp::jsonAppendString
-[ ] src/json.cpp::jsonParseReset
-[ ] src/json.cpp::jsonParseFree
-[ ] src/json.cpp::jsonHexToInt
-[ ] src/json.cpp::jsonHexToInt4
-[ ] src/json.cpp::jsonIs2Hex
-[ ] src/json.cpp::jsonIs4Hex
-[ ] src/json.cpp::json5Whitespace
-[ ] src/json.cpp::jsonBlobExpand
-[ ] src/json.cpp::jsonBlobMakeEditable
-[ ] src/json.cpp::jsonBlobAppendOneByte
-[ ] src/json.cpp::jsonIs4HexB
-[ ] src/json.cpp::jsonTranslateTextToBlob
-[ ] src/json.cpp::jsonReturnStringAsBlob
-[ ] src/json.cpp::jsonbPayloadSize
-[ ] src/json.cpp::jsonPrettyIndent
-[ ] src/json.cpp::jsonbArrayCount
-[ ] src/json.cpp::jsonAfterEditSizeAdjust
-[ ] src/json.cpp::jsonBytesToBypass
-[ ] src/json.cpp::jsonUnescapeOneChar
-[ ] src/json.cpp::jsonArgIsJsonb
-[ ] src/json.cpp::jsonShowParse
-[ ] src/json.cpp::jsonAllAlphanum
-[ ] src/json.cpp::jsonArrayCompute
-[ ] src/json.cpp::jsonArrayValue
-[ ] src/json.cpp::jsonArrayFinal
-[ ] src/json.cpp::jsonObjectCompute
-[ ] src/json.cpp::jsonObjectValue
-[ ] src/json.cpp::jsonObjectFinal
-[ ] src/json.cpp::jsonEachDisconnect
-[ ] src/json.cpp::jsonEachOpen
-[ ] src/json.cpp::jsonEachCursorReset
-[ ] src/json.cpp::jsonEachClose
-[ ] src/json.cpp::jsonEachEof
-[ ] src/json.cpp::jsonSkipLabel
-[ ] src/json.cpp::jsonAppendPathName
-[ ] src/json.cpp::jsonEachNext
-[ ] src/json.cpp::jsonEachPathLength
-[ ] src/json.cpp::jsonEachRowid
-[ ] src/json.cpp::sqlite3RegisterJsonFunctions
-[ ] src/json.cpp::sqlite3JsonVtabRegister
+[x] src/json.cpp::jsonCacheDelete
+[x] src/json.cpp::jsonCacheDeleteGeneric
+[x] src/json.cpp::jsonStringZero
+[x] src/json.cpp::jsonStringInit
+[x] src/json.cpp::jsonStringReset
+[x] src/json.cpp::jsonStringOom
+[x] src/json.cpp::jsonStringTooDeep
+[x] src/json.cpp::jsonStringGrow
+[x] src/json.cpp::jsonAppendRaw
+[x] src/json.cpp::jsonAppendRawNZ
+[x] src/json.cpp::jsonPrintf
+[x] src/json.cpp::jsonAppendCharExpand
+[x] src/json.cpp::jsonAppendChar
+[x] src/json.cpp::jsonStringTrimOneChar
+[x] src/json.cpp::jsonStringTerminate
+[x] src/json.cpp::jsonAppendSeparator
+[x] src/json.cpp::jsonAppendControlChar
+[x] src/json.cpp::jsonAppendString
+[x] src/json.cpp::jsonParseReset
+[x] src/json.cpp::jsonParseFree
+[x] src/json.cpp::jsonHexToInt
+[x] src/json.cpp::jsonHexToInt4
+[x] src/json.cpp::jsonIs2Hex
+[x] src/json.cpp::jsonIs4Hex
+[x] src/json.cpp::json5Whitespace
+[x] src/json.cpp::jsonBlobExpand
+[x] src/json.cpp::jsonBlobMakeEditable
+[x] src/json.cpp::jsonBlobAppendOneByte
+[x] src/json.cpp::jsonIs4HexB
+[x] src/json.cpp::jsonTranslateTextToBlob
+[x] src/json.cpp::jsonReturnStringAsBlob
+[x] src/json.cpp::jsonbPayloadSize
+[x] src/json.cpp::jsonPrettyIndent
+[x] src/json.cpp::jsonbArrayCount
+[x] src/json.cpp::jsonAfterEditSizeAdjust
+[x] src/json.cpp::jsonBytesToBypass
+[x] src/json.cpp::jsonUnescapeOneChar
+[x] src/json.cpp::jsonArgIsJsonb
+[x] src/json.cpp::jsonShowParse
+[x] src/json.cpp::jsonAllAlphanum
+[x] src/json.cpp::jsonArrayCompute
+[x] src/json.cpp::jsonArrayValue
+[x] src/json.cpp::jsonArrayFinal
+[x] src/json.cpp::jsonObjectCompute
+[x] src/json.cpp::jsonObjectValue
+[x] src/json.cpp::jsonObjectFinal
+[x] src/json.cpp::jsonEachDisconnect
+[x] src/json.cpp::jsonEachOpen
+[x] src/json.cpp::jsonEachCursorReset
+[x] src/json.cpp::jsonEachClose
+[x] src/json.cpp::jsonEachEof
+[x] src/json.cpp::jsonSkipLabel
+[x] src/json.cpp::jsonAppendPathName
+[x] src/json.cpp::jsonEachNext
+[x] src/json.cpp::jsonEachPathLength
+[x] src/json.cpp::jsonEachRowid
+[x] src/json.cpp::sqlite3RegisterJsonFunctions
+[x] src/json.cpp::sqlite3JsonVtabRegister
 [ ] src/loadext.cpp::sqlite3CloseExtensions
 [ ] src/loadext.cpp::sqlite3_enable_load_extension
 [ ] src/loadext.cpp::sqlite3_reset_auto_extension
