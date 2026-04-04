@@ -62,10 +62,10 @@ Update `function_list-variabledecls.txt` to change `[ ]` to `[x]` for the functi
 
 ## Step 4: Build
 
-After processing all functions in the batch, regenerate the amalgamation and compile it:
+After processing all functions in the batch, regenerate the amalgamation and compile it. **Important:** Use `TMPDIR=/tmp/claude` (or `/tmp/claude-1000` if that doesn't exist) so the build tools can write temporary files without sandbox permission issues.
 
 ```bash
-cd /home/jason/sqlitepp && rm -f sqlite3.cpp && make -f Makefile.linux-generic sqlite3.o 2>&1 | tail -30
+cd /home/jason/sqlitepp && rm -f sqlite3.cpp && TMPDIR=/tmp/claude make -f Makefile.linux-generic sqlite3.o 2>&1 | tail -30
 ```
 
 This regenerates `sqlite3.cpp` from the source files and then compiles it with the project's C++ compiler and flags (including `-Wall -Werror`). If the build fails, fix the issue or revert your changes to the function that caused the failure.
