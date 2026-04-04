@@ -33,10 +33,8 @@ void sqlite3HashInit(Hash *pNew){
 ** to the empty state.
 */
 void sqlite3HashClear(Hash *pH){
-  HashElem *elem;         /* For looping over all elements of the table */
-
   assert( pH!=0 );
-  elem = pH->first;
+  HashElem *elem = pH->first;         /* For looping over all elements of the table */
   pH->first = 0;
   sqlite3_free(pH->ht);
   pH->ht = 0;
@@ -111,9 +109,6 @@ static void insertElement(
 ** Return TRUE if the resize occurs and false if not.
 */
 static int rehash(Hash *pH, unsigned int new_size){
-  struct _ht *new_ht;            /* The new hash table */
-  HashElem *elem, *next_elem;    /* For looping over existing elements */
-
 #if SQLITE_MALLOC_SOFT_LIMIT>0
   if( new_size*sizeof(struct _ht)>SQLITE_MALLOC_SOFT_LIMIT ){
     new_size = SQLITE_MALLOC_SOFT_LIMIT/sizeof(struct _ht);
@@ -130,7 +125,7 @@ static int rehash(Hash *pH, unsigned int new_size){
   ** may be larger than the requested amount).
   */
   sqlite3BeginBenignMalloc();
-  new_ht = (struct _ht *)sqlite3Malloc( new_size*sizeof(struct _ht) );
+  struct _ht *new_ht = (struct _ht *)sqlite3Malloc( new_size*sizeof(struct _ht) );
   sqlite3EndBenignMalloc();
 
   if( new_ht==0 ) return 0;
@@ -138,6 +133,7 @@ static int rehash(Hash *pH, unsigned int new_size){
   pH->ht = new_ht;
   pH->htsize = new_size = sqlite3MallocSize(new_ht)/sizeof(struct _ht);
   memset(new_ht, 0, new_size*sizeof(struct _ht));
+  HashElem *elem, *next_elem;    /* For looping over existing elements */
   for(elem=pH->first, pH->first=0; elem; elem = next_elem){
     next_elem = elem->next;
     insertElement(pH, &new_ht[elem->h % new_size], elem);
@@ -240,13 +236,10 @@ void *sqlite3HashFind(const Hash *pH, const char *pKey){
 ** element corresponding to "key" is removed from the hash table.
 */
 void *sqlite3HashInsert(Hash *pH, const char *pKey, void *data){
-  unsigned int h;       /* the hash of the key modulo hash table size */
-  HashElem *elem;       /* Used to loop thru the element list */
-  HashElem *new_elem;   /* New element added to the pH */
-
   assert( pH!=0 );
   assert( pKey!=0 );
-  elem = findElementWithHash(pH,pKey,&h);
+  unsigned int h;       /* the hash of the key modulo hash table size */
+  HashElem *elem = findElementWithHash(pH,pKey,&h);       /* Used to loop thru the element list */
   if( elem->data ){
     void *old_data = elem->data;
     if( data==0 ){
@@ -258,7 +251,7 @@ void *sqlite3HashInsert(Hash *pH, const char *pKey, void *data){
     return old_data;
   }
   if( data==0 ) return 0;
-  new_elem = (HashElem*)sqlite3Malloc( sizeof(HashElem) );
+  HashElem *new_elem = (HashElem*)sqlite3Malloc( sizeof(HashElem) );   /* New element added to the pH */
   if( new_elem==0 ) return data;
   new_elem->pKey = pKey;
   new_elem->h = h;

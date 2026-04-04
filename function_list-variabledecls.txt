@@ -619,12 +619,12 @@
 [x] src/func.cpp::percentFinal
 [x] src/func.cpp::percentValue
 [x] src/func.cpp::sqlite3RegisterBuiltinFunctions
-[ ] src/hash.cpp::sqlite3HashInit
-[ ] src/hash.cpp::sqlite3HashClear
-[ ] src/hash.cpp::strHash
-[ ] src/hash.cpp::rehash
-[ ] src/hash.cpp::sqlite3HashFind
-[ ] src/hash.cpp::sqlite3HashInsert
+[x] src/hash.cpp::sqlite3HashInit
+[x] src/hash.cpp::sqlite3HashClear
+[x] src/hash.cpp::strHash
+[x] src/hash.cpp::rehash
+[x] src/hash.cpp::sqlite3HashFind
+[x] src/hash.cpp::sqlite3HashInsert
 [ ] src/insert.cpp::computeIndexAffStr
 [ ] src/insert.cpp::sqlite3IndexAffinityStr
 [ ] src/insert.cpp::sqlite3TableAffinityStr
