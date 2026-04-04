@@ -783,7 +783,6 @@ void sqlite3DeleteColumnNames(sqlite3 *db, Table *pTable){
 ** used by the Table object.
 */
 static void SQLITE_NOINLINE deleteTable(sqlite3 *db, Table *pTable){
-  Index *pIndex, *pNext;
 
 #ifdef SQLITE_DEBUG
   /* Record the number of outstanding lookaside allocations in schema Tables
@@ -801,7 +800,7 @@ static void SQLITE_NOINLINE deleteTable(sqlite3 *db, Table *pTable){
 #endif
 
   /* Delete all indices associated with this table. */
-  for(pIndex = pTable->pIndex; pIndex; pIndex=pNext){
+  for(Index *pIndex = pTable->pIndex, *pNext; pIndex; pIndex=pNext){
     pNext = pIndex->pNext;
     assert( pIndex->pSchema==pTable->pSchema
          || (IsVirtual(pTable) && pIndex->idxType!=SQLITE_IDXTYPE_APPDEF) );
@@ -857,16 +856,14 @@ void sqlite3DeleteTableGeneric(sqlite3 *db, void *pTable){
 ** table structure with all its indices and foreign keys.
 */
 void sqlite3UnlinkAndDeleteTable(sqlite3 *db, int iDb, const char *zTabName){
-  Table *p;
-  Db *pDb;
 
   assert( db!=0 );
   assert( iDb>=0 && iDb<db->nDb );
   assert( zTabName );
   assert( sqlite3SchemaMutexHeld(db, iDb, 0) );
   testcase( zTabName[0]==0 );  /* Zero-length table names are allowed */
-  pDb = &db->aDb[iDb];
-  p = static_cast<Table*>(sqlite3HashInsert(&pDb->pSchema->tblHash, zTabName, 0));
+  Db *const pDb = &db->aDb[iDb];
+  Table *const p = static_cast<Table*>(sqlite3HashInsert(&pDb->pSchema->tblHash, zTabName, 0));
   sqlite3DeleteTable(db, p);
   db->mDbFlags |= DBFLAG_SchemaChange;
 }

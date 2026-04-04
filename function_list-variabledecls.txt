@@ -282,11 +282,11 @@
 [x] src/build.cpp::sqlite3ColumnExpr
 [x] src/build.cpp::sqlite3ColumnColl
 [x] src/build.cpp::sqlite3DeleteColumnNames
-[ ] src/build.cpp::deleteTable
-[ ] src/build.cpp::sqlite3DeleteTable
-[ ] src/build.cpp::sqlite3DeleteTableGeneric
-[ ] src/build.cpp::sqlite3UnlinkAndDeleteTable
-[ ] src/build.cpp::sqlite3NameFromToken
+[x] src/build.cpp::deleteTable
+[x] src/build.cpp::sqlite3DeleteTable
+[x] src/build.cpp::sqlite3DeleteTableGeneric
+[x] src/build.cpp::sqlite3UnlinkAndDeleteTable
+[x] src/build.cpp::sqlite3NameFromToken
 [ ] src/build.cpp::sqlite3OpenSchemaTable
 [ ] src/build.cpp::sqlite3FindDbName
 [ ] src/build.cpp::sqlite3FindDb
