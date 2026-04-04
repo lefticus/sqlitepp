@@ -6154,8 +6154,6 @@ int sqlite3BtreeEof(BtCursor *pCur){
 ** available.
 */
 i64 sqlite3BtreeRowCountEst(BtCursor *pCur){
-  i64 n;
-  u8 i;
 
   assert( cursorOwnsBtShared(pCur) );
   assert( sqlite3_mutex_held(pCur->pBtree->db->mutex) );
@@ -6166,8 +6164,8 @@ i64 sqlite3BtreeRowCountEst(BtCursor *pCur){
   if( pCur->eState!=CURSOR_VALID ) return 0;
   if( NEVER(pCur->pPage->leaf==0) ) return -1;
 
-  n = pCur->pPage->nCell;
-  for(i=0; i<pCur->iPage; i++){
+  i64 n = pCur->pPage->nCell;
+  for(u8 i=0; i<pCur->iPage; i++){
     n *= pCur->apPage[i]->nCell+1;
   }
   return n;
@@ -6195,8 +6193,6 @@ i64 sqlite3BtreeRowCountEst(BtCursor *pCur){
 */
 static SQLITE_NOINLINE int btreeNext(BtCursor *pCur){
   int rc;
-  int idx;
-  MemPage *pPage;
 
   assert( cursorOwnsBtShared(pCur) );
   if( pCur->eState!=CURSOR_VALID ){
@@ -6214,8 +6210,8 @@ static SQLITE_NOINLINE int btreeNext(BtCursor *pCur){
     }
   }
 
-  pPage = pCur->pPage;
-  idx = ++pCur->ix;
+  MemPage *pPage = pCur->pPage;
+  const int idx = ++pCur->ix;
   if( sqlite3FaultSim(412) ) pPage->isInit = 0;
   if( !pPage->isInit ){
     return SQLITE_CORRUPT_BKPT;
@@ -6248,14 +6244,13 @@ static SQLITE_NOINLINE int btreeNext(BtCursor *pCur){
   }
 }
 int sqlite3BtreeNext(BtCursor *pCur, int flags){
-  MemPage *pPage;
   UNUSED_PARAMETER( flags );  /* Used in COMDB2 but not native SQLite */
   assert( cursorOwnsBtShared(pCur) );
   assert( flags==0 || flags==1 );
   pCur->info.nSize = 0;
   pCur->curFlags &= ~(BTCF_ValidNKey|BTCF_ValidOvfl);
   if( pCur->eState!=CURSOR_VALID ) return btreeNext(pCur);
-  pPage = pCur->pPage;
+  MemPage *const pPage = pCur->pPage;
   if( (++pCur->ix)>=pPage->nCell ){
     pCur->ix--;
     return btreeNext(pCur);
@@ -6289,7 +6284,6 @@ int sqlite3BtreeNext(BtCursor *pCur, int flags){
 */
 static SQLITE_NOINLINE int btreePrevious(BtCursor *pCur){
   int rc;
-  MemPage *pPage;
 
   assert( cursorOwnsBtShared(pCur) );
   assert( (pCur->curFlags & (BTCF_AtLast|BTCF_ValidOvfl|BTCF_ValidNKey))==0 );
@@ -6308,7 +6302,7 @@ static SQLITE_NOINLINE int btreePrevious(BtCursor *pCur){
     }
   }
 
-  pPage = pCur->pPage;
+  MemPage *pPage = pCur->pPage;
   if( sqlite3FaultSim(412) ) pPage->isInit = 0;
   if( !pPage->isInit ){
     return SQLITE_CORRUPT_BKPT;

@@ -212,11 +212,11 @@
 [x] src/btree.cpp::sqlite3BtreeLast
 [x] src/btree.cpp::cursorOnLastPage
 [x] src/btree.cpp::sqlite3BtreeEof
-[ ] src/btree.cpp::sqlite3BtreeRowCountEst
-[ ] src/btree.cpp::btreeNext
-[ ] src/btree.cpp::sqlite3BtreeNext
-[ ] src/btree.cpp::btreePrevious
-[ ] src/btree.cpp::sqlite3BtreePrevious
+[x] src/btree.cpp::sqlite3BtreeRowCountEst
+[x] src/btree.cpp::btreeNext
+[x] src/btree.cpp::sqlite3BtreeNext
+[x] src/btree.cpp::btreePrevious
+[x] src/btree.cpp::sqlite3BtreePrevious
 [ ] src/btree.cpp::freePage2
 [ ] src/btree.cpp::freePage
 [ ] src/btree.cpp::dropCell
