@@ -247,11 +247,11 @@
 [x] src/btree.cpp::getPageReferenced
 [x] src/btree.cpp::setPageReferenced
 [x] src/btree.cpp::checkRef
-[ ] src/btree.cpp::btreeHeapInsert
-[ ] src/btree.cpp::btreeHeapPull
-[ ] src/btree.cpp::sqlite3BtreeGetFilename
-[ ] src/btree.cpp::sqlite3BtreeGetJournalname
-[ ] src/btree.cpp::sqlite3BtreeTxnState
+[x] src/btree.cpp::btreeHeapInsert
+[x] src/btree.cpp::btreeHeapPull
+[x] src/btree.cpp::sqlite3BtreeGetFilename
+[x] src/btree.cpp::sqlite3BtreeGetJournalname
+[x] src/btree.cpp::sqlite3BtreeTxnState
 [ ] src/btree.cpp::sqlite3BtreeCheckpoint
 [ ] src/btree.cpp::sqlite3BtreeIsInBackup
 [ ] src/btree.cpp::sqlite3BtreeSchema

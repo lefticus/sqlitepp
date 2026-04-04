@@ -10635,10 +10635,10 @@ static void checkList(
 ** lower 16 bits are the index of the last byte of that range.
 */
 static void btreeHeapInsert(u32 *aHeap, u32 x){
-  u32 j, i;
   assert( aHeap!=0 );
-  i = ++aHeap[0];
+  u32 i = ++aHeap[0];
   aHeap[i] = x;
+  u32 j;
   while( (j = i/2)>0 && aHeap[j]>aHeap[i] ){
     x = aHeap[j];
     aHeap[j] = aHeap[i];
@@ -10647,13 +10647,14 @@ static void btreeHeapInsert(u32 *aHeap, u32 x){
   }
 }
 static int btreeHeapPull(u32 *aHeap, u32 *pOut){
-  u32 j, i, x;
+  u32 x;
   if( (x = aHeap[0])==0 ) return 0;
   *pOut = aHeap[1];
   aHeap[1] = aHeap[x];
   aHeap[x] = 0xffffffff;
   aHeap[0]--;
-  i = 1;
+  u32 i = 1;
+  u32 j;
   while( (j = i*2)<=aHeap[0] ){
     if( aHeap[j]>aHeap[j+1] ) j++;
     if( aHeap[i]<aHeap[j] ) break;
