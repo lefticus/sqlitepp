@@ -272,11 +272,11 @@
 [x] src/build.cpp::sqlite3NestedParse
 [x] src/build.cpp::sqlite3FindTable
 [x] src/build.cpp::sqlite3PreferredTableName
-[ ] src/build.cpp::sqlite3FindIndex
-[ ] src/build.cpp::sqlite3FreeIndex
-[ ] src/build.cpp::sqlite3UnlinkAndDeleteIndex
-[ ] src/build.cpp::sqlite3CollapseDatabaseArray
-[ ] src/build.cpp::sqlite3ResetOneSchema
+[x] src/build.cpp::sqlite3FindIndex
+[x] src/build.cpp::sqlite3FreeIndex
+[x] src/build.cpp::sqlite3UnlinkAndDeleteIndex
+[x] src/build.cpp::sqlite3CollapseDatabaseArray
+[x] src/build.cpp::sqlite3ResetOneSchema
 [ ] src/build.cpp::sqlite3ResetAllSchemasOfConnection
 [ ] src/build.cpp::sqlite3CommitInternalChanges
 [ ] src/build.cpp::sqlite3ColumnExpr

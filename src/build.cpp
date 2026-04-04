@@ -518,10 +518,9 @@ const char *sqlite3PreferredTableName(const char *zName){
 */
 Index *sqlite3FindIndex(sqlite3 *db, const char *zName, const char *zDb){
   Index *p = 0;
-  int i;
   /* All mutexes are required for schema access.  Make sure we hold them. */
   assert( zDb!=0 || sqlite3BtreeHoldsAllMutexes(db) );
-  for(i=OMIT_TEMPDB; i<db->nDb; i++){
+  for(int i=OMIT_TEMPDB; i<db->nDb; i++){
     int j = (i<2) ? i^1 : i;  /* Search TEMP before MAIN */
     Schema *pSchema = db->aDb[j].pSchema;
     assert( pSchema );
@@ -557,12 +556,9 @@ void sqlite3FreeIndex(sqlite3 *db, Index *p){
 ** with the index.
 */
 void sqlite3UnlinkAndDeleteIndex(sqlite3 *db, int iDb, const char *zIdxName){
-  Index *pIndex;
-  Hash *pHash;
-
   assert( sqlite3SchemaMutexHeld(db, iDb, 0) );
-  pHash = &db->aDb[iDb].pSchema->idxHash;
-  pIndex = static_cast<Index*>(sqlite3HashInsert(pHash, zIdxName, 0));
+  Hash *const pHash = &db->aDb[iDb].pSchema->idxHash;
+  Index *const pIndex = static_cast<Index*>(sqlite3HashInsert(pHash, zIdxName, 0));
   if( ALWAYS(pIndex) ){
     if( pIndex->pTable->pIndex==pIndex ){
       pIndex->pTable->pIndex = pIndex->pNext;
@@ -590,8 +586,8 @@ void sqlite3UnlinkAndDeleteIndex(sqlite3 *db, int iDb, const char *zIdxName){
 ** are never candidates for being collapsed.
 */
 void sqlite3CollapseDatabaseArray(sqlite3 *db){
-  int i, j;
-  for(i=j=2; i<db->nDb; i++){
+  int j;
+  for(int i=j=2; i<db->nDb; i++){
     struct Db *pDb = &db->aDb[i];
     if( pDb->pBt==0 ){
       sqlite3DbFree(db, pDb->zDbSName);
@@ -617,7 +613,6 @@ void sqlite3CollapseDatabaseArray(sqlite3 *db){
 ** Deferred resets may be run by calling with iDb<0.
 */
 void sqlite3ResetOneSchema(sqlite3 *db, int iDb){
-  int i;
   assert( iDb<db->nDb );
 
   if( iDb>=0 ){
@@ -628,7 +623,7 @@ void sqlite3ResetOneSchema(sqlite3 *db, int iDb){
   }
 
   if( db->nSchemaLock==0 ){
-    for(i=0; i<db->nDb; i++){
+    for(int i=0; i<db->nDb; i++){
       if( DbHasProperty(db, i, DB_ResetWanted) ){
         sqlite3SchemaClear(db->aDb[i].pSchema);
       }
