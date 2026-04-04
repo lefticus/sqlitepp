@@ -402,19 +402,19 @@
 [x] src/date.cpp::daysAfterMonday
 [x] src/date.cpp::daysAfterSunday
 [x] src/date.cpp::sqlite3RegisterDateTimeFunctions
-[ ] src/dbpage.cpp::dbpageDisconnect
-[ ] src/dbpage.cpp::dbpageBestIndex
-[ ] src/dbpage.cpp::dbpageOpen
-[ ] src/dbpage.cpp::dbpageClose
-[ ] src/dbpage.cpp::dbpageNext
-[ ] src/dbpage.cpp::dbpageEof
-[ ] src/dbpage.cpp::dbpageRowid
-[ ] src/dbpage.cpp::dbpageBeginTrans
-[ ] src/dbpage.cpp::dbpageBegin
-[ ] src/dbpage.cpp::dbpageSync
-[ ] src/dbpage.cpp::dbpageRollbackTo
-[ ] src/dbpage.cpp::sqlite3DbpageRegister
-[ ] src/dbpage.cpp::sqlite3DbpageRegister
+[x] src/dbpage.cpp::dbpageDisconnect
+[x] src/dbpage.cpp::dbpageBestIndex
+[x] src/dbpage.cpp::dbpageOpen
+[x] src/dbpage.cpp::dbpageClose
+[x] src/dbpage.cpp::dbpageNext
+[x] src/dbpage.cpp::dbpageEof
+[x] src/dbpage.cpp::dbpageRowid
+[x] src/dbpage.cpp::dbpageBeginTrans
+[x] src/dbpage.cpp::dbpageBegin
+[x] src/dbpage.cpp::dbpageSync
+[x] src/dbpage.cpp::dbpageRollbackTo
+[x] src/dbpage.cpp::sqlite3DbpageRegister
+[x] src/dbpage.cpp::sqlite3DbpageRegister
 [ ] src/dbstat.cpp::statDisconnect
 [ ] src/dbstat.cpp::statBestIndex
 [ ] src/dbstat.cpp::statOpen
