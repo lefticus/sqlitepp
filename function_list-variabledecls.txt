@@ -365,13 +365,13 @@
 [x] src/build.cpp::sqlite3CteDelete
 [x] src/build.cpp::sqlite3WithDelete
 [x] src/build.cpp::sqlite3WithDeleteGeneric
-[ ] src/callback.cpp::callCollNeeded
-[ ] src/callback.cpp::synthCollSeq
-[ ] src/callback.cpp::sqlite3CheckCollSeq
-[ ] src/callback.cpp::sqlite3SetTextEncoding
-[ ] src/callback.cpp::sqlite3LocateCollSeq
-[ ] src/callback.cpp::sqlite3SchemaClear
-[ ] src/callback.cpp::sqlite3SchemaGet
+[x] src/callback.cpp::callCollNeeded
+[x] src/callback.cpp::synthCollSeq
+[x] src/callback.cpp::sqlite3CheckCollSeq
+[x] src/callback.cpp::sqlite3SetTextEncoding
+[x] src/callback.cpp::sqlite3LocateCollSeq
+[x] src/callback.cpp::sqlite3SchemaClear
+[x] src/callback.cpp::sqlite3SchemaGet
 [ ] src/carray.cpp::carrayDisconnect
 [ ] src/carray.cpp::carrayOpen
 [ ] src/carray.cpp::carrayClose

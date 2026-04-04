@@ -50,12 +50,10 @@ static void callCollNeeded(sqlite3 *db, int enc, const char *zName){
 ** possible.
 */
 static int synthCollSeq(sqlite3 *db, CollSeq *pColl){
-  CollSeq *pColl2;
   char *z = pColl->zName;
-  int i;
   static const u8 aEnc[] = { SQLITE_UTF16BE, SQLITE_UTF16LE, SQLITE_UTF8 };
-  for(i=0; i<3; i++){
-    pColl2 = sqlite3FindCollSeq(db, aEnc[i], z, 0);
+  for(int i=0; i<3; i++){
+    CollSeq *pColl2 = sqlite3FindCollSeq(db, aEnc[i], z, 0);
     if( pColl2->xCmp!=0 ){
       memcpy(pColl, pColl2, sizeof(CollSeq));
       pColl->xDel = 0;         /* Do not copy the destructor */
@@ -254,12 +252,11 @@ CollSeq *sqlite3GetCollSeq(
 ** See also: sqlite3FindCollSeq(), sqlite3GetCollSeq()
 */
 CollSeq *sqlite3LocateCollSeq(Parse *pParse, const char *zName){
-  sqlite3 *db = pParse->db;
-  u8 enc = ENC(db);
-  u8 initbusy = db->init.busy;
-  CollSeq *pColl;
+  sqlite3 *const db = pParse->db;
+  const u8 enc = ENC(db);
+  const u8 initbusy = db->init.busy;
 
-  pColl = sqlite3FindCollSeq(db, enc, zName, initbusy);
+  CollSeq *pColl = sqlite3FindCollSeq(db, enc, zName, initbusy);
   if( !initbusy && (!pColl || !pColl->xCmp) ){
     pColl = sqlite3GetCollSeq(pParse, enc, pColl, zName);
   }
@@ -493,24 +490,21 @@ FuncDef *sqlite3FindFunction(
 ** The Schema.cache_size variable is not cleared.
 */
 void sqlite3SchemaClear(void *p){
-  Hash temp1;
-  Hash temp2;
-  HashElem *pElem;
-  Schema *pSchema = (Schema *)p;
+  Schema *const pSchema = (Schema *)p;
   sqlite3 xdb;
 
   memset(&xdb, 0, sizeof(xdb));
-  temp1 = pSchema->tblHash;
-  temp2 = pSchema->trigHash;
+  Hash temp1 = pSchema->tblHash;
+  Hash temp2 = pSchema->trigHash;
   sqlite3HashInit(&pSchema->trigHash);
   sqlite3HashClear(&pSchema->idxHash);
-  for(pElem=sqliteHashFirst(&temp2); pElem; pElem=sqliteHashNext(pElem)){
+  for(HashElem *pElem=sqliteHashFirst(&temp2); pElem; pElem=sqliteHashNext(pElem)){
     sqlite3DeleteTrigger(&xdb, (Trigger*)sqliteHashData(pElem));
   }
 
   sqlite3HashClear(&temp2);
   sqlite3HashInit(&pSchema->tblHash);
-  for(pElem=sqliteHashFirst(&temp1); pElem; pElem=sqliteHashNext(pElem)){
+  for(HashElem *pElem=sqliteHashFirst(&temp1); pElem; pElem=sqliteHashNext(pElem)){
     Table *pTab = static_cast<Table*>(sqliteHashData(pElem));
     sqlite3DeleteTable(&xdb, pTab);
   }
