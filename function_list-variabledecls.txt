@@ -207,11 +207,11 @@
 [x] src/btree.cpp::moveToRightmost
 [x] src/btree.cpp::sqlite3BtreeFirst
 [x] src/btree.cpp::sqlite3BtreeIsEmpty
-[ ] src/btree.cpp::cursorIsAtLastEntry
-[ ] src/btree.cpp::btreeLast
-[ ] src/btree.cpp::sqlite3BtreeLast
-[ ] src/btree.cpp::cursorOnLastPage
-[ ] src/btree.cpp::sqlite3BtreeEof
+[x] src/btree.cpp::cursorIsAtLastEntry
+[x] src/btree.cpp::btreeLast
+[x] src/btree.cpp::sqlite3BtreeLast
+[x] src/btree.cpp::cursorOnLastPage
+[x] src/btree.cpp::sqlite3BtreeEof
 [ ] src/btree.cpp::sqlite3BtreeRowCountEst
 [ ] src/btree.cpp::btreeNext
 [ ] src/btree.cpp::sqlite3BtreeNext

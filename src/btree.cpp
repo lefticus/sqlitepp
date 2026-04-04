@@ -5607,8 +5607,7 @@ int sqlite3BtreeIsEmpty(BtCursor *pCur, int *pRes){
 ** builds.
 */
 static int cursorIsAtLastEntry(BtCursor *pCur){
-  int ii;
-  for(ii=0; ii<pCur->iPage; ii++){
+  for(int ii=0; ii<pCur->iPage; ii++){
     if( pCur->aiIdx[ii]!=pCur->apPage[ii]->nCell ) return 0;
   }
   return pCur->ix==pCur->pPage->nCell-1 && pCur->pPage->leaf!=0;
@@ -5869,9 +5868,8 @@ static int indexCellCompare(
 ** page of a table.
 */
 static int cursorOnLastPage(BtCursor *pCur){
-  int i;
   assert( pCur->eState==CURSOR_VALID );
-  for(i=0; i<pCur->iPage; i++){
+  for(int i=0; i<pCur->iPage; i++){
     MemPage *pPage = pCur->apPage[i];
     if( pCur->aiIdx[i]<pPage->nCell ) return 0;
   }
