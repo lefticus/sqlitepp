@@ -6696,7 +6696,7 @@ end_allocate_page:
 static int freePage2(BtShared *pBt, MemPage *pMemPage, Pgno iPage){
   MemPage *pTrunk = 0;                /* Free-list trunk page */
   Pgno iTrunk = 0;                    /* Page number of free-list trunk page */
-  MemPage *pPage1 = pBt->pPage1;      /* Local reference to page 1 */
+  MemPage * const pPage1 = pBt->pPage1; /* Local reference to page 1 */
   MemPage *pPage;                     /* Page being freed. May be NULL. */
   int rc;                             /* Return Code */
   u32 nFree;                          /* Initial number of pages on free-list */
@@ -7125,12 +7125,6 @@ static int fillInCell(
 ** "sz" must be the number of bytes in the cell.
 */
 static void dropCell(MemPage *pPage, int idx, int sz, int *pRC){
-  u32 pc;         /* Offset to cell content of cell being deleted */
-  u8 *data;       /* pPage->aData */
-  u8 *ptr;        /* Used to move bytes around within data[] */
-  int rc;         /* The return code */
-  int hdr;        /* Beginning of the header.  0 most pages.  100 page 1 */
-
   if( *pRC ) return;
   assert( idx>=0 );
   assert( idx<pPage->nCell );
@@ -7138,18 +7132,18 @@ static void dropCell(MemPage *pPage, int idx, int sz, int *pRC){
   assert( sqlite3PagerIswriteable(pPage->pDbPage) );
   assert( sqlite3_mutex_held(pPage->pBt->mutex) );
   assert( pPage->nFree>=0 );
-  data = pPage->aData;
-  ptr = &pPage->aCellIdx[2*idx];
+  u8 * const data = pPage->aData;                    /* pPage->aData */
+  u8 * const ptr = &pPage->aCellIdx[2*idx];          /* Used to move bytes around within data[] */
   assert( pPage->pBt->usableSize > (u32)(ptr-data) );
-  pc = get2byte(ptr);
-  hdr = pPage->hdrOffset;
+  const u32 pc = get2byte(ptr);       /* Offset to cell content of cell being deleted */
+  const int hdr = pPage->hdrOffset;   /* Beginning of the header.  0 most pages.  100 page 1 */
   testcase( pc==(u32)get2byte(&data[hdr+5]) );
   testcase( pc+sz==pPage->pBt->usableSize );
   if( pc+sz > pPage->pBt->usableSize ){
     *pRC = SQLITE_CORRUPT_BKPT;
     return;
   }
-  rc = freeSpace(pPage, pc, sz);
+  const int rc = freeSpace(pPage, pc, sz);  /* The return code */
   if( rc ){
     *pRC = rc;
     return;
@@ -7457,8 +7451,8 @@ struct CellArray {
 ** computed.
 */
 static void populateCellCache(CellArray *p, int idx, int N){
-  MemPage *pRef = p->pRef;
-  u16 *szCell = p->szCell;
+  MemPage * const pRef = p->pRef;
+  u16 * const szCell = p->szCell;
   assert( idx>=0 && idx+N<=p->nCell );
   while( N>0 ){
     assert( p->apCell[idx]!=0 );

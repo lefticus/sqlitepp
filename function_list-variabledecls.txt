@@ -217,11 +217,11 @@
 [x] src/btree.cpp::sqlite3BtreeNext
 [x] src/btree.cpp::btreePrevious
 [x] src/btree.cpp::sqlite3BtreePrevious
-[ ] src/btree.cpp::freePage2
-[ ] src/btree.cpp::freePage
-[ ] src/btree.cpp::dropCell
-[ ] src/btree.cpp::populateCellCache
-[ ] src/btree.cpp::computeCellSize
+[x] src/btree.cpp::freePage2
+[x] src/btree.cpp::freePage
+[x] src/btree.cpp::dropCell
+[x] src/btree.cpp::populateCellCache
+[x] src/btree.cpp::computeCellSize
 [ ] src/btree.cpp::cachedCellSize
 [ ] src/btree.cpp::balance_quick
 [ ] src/btree.cpp::ptrmapCheckPages
