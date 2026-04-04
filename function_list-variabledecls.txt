@@ -182,11 +182,11 @@
 [x] src/btree.cpp::sqlite3BtreeTripAllCursors
 [x] src/btree.cpp::btreeSetNPage
 [x] src/btree.cpp::sqlite3BtreeRollback
-[ ] src/btree.cpp::sqlite3BtreeBeginStmt
-[ ] src/btree.cpp::sqlite3BtreeSavepoint
-[ ] src/btree.cpp::sqlite3BtreeCursorSize
-[ ] src/btree.cpp::sqlite3BtreeCursorZero
-[ ] src/btree.cpp::sqlite3BtreeCloseCursor
+[x] src/btree.cpp::sqlite3BtreeBeginStmt
+[x] src/btree.cpp::sqlite3BtreeSavepoint
+[x] src/btree.cpp::sqlite3BtreeCursorSize
+[x] src/btree.cpp::sqlite3BtreeCursorZero
+[x] src/btree.cpp::sqlite3BtreeCloseCursor
 [ ] src/btree.cpp::getCellInfo
 [ ] src/btree.cpp::sqlite3BtreeCursorIsValid
 [ ] src/btree.cpp::sqlite3BtreeCursorIsValidNN

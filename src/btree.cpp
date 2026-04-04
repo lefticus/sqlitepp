@@ -4474,8 +4474,7 @@ int sqlite3BtreeRollback(Btree *p, int tripCode, int writeOnly){
 ** using the sqlite3BtreeSavepoint() function.
 */
 int sqlite3BtreeBeginStmt(Btree *p, int iStatement){
-  int rc;
-  BtShared *pBt = p->pBt;
+  BtShared *const pBt = p->pBt;
   sqlite3BtreeEnter(p);
   assert( p->inTrans==TRANS_WRITE );
   assert( (pBt->btsFlags & BTS_READ_ONLY)==0 );
@@ -4487,7 +4486,7 @@ int sqlite3BtreeBeginStmt(Btree *p, int iStatement){
   ** SQL statements. It is illegal to open, release or rollback any
   ** such savepoints while the statement transaction savepoint is active.
   */
-  rc = sqlite3PagerOpenSavepoint(pBt->pPager, iStatement);
+  const int rc = sqlite3PagerOpenSavepoint(pBt->pPager, iStatement);
   sqlite3BtreeLeave(p);
   return rc;
 }
@@ -4717,9 +4716,9 @@ void sqlite3BtreeCursorZero(BtCursor *p){
 ** when the last cursor is closed.
 */
 int sqlite3BtreeCloseCursor(BtCursor *pCur){
-  Btree *pBtree = pCur->pBtree;
+  Btree *const pBtree = pCur->pBtree;
   if( pBtree ){
-    BtShared *pBt = pCur->pBt;
+    BtShared *const pBt = pCur->pBt;
     sqlite3BtreeEnter(pBtree);
     assert( pBt->pCursor!=0 );
     if( pBt->pCursor==pCur ){
