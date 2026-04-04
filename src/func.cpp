@@ -25,9 +25,8 @@
 ** Return the collating function associated with a function.
 */
 static CollSeq *sqlite3GetFuncCollSeq(sqlite3_context *context){
-  VdbeOp *pOp;
   assert( context->pVdbe!=0 );
-  pOp = &context->pVdbe->aOp[context->iOp-1];
+  VdbeOp *const pOp = &context->pVdbe->aOp[context->iOp-1];
   assert( pOp->opcode==OP_CollSeq );
   assert( pOp->p4type==P4_COLLSEQ );
   return pOp->p4.pColl;
@@ -441,8 +440,6 @@ static void substrFunc(
 #ifndef SQLITE_OMIT_FLOATING_POINT
 static void roundFunc(sqlite3_context *context, int argc, sqlite3_value **argv){
   i64 n = 0;
-  double r;
-  char *zBuf;
   assert( argc==1 || argc==2 );
   if( argc==2 ){
     if( SQLITE_NULL==sqlite3_value_type(argv[1]) ) return;
@@ -451,17 +448,17 @@ static void roundFunc(sqlite3_context *context, int argc, sqlite3_value **argv){
     if( n<0 ) n = 0;
   }
   if( sqlite3_value_type(argv[0])==SQLITE_NULL ) return;
-  r = sqlite3_value_double(argv[0]);
+  double r = sqlite3_value_double(argv[0]);
   /* If Y==0 and X will fit in a 64-bit int,
   ** handle the rounding directly,
   ** otherwise use printf.
   */
   if( r<-4503599627370496.0 || r>+4503599627370496.0 ){
     /* The value has no fractional part so there is nothing to round */
-  }else if( n==0 ){ 
+  }else if( n==0 ){
     r = (double)((sqlite_int64)(r+(r<0?-0.5:+0.5)));
   }else{
-    zBuf = sqlite3_mprintf("%!.*f",(int)n,r);
+    char *zBuf = sqlite3_mprintf("%!.*f",(int)n,r);
     if( zBuf==0 ){
       sqlite3_result_error_nomem(context);
       return;
@@ -481,11 +478,11 @@ static void roundFunc(sqlite3_context *context, int argc, sqlite3_value **argv){
 ** raise an SQLITE_TOOBIG exception and return NULL.
 */
 static void *contextMalloc(sqlite3_context *context, i64 nByte){
-  char *z;
-  sqlite3 *db = sqlite3_context_db_handle(context);
+  sqlite3 *const db = sqlite3_context_db_handle(context);
   assert( nByte>0 );
   testcase( nByte==db->aLimit[SQLITE_LIMIT_LENGTH] );
   testcase( nByte==(i64)db->aLimit[SQLITE_LIMIT_LENGTH]+1 );
+  char *z;
   if( nByte>db->aLimit[SQLITE_LIMIT_LENGTH] ){
     sqlite3_result_error_toobig(context);
     z = 0;
@@ -502,18 +499,15 @@ static void *contextMalloc(sqlite3_context *context, i64 nByte){
 ** Implementation of the upper() and lower() SQL functions.
 */
 static void upperFunc(sqlite3_context *context, int argc, sqlite3_value **argv){
-  char *z1;
-  const char *z2;
-  int i, n;
   UNUSED_PARAMETER(argc);
-  z2 = reinterpret_cast<const char*>(sqlite3_value_text(argv[0]));
-  n = sqlite3_value_bytes(argv[0]);
+  const char *const z2 = reinterpret_cast<const char*>(sqlite3_value_text(argv[0]));
+  const int n = sqlite3_value_bytes(argv[0]);
   /* Verify that the call to _bytes() does not invalidate the _text() pointer */
   assert( z2==reinterpret_cast<const char*>(sqlite3_value_text(argv[0])) );
   if( z2 ){
-    z1 = static_cast<char*>(contextMalloc(context, ((i64)n)+1));
+    char *z1 = static_cast<char*>(contextMalloc(context, ((i64)n)+1));
     if( z1 ){
-      for(i=0; i<n; i++){
+      for(int i=0; i<n; i++){
         z1[i] = (char)sqlite3Toupper(z2[i]);
       }
       sqlite3_result_text(context, z1, n, sqlite3_free);
@@ -521,18 +515,15 @@ static void upperFunc(sqlite3_context *context, int argc, sqlite3_value **argv){
   }
 }
 static void lowerFunc(sqlite3_context *context, int argc, sqlite3_value **argv){
-  char *z1;
-  const char *z2;
-  int i, n;
   UNUSED_PARAMETER(argc);
-  z2 = reinterpret_cast<const char*>(sqlite3_value_text(argv[0]));
-  n = sqlite3_value_bytes(argv[0]);
+  const char *const z2 = reinterpret_cast<const char*>(sqlite3_value_text(argv[0]));
+  const int n = sqlite3_value_bytes(argv[0]);
   /* Verify that the call to _bytes() does not invalidate the _text() pointer */
   assert( z2==reinterpret_cast<const char*>(sqlite3_value_text(argv[0])) );
   if( z2 ){
-    z1 = static_cast<char*>(contextMalloc(context, ((i64)n)+1));
+    char *z1 = static_cast<char*>(contextMalloc(context, ((i64)n)+1));
     if( z1 ){
-      for(i=0; i<n; i++){
+      for(int i=0; i<n; i++){
         z1[i] = sqlite3Tolower(z2[i]);
       }
       sqlite3_result_text(context, z1, n, sqlite3_free);
@@ -1155,9 +1146,8 @@ void sqlite3QuoteValue(StrAccum *pStr, sqlite3_value *pValue, int bEscape){
 ** one of the first N characters in z[] is not a hexadecimal digit.
 */
 static int isNHex(const char *z, int N, u32 *pVal){
-  int i;
   u32 v = 0;
-  for(i=0; i<N; i++){
+  for(int i=0; i<N; i++){
     if( !sqlite3Isxdigit(z[i]) ) return 0;
     v = (v<<4) + sqlite3HexToInt(z[i]);
   }
@@ -1264,7 +1254,7 @@ unistr_error:
 */
 static void quoteFunc(sqlite3_context *context, int argc, sqlite3_value **argv){
   sqlite3_str str;
-  sqlite3 *db = sqlite3_context_db_handle(context);
+  sqlite3 *const db = sqlite3_context_db_handle(context);
   assert( argc==1 );
   UNUSED_PARAMETER(argc);
   sqlite3StrAccumInit(&str, db, 0, 0, db->aLimit[SQLITE_LIMIT_LENGTH]);
@@ -1369,7 +1359,7 @@ static void hexFunc(
 ** contains character ch, or 0 if it does not.
 */
 static int strContainsChar(const u8 *zStr, int nStr, u32 ch){
-  const u8 *zEnd = &zStr[nStr];
+  const u8 *const zEnd = &zStr[nStr];
   const u8 *z = zStr;
   while( z<zEnd ){
     u32 tst = Utf8Read(z);
@@ -1820,10 +1810,8 @@ static void soundexFunc(
 ** A function that loads a shared-library extension then returns NULL.
 */
 static void loadExt(sqlite3_context *context, int argc, sqlite3_value **argv){
-  const char *zFile = (const char *)sqlite3_value_text(argv[0]);
-  const char *zProc;
-  sqlite3 *db = sqlite3_context_db_handle(context);
-  char *zErrMsg = 0;
+  const char *const zFile = (const char *)sqlite3_value_text(argv[0]);
+  sqlite3 *const db = sqlite3_context_db_handle(context);
 
   /* Disallow the load_extension() SQL function unless the SQLITE_LoadExtFunc
   ** flag is set.  See the sqlite3_enable_load_extension() API.
@@ -1833,11 +1821,13 @@ static void loadExt(sqlite3_context *context, int argc, sqlite3_value **argv){
     return;
   }
 
+  const char *zProc;
   if( argc==2 ){
     zProc = (const char *)sqlite3_value_text(argv[1]);
   }else{
     zProc = 0;
   }
+  char *zErrMsg = 0;
   if( zFile && sqlite3_load_extension(db, zFile, zProc, &zErrMsg) ){
     sqlite3_result_error(context, zErrMsg, -1);
     sqlite3_free(zErrMsg);
@@ -1926,12 +1916,10 @@ static void kahanBabuskaNeumaierInit(
 ** it overflows an integer.
 */
 static void sumStep(sqlite3_context *context, int argc, sqlite3_value **argv){
-  SumCtx *p;
-  int type;
   assert( argc==1 );
   UNUSED_PARAMETER(argc);
-  p = static_cast<SumCtx *>(sqlite3_aggregate_context(context, sizeof(*p)));
-  type = sqlite3_value_numeric_type(argv[0]);
+  SumCtx *const p = static_cast<SumCtx *>(sqlite3_aggregate_context(context, sizeof(*p)));
+  const int type = sqlite3_value_numeric_type(argv[0]);
   if( p && type!=SQLITE_NULL ){
     p->cnt++;
     if( p->approx==0 ){
@@ -1962,12 +1950,10 @@ static void sumStep(sqlite3_context *context, int argc, sqlite3_value **argv){
 }
 #ifndef SQLITE_OMIT_WINDOWFUNC
 static void sumInverse(sqlite3_context *context, int argc, sqlite3_value**argv){
-  SumCtx *p;
-  int type;
   assert( argc==1 );
   UNUSED_PARAMETER(argc);
-  p = static_cast<SumCtx *>(sqlite3_aggregate_context(context, sizeof(*p)));
-  type = sqlite3_value_numeric_type(argv[0]);
+  SumCtx *const p = static_cast<SumCtx *>(sqlite3_aggregate_context(context, sizeof(*p)));
+  const int type = sqlite3_value_numeric_type(argv[0]);
   /* p is always non-NULL because sumStep() will have been called first
   ** to initialize it */
   if( ALWAYS(p) && type!=SQLITE_NULL ){
@@ -1995,8 +1981,7 @@ static void sumInverse(sqlite3_context *context, int argc, sqlite3_value**argv){
 # define sumInverse 0
 #endif /* SQLITE_OMIT_WINDOWFUNC */
 static void sumFinalize(sqlite3_context *context){
-  SumCtx *p;
-  p = static_cast<SumCtx *>(sqlite3_aggregate_context(context, 0));
+  SumCtx *const p = static_cast<SumCtx *>(sqlite3_aggregate_context(context, 0));
   if( p && p->cnt>0 ){
     if( p->approx ){
       if( p->ovrfl ){
@@ -2012,8 +1997,7 @@ static void sumFinalize(sqlite3_context *context){
   }
 }
 static void avgFinalize(sqlite3_context *context){
-  SumCtx *p;
-  p = static_cast<SumCtx *>(sqlite3_aggregate_context(context, 0));
+  SumCtx *const p = static_cast<SumCtx *>(sqlite3_aggregate_context(context, 0));
   if( p && p->cnt>0 ){
     double r;
     if( p->approx ){
@@ -2026,9 +2010,8 @@ static void avgFinalize(sqlite3_context *context){
   }
 }
 static void totalFinalize(sqlite3_context *context){
-  SumCtx *p;
   double r = 0.0;
-  p = static_cast<SumCtx *>(sqlite3_aggregate_context(context, 0));
+  SumCtx *const p = static_cast<SumCtx *>(sqlite3_aggregate_context(context, 0));
   if( p ){
     if( p->approx ){
       r = p->rSum;
@@ -2056,8 +2039,7 @@ struct CountCtx {
 ** Routines to implement the count() aggregate function.
 */
 static void countStep(sqlite3_context *context, int argc, sqlite3_value **argv){
-  CountCtx *p;
-  p = static_cast<CountCtx *>(sqlite3_aggregate_context(context, sizeof(*p)));
+  CountCtx *const p = static_cast<CountCtx *>(sqlite3_aggregate_context(context, sizeof(*p)));
   if( (argc==0 || SQLITE_NULL!=sqlite3_value_type(argv[0])) && p ){
     p->n++;
   }
@@ -2072,14 +2054,12 @@ static void countStep(sqlite3_context *context, int argc, sqlite3_value **argv){
 #endif
 }  
 static void countFinalize(sqlite3_context *context){
-  CountCtx *p;
-  p = static_cast<CountCtx *>(sqlite3_aggregate_context(context, 0));
+  CountCtx *const p = static_cast<CountCtx *>(sqlite3_aggregate_context(context, 0));
   sqlite3_result_int64(context, p ? p->n : 0);
 }
 #ifndef SQLITE_OMIT_WINDOWFUNC
 static void countInverse(sqlite3_context *ctx, int argc, sqlite3_value **argv){
-  CountCtx *p;
-  p = static_cast<CountCtx *>(sqlite3_aggregate_context(ctx, sizeof(*p)));
+  CountCtx *const p = static_cast<CountCtx *>(sqlite3_aggregate_context(ctx, sizeof(*p)));
   /* p is always non-NULL since countStep() will have been called first */
   if( (argc==0 || SQLITE_NULL!=sqlite3_value_type(argv[0])) && ALWAYS(p) ){
     p->n--;
@@ -2134,8 +2114,7 @@ static void minmaxStep(
   }
 }
 static void minMaxValueFinalize(sqlite3_context *context, int bValue){
-  sqlite3_value *pRes;
-  pRes = static_cast<sqlite3_value*>(sqlite3_aggregate_context(context, 0));
+  sqlite3_value *const pRes = static_cast<sqlite3_value*>(sqlite3_aggregate_context(context, 0));
   if( pRes ){
     if( pRes->flags ){
       sqlite3_result_value(context, pRes);
@@ -2337,7 +2316,7 @@ static void groupConcatValue(sqlite3_context *context){
 ** This routine only deals with those that are not global.
 */
 void sqlite3RegisterPerConnectionBuiltinFunctions(sqlite3 *db){
-  int rc = sqlite3_overload_function(db, "MATCH", 2);
+  const int rc = sqlite3_overload_function(db, "MATCH", 2);
   assert( rc==SQLITE_NOMEM || rc==SQLITE_OK );
   if( rc==SQLITE_NOMEM ){
     sqlite3OomFault(db);
@@ -2350,10 +2329,8 @@ void sqlite3RegisterPerConnectionBuiltinFunctions(sqlite3 *db){
 ** sensitive.
 */
 void sqlite3RegisterLikeFunctions(sqlite3 *db, int caseSensitive){
-  FuncDef *pDef;
   struct compareInfo *pInfo;
   int flags;
-  int nArg;
   if( caseSensitive ){
     pInfo = (struct compareInfo*)&likeInfoAlt;
     flags = SQLITE_FUNC_LIKE | SQLITE_FUNC_CASE;
@@ -2361,10 +2338,10 @@ void sqlite3RegisterLikeFunctions(sqlite3 *db, int caseSensitive){
     pInfo = (struct compareInfo*)&likeInfoNorm;
     flags = SQLITE_FUNC_LIKE;
   }
-  for(nArg=2; nArg<=3; nArg++){
-    sqlite3CreateFunc(db, "like", nArg, SQLITE_UTF8, pInfo, likeFunc, 
+  for(int nArg=2; nArg<=3; nArg++){
+    sqlite3CreateFunc(db, "like", nArg, SQLITE_UTF8, pInfo, likeFunc,
                       0, 0, 0, 0, 0);
-    pDef = sqlite3FindFunction(db, "like", nArg, SQLITE_UTF8, 0);
+    FuncDef *pDef = sqlite3FindFunction(db, "like", nArg, SQLITE_UTF8, 0);
     assert( pDef!=0 ); /* The sqlite3CreateFunc() call above cannot fail
                        ** because the "like" SQL-function already exists */
     pDef->funcFlags |= flags;
@@ -2390,17 +2367,15 @@ void sqlite3RegisterLikeFunctions(sqlite3 *db, int caseSensitive){
 ** false.
 */
 int sqlite3IsLikeFunction(sqlite3 *db, Expr *pExpr, int *pIsNocase, char *aWc){
-  FuncDef *pDef;
-  int nExpr;
   assert( pExpr!=0 );
   assert( pExpr->op==TK_FUNCTION );
   assert( ExprUseXList(pExpr) );
   if( !pExpr->x.pList ){
     return 0;
   }
-  nExpr = pExpr->x.pList->nExpr;
+  const int nExpr = pExpr->x.pList->nExpr;
   assert( !ExprHasProperty(pExpr, EP_IntValue) );
-  pDef = sqlite3FindFunction(db, pExpr->u.zToken, nExpr, SQLITE_UTF8, 0);
+  FuncDef *const pDef = sqlite3FindFunction(db, pExpr->u.zToken, nExpr, SQLITE_UTF8, 0);
 #ifdef SQLITE_ENABLE_UNKNOWN_SQL_FUNCTION
   if( pDef==0 ) return 0;
 #endif
@@ -2817,14 +2792,11 @@ static i64 percentBinarySearch(Percentile *p, double y, int bExact){
 ** of the function.
 */
 static void percentError(sqlite3_context *pCtx, const char *zFormat, ...){
-  char *zMsg1;
-  char *zMsg2;
   va_list ap;
-
   va_start(ap, zFormat);
-  zMsg1 = sqlite3_vmprintf(zFormat, ap);
+  char *const zMsg1 = sqlite3_vmprintf(zFormat, ap);
   va_end(ap);
-  zMsg2 = zMsg1 ? sqlite3_mprintf(zMsg1, sqlite3VdbeFuncName(pCtx)) : 0;
+  char *const zMsg2 = zMsg1 ? sqlite3_mprintf(zMsg1, sqlite3VdbeFuncName(pCtx)) : 0;
   sqlite3_result_error(pCtx, zMsg2, -1);
   sqlite3_free(zMsg1);
   sqlite3_free(zMsg2);
@@ -2835,10 +2807,8 @@ static void percentError(sqlite3_context *pCtx, const char *zFormat, ...){
 ** input row.
 */
 static void percentStep(sqlite3_context *pCtx, int argc, sqlite3_value **argv){
-  Percentile *p;
   double rPct;
   int eType;
-  double y;
   assert( argc==2 || argc==1 );
 
   if( argc==1 ){
@@ -2864,7 +2834,7 @@ static void percentStep(sqlite3_context *pCtx, int argc, sqlite3_value **argv){
   }
 
   /* Allocate the session context. */
-  p = static_cast<Percentile*>(sqlite3_aggregate_context(pCtx, sizeof(*p)));
+  Percentile *const p = static_cast<Percentile*>(sqlite3_aggregate_context(pCtx, sizeof(*p)));
   if( p==0 ) return;
 
   /* Remember the P value.  Throw an error if the P value is different
@@ -2890,7 +2860,7 @@ static void percentStep(sqlite3_context *pCtx, int argc, sqlite3_value **argv){
   }
 
   /* Throw an error if the Y value is infinity or NaN */
-  y = sqlite3_value_double(argv[0]);
+  const double y = sqlite3_value_double(argv[0]);
   if( percentIsInfinity(y) ){
     percentError(pCtx, "Inf input to %%s()");
     return;
@@ -2946,11 +2916,9 @@ static void percentStep(sqlite3_context *pCtx, int argc, sqlite3_value **argv){
 **         comparison.
 */
 static void percentSort(double *a, unsigned int n){
-  int iLt;  /* Entries before a[iLt] are less than rPivot */
   int iGt;  /* Entries at or after a[iGt] are greater than rPivot */
   int i;         /* Loop counter */
-  double rPivot; /* The pivot value */
-  
+
   assert( n>=2 );
   if( a[0]>a[n-1] ){
     SWAP_DOUBLE(a[0],a[n-1])
@@ -2964,7 +2932,8 @@ static void percentSort(double *a, unsigned int n){
     SWAP_DOUBLE(a[i],a[iGt])
   }
   if( n==3 ) return;
-  rPivot = a[i];
+  const double rPivot = a[i]; /* The pivot value */
+  int iLt;  /* Entries before a[iLt] are less than rPivot */
   iLt = i = 1;
   do{
     if( a[i]<rPivot ){
@@ -2997,18 +2966,14 @@ static void percentSort(double *a, unsigned int n){
 ** row that was previously inserted by "step".
 */
 static void percentInverse(sqlite3_context *pCtx,int argc,sqlite3_value **argv){
-  Percentile *p;
-  int eType;
-  double y;
-  i64 i;
   assert( argc==2 || argc==1 );
 
   /* Allocate the session context. */
-  p = static_cast<Percentile*>(sqlite3_aggregate_context(pCtx, sizeof(*p)));
+  Percentile *const p = static_cast<Percentile*>(sqlite3_aggregate_context(pCtx, sizeof(*p)));
   assert( p!=0 );
 
   /* Ignore rows for which Y is NULL */
-  eType = sqlite3_value_type(argv[0]);
+  const int eType = sqlite3_value_type(argv[0]);
   if( eType==SQLITE_NULL ) return;
 
   /* If not NULL, then Y must be numeric.  Otherwise throw an error.
@@ -3018,7 +2983,7 @@ static void percentInverse(sqlite3_context *pCtx,int argc,sqlite3_value **argv){
   }
 
   /* Ignore the Y value if it is infinity or NaN */
-  y = sqlite3_value_double(argv[0]);
+  const double y = sqlite3_value_double(argv[0]);
   if( percentIsInfinity(y) ){
     return;
   }
@@ -3030,7 +2995,7 @@ static void percentInverse(sqlite3_context *pCtx,int argc,sqlite3_value **argv){
   p->bKeepSorted = 1;
 
   /* Find and remove the row */
-  i = percentBinarySearch(p, y, 1);
+  const i64 i = percentBinarySearch(p, y, 1);
   if( i>=0 ){
     p->nUsed--;
     if( i<(int)p->nUsed ){
@@ -3044,12 +3009,8 @@ static void percentInverse(sqlite3_context *pCtx,int argc,sqlite3_value **argv){
 ** memory if and only if bIsFinal is true.
 */
 static void percentCompute(sqlite3_context *pCtx, int bIsFinal){
-  Percentile *p;
-  int settings = SQLITE_PTR_TO_INT(sqlite3_user_data(pCtx))&1; /* Discrete? */
-  unsigned i1, i2;
-  double v1, v2;
-  double ix, vx;
-  p = static_cast<Percentile*>(sqlite3_aggregate_context(pCtx, 0));
+  const int settings = SQLITE_PTR_TO_INT(sqlite3_user_data(pCtx))&1; /* Discrete? */
+  Percentile *const p = static_cast<Percentile*>(sqlite3_aggregate_context(pCtx, 0));
   if( p==0 ) return;
   if( p->a==0 ) return;
   if( p->nUsed ){
@@ -3058,14 +3019,15 @@ static void percentCompute(sqlite3_context *pCtx, int bIsFinal){
       percentSort(p->a, p->nUsed);
       p->bSorted = 1;
     }
-    ix = p->rPct*(p->nUsed-1);
-    i1 = (unsigned)ix;
+    const double ix = p->rPct*(p->nUsed-1);
+    const unsigned i1 = (unsigned)ix;
+    double vx;
     if( settings & 1 ){
       vx = p->a[i1];
     }else{
-      i2 = ix==(double)i1 || i1==p->nUsed-1 ? i1 : i1+1;
-      v1 = p->a[i1];
-      v2 = p->a[i2];
+      const unsigned i2 = ix==(double)i1 || i1==p->nUsed-1 ? i1 : i1+1;
+      const double v1 = p->a[i1];
+      const double v2 = p->a[i2];
       vx = v1 + (v2-v1)*(ix-i1);
     }
     sqlite3_result_double(pCtx, vx);

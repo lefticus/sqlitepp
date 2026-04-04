@@ -573,52 +573,52 @@
 [x] src/fkey.cpp::sqlite3FkDropTable
 [x] src/fkey.cpp::isSetNullAction
 [x] src/fkey.cpp::sqlite3FkDelete
-[ ] src/func.cpp::sqlite3GetFuncCollSeq
-[ ] src/func.cpp::sqlite3SkipAccumulatorLoad
-[ ] src/func.cpp::absFunc
-[ ] src/func.cpp::roundFunc
-[ ] src/func.cpp::contextMalloc
-[ ] src/func.cpp::upperFunc
-[ ] src/func.cpp::lowerFunc
-[ ] src/func.cpp::sqlite3_strglob
-[ ] src/func.cpp::sqlite3_strlike
-[ ] src/func.cpp::sqlite3QuoteValue
-[ ] src/func.cpp::isNHex
-[ ] src/func.cpp::quoteFunc
-[ ] src/func.cpp::strContainsChar
-[ ] src/func.cpp::loadExt
-[ ] src/func.cpp::kahanBabuskaNeumaierStepInt64
-[ ] src/func.cpp::sumStep
-[ ] src/func.cpp::sumInverse
-[ ] src/func.cpp::sumFinalize
-[ ] src/func.cpp::avgFinalize
-[ ] src/func.cpp::totalFinalize
-[ ] src/func.cpp::countStep
-[ ] src/func.cpp::countFinalize
-[ ] src/func.cpp::countInverse
-[ ] src/func.cpp::minMaxValueFinalize
-[ ] src/func.cpp::minMaxValue
-[ ] src/func.cpp::minMaxFinalize
-[ ] src/func.cpp::groupConcatFinalize
-[ ] src/func.cpp::groupConcatValue
-[ ] src/func.cpp::sqlite3RegisterPerConnectionBuiltinFunctions
-[ ] src/func.cpp::sqlite3RegisterLikeFunctions
-[ ] src/func.cpp::sqlite3IsLikeFunction
-[ ] src/func.cpp::xCeil
-[ ] src/func.cpp::xFloor
-[ ] src/func.cpp::degToRad
-[ ] src/func.cpp::radToDeg
-[ ] src/func.cpp::percentIsInfinity
-[ ] src/func.cpp::percentSameValue
-[ ] src/func.cpp::percentBinarySearch
-[ ] src/func.cpp::percentError
-[ ] src/func.cpp::percentStep
-[ ] src/func.cpp::percentSort
-[ ] src/func.cpp::percentInverse
-[ ] src/func.cpp::percentCompute
-[ ] src/func.cpp::percentFinal
-[ ] src/func.cpp::percentValue
-[ ] src/func.cpp::sqlite3RegisterBuiltinFunctions
+[x] src/func.cpp::sqlite3GetFuncCollSeq
+[x] src/func.cpp::sqlite3SkipAccumulatorLoad
+[x] src/func.cpp::absFunc
+[x] src/func.cpp::roundFunc
+[x] src/func.cpp::contextMalloc
+[x] src/func.cpp::upperFunc
+[x] src/func.cpp::lowerFunc
+[x] src/func.cpp::sqlite3_strglob
+[x] src/func.cpp::sqlite3_strlike
+[x] src/func.cpp::sqlite3QuoteValue
+[x] src/func.cpp::isNHex
+[x] src/func.cpp::quoteFunc
+[x] src/func.cpp::strContainsChar
+[x] src/func.cpp::loadExt
+[x] src/func.cpp::kahanBabuskaNeumaierStepInt64
+[x] src/func.cpp::sumStep
+[x] src/func.cpp::sumInverse
+[x] src/func.cpp::sumFinalize
+[x] src/func.cpp::avgFinalize
+[x] src/func.cpp::totalFinalize
+[x] src/func.cpp::countStep
+[x] src/func.cpp::countFinalize
+[x] src/func.cpp::countInverse
+[x] src/func.cpp::minMaxValueFinalize
+[x] src/func.cpp::minMaxValue
+[x] src/func.cpp::minMaxFinalize
+[x] src/func.cpp::groupConcatFinalize
+[x] src/func.cpp::groupConcatValue
+[x] src/func.cpp::sqlite3RegisterPerConnectionBuiltinFunctions
+[x] src/func.cpp::sqlite3RegisterLikeFunctions
+[x] src/func.cpp::sqlite3IsLikeFunction
+[x] src/func.cpp::xCeil
+[x] src/func.cpp::xFloor
+[x] src/func.cpp::degToRad
+[x] src/func.cpp::radToDeg
+[x] src/func.cpp::percentIsInfinity
+[x] src/func.cpp::percentSameValue
+[x] src/func.cpp::percentBinarySearch
+[x] src/func.cpp::percentError
+[x] src/func.cpp::percentStep
+[x] src/func.cpp::percentSort
+[x] src/func.cpp::percentInverse
+[x] src/func.cpp::percentCompute
+[x] src/func.cpp::percentFinal
+[x] src/func.cpp::percentValue
+[x] src/func.cpp::sqlite3RegisterBuiltinFunctions
 [ ] src/hash.cpp::sqlite3HashInit
 [ ] src/hash.cpp::sqlite3HashClear
 [ ] src/hash.cpp::strHash
