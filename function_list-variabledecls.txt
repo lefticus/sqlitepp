@@ -2493,6 +2493,7 @@
 [x] src/test_thread.cpp::sqlite3_blocking_step
 [x] src/test_thread.cpp::SqlitetestThread_Init
 [x] src/test_thread.cpp::SqlitetestThread_Init
+<<<<<<< HEAD
 >>>>>>> b97868aad (Move variable declarations down and add const: src/test_thread.cpp)
 [ ] src/test_vdbecov.cpp::Sqlitetestvdbecov_Init
 [ ] src/test_vfs.cpp::tvfsResultCode
@@ -2524,6 +2525,38 @@
 [ ] src/test_vfs.cpp::tvfsUnfetch
 [ ] src/test_vfs.cpp::testvfs_obj_del
 [ ] src/test_vfs.cpp::Sqlitetestvfs_Init
+=======
+[x] src/test_vdbecov.cpp::Sqlitetestvdbecov_Init
+[x] src/test_vfs.cpp::tvfsResultCode
+[x] src/test_vfs.cpp::tvfsInjectFault
+[x] src/test_vfs.cpp::tvfsInjectIoerr
+[x] src/test_vfs.cpp::tvfsInjectFullerr
+[x] src/test_vfs.cpp::tvfsInjectCantopenerr
+[x] src/test_vfs.cpp::tvfsClose
+[x] src/test_vfs.cpp::tvfsTruncate
+[x] src/test_vfs.cpp::tvfsSync
+[x] src/test_vfs.cpp::tvfsFileSize
+[x] src/test_vfs.cpp::tvfsLock
+[x] src/test_vfs.cpp::tvfsUnlock
+[x] src/test_vfs.cpp::tvfsCheckReservedLock
+[x] src/test_vfs.cpp::tvfsFileControl
+[x] src/test_vfs.cpp::tvfsSectorSize
+[x] src/test_vfs.cpp::tvfsDeviceCharacteristics
+[x] src/test_vfs.cpp::tvfsDelete
+[x] src/test_vfs.cpp::tvfsDlOpen
+[x] src/test_vfs.cpp::tvfsDlError
+[x] src/test_vfs.cpp::void
+[x] src/test_vfs.cpp::tvfsDlClose
+[x] src/test_vfs.cpp::tvfsRandomness
+[x] src/test_vfs.cpp::tvfsSleep
+[x] src/test_vfs.cpp::tvfsCurrentTime
+[x] src/test_vfs.cpp::tvfsShmOpen
+[x] src/test_vfs.cpp::tvfsAllocPage
+[x] src/test_vfs.cpp::tvfsShmBarrier
+[x] src/test_vfs.cpp::tvfsUnfetch
+[x] src/test_vfs.cpp::testvfs_obj_del
+[x] src/test_vfs.cpp::Sqlitetestvfs_Init
+>>>>>>> 17dfcc87b (Move variable declarations down and add const: src/test_vfs.cpp)
 [ ] src/test_window.cpp::doTestWindowFinalize
 [ ] src/test_window.cpp::testWindowFinal
 [ ] src/test_window.cpp::testWindowValue
