@@ -113,11 +113,11 @@ static int bytecodevtabDisconnect(sqlite3_vtab *pVtab){
 ** Constructor for a new bytecodevtab_cursor object.
 */
 static int bytecodevtabOpen(sqlite3_vtab *p, sqlite3_vtab_cursor **ppCursor){
-  bytecodevtab *pVTab = (bytecodevtab*)p;
   bytecodevtab_cursor *pCur;
   pCur = static_cast<bytecodevtab_cursor*>(sqlite3_malloc( sizeof(*pCur) ));
   if( pCur==0 ) return SQLITE_NOMEM;
   memset(pCur, 0, sizeof(*pCur));
+  const bytecodevtab *pVTab = (bytecodevtab*)p;
   sqlite3VdbeMemInit(&pCur->sub, pVTab->db, 1);
   *ppCursor = &pCur->base;
   return SQLITE_OK;
@@ -157,8 +157,6 @@ static int bytecodevtabClose(sqlite3_vtab_cursor *cur){
 */
 static int bytecodevtabNext(sqlite3_vtab_cursor *cur){
   bytecodevtab_cursor *pCur = (bytecodevtab_cursor*)cur;
-  bytecodevtab *pTab = (bytecodevtab*)cur->pVtab;
-  int rc;
   if( pCur->zP4 ){
     sqlite3_free(pCur->zP4);
     pCur->zP4 = 0;
@@ -168,8 +166,9 @@ static int bytecodevtabNext(sqlite3_vtab_cursor *cur){
     pCur->zType = 0;
     pCur->zSchema = 0;
   }
-  rc = sqlite3VdbeNextOpcode(
-           (Vdbe*)pCur->pStmt, 
+  const bytecodevtab *pTab = (bytecodevtab*)cur->pVtab;
+  const int rc = sqlite3VdbeNextOpcode(
+           (Vdbe*)pCur->pStmt,
            pCur->showSubprograms ? &pCur->sub : 0,
            pTab->bTablesUsed,
            &pCur->iRowid,
@@ -187,7 +186,7 @@ static int bytecodevtabNext(sqlite3_vtab_cursor *cur){
 ** row of output.
 */
 static int bytecodevtabEof(sqlite3_vtab_cursor *cur){
-  bytecodevtab_cursor *pCur = (bytecodevtab_cursor*)cur;
+  const bytecodevtab_cursor *pCur = (bytecodevtab_cursor*)cur;
   return pCur->aOp==0;
 }
 
@@ -319,7 +318,7 @@ static int bytecodevtabColumn(
 ** rowid is the same as the output value.
 */
 static int bytecodevtabRowid(sqlite3_vtab_cursor *cur, sqlite_int64 *pRowid){
-  bytecodevtab_cursor *pCur = (bytecodevtab_cursor*)cur;
+  const bytecodevtab_cursor *pCur = (bytecodevtab_cursor*)cur;
   *pRowid = pCur->iRowid;
   return SQLITE_OK;
 }
@@ -434,8 +433,7 @@ static sqlite3_module bytecodevtabModule = {
 
 
 int sqlite3VdbeBytecodeVtabInit(sqlite3 *db){
-  int rc;
-  rc = sqlite3_create_module(db, "bytecode", &bytecodevtabModule, 0);
+  int rc = sqlite3_create_module(db, "bytecode", &bytecodevtabModule, 0);
   if( rc==SQLITE_OK ){
     rc = sqlite3_create_module(db, "tables_used", &bytecodevtabModule, &db);
   }

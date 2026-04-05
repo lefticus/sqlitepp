@@ -3242,15 +3242,15 @@
 [x] src/vdbesort.cpp::sqlite3VdbeSorterNext
 [x] src/vdbesort.cpp::sqlite3VdbeSorterRowkey
 [x] src/vdbetrace.cpp::findNextHostParameter
-[ ] src/vdbevtab.cpp::bytecodevtabDisconnect
-[ ] src/vdbevtab.cpp::bytecodevtabOpen
-[ ] src/vdbevtab.cpp::bytecodevtabCursorClear
-[ ] src/vdbevtab.cpp::bytecodevtabClose
-[ ] src/vdbevtab.cpp::bytecodevtabNext
-[ ] src/vdbevtab.cpp::bytecodevtabEof
-[ ] src/vdbevtab.cpp::bytecodevtabRowid
-[ ] src/vdbevtab.cpp::sqlite3VdbeBytecodeVtabInit
-[ ] src/vdbevtab.cpp::sqlite3VdbeBytecodeVtabInit
+[x] src/vdbevtab.cpp::bytecodevtabDisconnect
+[x] src/vdbevtab.cpp::bytecodevtabOpen
+[x] src/vdbevtab.cpp::bytecodevtabCursorClear
+[x] src/vdbevtab.cpp::bytecodevtabClose
+[x] src/vdbevtab.cpp::bytecodevtabNext
+[x] src/vdbevtab.cpp::bytecodevtabEof
+[x] src/vdbevtab.cpp::bytecodevtabRowid
+[x] src/vdbevtab.cpp::sqlite3VdbeBytecodeVtabInit
+[x] src/vdbevtab.cpp::sqlite3VdbeBytecodeVtabInit
 [ ] src/vtab.cpp::sqlite3_drop_modules
 [ ] src/vtab.cpp::sqlite3VtabModuleUnref
 [ ] src/vtab.cpp::sqlite3VtabLock
