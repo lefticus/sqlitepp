@@ -968,25 +968,25 @@
 [x] src/mutex.cpp::sqlite3_mutex_leave
 [x] src/mutex.cpp::sqlite3_mutex_held
 [x] src/mutex.cpp::sqlite3_mutex_notheld
-[ ] src/mutex_noop.cpp::noopMutexInit
-[ ] src/mutex_noop.cpp::noopMutexEnd
-[ ] src/mutex_noop.cpp::noopMutexAlloc
-[ ] src/mutex_noop.cpp::noopMutexFree
-[ ] src/mutex_noop.cpp::noopMutexEnter
-[ ] src/mutex_noop.cpp::noopMutexTry
-[ ] src/mutex_noop.cpp::noopMutexLeave
-[ ] src/mutex_noop.cpp::sqlite3NoopMutex
-[ ] src/mutex_noop.cpp::debugMutexHeld
-[ ] src/mutex_noop.cpp::debugMutexNotheld
-[ ] src/mutex_noop.cpp::debugMutexInit
-[ ] src/mutex_noop.cpp::debugMutexEnd
-[ ] src/mutex_noop.cpp::debugMutexAlloc
-[ ] src/mutex_noop.cpp::debugMutexFree
-[ ] src/mutex_noop.cpp::debugMutexEnter
-[ ] src/mutex_noop.cpp::debugMutexTry
-[ ] src/mutex_noop.cpp::debugMutexLeave
-[ ] src/mutex_noop.cpp::sqlite3NoopMutex
-[ ] src/mutex_noop.cpp::sqlite3DefaultMutex
+[x] src/mutex_noop.cpp::noopMutexInit
+[x] src/mutex_noop.cpp::noopMutexEnd
+[x] src/mutex_noop.cpp::noopMutexAlloc
+[x] src/mutex_noop.cpp::noopMutexFree
+[x] src/mutex_noop.cpp::noopMutexEnter
+[x] src/mutex_noop.cpp::noopMutexTry
+[x] src/mutex_noop.cpp::noopMutexLeave
+[x] src/mutex_noop.cpp::sqlite3NoopMutex
+[x] src/mutex_noop.cpp::debugMutexHeld
+[x] src/mutex_noop.cpp::debugMutexNotheld
+[x] src/mutex_noop.cpp::debugMutexInit
+[x] src/mutex_noop.cpp::debugMutexEnd
+[x] src/mutex_noop.cpp::debugMutexAlloc
+[x] src/mutex_noop.cpp::debugMutexFree
+[x] src/mutex_noop.cpp::debugMutexEnter
+[x] src/mutex_noop.cpp::debugMutexTry
+[x] src/mutex_noop.cpp::debugMutexLeave
+[x] src/mutex_noop.cpp::sqlite3NoopMutex
+[x] src/mutex_noop.cpp::sqlite3DefaultMutex
 [ ] src/mutex_unix.cpp::pthreadMutexHeld
 [ ] src/mutex_unix.cpp::pthreadMutexNotheld
 [ ] src/mutex_unix.cpp::sqlite3MemoryBarrier

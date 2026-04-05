@@ -87,11 +87,11 @@ typedef struct sqlite3_debug_mutex {
 ** intended for use inside assert() statements.
 */
 static int debugMutexHeld(sqlite3_mutex *pX){
-  sqlite3_debug_mutex *p = (sqlite3_debug_mutex*)pX;
+  const sqlite3_debug_mutex *p = (sqlite3_debug_mutex*)pX;
   return p==0 || p->cnt>0;
 }
 static int debugMutexNotheld(sqlite3_mutex *pX){
-  sqlite3_debug_mutex *p = (sqlite3_debug_mutex*)pX;
+  const sqlite3_debug_mutex *p = (sqlite3_debug_mutex*)pX;
   return p==0 || p->cnt==0;
 }
 
@@ -138,7 +138,7 @@ static sqlite3_mutex *debugMutexAlloc(int id){
 ** This routine deallocates a previously allocated mutex.
 */
 static void debugMutexFree(sqlite3_mutex *pX){
-  sqlite3_debug_mutex *p = (sqlite3_debug_mutex*)pX;
+  const auto p = (sqlite3_debug_mutex*)pX;
   assert( p->cnt==0 );
   if( p->id==SQLITE_MUTEX_RECURSIVE || p->id==SQLITE_MUTEX_FAST ){
     sqlite3_free(p);
@@ -161,12 +161,12 @@ static void debugMutexFree(sqlite3_mutex *pX){
 ** more than once, the behavior is undefined.
 */
 static void debugMutexEnter(sqlite3_mutex *pX){
-  sqlite3_debug_mutex *p = (sqlite3_debug_mutex*)pX;
+  const auto p = (sqlite3_debug_mutex*)pX;
   assert( p->id==SQLITE_MUTEX_RECURSIVE || debugMutexNotheld(pX) );
   p->cnt++;
 }
 static int debugMutexTry(sqlite3_mutex *pX){
-  sqlite3_debug_mutex *p = (sqlite3_debug_mutex*)pX;
+  const auto p = (sqlite3_debug_mutex*)pX;
   assert( p->id==SQLITE_MUTEX_RECURSIVE || debugMutexNotheld(pX) );
   p->cnt++;
   return SQLITE_OK;
@@ -179,7 +179,7 @@ static int debugMutexTry(sqlite3_mutex *pX){
 ** is not currently allocated.  SQLite will never do either.
 */
 static void debugMutexLeave(sqlite3_mutex *pX){
-  sqlite3_debug_mutex *p = (sqlite3_debug_mutex*)pX;
+  const auto p = (sqlite3_debug_mutex*)pX;
   assert( debugMutexHeld(pX) );
   p->cnt--;
   assert( p->id==SQLITE_MUTEX_RECURSIVE || debugMutexNotheld(pX) );
