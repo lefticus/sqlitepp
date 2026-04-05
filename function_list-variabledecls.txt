@@ -892,22 +892,22 @@
 [x] src/mem3.cpp::memsys3Shutdown
 [x] src/mem3.cpp::sqlite3Memsys3Dump
 [x] src/mem3.cpp::sqlite3MemGetMemsys3
-[ ] src/mem5.cpp::memsys5Unlink
-[ ] src/mem5.cpp::memsys5Link
-[ ] src/mem5.cpp::memsys5Enter
-[ ] src/mem5.cpp::memsys5Leave
-[ ] src/mem5.cpp::memsys5Size
-[ ] src/mem5.cpp::memsys5MallocUnsafe
-[ ] src/mem5.cpp::memsys5FreeUnsafe
-[ ] src/mem5.cpp::memsys5Malloc
-[ ] src/mem5.cpp::memsys5Free
-[ ] src/mem5.cpp::memsys5Realloc
-[ ] src/mem5.cpp::memsys5Roundup
-[ ] src/mem5.cpp::memsys5Log
-[ ] src/mem5.cpp::memsys5Init
-[ ] src/mem5.cpp::memsys5Shutdown
-[ ] src/mem5.cpp::sqlite3Memsys5Dump
-[ ] src/mem5.cpp::sqlite3MemGetMemsys5
+[x] src/mem5.cpp::memsys5Unlink
+[x] src/mem5.cpp::memsys5Link
+[x] src/mem5.cpp::memsys5Enter
+[x] src/mem5.cpp::memsys5Leave
+[x] src/mem5.cpp::memsys5Size
+[x] src/mem5.cpp::memsys5MallocUnsafe
+[x] src/mem5.cpp::memsys5FreeUnsafe
+[x] src/mem5.cpp::memsys5Malloc
+[x] src/mem5.cpp::memsys5Free
+[x] src/mem5.cpp::memsys5Realloc
+[x] src/mem5.cpp::memsys5Roundup
+[x] src/mem5.cpp::memsys5Log
+[x] src/mem5.cpp::memsys5Init
+[x] src/mem5.cpp::memsys5Shutdown
+[x] src/mem5.cpp::sqlite3Memsys5Dump
+[x] src/mem5.cpp::sqlite3MemGetMemsys5
 [ ] src/memdb.cpp::memdbEnter
 [ ] src/memdb.cpp::memdbLeave
 [ ] src/memdb.cpp::memdbEnter
