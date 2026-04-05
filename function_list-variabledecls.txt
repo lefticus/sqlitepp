@@ -3423,24 +3423,24 @@
 [x] src/wherecode.cpp::codeCursorHintFixExpr
 [x] src/wherecode.cpp::codeExprOrVector
 [x] src/wherecode.cpp::whereLoopIsOneRow
-[ ] src/whereexpr.cpp::whereOrInfoDelete
-[ ] src/whereexpr.cpp::whereAndInfoDelete
-[ ] src/whereexpr.cpp::whereClauseInsert
-[ ] src/whereexpr.cpp::allowedOp
-[ ] src/whereexpr.cpp::exprCommute
-[ ] src/whereexpr.cpp::operatorMask
-[ ] src/whereexpr.cpp::sqlite3ExprIsLikeOperator
-[ ] src/whereexpr.cpp::transferJoinMarkings
-[ ] src/whereexpr.cpp::markTermAsChild
-[ ] src/whereexpr.cpp::whereNthSubterm
-[ ] src/whereexpr.cpp::termIsEquivalence
-[ ] src/whereexpr.cpp::exprSelectUsage
-[ ] src/whereexpr.cpp::sqlite3WhereSplit
-[ ] src/whereexpr.cpp::sqlite3WhereAddLimit
-[ ] src/whereexpr.cpp::sqlite3WhereClauseClear
-[ ] src/whereexpr.cpp::sqlite3WhereExprUsageNN
-[ ] src/whereexpr.cpp::sqlite3WhereExprUsage
-[ ] src/whereexpr.cpp::sqlite3WhereExprListUsage
+[x] src/whereexpr.cpp::whereOrInfoDelete
+[x] src/whereexpr.cpp::whereAndInfoDelete
+[x] src/whereexpr.cpp::whereClauseInsert
+[x] src/whereexpr.cpp::allowedOp
+[x] src/whereexpr.cpp::exprCommute
+[x] src/whereexpr.cpp::operatorMask
+[x] src/whereexpr.cpp::sqlite3ExprIsLikeOperator
+[x] src/whereexpr.cpp::transferJoinMarkings
+[x] src/whereexpr.cpp::markTermAsChild
+[x] src/whereexpr.cpp::whereNthSubterm
+[x] src/whereexpr.cpp::termIsEquivalence
+[x] src/whereexpr.cpp::exprSelectUsage
+[x] src/whereexpr.cpp::sqlite3WhereSplit
+[x] src/whereexpr.cpp::sqlite3WhereAddLimit
+[x] src/whereexpr.cpp::sqlite3WhereClauseClear
+[x] src/whereexpr.cpp::sqlite3WhereExprUsageNN
+[x] src/whereexpr.cpp::sqlite3WhereExprUsage
+[x] src/whereexpr.cpp::sqlite3WhereExprListUsage
 [ ] src/window.cpp::row_numberValueFunc
 [ ] src/window.cpp::dense_rankValueFunc
 [ ] src/window.cpp::nth_valueFinalizeFunc

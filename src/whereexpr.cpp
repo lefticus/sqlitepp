@@ -58,8 +58,6 @@ static void whereAndInfoDelete(sqlite3 *db, WhereAndInfo *p){
 ** the pWC->a[] array.
 */
 static int whereClauseInsert(WhereClause *pWC, Expr *p, u16 wtFlags){
-  WhereTerm *pTerm;
-  int idx;
   testcase( wtFlags & TERM_VIRTUAL );
   if( pWC->nTerm>=pWC->nSlot ){
     WhereTerm *pOld = pWC->a;
@@ -75,7 +73,8 @@ static int whereClauseInsert(WhereClause *pWC, Expr *p, u16 wtFlags){
     memcpy(pWC->a, pOld, sizeof(pWC->a[0])*pWC->nTerm);
     pWC->nSlot = pWC->nSlot*2;
   }
-  pTerm = &pWC->a[idx = pWC->nTerm++];
+  const int idx = pWC->nTerm++;
+  WhereTerm *const pTerm = &pWC->a[idx];
   if( (wtFlags & TERM_VIRTUAL)==0 ) pWC->nBase = pWC->nTerm;
   if( p && ExprHasProperty(p, EP_Unlikely) ){
     pTerm->truthProb = sqlite3LogEst(p->iTable) - 270;
@@ -360,10 +359,9 @@ int sqlite3ExprIsLikeOperator(const Expr *pExpr){
     { "like",   SQLITE_INDEX_CONSTRAINT_LIKE },
     { "regexp", SQLITE_INDEX_CONSTRAINT_REGEXP }
   };
-  int i;
   assert( pExpr->op==TK_FUNCTION );
   assert( !ExprHasProperty(pExpr, EP_IntValue) );
-  for(i=0; i<ArraySize(aOp); i++){
+  for(int i=0; i<ArraySize(aOp); i++){
     if( sqlite3StrICmp(pExpr->u.zToken, aOp[i].zOp)==0 ){
       return aOp[i].eOp;
     }
@@ -962,8 +960,6 @@ static void exprAnalyzeOrTerm(
 ** returned when it should not be, then incorrect answers might result.
 */
 static int termIsEquivalence(Parse *pParse, Expr *pExpr, SrcList *pSrc){
-  char aff1, aff2;
-  CollSeq *pColl;
   if( !OptimizationEnabled(pParse->db, SQLITE_Transitive) ) return 0;  /* (1) */
   if( pExpr->op!=TK_EQ && pExpr->op!=TK_IS ) return 0;                 /* (2) */
   if( ExprHasProperty(pExpr, EP_OuterON) ) return 0;                   /* (3) */
@@ -974,14 +970,14 @@ static int termIsEquivalence(Parse *pParse, Expr *pExpr, SrcList *pSrc){
   ){
     return 0;                                                          /* (4) */
   }
-  aff1 = sqlite3ExprAffinity(pExpr->pLeft);
-  aff2 = sqlite3ExprAffinity(pExpr->pRight);
+  const char aff1 = sqlite3ExprAffinity(pExpr->pLeft);
+  const char aff2 = sqlite3ExprAffinity(pExpr->pRight);
   if( aff1!=aff2
    && (!sqlite3IsNumericAffinity(aff1) || !sqlite3IsNumericAffinity(aff2))
   ){
     return 0;                                                          /* (5) */
   }
-  pColl = sqlite3ExprCompareCollSeq(pParse, pExpr);
+  const CollSeq *pColl = sqlite3ExprCompareCollSeq(pParse, pExpr);
   if( !sqlite3IsBinary(pColl)
    && !sqlite3ExprCollSeqMatch(pParse, pExpr->pLeft, pExpr->pRight)
   ){
@@ -998,15 +994,14 @@ static int termIsEquivalence(Parse *pParse, Expr *pExpr, SrcList *pSrc){
 static Bitmask exprSelectUsage(WhereMaskSet *pMaskSet, Select *pS){
   Bitmask mask = 0;
   while( pS ){
-    SrcList *pSrc = pS->pSrc;
+    SrcList *const pSrc = pS->pSrc;
     mask |= sqlite3WhereExprListUsage(pMaskSet, pS->pEList);
     mask |= sqlite3WhereExprListUsage(pMaskSet, pS->pGroupBy);
     mask |= sqlite3WhereExprListUsage(pMaskSet, pS->pOrderBy);
     mask |= sqlite3WhereExprUsage(pMaskSet, pS->pWhere);
     mask |= sqlite3WhereExprUsage(pMaskSet, pS->pHaving);
     if( ALWAYS(pSrc!=0) ){
-      int i;
-      for(i=0; i<pSrc->nSrc; i++){
+      for(int i=0; i<pSrc->nSrc; i++){
         if( pSrc->a[i].fg.isSubquery ){
           mask |= exprSelectUsage(pMaskSet, pSrc->a[i].u4.pSubq->pSelect);
         }
@@ -1861,10 +1856,9 @@ Bitmask sqlite3WhereExprUsage(WhereMaskSet *pMaskSet, Expr *p){
   return p ? sqlite3WhereExprUsageNN(pMaskSet,p) : 0;
 }
 Bitmask sqlite3WhereExprListUsage(WhereMaskSet *pMaskSet, ExprList *pList){
-  int i;
   Bitmask mask = 0;
   if( pList ){
-    for(i=0; i<pList->nExpr; i++){
+    for(int i=0; i<pList->nExpr; i++){
       mask |= sqlite3WhereExprUsage(pMaskSet, pList->a[i].pExpr);
     }
   }
