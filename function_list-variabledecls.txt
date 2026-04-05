@@ -1635,7 +1635,7 @@
 [x] src/status.cpp::sqlite3_status
 [x] src/status.cpp::countLookasideSlots
 [x] src/status.cpp::sqlite3LookasideUsed
-[ ] src/table.cpp::sqlite3_get_table_cb
+[x] src/table.cpp::sqlite3_get_table_cb
 [ ] src/tclsqlite.cpp::strlen30
 [ ] src/tclsqlite.cpp::closeIncrblobChannels
 [ ] src/tclsqlite.cpp::safeToUseEvalObjv

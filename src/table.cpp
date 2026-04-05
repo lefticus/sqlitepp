@@ -41,18 +41,11 @@ typedef struct TabResult {
 */
 static int sqlite3_get_table_cb(void *pArg, int nCol, char **argv, char **colv){
   TabResult *p = (TabResult*)pArg;  /* Result accumulator */
-  int need;                         /* Slots needed in p->azResult[] */
-  int i;                            /* Loop counter */
-  char *z;                          /* A single column of result */
 
   /* Make sure there is enough space in p->azResult to hold everything
   ** we need to remember from this invocation of the callback.
   */
-  if( p->nRow==0 && argv!=0 ){
-    need = nCol*2;
-  }else{
-    need = nCol;
-  }
+  const int need = ( p->nRow==0 && argv!=0 ) ? nCol*2 : nCol;
   if( p->nData + need > p->nAlloc ){
     char **azNew;
     p->nAlloc = p->nAlloc*2 + need;
@@ -66,8 +59,8 @@ static int sqlite3_get_table_cb(void *pArg, int nCol, char **argv, char **colv){
   */
   if( p->nRow==0 ){
     p->nColumn = nCol;
-    for(i=0; i<nCol; i++){
-      z = sqlite3_mprintf("%s", colv[i]);
+    for(int i=0; i<nCol; i++){
+      char *z = sqlite3_mprintf("%s", colv[i]);
       if( z==0 ) goto malloc_failed;
       p->azResult[p->nData++] = z;
     }
@@ -83,11 +76,12 @@ static int sqlite3_get_table_cb(void *pArg, int nCol, char **argv, char **colv){
   /* Copy over the row data
   */
   if( argv!=0 ){
-    for(i=0; i<nCol; i++){
+    for(int i=0; i<nCol; i++){
+      char *z;
       if( argv[i]==0 ){
         z = 0;
       }else{
-        int n = sqlite3Strlen30(argv[i])+1;
+        const int n = sqlite3Strlen30(argv[i])+1;
         z = static_cast<char *>(sqlite3_malloc64( n ));
         if( z==0 ) goto malloc_failed;
         memcpy(z, argv[i], n);
