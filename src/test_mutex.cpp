@@ -63,10 +63,9 @@ static int counterMutexNotheld(sqlite3_mutex *p){
 ** return the value of g.disableInit as the result code.  This can be used
 ** to simulate an initialization failure.
 */
-static int counterMutexInit(void){ 
-  int rc;
+static int counterMutexInit(void){
   if( g.disableInit ) return g.disableInit;
-  rc = g.m.xMutexInit();
+  const int rc = g.m.xMutexInit();
   g.isInit = 1;
   return rc;
 }
@@ -83,14 +82,13 @@ static int counterMutexEnd(void){
 ** Allocate a countable mutex
 */
 static sqlite3_mutex *counterMutexAlloc(int eType){
-  sqlite3_mutex *pReal;
   sqlite3_mutex *pRet = 0;
 
   assert( g.isInit );
   assert( eType>=SQLITE_MUTEX_FAST );
   assert( eType<=SQLITE_MUTEX_STATIC_VFS3 );
 
-  pReal = g.m.xMutexAlloc(eType);
+  sqlite3_mutex *const pReal = g.m.xMutexAlloc(eType);
   if( !pReal ) return 0;
 
   if( eType==SQLITE_MUTEX_FAST || eType==SQLITE_MUTEX_RECURSIVE ){
@@ -374,7 +372,7 @@ static int SQLITE_TCLAPI test_config(
 static sqlite3 *getDbPointer(Tcl_Interp *pInterp, Tcl_Obj *pObj){
   sqlite3 *db;
   Tcl_CmdInfo info;
-  char *zCmd = Tcl_GetString(pObj);
+  const char *zCmd = Tcl_GetString(pObj);
   if( Tcl_GetCommandInfo(pInterp, zCmd, &info) ){
     db = *((sqlite3 **)info.objClientData);
   }else{
@@ -492,8 +490,7 @@ int Sqlitetest_mutex_Init(Tcl_Interp *interp){
     { "read_mutex_counters",     (Tcl_ObjCmdProc*)test_read_mutex_counters },
     { "clear_mutex_counters",    (Tcl_ObjCmdProc*)test_clear_mutex_counters },
   };
-  int i;
-  for(i=0; i<(int)(sizeof(aCmd)/sizeof(aCmd[0])); i++){
+  for(int i=0; i<(int)(sizeof(aCmd)/sizeof(aCmd[0])); i++){
     Tcl_CreateObjCommand(interp, aCmd[i].zName, aCmd[i].xProc, 0, 0);
   }
 

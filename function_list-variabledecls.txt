@@ -1981,6 +1981,7 @@
 [x] src/test_md5.cpp::Md5_Init
 [x] src/test_md5.cpp::md5step
 [x] src/test_md5.cpp::md5finalize
+<<<<<<< HEAD
 [ ] src/test_multiplex.cpp::multiplexStrlen30
 [ ] src/test_multiplex.cpp::multiplexSubFilename
 [ ] src/test_multiplex.cpp::multiplexFreeComponents
@@ -2021,6 +2022,48 @@
 [ ] src/test_mutex.cpp::counterMutexLeave
 [ ] src/test_mutex.cpp::getDbPointer
 [ ] src/test_mutex.cpp::Sqlitetest_mutex_Init
+=======
+[x] src/test_multiplex.cpp::multiplexStrlen30
+[x] src/test_multiplex.cpp::multiplexSubFilename
+[x] src/test_multiplex.cpp::multiplexFreeComponents
+[x] src/test_multiplex.cpp::multiplexAccess
+[x] src/test_multiplex.cpp::multiplexFullPathname
+[x] src/test_multiplex.cpp::multiplexDlOpen
+[x] src/test_multiplex.cpp::multiplexDlError
+[x] src/test_multiplex.cpp::void
+[x] src/test_multiplex.cpp::multiplexDlClose
+[x] src/test_multiplex.cpp::multiplexRandomness
+[x] src/test_multiplex.cpp::multiplexSleep
+[x] src/test_multiplex.cpp::multiplexCurrentTime
+[x] src/test_multiplex.cpp::multiplexGetLastError
+[x] src/test_multiplex.cpp::multiplexCurrentTimeInt64
+[x] src/test_multiplex.cpp::multiplexClose
+[x] src/test_multiplex.cpp::multiplexTruncate
+[x] src/test_multiplex.cpp::multiplexSync
+[x] src/test_multiplex.cpp::multiplexFileSize
+[x] src/test_multiplex.cpp::multiplexLock
+[x] src/test_multiplex.cpp::multiplexUnlock
+[x] src/test_multiplex.cpp::multiplexCheckReservedLock
+[x] src/test_multiplex.cpp::multiplexFileControl
+[x] src/test_multiplex.cpp::multiplexSectorSize
+[x] src/test_multiplex.cpp::multiplexDeviceCharacteristics
+[x] src/test_multiplex.cpp::multiplexShmBarrier
+[x] src/test_multiplex.cpp::multiplexShmUnmap
+[x] src/test_multiplex.cpp::sqlite3_multiplex_initialize
+[x] src/test_multiplex.cpp::sqlite3_multiplex_shutdown
+[x] src/test_multiplex.cpp::Sqlitemultiplex_Init
+[x] src/test_mutex.cpp::counterMutexHeld
+[x] src/test_mutex.cpp::counterMutexNotheld
+[x] src/test_mutex.cpp::counterMutexInit
+[x] src/test_mutex.cpp::counterMutexEnd
+[x] src/test_mutex.cpp::counterMutexAlloc
+[x] src/test_mutex.cpp::counterMutexFree
+[x] src/test_mutex.cpp::counterMutexEnter
+[x] src/test_mutex.cpp::counterMutexTry
+[x] src/test_mutex.cpp::counterMutexLeave
+[x] src/test_mutex.cpp::getDbPointer
+[x] src/test_mutex.cpp::Sqlitetest_mutex_Init
+>>>>>>> 74a5e1124 (Move variable declarations down and add const: src/test_mutex.cpp)
 [ ] src/test_onefile.cpp::tmpClose
 [ ] src/test_onefile.cpp::tmpTruncate
 [ ] src/test_onefile.cpp::tmpSync
