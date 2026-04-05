@@ -86,10 +86,10 @@ int sqlite3ThreadCreate(
 
 /* Get the results of the thread */
 int sqlite3ThreadJoin(SQLiteThread *p, void **ppOut){
-  int rc;
 
   assert( ppOut!=0 );
   if( NEVER(p==0) ) return SQLITE_NOMEM_BKPT;
+  int rc;
   if( p->done ){
     *ppOut = p->pOut;
     rc = SQLITE_OK;
@@ -182,11 +182,10 @@ DWORD sqlite3Win32Wait(HANDLE hObject); /* os_win.cpp */
 
 /* Get the results of the thread */
 int sqlite3ThreadJoin(SQLiteThread *p, void **ppOut){
-  DWORD rc;
-  BOOL bRc;
 
   assert( ppOut!=0 );
   if( NEVER(p==0) ) return SQLITE_NOMEM_BKPT;
+  DWORD rc;
   if( p->xTask==0 ){
     /* assert( p->id==GetCurrentThreadId() ); */
     rc = WAIT_OBJECT_0;
@@ -195,7 +194,7 @@ int sqlite3ThreadJoin(SQLiteThread *p, void **ppOut){
     assert( p->id!=0 && p->id!=GetCurrentThreadId() );
     rc = sqlite3Win32Wait((HANDLE)p->tid);
     assert( rc!=WAIT_IO_COMPLETION );
-    bRc = CloseHandle((HANDLE)p->tid);
+    const BOOL bRc = CloseHandle((HANDLE)p->tid);
     (void)bRc;  /* Prevent warning when assert() is a no-op */
     assert( bRc );
   }

@@ -2580,10 +2580,16 @@
 =======
 [x] src/test_wsd.cpp::sqlite3_wsd_init
 [x] src/test_wsd.cpp::sqlite3_wsd_find
+<<<<<<< HEAD
 >>>>>>> 13fee0617 (Move variable declarations down and add const: src/test_wsd.cpp)
 [ ] src/threads.cpp::sqlite3ThreadJoin
 [ ] src/threads.cpp::sqlite3ThreadJoin
 [ ] src/threads.cpp::sqlite3ThreadJoin
+=======
+[x] src/threads.cpp::sqlite3ThreadJoin
+[x] src/threads.cpp::sqlite3ThreadJoin
+[x] src/threads.cpp::sqlite3ThreadJoin
+>>>>>>> 1acfad96e (Move variable declarations down and add const: src/threads.cpp)
 [ ] src/tokenize.cpp::sqlite3IsIdChar
 [ ] src/tokenize.cpp::getToken
 [ ] src/tokenize.cpp::analyzeWindowKeyword
