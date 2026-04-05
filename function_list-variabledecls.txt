@@ -1544,10 +1544,10 @@
 [x] src/printf.cpp::sqlite3RCStrUnref
 [x] src/printf.cpp::sqlite3RCStrNew
 [x] src/printf.cpp::sqlite3RCStrResize
-[ ] src/random.cpp::chacha_block
-[ ] src/random.cpp::sqlite3_randomness
-[ ] src/random.cpp::sqlite3PrngSaveState
-[ ] src/random.cpp::sqlite3PrngRestoreState
+[x] src/random.cpp::chacha_block
+[x] src/random.cpp::sqlite3_randomness
+[x] src/random.cpp::sqlite3PrngSaveState
+[x] src/random.cpp::sqlite3PrngRestoreState
 [ ] src/resolve.cpp::incrAggDepth
 [ ] src/resolve.cpp::incrAggFunctionDepth
 [ ] src/resolve.cpp::areDoubleQuotedStringsEnabled
