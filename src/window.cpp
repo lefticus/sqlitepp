@@ -187,8 +187,7 @@ static void dense_rankStepFunc(
   UNUSED_PARAMETER(apArg);
 }
 static void dense_rankValueFunc(sqlite3_context *pCtx){
-  struct CallCount *p;
-  p = static_cast<struct CallCount*>(sqlite3_aggregate_context(pCtx, sizeof(*p)));
+  struct CallCount *p = static_cast<struct CallCount*>(sqlite3_aggregate_context(pCtx, sizeof(*p)));
   if( p ){
     if( p->nStep ){
       p->nValue++;
@@ -249,8 +248,7 @@ static void nth_valueStepFunc(
   );
 }
 static void nth_valueFinalizeFunc(sqlite3_context *pCtx){
-  struct NthValueCtx *p;
-  p = static_cast<struct NthValueCtx*>(sqlite3_aggregate_context(pCtx, 0));
+  auto *p = static_cast<struct NthValueCtx*>(sqlite3_aggregate_context(pCtx, 0));
   if( p && p->pValue ){
     sqlite3_result_value(pCtx, p->pValue);
     sqlite3_value_free(p->pValue);
@@ -277,8 +275,7 @@ static void first_valueStepFunc(
   UNUSED_PARAMETER(apArg);
 }
 static void first_valueFinalizeFunc(sqlite3_context *pCtx){
-  struct NthValueCtx *p;
-  p = static_cast<struct NthValueCtx*>(sqlite3_aggregate_context(pCtx, sizeof(*p)));
+  struct NthValueCtx *p = static_cast<struct NthValueCtx*>(sqlite3_aggregate_context(pCtx, sizeof(*p)));
   if( p && p->pValue ){
     sqlite3_result_value(pCtx, p->pValue);
     sqlite3_value_free(p->pValue);
@@ -311,8 +308,7 @@ static void rankStepFunc(
   UNUSED_PARAMETER(apArg);
 }
 static void rankValueFunc(sqlite3_context *pCtx){
-  struct CallCount *p;
-  p = static_cast<struct CallCount*>(sqlite3_aggregate_context(pCtx, sizeof(*p)));
+  struct CallCount *p = static_cast<struct CallCount*>(sqlite3_aggregate_context(pCtx, sizeof(*p)));
   if( p ){
     sqlite3_result_int64(pCtx, p->nValue);
     p->nValue = 0;
@@ -350,8 +346,7 @@ static void percent_rankInvFunc(
   p->nStep++;
 }
 static void percent_rankValueFunc(sqlite3_context *pCtx){
-  struct CallCount *p;
-  p = static_cast<struct CallCount*>(sqlite3_aggregate_context(pCtx, sizeof(*p)));
+  struct CallCount *p = static_cast<struct CallCount*>(sqlite3_aggregate_context(pCtx, sizeof(*p)));
   if( p ){
     p->nValue = p->nStep;
     if( p->nTotal>1 ){
@@ -395,8 +390,7 @@ static void cume_distInvFunc(
   p->nStep++;
 }
 static void cume_distValueFunc(sqlite3_context *pCtx){
-  struct CallCount *p;
-  p = static_cast<struct CallCount*>(sqlite3_aggregate_context(pCtx, 0));
+  auto *p = static_cast<struct CallCount*>(sqlite3_aggregate_context(pCtx, 0));
   if( p ){
     double r = (double)(p->nStep) / (double)(p->nTotal);
     sqlite3_result_double(pCtx, r);
@@ -451,16 +445,15 @@ static void ntileInvFunc(
   p->iRow++;
 }
 static void ntileValueFunc(sqlite3_context *pCtx){
-  struct NtileCtx *p;
-  p = static_cast<struct NtileCtx*>(sqlite3_aggregate_context(pCtx, sizeof(*p)));
+  struct NtileCtx *p = static_cast<struct NtileCtx*>(sqlite3_aggregate_context(pCtx, sizeof(*p)));
   if( p && p->nParam>0 ){
-    int nSize = (p->nTotal / p->nParam);
+    const int nSize = (p->nTotal / p->nParam);
     if( nSize==0 ){
       sqlite3_result_int64(pCtx, p->iRow+1);
     }else{
-      i64 nLarge = p->nTotal - p->nParam*nSize;
-      i64 iSmall = nLarge*(nSize+1);
-      i64 iRow = p->iRow;
+      const i64 nLarge = p->nTotal - p->nParam*nSize;
+      const i64 iSmall = nLarge*(nSize+1);
+      const i64 iRow = p->iRow;
 
       assert( (nLarge*(nSize+1) + (p->nParam-nLarge)*nSize)==p->nTotal );
 
@@ -521,15 +514,13 @@ static void last_valueInvFunc(
   }
 }
 static void last_valueValueFunc(sqlite3_context *pCtx){
-  struct LastValueCtx *p;
-  p = static_cast<struct LastValueCtx*>(sqlite3_aggregate_context(pCtx, 0));
+  auto *p = static_cast<struct LastValueCtx*>(sqlite3_aggregate_context(pCtx, 0));
   if( p && p->pVal ){
     sqlite3_result_value(pCtx, p->pVal);
   }
 }
 static void last_valueFinalizeFunc(sqlite3_context *pCtx){
-  struct LastValueCtx *p;
-  p = static_cast<struct LastValueCtx*>(sqlite3_aggregate_context(pCtx, sizeof(*p)));
+  struct LastValueCtx *p = static_cast<struct LastValueCtx*>(sqlite3_aggregate_context(pCtx, sizeof(*p)));
   if( p && p->pVal ){
     sqlite3_result_value(pCtx, p->pVal);
     sqlite3_value_free(p->pVal);
@@ -760,7 +751,7 @@ static int selectWindowRewriteExprCb(Walker *pWalker, Expr *pExpr){
     if( pExpr->op!=TK_COLUMN ){
       return WRC_Continue;
     }else{
-      int nSrc = p->pSrc->nSrc;
+      const int nSrc = p->pSrc->nSrc;
       int i;
       for(i=0; i<nSrc; i++){
         if( pExpr->iTable==p->pSrc->a[i].iCursor ) break;
@@ -805,7 +796,7 @@ static int selectWindowRewriteExprCb(Walker *pWalker, Expr *pExpr){
         p->pSub = sqlite3ExprListAppend(pParse, p->pSub, pDup);
       }
       if( p->pSub ){
-        int f = pExpr->flags & EP_Collate;
+        const int f = pExpr->flags & EP_Collate;
         assert( ExprHasProperty(pExpr, EP_Static)==0 );
         ExprSetProperty(pExpr, EP_Static);
         sqlite3ExprDelete(pParse->db, pExpr);
@@ -977,7 +968,7 @@ int sqlite3WindowRewrite(Parse *pParse, Select *p){
     Table *pTab;
     Walker w;
 
-    u32 selFlags = p->selFlags;
+    const u32 selFlags = p->selFlags;
 
     pTab = static_cast<Table *>(sqlite3DbMallocZero(db, sizeof(Table)));
     if( pTab==0 ){
@@ -1387,14 +1378,11 @@ int sqlite3WindowCompare(
 */
 void sqlite3WindowCodeInit(Parse *pParse, Select *pSelect){
   Window *pWin;
-  int nEphExpr;
-  Window *pMWin;
-  Vdbe *v;
 
   assert( pSelect->pSrc->a[0].fg.isSubquery );
-  nEphExpr = pSelect->pSrc->a[0].u4.pSubq->pSelect->pEList->nExpr;
-  pMWin = pSelect->pWin;
-  v = sqlite3GetVdbe(pParse);
+  const int nEphExpr = pSelect->pSrc->a[0].u4.pSubq->pSelect->pEList->nExpr;
+  Window *pMWin = pSelect->pWin;
+  Vdbe *v = sqlite3GetVdbe(pParse);
 
   sqlite3VdbeAddOp2(v, OP_OpenEphemeral, pMWin->iEphCsr, nEphExpr);
   sqlite3VdbeAddOp2(v, OP_OpenDup, pMWin->iEphCsr+1, pMWin->iEphCsr);
@@ -1404,7 +1392,7 @@ void sqlite3WindowCodeInit(Parse *pParse, Select *pSelect){
   /* Allocate registers to use for PARTITION BY values, if any. Initialize
   ** said registers to NULL.  */
   if( pMWin->pPartition ){
-    int nExpr = pMWin->pPartition->nExpr;
+    const int nExpr = pMWin->pPartition->nExpr;
     pMWin->regPart = pParse->nMem+1;
     pParse->nMem += nExpr;
     sqlite3VdbeAddOp3(v, OP_Null, 0, pMWin->regPart, pMWin->regPart+nExpr-1);
@@ -1433,11 +1421,9 @@ void sqlite3WindowCodeInit(Parse *pParse, Select *pSelect){
       **   regApp+1: integer value used to ensure keys are unique
       **   regApp+2: output of MakeRecord
       */
-      ExprList *pList;
-      KeyInfo *pKeyInfo;
       assert( ExprUseXList(pWin->pOwner) );
-      pList = pWin->pOwner->x.pList;
-      pKeyInfo = sqlite3KeyInfoFromExprList(pParse, pList, 0, 0);
+      ExprList *pList = pWin->pOwner->x.pList;
+      KeyInfo *pKeyInfo = sqlite3KeyInfoFromExprList(pParse, pList, 0, 0);
       pWin->csrApp = pParse->nTab++;
       pWin->regApp = pParse->nMem+1;
       pParse->nMem += 3;
@@ -1487,11 +1473,11 @@ static void windowCheckValue(Parse *pParse, int reg, int eCond){
   };
   static int aOp[] = { OP_Ge, OP_Ge, OP_Gt, OP_Ge, OP_Ge };
   Vdbe *v = sqlite3GetVdbe(pParse);
-  int regZero = sqlite3GetTempReg(pParse);
+  const int regZero = sqlite3GetTempReg(pParse);
   assert( eCond>=0 && eCond<ArraySize(azErr) );
   sqlite3VdbeAddOp2(v, OP_Integer, 0, regZero);
   if( eCond>=WINDOW_STARTING_NUM ){
-    int regString = sqlite3GetTempReg(pParse);
+    const int regString = sqlite3GetTempReg(pParse);
     sqlite3VdbeAddOp4(v, OP_String8, 0, regString, 0, "", P4_STATIC);
     sqlite3VdbeAddOp3(v, OP_Ge, regString, sqlite3VdbeCurrentAddr(v)+2, reg);
     sqlite3VdbeChangeP5(v, SQLITE_AFF_NUMERIC|SQLITE_JUMPIFNULL);
@@ -1791,7 +1777,7 @@ static void windowAggFinal(WindowCodeArg *p, int bFin){
     }else if( pWin->regApp ){
       assert( pMWin->regStartRowid==0 );
     }else{
-      int nArg = windowArgCount(pWin);
+      const int nArg = windowArgCount(pWin);
       if( bFin ){
         sqlite3VdbeAddOp2(v, OP_AggFinal, pWin->regAccum, nArg);
         sqlite3VdbeAppendP4(v, pWin->pWFunc, P4_FUNCDEF);
@@ -1817,28 +1803,20 @@ static void windowFullScan(WindowCodeArg *p){
   Window *pMWin = p->pMWin;
   Vdbe *v = p->pVdbe;
 
-  int regCRowid = 0;              /* Current rowid value */
   int regCPeer = 0;               /* Current peer values */
-  int regRowid = 0;               /* AggStep rowid value */
   int regPeer = 0;                /* AggStep peer values */
-
-  int nPeer;
-  int lblNext;
-  int lblBrk;
-  int addrNext;
-  int csr;
 
   VdbeModuleComment((v, "windowFullScan begin"));
 
   assert( pMWin!=0 );
-  csr = pMWin->csrApp;
-  nPeer = (pMWin->pOrderBy ? pMWin->pOrderBy->nExpr : 0);
+  const int csr = pMWin->csrApp;
+  const int nPeer = (pMWin->pOrderBy ? pMWin->pOrderBy->nExpr : 0);
 
-  lblNext = sqlite3VdbeMakeLabel(pParse);
-  lblBrk = sqlite3VdbeMakeLabel(pParse);
+  const int lblNext = sqlite3VdbeMakeLabel(pParse);
+  const int lblBrk = sqlite3VdbeMakeLabel(pParse);
 
-  regCRowid = sqlite3GetTempReg(pParse);
-  regRowid = sqlite3GetTempReg(pParse);
+  int regCRowid = sqlite3GetTempReg(pParse);
+  int regRowid = sqlite3GetTempReg(pParse);
   if( nPeer ){
     regCPeer = sqlite3GetTempRange(pParse, nPeer);
     regPeer = sqlite3GetTempRange(pParse, nPeer);
@@ -1853,7 +1831,7 @@ static void windowFullScan(WindowCodeArg *p){
 
   sqlite3VdbeAddOp3(v, OP_SeekGE, csr, lblBrk, pMWin->regStartRowid);
   VdbeCoverage(v);
-  addrNext = sqlite3VdbeCurrentAddr(v);
+  const int addrNext = sqlite3VdbeCurrentAddr(v);
   sqlite3VdbeAddOp2(v, OP_Rowid, csr, regRowid);
   sqlite3VdbeAddOp3(v, OP_Gt, pMWin->regEndRowid, lblBrk, regRowid);
   VdbeCoverageNeverNull(v);
@@ -1933,11 +1911,11 @@ static void windowReturnOneRow(WindowCodeArg *p){
       if( pFunc->zName==nth_valueName
        || pFunc->zName==first_valueName
       ){
-        int csr = pWin->csrApp;
-        int lbl = sqlite3VdbeMakeLabel(pParse);
-        int tmpReg = sqlite3GetTempReg(pParse);
+        const int csr = pWin->csrApp;
+        const int lbl = sqlite3VdbeMakeLabel(pParse);
+        const int tmpReg = sqlite3GetTempReg(pParse);
         sqlite3VdbeAddOp2(v, OP_Null, 0, pWin->regResult);
- 
+
         if( pFunc->zName==nth_valueName ){
           sqlite3VdbeAddOp3(v, OP_Column,pMWin->iEphCsr,pWin->iArgCol+1,tmpReg);
           windowCheckValue(pParse, tmpReg, 2);
@@ -1954,11 +1932,11 @@ static void windowReturnOneRow(WindowCodeArg *p){
         sqlite3ReleaseTempReg(pParse, tmpReg);
       }
       else if( pFunc->zName==leadName || pFunc->zName==lagName ){
-        int nArg = pWin->pOwner->x.pList->nExpr;
-        int csr = pWin->csrApp;
-        int lbl = sqlite3VdbeMakeLabel(pParse);
-        int tmpReg = sqlite3GetTempReg(pParse);
-        int iEph = pMWin->iEphCsr;
+        const int nArg = pWin->pOwner->x.pList->nExpr;
+        const int csr = pWin->csrApp;
+        const int lbl = sqlite3VdbeMakeLabel(pParse);
+        const int tmpReg = sqlite3GetTempReg(pParse);
+        const int iEph = pMWin->iEphCsr;
  
         if( nArg<3 ){
           sqlite3VdbeAddOp2(v, OP_Null, 0, pWin->regResult);
@@ -1967,11 +1945,11 @@ static void windowReturnOneRow(WindowCodeArg *p){
         }
         sqlite3VdbeAddOp2(v, OP_Rowid, iEph, tmpReg);
         if( nArg<2 ){
-          int val = (pFunc->zName==leadName ? 1 : -1);
+          const int val = (pFunc->zName==leadName ? 1 : -1);
           sqlite3VdbeAddOp2(v, OP_AddImm, tmpReg, val);
         }else{
-          int op = (pFunc->zName==leadName ? OP_Add : OP_Subtract);
-          int tmpReg2 = sqlite3GetTempReg(pParse);
+          const int op = (pFunc->zName==leadName ? OP_Add : OP_Subtract);
+          const int tmpReg2 = sqlite3GetTempReg(pParse);
           sqlite3VdbeAddOp3(v, OP_Column, iEph, pWin->iArgCol+1, tmpReg2);
           sqlite3VdbeAddOp3(v, op, tmpReg2, tmpReg, tmpReg);
           sqlite3ReleaseTempReg(pParse, tmpReg2);
@@ -1996,7 +1974,6 @@ static void windowReturnOneRow(WindowCodeArg *p){
 */
 static int windowInitAccum(Parse *pParse, Window *pMWin){
   Vdbe *v = sqlite3GetVdbe(pParse);
-  int regArg;
   int nArg = 0;
   Window *pWin;
   for(pWin=pMWin; pWin; pWin=pWin->pNextWin){
@@ -2017,7 +1994,7 @@ static int windowInitAccum(Parse *pParse, Window *pMWin){
       }
     }
   }
-  regArg = pParse->nMem+1;
+  const int regArg = pParse->nMem+1;
   pParse->nMem += nArg;
   return regArg;
 }

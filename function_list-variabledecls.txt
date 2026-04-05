@@ -3441,39 +3441,39 @@
 [x] src/whereexpr.cpp::sqlite3WhereExprUsageNN
 [x] src/whereexpr.cpp::sqlite3WhereExprUsage
 [x] src/whereexpr.cpp::sqlite3WhereExprListUsage
-[ ] src/window.cpp::row_numberValueFunc
-[ ] src/window.cpp::dense_rankValueFunc
-[ ] src/window.cpp::nth_valueFinalizeFunc
-[ ] src/window.cpp::first_valueFinalizeFunc
-[ ] src/window.cpp::rankValueFunc
-[ ] src/window.cpp::percent_rankValueFunc
-[ ] src/window.cpp::cume_distValueFunc
-[ ] src/window.cpp::ntileValueFunc
-[ ] src/window.cpp::last_valueValueFunc
-[ ] src/window.cpp::last_valueFinalizeFunc
-[ ] src/window.cpp::noopValueFunc
-[ ] src/window.cpp::sqlite3WindowFunctions
-[ ] src/window.cpp::windowFind
-[ ] src/window.cpp::selectWindowRewriteExprCb
-[ ] src/window.cpp::selectWindowRewriteSelectCb
-[ ] src/window.cpp::sqlite3WindowExtraAggFuncDepth
-[ ] src/window.cpp::disallowAggregatesInOrderByCb
-[ ] src/window.cpp::sqlite3WindowRewrite
-[ ] src/window.cpp::sqlite3WindowUnlinkFromSelect
-[ ] src/window.cpp::sqlite3WindowDelete
-[ ] src/window.cpp::sqlite3WindowListDelete
-[ ] src/window.cpp::sqlite3WindowOffsetExpr
-[ ] src/window.cpp::sqlite3WindowChain
-[ ] src/window.cpp::sqlite3WindowAttach
-[ ] src/window.cpp::sqlite3WindowLink
-[ ] src/window.cpp::sqlite3WindowCodeInit
-[ ] src/window.cpp::windowCheckValue
-[ ] src/window.cpp::windowArgCount
-[ ] src/window.cpp::windowAggFinal
-[ ] src/window.cpp::windowFullScan
-[ ] src/window.cpp::windowReturnOneRow
-[ ] src/window.cpp::windowInitAccum
-[ ] src/window.cpp::windowCacheFrame
-[ ] src/window.cpp::sqlite3WindowDup
-[ ] src/window.cpp::sqlite3WindowListDup
-[ ] src/window.cpp::windowExprGtZero
+[x] src/window.cpp::row_numberValueFunc
+[x] src/window.cpp::dense_rankValueFunc
+[x] src/window.cpp::nth_valueFinalizeFunc
+[x] src/window.cpp::first_valueFinalizeFunc
+[x] src/window.cpp::rankValueFunc
+[x] src/window.cpp::percent_rankValueFunc
+[x] src/window.cpp::cume_distValueFunc
+[x] src/window.cpp::ntileValueFunc
+[x] src/window.cpp::last_valueValueFunc
+[x] src/window.cpp::last_valueFinalizeFunc
+[x] src/window.cpp::noopValueFunc
+[x] src/window.cpp::sqlite3WindowFunctions
+[x] src/window.cpp::windowFind
+[x] src/window.cpp::selectWindowRewriteExprCb
+[x] src/window.cpp::selectWindowRewriteSelectCb
+[x] src/window.cpp::sqlite3WindowExtraAggFuncDepth
+[x] src/window.cpp::disallowAggregatesInOrderByCb
+[x] src/window.cpp::sqlite3WindowRewrite
+[x] src/window.cpp::sqlite3WindowUnlinkFromSelect
+[x] src/window.cpp::sqlite3WindowDelete
+[x] src/window.cpp::sqlite3WindowListDelete
+[x] src/window.cpp::sqlite3WindowOffsetExpr
+[x] src/window.cpp::sqlite3WindowChain
+[x] src/window.cpp::sqlite3WindowAttach
+[x] src/window.cpp::sqlite3WindowLink
+[x] src/window.cpp::sqlite3WindowCodeInit
+[x] src/window.cpp::windowCheckValue
+[x] src/window.cpp::windowArgCount
+[x] src/window.cpp::windowAggFinal
+[x] src/window.cpp::windowFullScan
+[x] src/window.cpp::windowReturnOneRow
+[x] src/window.cpp::windowInitAccum
+[x] src/window.cpp::windowCacheFrame
+[x] src/window.cpp::sqlite3WindowDup
+[x] src/window.cpp::sqlite3WindowListDup
+[x] src/window.cpp::windowExprGtZero
