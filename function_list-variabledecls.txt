@@ -2391,6 +2391,7 @@
 [x] src/test_superlock.cpp::superunlock_del
 [x] src/test_superlock.cpp::superlock_busy
 [x] src/test_superlock.cpp::SqliteSuperlock_Init
+<<<<<<< HEAD
 >>>>>>> b35463a8d (Move variable declarations down and add const: src/test_superlock.cpp)
 [ ] src/test_syscall.cpp::tsIsFail
 [ ] src/test_syscall.cpp::tsErrno
@@ -2415,6 +2416,31 @@
 [ ] src/test_syscall.cpp::ts_getpagesize
 [ ] src/test_syscall.cpp::SqlitetestSyscall_Init
 [ ] src/test_syscall.cpp::SqlitetestSyscall_Init
+=======
+[x] src/test_syscall.cpp::tsIsFail
+[x] src/test_syscall.cpp::tsErrno
+[x] src/test_syscall.cpp::tsIsFailErrno
+[x] src/test_syscall.cpp::ts_open
+[x] src/test_syscall.cpp::ts_close
+[x] src/test_syscall.cpp::ts_access
+[x] src/test_syscall.cpp::ts_getcwd
+[x] src/test_syscall.cpp::ts_stat
+[x] src/test_syscall.cpp::ts_fstat
+[x] src/test_syscall.cpp::ts_ftruncate
+[x] src/test_syscall.cpp::ts_fcntl
+[x] src/test_syscall.cpp::ts_read
+[x] src/test_syscall.cpp::ts_pread
+[x] src/test_syscall.cpp::ts_pread64
+[x] src/test_syscall.cpp::ts_write
+[x] src/test_syscall.cpp::ts_pwrite
+[x] src/test_syscall.cpp::ts_pwrite64
+[x] src/test_syscall.cpp::ts_fchmod
+[x] src/test_syscall.cpp::ts_fallocate
+[x] src/test_syscall.cpp::ts_mremap
+[x] src/test_syscall.cpp::ts_getpagesize
+[x] src/test_syscall.cpp::SqlitetestSyscall_Init
+[x] src/test_syscall.cpp::SqlitetestSyscall_Init
+>>>>>>> 2f6af4fef (Move variable declarations down and add const: src/test_syscall.cpp)
 [ ] src/test_tclsh.cpp::sqlite3TestInit
 [ ] src/test_tclvar.cpp::tclvarDisconnect
 [ ] src/test_tclvar.cpp::tclvarOpen

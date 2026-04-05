@@ -192,8 +192,8 @@ static int tsIsFail(void){
 ** comments above the implementation of ts_fallocate() for details.
 */
 static int tsErrno(const char *zFunc){
+  const size_t nFunc = strlen(zFunc);
   int i;
-  size_t nFunc = strlen(zFunc);
   for(i=0; aSyscall[i].zName; i++){
     if( strlen(aSyscall[i].zName)!=nFunc ) continue;
     if( memcmp(aSyscall[i].zName, zFunc, nFunc) ) continue;
@@ -296,13 +296,12 @@ static int ts_ftruncate(int fd, off_t n){
 ** A wrapper around fcntl().
 */
 static int ts_fcntl(int fd, int cmd, ... ){
-  va_list ap;
-  void *pArg;
   if( tsIsFailErrno("fcntl") ){
     return -1;
   }
+  va_list ap;
   va_start(ap, cmd);
-  pArg = va_arg(ap, void *);
+  void *pArg = va_arg(ap, void *);
   return orig_fcntl(fd, cmd, pArg);
 }
 
@@ -408,13 +407,12 @@ static void *ts_mmap(
 }
 
 static void *ts_mremap(void *a, size_t b, size_t c, int d, ...){
-  va_list ap;
-  void *pArg;
   if( tsIsFailErrno("mremap") ){
     return MAP_FAILED;
   }
+  va_list ap;
   va_start(ap, d);
-  pArg = va_arg(ap, void *);
+  void *pArg = va_arg(ap, void *);
   return orig_mremap(a, b, c, d, pArg);
 }
 
