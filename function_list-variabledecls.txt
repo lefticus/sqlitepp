@@ -2608,6 +2608,7 @@
 [x] src/tokenize.cpp::sqlite3GetToken
 [x] src/tokenize.cpp::sqlite3RunParser
 [x] src/tokenize.cpp::addSpaceSeparator
+<<<<<<< HEAD
 >>>>>>> 231035605 (Move variable declarations down and add const: src/tokenize.cpp)
 [ ] src/treeview.cpp::sqlite3TreeViewPush
 [ ] src/treeview.cpp::sqlite3TreeViewPop
@@ -2632,6 +2633,31 @@
 [ ] src/treeview.cpp::sqlite3ShowTriggerList
 [ ] src/treeview.cpp::sqlite3ShowWindow
 [ ] src/treeview.cpp::sqlite3ShowWinFunc
+=======
+[x] src/treeview.cpp::sqlite3TreeViewPush
+[x] src/treeview.cpp::sqlite3TreeViewPop
+[x] src/treeview.cpp::sqlite3TreeViewLine
+[x] src/treeview.cpp::sqlite3TreeViewItem
+[x] src/treeview.cpp::sqlite3TreeViewWith
+[x] src/treeview.cpp::sqlite3TreeViewSrcList
+[x] src/treeview.cpp::sqlite3TreeViewSelect
+[x] src/treeview.cpp::sqlite3TreeViewWindow
+[x] src/treeview.cpp::sqlite3TreeViewWinFunc
+[x] src/treeview.cpp::sqlite3TreeViewExpr
+[x] src/treeview.cpp::sqlite3ShowExpr
+[x] src/treeview.cpp::sqlite3ShowExprList
+[x] src/treeview.cpp::sqlite3ShowIdList
+[x] src/treeview.cpp::sqlite3ShowSrcList
+[x] src/treeview.cpp::sqlite3ShowSelect
+[x] src/treeview.cpp::sqlite3ShowWith
+[x] src/treeview.cpp::sqlite3ShowUpsert
+[x] src/treeview.cpp::sqlite3ShowTriggerStep
+[x] src/treeview.cpp::sqlite3ShowTriggerStepList
+[x] src/treeview.cpp::sqlite3ShowTrigger
+[x] src/treeview.cpp::sqlite3ShowTriggerList
+[x] src/treeview.cpp::sqlite3ShowWindow
+[x] src/treeview.cpp::sqlite3ShowWinFunc
+>>>>>>> 36c45f253 (Move variable declarations down and add const: src/treeview.cpp)
 [ ] src/trigger.cpp::sqlite3DeleteTriggerStep
 [ ] src/trigger.cpp::sqlite3TriggerList
 [ ] src/trigger.cpp::triggerSpanDup
