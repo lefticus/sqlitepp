@@ -2657,6 +2657,7 @@
 [x] src/treeview.cpp::sqlite3ShowTriggerList
 [x] src/treeview.cpp::sqlite3ShowWindow
 [x] src/treeview.cpp::sqlite3ShowWinFunc
+<<<<<<< HEAD
 >>>>>>> 36c45f253 (Move variable declarations down and add const: src/treeview.cpp)
 [ ] src/trigger.cpp::sqlite3DeleteTriggerStep
 [ ] src/trigger.cpp::sqlite3TriggerList
@@ -2672,6 +2673,22 @@
 [ ] src/trigger.cpp::sqlite3ReturningSubqueryCorrelated
 [ ] src/trigger.cpp::onErrorText
 [ ] src/trigger.cpp::transferParseError
+=======
+[x] src/trigger.cpp::sqlite3DeleteTriggerStep
+[x] src/trigger.cpp::sqlite3TriggerList
+[x] src/trigger.cpp::triggerSpanDup
+[x] src/trigger.cpp::sqlite3DeleteTrigger
+[x] src/trigger.cpp::sqlite3DropTrigger
+[x] src/trigger.cpp::tableOfTrigger
+[x] src/trigger.cpp::sqlite3DropTriggerPtr
+[x] src/trigger.cpp::sqlite3UnlinkAndDeleteTrigger
+[x] src/trigger.cpp::checkColumnOverlap
+[x] src/trigger.cpp::tempTriggersExist
+[x] src/trigger.cpp::sqlite3ReturningSubqueryVarSelect
+[x] src/trigger.cpp::sqlite3ReturningSubqueryCorrelated
+[x] src/trigger.cpp::onErrorText
+[x] src/trigger.cpp::transferParseError
+>>>>>>> 67a75c2df (Move variable declarations down and add const: src/trigger.cpp)
 [ ] src/update.cpp::sqlite3ColumnDefault
 [ ] src/update.cpp::exprRowColumn
 [ ] src/upsert.cpp::upsertDelete

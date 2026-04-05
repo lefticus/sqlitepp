@@ -48,14 +48,10 @@ void sqlite3DeleteTriggerStep(sqlite3 *db, TriggerStep *pTriggerStep){
 ** pTab as well as the triggers lised in pTab->pTrigger.
 */
 Trigger *sqlite3TriggerList(Parse *pParse, Table *pTab){
-  Schema *pTmpSchema;       /* Schema of the pTab table */
-  Trigger *pList;           /* List of triggers to return */
-  HashElem *p;              /* Loop variable for TEMP triggers */
-
   assert( pParse->disableTriggers==0 );
-  pTmpSchema = pParse->db->aDb[1].pSchema;
-  p = sqliteHashFirst(&pTmpSchema->trigHash);
-  pList = pTab->pTrigger;
+  Schema *const pTmpSchema = pParse->db->aDb[1].pSchema;       /* Schema of the pTab table */
+  HashElem *p = sqliteHashFirst(&pTmpSchema->trigHash);              /* Loop variable for TEMP triggers */
+  Trigger *pList = pTab->pTrigger;           /* List of triggers to return */
   while( p ){
     Trigger *pTrig = (Trigger *)sqliteHashData(p);
     if( pTrig->pTabSchema==pTab->pSchema
@@ -428,8 +424,7 @@ triggerfinish_cleanup:
 */
 static char *triggerSpanDup(sqlite3 *db, const char *zStart, const char *zEnd){
   char *z = sqlite3DbSpanDup(db, zStart, zEnd);
-  int i;
-  if( z ) for(i=0; z[i]; i++) if( sqlite3Isspace(z[i]) ) z[i] = ' ';
+  if( z ) for(int i=0; z[i]; i++) if( sqlite3Isspace(z[i]) ) z[i] = ' ';
   return z;
 }    
 
@@ -657,10 +652,9 @@ void sqlite3DeleteTrigger(sqlite3 *db, Trigger *pTrigger){
 **/
 void sqlite3DropTrigger(Parse *pParse, SrcList *pName, int noErr){
   Trigger *pTrigger = 0;
-  int i;
   const char *zDb;
   const char *zName;
-  sqlite3 *db = pParse->db;
+  sqlite3 *const db = pParse->db;
 
   if( db->mallocFailed ) goto drop_trigger_cleanup;
   if( SQLITE_OK!=sqlite3ReadSchema(pParse) ){
@@ -672,8 +666,8 @@ void sqlite3DropTrigger(Parse *pParse, SrcList *pName, int noErr){
   zDb = pName->a[0].u4.zDatabase;
   zName = pName->a[0].zName;
   assert( zDb!=0 || sqlite3BtreeHoldsAllMutexes(db) );
-  for(i=OMIT_TEMPDB; i<db->nDb; i++){
-    int j = (i<2) ? i^1 : i;  /* Search TEMP before MAIN */
+  for(int i=OMIT_TEMPDB; i<db->nDb; i++){
+    const int j = (i<2) ? i^1 : i;  /* Search TEMP before MAIN */
     if( zDb && sqlite3DbIsNamed(db, j, zDb)==0 ) continue;
     assert( sqlite3SchemaMutexHeld(db, j, 0) );
     pTrigger = static_cast<Trigger*>(sqlite3HashFind(&(db->aDb[j].pSchema->trigHash), zName));
@@ -707,14 +701,10 @@ static Table *tableOfTrigger(Trigger *pTrigger){
 ** Drop a trigger given a pointer to that trigger. 
 */
 void sqlite3DropTriggerPtr(Parse *pParse, Trigger *pTrigger){
-  Table   *pTable;
-  Vdbe *v;
-  sqlite3 *db = pParse->db;
-  int iDb;
-
-  iDb = sqlite3SchemaToIndex(pParse->db, pTrigger->pSchema);
+  sqlite3 *const db = pParse->db;
+  const int iDb = sqlite3SchemaToIndex(pParse->db, pTrigger->pSchema);
   assert( iDb>=0 && iDb<db->nDb );
-  pTable = tableOfTrigger(pTrigger);
+  Table *const pTable = tableOfTrigger(pTrigger);
   assert( (pTable && pTable->pSchema==pTrigger->pSchema) || iDb==1 );
 #ifndef SQLITE_OMIT_AUTHORIZATION
   if( pTable ){
@@ -731,7 +721,7 @@ void sqlite3DropTriggerPtr(Parse *pParse, Trigger *pTrigger){
 
   /* Generate code to destroy the database record of the trigger.
   */
-  if( (v = sqlite3GetVdbe(pParse))!=0 ){
+  if( Vdbe *v = sqlite3GetVdbe(pParse) ){
     sqlite3NestedParse(pParse,
        "DELETE FROM %Q." LEGACY_SCHEMA_TABLE " WHERE name=%Q AND type='trigger'",
        db->aDb[iDb].zDbSName, pTrigger->zName
@@ -745,12 +735,9 @@ void sqlite3DropTriggerPtr(Parse *pParse, Trigger *pTrigger){
 ** Remove a trigger from the hash tables of the sqlite* pointer.
 */
 void sqlite3UnlinkAndDeleteTrigger(sqlite3 *db, int iDb, const char *zName){
-  Trigger *pTrigger;
-  Hash *pHash;
-
   assert( sqlite3SchemaMutexHeld(db, iDb, 0) );
-  pHash = &(db->aDb[iDb].pSchema->trigHash);
-  pTrigger = static_cast<Trigger*>(sqlite3HashInsert(pHash, zName, 0));
+  Hash *const pHash = &(db->aDb[iDb].pSchema->trigHash);
+  Trigger *const pTrigger = static_cast<Trigger*>(sqlite3HashInsert(pHash, zName, 0));
   if( ALWAYS(pTrigger) ){
     if( pTrigger->pSchema==pTrigger->pTabSchema ){
       Table *pTab = tableOfTrigger(pTrigger);
@@ -779,9 +766,8 @@ void sqlite3UnlinkAndDeleteTrigger(sqlite3 *db, int iDb, const char *zName){
 ** if there is no match.
 */
 static int checkColumnOverlap(IdList *pIdList, ExprList *pEList){
-  int e;
   if( pIdList==0 || NEVER(pEList==0) ) return 1;
-  for(e=0; e<pEList->nExpr; e++){
+  for(int e=0; e<pEList->nExpr; e++){
     if( sqlite3IdListIndex(pIdList, pEList->a[e].zEName)>=0 ) return 1;
   }
   return 0; 
@@ -970,12 +956,10 @@ static int sqlite3ReturningSubqueryVarSelect(Walker *NotUsed, Expr *pExpr){
 **        that (1) has happened.
 */
 static int sqlite3ReturningSubqueryCorrelated(Walker *pWalker, Select *pSelect){
-  int i;
-  SrcList *pSrc;
   assert( pSelect!=0 );
-  pSrc = pSelect->pSrc;
+  SrcList *const pSrc = pSelect->pSrc;
   assert( pSrc!=0 );
-  for(i=0; i<pSrc->nSrc; i++){
+  for(int i=0; i<pSrc->nSrc; i++){
     if( pSrc->a[i].pSTab==pWalker->u.pTab ){
       testcase( pSelect->selFlags & SF_Correlated );
       pSelect->selFlags |= SF_Correlated;
