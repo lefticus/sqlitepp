@@ -1192,92 +1192,92 @@
 [x] src/os_unix.cpp::proxyClose
 [x] src/os_unix.cpp::sqlite3_os_init
 [x] src/os_unix.cpp::sqlite3_os_end
-[ ] src/os_win.cpp::winNextSystemCall
-[ ] src/os_win.cpp::sqlite3_win32_compact_heap
-[ ] src/os_win.cpp::sqlite3_win32_reset_heap
-[ ] src/os_win.cpp::sqlite3_win32_write_debug
-[ ] src/os_win.cpp::sqlite3_win32_sleep
-[ ] src/os_win.cpp::sqlite3Win32Wait
-[ ] src/os_win.cpp::sqlite3_win32_is_nt
-[ ] src/os_win.cpp::winMemMalloc
-[ ] src/os_win.cpp::winMemFree
-[ ] src/os_win.cpp::winMemRealloc
-[ ] src/os_win.cpp::winMemSize
-[ ] src/os_win.cpp::winMemRoundup
-[ ] src/os_win.cpp::winMemInit
-[ ] src/os_win.cpp::winMemShutdown
-[ ] src/os_win.cpp::sqlite3MemGetWin32
-[ ] src/os_win.cpp::sqlite3MemSetDefault
-[ ] src/os_win.cpp::winUtf8ToUnicode
-[ ] src/os_win.cpp::winUnicodeToUtf8
-[ ] src/os_win.cpp::winMbcsToUnicode
-[ ] src/os_win.cpp::winUnicodeToMbcs
-[ ] src/os_win.cpp::winMbcsToUtf8
-[ ] src/os_win.cpp::winUtf8ToMbcs
-[ ] src/os_win.cpp::sqlite3_win32_utf8_to_unicode
-[ ] src/os_win.cpp::sqlite3_win32_unicode_to_utf8
-[ ] src/os_win.cpp::sqlite3_win32_mbcs_to_utf8
-[ ] src/os_win.cpp::sqlite3_win32_mbcs_to_utf8_v2
-[ ] src/os_win.cpp::sqlite3_win32_utf8_to_mbcs
-[ ] src/os_win.cpp::sqlite3_win32_utf8_to_mbcs_v2
-[ ] src/os_win.cpp::winGetLastErrorMsg
-[ ] src/os_win.cpp::winRetryIoerr
-[ ] src/os_win.cpp::winLogIoerr
-[ ] src/os_win.cpp::winceMutexAcquire
-[ ] src/os_win.cpp::winceCreateLock
-[ ] src/os_win.cpp::winceDestroyLock
-[ ] src/os_win.cpp::winHandleUnlock
-[ ] src/os_win.cpp::winHandleSeek
-[ ] src/os_win.cpp::winSeekFile
-[ ] src/os_win.cpp::winClose
-[ ] src/os_win.cpp::winHandleTruncate
-[ ] src/os_win.cpp::winHandleSize
-[ ] src/os_win.cpp::winHandleClose
-[ ] src/os_win.cpp::winTruncate
-[ ] src/os_win.cpp::winSync
-[ ] src/os_win.cpp::winFileSize
-[ ] src/os_win.cpp::winGetReadLock
-[ ] src/os_win.cpp::winUnlockReadLock
-[ ] src/os_win.cpp::winLock
-[ ] src/os_win.cpp::winCheckReservedLock
-[ ] src/os_win.cpp::winUnlock
-[ ] src/os_win.cpp::winNolockLock
-[ ] src/os_win.cpp::winNolockCheckReservedLock
-[ ] src/os_win.cpp::winNolockUnlock
-[ ] src/os_win.cpp::winModeBit
-[ ] src/os_win.cpp::winFileControl
-[ ] src/os_win.cpp::winSectorSize
-[ ] src/os_win.cpp::winDeviceCharacteristics
-[ ] src/os_win.cpp::winConvertFromUtf8Filename
-[ ] src/os_win.cpp::winShmEnterMutex
-[ ] src/os_win.cpp::winShmLeaveMutex
-[ ] src/os_win.cpp::winShmMutexHeld
-[ ] src/os_win.cpp::winShmPurge
-[ ] src/os_win.cpp::winLockSharedMemory
-[ ] src/os_win.cpp::winCloseSharedMemory
-[ ] src/os_win.cpp::winIsUNCPath
-[ ] src/os_win.cpp::winOpenSharedMemory
-[ ] src/os_win.cpp::winUnmapfile
-[ ] src/os_win.cpp::winMapfile
-[ ] src/os_win.cpp::winFetch
-[ ] src/os_win.cpp::winUnfetch
-[ ] src/os_win.cpp::winMakeEndInDirSep
-[ ] src/os_win.cpp::winTempDirDefined
-[ ] src/os_win.cpp::winGetTempname
-[ ] src/os_win.cpp::winIsDir
-[ ] src/os_win.cpp::winSimplifyName
-[ ] src/os_win.cpp::winDlOpen
-[ ] src/os_win.cpp::winDlError
-[ ] src/os_win.cpp::void
-[ ] src/os_win.cpp::winDlClose
-[ ] src/os_win.cpp::xorMemory
-[ ] src/os_win.cpp::winRandomness
-[ ] src/os_win.cpp::winSleep
-[ ] src/os_win.cpp::winCurrentTimeInt64
-[ ] src/os_win.cpp::winCurrentTime
-[ ] src/os_win.cpp::winGetLastError
-[ ] src/os_win.cpp::sqlite3_os_init
-[ ] src/os_win.cpp::sqlite3_os_end
+[x] src/os_win.cpp::winNextSystemCall
+[x] src/os_win.cpp::sqlite3_win32_compact_heap
+[x] src/os_win.cpp::sqlite3_win32_reset_heap
+[x] src/os_win.cpp::sqlite3_win32_write_debug
+[x] src/os_win.cpp::sqlite3_win32_sleep
+[x] src/os_win.cpp::sqlite3Win32Wait
+[x] src/os_win.cpp::sqlite3_win32_is_nt
+[x] src/os_win.cpp::winMemMalloc
+[x] src/os_win.cpp::winMemFree
+[x] src/os_win.cpp::winMemRealloc
+[x] src/os_win.cpp::winMemSize
+[x] src/os_win.cpp::winMemRoundup
+[x] src/os_win.cpp::winMemInit
+[x] src/os_win.cpp::winMemShutdown
+[x] src/os_win.cpp::sqlite3MemGetWin32
+[x] src/os_win.cpp::sqlite3MemSetDefault
+[x] src/os_win.cpp::winUtf8ToUnicode
+[x] src/os_win.cpp::winUnicodeToUtf8
+[x] src/os_win.cpp::winMbcsToUnicode
+[x] src/os_win.cpp::winUnicodeToMbcs
+[x] src/os_win.cpp::winMbcsToUtf8
+[x] src/os_win.cpp::winUtf8ToMbcs
+[x] src/os_win.cpp::sqlite3_win32_utf8_to_unicode
+[x] src/os_win.cpp::sqlite3_win32_unicode_to_utf8
+[x] src/os_win.cpp::sqlite3_win32_mbcs_to_utf8
+[x] src/os_win.cpp::sqlite3_win32_mbcs_to_utf8_v2
+[x] src/os_win.cpp::sqlite3_win32_utf8_to_mbcs
+[x] src/os_win.cpp::sqlite3_win32_utf8_to_mbcs_v2
+[x] src/os_win.cpp::winGetLastErrorMsg
+[x] src/os_win.cpp::winRetryIoerr
+[x] src/os_win.cpp::winLogIoerr
+[x] src/os_win.cpp::winceMutexAcquire
+[x] src/os_win.cpp::winceCreateLock
+[x] src/os_win.cpp::winceDestroyLock
+[x] src/os_win.cpp::winHandleUnlock
+[x] src/os_win.cpp::winHandleSeek
+[x] src/os_win.cpp::winSeekFile
+[x] src/os_win.cpp::winClose
+[x] src/os_win.cpp::winHandleTruncate
+[x] src/os_win.cpp::winHandleSize
+[x] src/os_win.cpp::winHandleClose
+[x] src/os_win.cpp::winTruncate
+[x] src/os_win.cpp::winSync
+[x] src/os_win.cpp::winFileSize
+[x] src/os_win.cpp::winGetReadLock
+[x] src/os_win.cpp::winUnlockReadLock
+[x] src/os_win.cpp::winLock
+[x] src/os_win.cpp::winCheckReservedLock
+[x] src/os_win.cpp::winUnlock
+[x] src/os_win.cpp::winNolockLock
+[x] src/os_win.cpp::winNolockCheckReservedLock
+[x] src/os_win.cpp::winNolockUnlock
+[x] src/os_win.cpp::winModeBit
+[x] src/os_win.cpp::winFileControl
+[x] src/os_win.cpp::winSectorSize
+[x] src/os_win.cpp::winDeviceCharacteristics
+[x] src/os_win.cpp::winConvertFromUtf8Filename
+[x] src/os_win.cpp::winShmEnterMutex
+[x] src/os_win.cpp::winShmLeaveMutex
+[x] src/os_win.cpp::winShmMutexHeld
+[x] src/os_win.cpp::winShmPurge
+[x] src/os_win.cpp::winLockSharedMemory
+[x] src/os_win.cpp::winCloseSharedMemory
+[x] src/os_win.cpp::winIsUNCPath
+[x] src/os_win.cpp::winOpenSharedMemory
+[x] src/os_win.cpp::winUnmapfile
+[x] src/os_win.cpp::winMapfile
+[x] src/os_win.cpp::winFetch
+[x] src/os_win.cpp::winUnfetch
+[x] src/os_win.cpp::winMakeEndInDirSep
+[x] src/os_win.cpp::winTempDirDefined
+[x] src/os_win.cpp::winGetTempname
+[x] src/os_win.cpp::winIsDir
+[x] src/os_win.cpp::winSimplifyName
+[x] src/os_win.cpp::winDlOpen
+[x] src/os_win.cpp::winDlError
+[x] src/os_win.cpp::void
+[x] src/os_win.cpp::winDlClose
+[x] src/os_win.cpp::xorMemory
+[x] src/os_win.cpp::winRandomness
+[x] src/os_win.cpp::winSleep
+[x] src/os_win.cpp::winCurrentTimeInt64
+[x] src/os_win.cpp::winCurrentTime
+[x] src/os_win.cpp::winGetLastError
+[x] src/os_win.cpp::sqlite3_os_init
+[x] src/os_win.cpp::sqlite3_os_end
 [x] src/pager.cpp::sqlite3PagerDirectReadOk
 [x] src/pager.cpp::assert_pager_state
 [x] src/pager.cpp::print_pager_state
