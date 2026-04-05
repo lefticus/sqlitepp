@@ -1716,34 +1716,34 @@
 [x] src/test4.cpp::Sqlitetest4_Init
 [x] src/test5.cpp::name_to_enc
 [x] src/test5.cpp::Sqlitetest5_Init
-[ ] src/test6.cpp::crash_malloc
-[ ] src/test6.cpp::crash_free
-[ ] src/test6.cpp::crash_realloc
-[ ] src/test6.cpp::writeDbFile
-[ ] src/test6.cpp::writeListSync
-[ ] src/test6.cpp::cfClose
-[ ] src/test6.cpp::cfTruncate
-[ ] src/test6.cpp::cfSync
-[ ] src/test6.cpp::cfFileSize
-[ ] src/test6.cpp::cfLock
-[ ] src/test6.cpp::cfUnlock
-[ ] src/test6.cpp::cfCheckReservedLock
-[ ] src/test6.cpp::cfFileControl
-[ ] src/test6.cpp::cfSectorSize
-[ ] src/test6.cpp::cfDeviceCharacteristics
-[ ] src/test6.cpp::cfShmLock
-[ ] src/test6.cpp::cfShmBarrier
-[ ] src/test6.cpp::cfShmUnmap
-[ ] src/test6.cpp::cfDelete
-[ ] src/test6.cpp::cfDlOpen
-[ ] src/test6.cpp::cfDlError
-[ ] src/test6.cpp::void
-[ ] src/test6.cpp::cfDlClose
-[ ] src/test6.cpp::cfRandomness
-[ ] src/test6.cpp::cfSleep
-[ ] src/test6.cpp::cfCurrentTime
-[ ] src/test6.cpp::cfGetLastError
-[ ] src/test6.cpp::Sqlitetest6_Init
+[x] src/test6.cpp::crash_malloc
+[x] src/test6.cpp::crash_free
+[x] src/test6.cpp::crash_realloc
+[x] src/test6.cpp::writeDbFile
+[x] src/test6.cpp::writeListSync
+[x] src/test6.cpp::cfClose
+[x] src/test6.cpp::cfTruncate
+[x] src/test6.cpp::cfSync
+[x] src/test6.cpp::cfFileSize
+[x] src/test6.cpp::cfLock
+[x] src/test6.cpp::cfUnlock
+[x] src/test6.cpp::cfCheckReservedLock
+[x] src/test6.cpp::cfFileControl
+[x] src/test6.cpp::cfSectorSize
+[x] src/test6.cpp::cfDeviceCharacteristics
+[x] src/test6.cpp::cfShmLock
+[x] src/test6.cpp::cfShmBarrier
+[x] src/test6.cpp::cfShmUnmap
+[x] src/test6.cpp::cfDelete
+[x] src/test6.cpp::cfDlOpen
+[x] src/test6.cpp::cfDlError
+[x] src/test6.cpp::void
+[x] src/test6.cpp::cfDlClose
+[x] src/test6.cpp::cfRandomness
+[x] src/test6.cpp::cfSleep
+[x] src/test6.cpp::cfCurrentTime
+[x] src/test6.cpp::cfGetLastError
+[x] src/test6.cpp::Sqlitetest6_Init
 [ ] src/test8.cpp::simulateVtabError
 [ ] src/test8.cpp::dequoteString
 [ ] src/test8.cpp::appendToEchoModule

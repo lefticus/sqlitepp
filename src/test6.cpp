@@ -171,8 +171,8 @@ static void *crash_realloc(void *p, int n){
 ** 512 byte block beginning at offset PENDING_BYTE.
 */
 static int writeDbFile(CrashFile *p, u8 *z, i64 iAmt, i64 iOff){
+  const int iSkip = 0;
   int rc = SQLITE_OK;
-  int iSkip = 0;
   if( (iAmt-iSkip)>0 ){
     rc = sqlite3OsWrite(p->pRealFile, &z[iSkip], (int)(iAmt-iSkip), iOff+iSkip);
   }
@@ -185,7 +185,7 @@ static int writeDbFile(CrashFile *p, u8 *z, i64 iAmt, i64 iOff){
 */
 static int writeListSync(CrashFile *pFile, int isCrash){
   int rc = SQLITE_OK;
-  int iDc = g.iDeviceCharacteristics;
+  const int iDc = g.iDeviceCharacteristics;
 
   WriteBuffer *pWrite;
   WriteBuffer **ppPtr;
@@ -222,7 +222,7 @@ static int writeListSync(CrashFile *pFile, int isCrash){
 
   ppPtr = &g.pWriteList;
   for(pWrite=*ppPtr; rc==SQLITE_OK && pWrite; pWrite=*ppPtr){
-    sqlite3_file *pRealFile = pWrite->pFile->pRealFile;
+    sqlite3_file *const pRealFile = pWrite->pFile->pRealFile;
 
     /* (eAction==1)      -> write block out normally,
     ** (eAction==2)      -> do nothing,
@@ -305,8 +305,8 @@ static int writeListSync(CrashFile *pFile, int isCrash){
       }
       case 3: {               /* Trash sectors */
         u8 *zGarbage;
-        int iFirst = (int)(pWrite->iOffset/g.iSectorSize);
-        int iLast = (int)((pWrite->iOffset+pWrite->nBuf-1)/g.iSectorSize);
+        const int iFirst = (int)(pWrite->iOffset/g.iSectorSize);
+        const int iLast = (int)((pWrite->iOffset+pWrite->nBuf-1)/g.iSectorSize);
 
         assert(pWrite->zBuf);
 
@@ -393,7 +393,7 @@ static int writeListAppend(
 ** Close a crash-file.
 */
 static int cfClose(sqlite3_file *pFile){
-  CrashFile *pCrash = (CrashFile *)pFile;
+  CrashFile *const pCrash = (CrashFile *)pFile;
   writeListSync(pCrash, 0);
   sqlite3OsClose(pCrash->pRealFile);
   return SQLITE_OK;
@@ -408,8 +408,8 @@ static int cfRead(
   int iAmt,
   sqlite_int64 iOfst
 ){
-  CrashFile *pCrash = (CrashFile *)pFile;
-  int nCopy = (int)MIN((i64)iAmt, (pCrash->iSize - iOfst));
+  const CrashFile *const pCrash = (CrashFile *)pFile;
+  const int nCopy = (int)MIN((i64)iAmt, (pCrash->iSize - iOfst));
 
   if( nCopy>0 ){
     memcpy(zBuf, &pCrash->zData[iOfst], nCopy);
@@ -432,7 +432,7 @@ static int cfWrite(
   int iAmt,
   sqlite_int64 iOfst
 ){
-  CrashFile *pCrash = (CrashFile *)pFile;
+  CrashFile *const pCrash = (CrashFile *)pFile;
   if( iAmt+iOfst>pCrash->iSize ){
     pCrash->iSize = (int)(iAmt+iOfst);
   }
@@ -455,7 +455,7 @@ static int cfWrite(
 ** Truncate a crash-file.
 */
 static int cfTruncate(sqlite3_file *pFile, sqlite_int64 size){
-  CrashFile *pCrash = (CrashFile *)pFile;
+  CrashFile *const pCrash = (CrashFile *)pFile;
   assert(size>=0);
   if( pCrash->iSize>size ){
     pCrash->iSize = (int)size;
@@ -467,11 +467,11 @@ static int cfTruncate(sqlite3_file *pFile, sqlite_int64 size){
 ** Sync a crash-file.
 */
 static int cfSync(sqlite3_file *pFile, int flags){
-  CrashFile *pCrash = (CrashFile *)pFile;
+  CrashFile *const pCrash = (CrashFile *)pFile;
   int isCrash = 0;
 
-  const char *zName = pCrash->zName;
-  const char *zCrashFile = g.zCrashFile;
+  const char *const zName = pCrash->zName;
+  const char *const zCrashFile = g.zCrashFile;
   int nName = (int)strlen(zName);
   int nCrashFile = (int)strlen(zCrashFile);
 
@@ -499,7 +499,7 @@ static int cfSync(sqlite3_file *pFile, int flags){
 ** Return the current file-size of the crash-file.
 */
 static int cfFileSize(sqlite3_file *pFile, sqlite_int64 *pSize){
-  CrashFile *pCrash = (CrashFile *)pFile;
+  const CrashFile *const pCrash = (CrashFile *)pFile;
   *pSize = (i64)pCrash->iSize;
   return SQLITE_OK;
 }
@@ -518,8 +518,8 @@ static int cfCheckReservedLock(sqlite3_file *pFile, int *pResOut){
 }
 static int cfFileControl(sqlite3_file *pFile, int op, void *pArg){
   if( op==SQLITE_FCNTL_SIZE_HINT ){
-    CrashFile *pCrash = (CrashFile *)pFile;
-    i64 nByte = *(i64 *)pArg;
+    CrashFile *const pCrash = (CrashFile *)pFile;
+    const i64 nByte = *(i64 *)pArg;
     if( nByte>pCrash->iSize ){
       if( SQLITE_OK==writeListAppend(pFile, nByte, 0, 0) ){
         pCrash->iSize = (int)nByte;
@@ -546,15 +546,15 @@ static int cfDeviceCharacteristics(sqlite3_file *pFile){
 ** Pass-throughs for WAL support.
 */
 static int cfShmLock(sqlite3_file *pFile, int ofst, int n, int flags){
-  sqlite3_file *pReal = ((CrashFile*)pFile)->pRealFile;
+  sqlite3_file *const pReal = ((CrashFile*)pFile)->pRealFile;
   return pReal->pMethods->xShmLock(pReal, ofst, n, flags);
 }
 static void cfShmBarrier(sqlite3_file *pFile){
-  sqlite3_file *pReal = ((CrashFile*)pFile)->pRealFile;
+  sqlite3_file *const pReal = ((CrashFile*)pFile)->pRealFile;
   pReal->pMethods->xShmBarrier(pReal);
 }
 static int cfShmUnmap(sqlite3_file *pFile, int delFlag){
-  sqlite3_file *pReal = ((CrashFile*)pFile)->pRealFile;
+  sqlite3_file *const pReal = ((CrashFile*)pFile)->pRealFile;
   return pReal->pMethods->xShmUnmap(pReal, delFlag);
 }
 static int cfShmMap(
@@ -564,7 +564,7 @@ static int cfShmMap(
   int w,                          /* True to extend file if necessary */
   void volatile **pp              /* OUT: Mapped memory */
 ){
-  sqlite3_file *pReal = ((CrashFile*)pFile)->pRealFile;
+  sqlite3_file *const pReal = ((CrashFile*)pFile)->pRealFile;
   return pReal->pMethods->xShmMap(pReal, iRegion, sz, w, pp);
 }
 
@@ -611,10 +611,10 @@ static int cfOpen(
   int flags,
   int *pOutFlags
 ){
-  sqlite3_vfs *pVfs = (sqlite3_vfs *)pCfVfs->pAppData;
+  sqlite3_vfs *const pVfs = (sqlite3_vfs *)pCfVfs->pAppData;
   int rc;
-  CrashFile *pWrapper = (CrashFile *)pFile;
-  sqlite3_file *pReal = (sqlite3_file*)&pWrapper[1];
+  CrashFile *const pWrapper = (CrashFile *)pFile;
+  sqlite3_file *const pReal = (sqlite3_file*)&pWrapper[1];
 
   memset(pWrapper, 0, sizeof(CrashFile));
   rc = sqlite3OsOpen(pVfs, zName, pReal, flags, pOutFlags);
@@ -659,7 +659,7 @@ static int cfOpen(
 }
 
 static int cfDelete(sqlite3_vfs *pCfVfs, const char *zPath, int dirSync){
-  sqlite3_vfs *pVfs = (sqlite3_vfs *)pCfVfs->pAppData;
+  sqlite3_vfs *const pVfs = (sqlite3_vfs *)pCfVfs->pAppData;
   return pVfs->xDelete(pVfs, zPath, dirSync);
 }
 static int cfAccess(
@@ -668,7 +668,7 @@ static int cfAccess(
   int flags,
   int *pResOut
 ){
-  sqlite3_vfs *pVfs = (sqlite3_vfs *)pCfVfs->pAppData;
+  sqlite3_vfs *const pVfs = (sqlite3_vfs *)pCfVfs->pAppData;
   return pVfs->xAccess(pVfs, zPath, flags, pResOut);
 }
 static int cfFullPathname(
@@ -677,39 +677,39 @@ static int cfFullPathname(
   int nPathOut,
   char *zPathOut
 ){
-  sqlite3_vfs *pVfs = (sqlite3_vfs *)pCfVfs->pAppData;
+  sqlite3_vfs *const pVfs = (sqlite3_vfs *)pCfVfs->pAppData;
   return pVfs->xFullPathname(pVfs, zPath, nPathOut, zPathOut);
 }
 static void *cfDlOpen(sqlite3_vfs *pCfVfs, const char *zPath){
-  sqlite3_vfs *pVfs = (sqlite3_vfs *)pCfVfs->pAppData;
+  sqlite3_vfs *const pVfs = (sqlite3_vfs *)pCfVfs->pAppData;
   return pVfs->xDlOpen(pVfs, zPath);
 }
 static void cfDlError(sqlite3_vfs *pCfVfs, int nByte, char *zErrMsg){
-  sqlite3_vfs *pVfs = (sqlite3_vfs *)pCfVfs->pAppData;
+  sqlite3_vfs *const pVfs = (sqlite3_vfs *)pCfVfs->pAppData;
   pVfs->xDlError(pVfs, nByte, zErrMsg);
 }
 static void (*cfDlSym(sqlite3_vfs *pCfVfs, void *pH, const char *zSym))(void){
-  sqlite3_vfs *pVfs = (sqlite3_vfs *)pCfVfs->pAppData;
+  sqlite3_vfs *const pVfs = (sqlite3_vfs *)pCfVfs->pAppData;
   return pVfs->xDlSym(pVfs, pH, zSym);
 }
 static void cfDlClose(sqlite3_vfs *pCfVfs, void *pHandle){
-  sqlite3_vfs *pVfs = (sqlite3_vfs *)pCfVfs->pAppData;
+  sqlite3_vfs *const pVfs = (sqlite3_vfs *)pCfVfs->pAppData;
   pVfs->xDlClose(pVfs, pHandle);
 }
 static int cfRandomness(sqlite3_vfs *pCfVfs, int nByte, char *zBufOut){
-  sqlite3_vfs *pVfs = (sqlite3_vfs *)pCfVfs->pAppData;
+  sqlite3_vfs *const pVfs = (sqlite3_vfs *)pCfVfs->pAppData;
   return pVfs->xRandomness(pVfs, nByte, zBufOut);
 }
 static int cfSleep(sqlite3_vfs *pCfVfs, int nMicro){
-  sqlite3_vfs *pVfs = (sqlite3_vfs *)pCfVfs->pAppData;
+  sqlite3_vfs *const pVfs = (sqlite3_vfs *)pCfVfs->pAppData;
   return pVfs->xSleep(pVfs, nMicro);
 }
 static int cfCurrentTime(sqlite3_vfs *pCfVfs, double *pTimeOut){
-  sqlite3_vfs *pVfs = (sqlite3_vfs *)pCfVfs->pAppData;
+  sqlite3_vfs *const pVfs = (sqlite3_vfs *)pCfVfs->pAppData;
   return pVfs->xCurrentTime(pVfs, pTimeOut);
 }
 static int cfGetLastError(sqlite3_vfs *pCfVfs, int n, char *z){
-  sqlite3_vfs *pVfs = (sqlite3_vfs *)pCfVfs->pAppData;
+  sqlite3_vfs *const pVfs = (sqlite3_vfs *)pCfVfs->pAppData;
   return pVfs->xGetLastError(pVfs, n, z);
 }
 
