@@ -3251,37 +3251,37 @@
 [x] src/vdbevtab.cpp::bytecodevtabRowid
 [x] src/vdbevtab.cpp::sqlite3VdbeBytecodeVtabInit
 [x] src/vdbevtab.cpp::sqlite3VdbeBytecodeVtabInit
-[ ] src/vtab.cpp::sqlite3_drop_modules
-[ ] src/vtab.cpp::sqlite3VtabModuleUnref
-[ ] src/vtab.cpp::sqlite3VtabLock
-[ ] src/vtab.cpp::sqlite3GetVTable
-[ ] src/vtab.cpp::sqlite3VtabUnlock
-[ ] src/vtab.cpp::vtabDisconnectAll
-[ ] src/vtab.cpp::sqlite3VtabDisconnect
-[ ] src/vtab.cpp::sqlite3VtabUnlockList
-[ ] src/vtab.cpp::sqlite3VtabClear
-[ ] src/vtab.cpp::addModuleArgument
-[ ] src/vtab.cpp::addArgumentToVtab
-[ ] src/vtab.cpp::sqlite3VtabFinishParse
-[ ] src/vtab.cpp::sqlite3VtabArgInit
-[ ] src/vtab.cpp::sqlite3VtabArgExtend
-[ ] src/vtab.cpp::sqlite3VtabCallConnect
-[ ] src/vtab.cpp::growVTrans
-[ ] src/vtab.cpp::addToVTrans
-[ ] src/vtab.cpp::sqlite3VtabCallCreate
-[ ] src/vtab.cpp::sqlite3_declare_vtab
-[ ] src/vtab.cpp::sqlite3VtabCallDestroy
-[ ] src/vtab.cpp::callFinaliser
-[ ] src/vtab.cpp::sqlite3VtabSync
-[ ] src/vtab.cpp::sqlite3VtabRollback
-[ ] src/vtab.cpp::sqlite3VtabCommit
-[ ] src/vtab.cpp::sqlite3VtabBegin
-[ ] src/vtab.cpp::sqlite3VtabSavepoint
-[ ] src/vtab.cpp::sqlite3VtabMakeWritable
-[ ] src/vtab.cpp::sqlite3VtabEponymousTableInit
-[ ] src/vtab.cpp::sqlite3VtabEponymousTableClear
-[ ] src/vtab.cpp::sqlite3_vtab_on_conflict
-[ ] src/vtab.cpp::sqlite3_vtab_config
+[x] src/vtab.cpp::sqlite3_drop_modules
+[x] src/vtab.cpp::sqlite3VtabModuleUnref
+[x] src/vtab.cpp::sqlite3VtabLock
+[x] src/vtab.cpp::sqlite3GetVTable
+[x] src/vtab.cpp::sqlite3VtabUnlock
+[x] src/vtab.cpp::vtabDisconnectAll
+[x] src/vtab.cpp::sqlite3VtabDisconnect
+[x] src/vtab.cpp::sqlite3VtabUnlockList
+[x] src/vtab.cpp::sqlite3VtabClear
+[x] src/vtab.cpp::addModuleArgument
+[x] src/vtab.cpp::addArgumentToVtab
+[x] src/vtab.cpp::sqlite3VtabFinishParse
+[x] src/vtab.cpp::sqlite3VtabArgInit
+[x] src/vtab.cpp::sqlite3VtabArgExtend
+[x] src/vtab.cpp::sqlite3VtabCallConnect
+[x] src/vtab.cpp::growVTrans
+[x] src/vtab.cpp::addToVTrans
+[x] src/vtab.cpp::sqlite3VtabCallCreate
+[x] src/vtab.cpp::sqlite3_declare_vtab
+[x] src/vtab.cpp::sqlite3VtabCallDestroy
+[x] src/vtab.cpp::callFinaliser
+[x] src/vtab.cpp::sqlite3VtabSync
+[x] src/vtab.cpp::sqlite3VtabRollback
+[x] src/vtab.cpp::sqlite3VtabCommit
+[x] src/vtab.cpp::sqlite3VtabBegin
+[x] src/vtab.cpp::sqlite3VtabSavepoint
+[x] src/vtab.cpp::sqlite3VtabMakeWritable
+[x] src/vtab.cpp::sqlite3VtabEponymousTableInit
+[x] src/vtab.cpp::sqlite3VtabEponymousTableClear
+[x] src/vtab.cpp::sqlite3_vtab_on_conflict
+[x] src/vtab.cpp::sqlite3_vtab_config
 [ ] src/wal.cpp::sehExceptionFilter
 [ ] src/wal.cpp::sehInjectFault
 [ ] src/wal.cpp::walCkptInfo
