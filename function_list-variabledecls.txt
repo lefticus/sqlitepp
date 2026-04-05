@@ -2865,6 +2865,7 @@
 [x] src/vacuum.cpp::execSql
 [x] src/vacuum.cpp::execSqlF
 [x] src/vacuum.cpp::sqlite3Vacuum
+<<<<<<< HEAD
 >>>>>>> b3a23a3e8 (Move variable declarations down and add const: src/vacuum.cpp)
 [ ] src/vdbe.cpp::updateMaxBlobsize
 [ ] src/vdbe.cpp::test_trace_breakpoint
@@ -2882,6 +2883,24 @@
 [ ] src/vdbe.cpp::out2Prerelease
 [ ] src/vdbe.cpp::filterHash
 [ ] src/vdbe.cpp::vdbeMemTypeName
+=======
+[x] src/vdbe.cpp::updateMaxBlobsize
+[x] src/vdbe.cpp::test_trace_breakpoint
+[x] src/vdbe.cpp::alsoAnInt
+[x] src/vdbe.cpp::applyNumericAffinity
+[x] src/vdbe.cpp::sqlite3_value_numeric_type
+[x] src/vdbe.cpp::computeNumericType
+[x] src/vdbe.cpp::numericType
+[x] src/vdbe.cpp::sqlite3VdbeMemPrettyPrint
+[x] src/vdbe.cpp::memTracePrint
+[x] src/vdbe.cpp::registerTrace
+[x] src/vdbe.cpp::sqlite3VdbeRegisterDump
+[x] src/vdbe.cpp::checkSavepointCount
+[x] src/vdbe.cpp::out2PrereleaseWithClear
+[x] src/vdbe.cpp::out2Prerelease
+[x] src/vdbe.cpp::filterHash
+[x] src/vdbe.cpp::vdbeMemTypeName
+>>>>>>> 31fd6d625 (Move variable declarations down and add const: src/vdbe.cpp)
 [x] src/vdbeapi.cpp::sqlite3_expired
 [x] src/vdbeapi.cpp::vdbeSafety
 [x] src/vdbeapi.cpp::vdbeSafetyNotNull

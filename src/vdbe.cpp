@@ -327,8 +327,7 @@ static VdbeCursor *allocateCursor(
 ** return false.
 */
 static int alsoAnInt(Mem *pRec, double rValue, i64 *piValue){
-  i64 iValue;
-  iValue = sqlite3RealToI64(rValue);
+  const i64 iValue = sqlite3RealToI64(rValue);
   if( sqlite3RealSameAsInt(rValue,iValue) ){
     *piValue = iValue;
     return 1;
@@ -353,9 +352,8 @@ static int alsoAnInt(Mem *pRec, double rValue, i64 *piValue){
 */
 static void applyNumericAffinity(Mem *pRec, int bTryForInt){
   double rValue;
-  int rc;
   assert( (pRec->flags & (MEM_Str|MEM_Int|MEM_Real|MEM_IntReal))==MEM_Str );
-  rc = sqlite3MemRealValueRC(pRec, &rValue);
+  const int rc = sqlite3MemRealValueRC(pRec, &rValue);
   if( rc<=0 ) return;
   if( (rc&2)==0 && alsoAnInt(pRec, rValue, &pRec->u.i) ){
     pRec->flags |= MEM_Int;
@@ -465,15 +463,14 @@ void sqlite3ValueApplyAffinity(
 ** accordingly.
 */
 static u16 SQLITE_NOINLINE computeNumericType(Mem *pMem){
-  int rc;
-  sqlite3_int64 ix;
   assert( (pMem->flags & (MEM_Int|MEM_Real|MEM_IntReal))==0 );
   assert( (pMem->flags & (MEM_Str|MEM_Blob))!=0 );
   if( ExpandBlob(pMem) ){
     pMem->u.i = 0;
     return MEM_Int;
   }
-  rc = sqlite3MemRealValueRC(pMem, &pMem->u.r);
+  sqlite3_int64 ix;
+  const int rc = sqlite3MemRealValueRC(pMem, &pMem->u.r);
   if( rc<=0 ){
     if( (rc&2)==0 && sqlite3Atoi64(pMem->z, &ix, pMem->n, pMem->enc)<=1 ){
       pMem->u.i = ix;
@@ -517,7 +514,7 @@ static u16 numericType(Mem *pMem){
 ** into buffer zBuf, length nBuf.
 */
 void sqlite3VdbeMemPrettyPrint(Mem *pMem, StrAccum *pStr){
-  int f = pMem->flags;
+  const int f = pMem->flags;
   static const char *const encnames[] = {"(X)", "(8)", "(16LE)", "(16BE)"};
   if( f&MEM_Blob ){
     int i;
@@ -628,8 +625,7 @@ static void registerTrace(int iReg, Mem *p){
 ** interactive debugging.
 */
 void sqlite3VdbeRegisterDump(Vdbe *v){
-  int i;
-  for(i=1; i<v->nMem; i++) registerTrace(i, v->aMem+i);
+  for(int i=1; i<v->nMem; i++) registerTrace(i, v->aMem+i);
 }
 #endif /* SQLITE_DEBUG */
 
@@ -653,8 +649,7 @@ void sqlite3VdbeRegisterDump(Vdbe *v){
 */
 static int checkSavepointCount(sqlite3 *db){
   int n = 0;
-  Savepoint *p;
-  for(p=db->pSavepoint; p; p=p->pNext) n++;
+  for(Savepoint *p=db->pSavepoint; p; p=p->pNext) n++;
   assert( n==(db->nSavepoint + db->isTransactionSavepoint) );
   return 1;
 }
@@ -670,10 +665,9 @@ static SQLITE_NOINLINE Mem *out2PrereleaseWithClear(Mem *pOut){
   return pOut;
 }
 static Mem *out2Prerelease(Vdbe *p, VdbeOp *pOp){
-  Mem *pOut;
   assert( pOp->p2>0 );
   assert( pOp->p2<=(p->nMem+1 - p->nCursor) );
-  pOut = &p->aMem[pOp->p2];
+  Mem *pOut = &p->aMem[pOp->p2];
   memAboutToChange(p, pOut);
   if( VdbeMemDynamic(pOut) ){ /*OPTIMIZATION-IF-FALSE*/
     return out2PrereleaseWithClear(pOut);
@@ -688,11 +682,10 @@ static Mem *out2Prerelease(Vdbe *p, VdbeOp *pOp){
 ** with pOp->p3.  Return the hash.
 */
 static u64 filterHash(const Mem *aMem, const Op *pOp){
-  int i, mx;
   u64 h = 0;
 
   assert( pOp->p4type==P4_INT32 );
-  for(i=pOp->p3, mx=i+pOp->p4.i; i<mx; i++){
+  for(int i=pOp->p3, mx=i+pOp->p4.i; i<mx; i++){
     const Mem *p = &aMem[i];
     if( p->flags & (MEM_Int|MEM_IntReal) ){
       h += p->u.i;
