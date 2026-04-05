@@ -138,14 +138,12 @@ static int fsdirConnect(
   sqlite3_vtab **ppVtab,
   char **pzErr
 ){
-  FsdirVtab *pTab;
-
   if( argc!=3 ){
     *pzErr = sqlite3_mprintf("wrong number of arguments");
     return SQLITE_ERROR;
   }
 
-  pTab = (FsdirVtab *)sqlite3_malloc(sizeof(FsdirVtab));
+  FsdirVtab *const pTab = (FsdirVtab *)sqlite3_malloc(sizeof(FsdirVtab));
   if( !pTab ) return SQLITE_NOMEM;
   memset(pTab, 0, sizeof(FsdirVtab));
 
@@ -169,11 +167,9 @@ static int fsdirDisconnect(sqlite3_vtab *pVtab){
 **   (dir = ?)
 */
 static int fsdirBestIndex(sqlite3_vtab *tab, sqlite3_index_info *pIdxInfo){
-  int ii;
-
   pIdxInfo->estimatedCost = 1000000000.0;
 
-  for(ii=0; ii<pIdxInfo->nConstraint; ii++){
+  for(int ii=0; ii<pIdxInfo->nConstraint; ii++){
     struct sqlite3_index_constraint const *p = &pIdxInfo->aConstraint[ii];
     if( p->iColumn==0 && p->usable && p->op==SQLITE_INDEX_CONSTRAINT_EQ ){
       struct sqlite3_index_constraint_usage *pUsage;
@@ -195,11 +191,10 @@ static int fsdirBestIndex(sqlite3_vtab *tab, sqlite3_index_info *pIdxInfo){
 ** Open a new fsdir cursor.
 */
 static int fsdirOpen(sqlite3_vtab *pVTab, sqlite3_vtab_cursor **ppCursor){
-  FsdirCsr *pCur;
   /* Allocate an extra 256 bytes because it is undefined how big dirent.d_name
   ** is and we need enough space.  Linux provides plenty already, but
   ** Solaris only provides one byte. */
-  pCur = (FsdirCsr*)sqlite3_malloc(sizeof(FsdirCsr)+256);
+  FsdirCsr *const pCur = (FsdirCsr*)sqlite3_malloc(sizeof(FsdirCsr)+256);
   if( pCur==0 ) return SQLITE_NOMEM;
   memset(pCur, 0, sizeof(FsdirCsr));
   *ppCursor = &pCur->base;
@@ -210,7 +205,7 @@ static int fsdirOpen(sqlite3_vtab *pVTab, sqlite3_vtab_cursor **ppCursor){
 ** Close a fsdir cursor.
 */
 static int fsdirClose(sqlite3_vtab_cursor *cur){
-  FsdirCsr *pCur = (FsdirCsr*)cur;
+  FsdirCsr *const pCur = (FsdirCsr*)cur;
   if( pCur->pDir ) closedir(pCur->pDir);
   sqlite3_free(pCur->zDir);
   sqlite3_free(pCur);
@@ -221,7 +216,7 @@ static int fsdirClose(sqlite3_vtab_cursor *cur){
 ** Skip the cursor to the next entry.
 */
 static int fsdirNext(sqlite3_vtab_cursor *cur){
-  FsdirCsr *pCsr = (FsdirCsr*)cur;
+  FsdirCsr *const pCsr = (FsdirCsr*)cur;
 
   if( pCsr->pDir ){
     pCsr->pEntry = readdir(pCsr->pDir);
@@ -243,10 +238,7 @@ static int fsdirFilter(
   int idxNum, const char *idxStr,
   int argc, sqlite3_value **argv
 ){
-  FsdirCsr *pCsr = (FsdirCsr*)pVtabCursor;
-  const char *zDir;
-  int nDir;
-
+  FsdirCsr *const pCsr = (FsdirCsr*)pVtabCursor;
 
   if( idxNum!=1 || argc!=1 ){
     return SQLITE_ERROR;
@@ -259,8 +251,8 @@ static int fsdirFilter(
     pCsr->pDir = 0;
   }
 
-  zDir = (const char*)sqlite3_value_text(argv[0]);
-  nDir = sqlite3_value_bytes(argv[0]);
+  const char *const zDir = (const char*)sqlite3_value_text(argv[0]);
+  const int nDir = sqlite3_value_bytes(argv[0]);
   pCsr->zDir = (char*)sqlite3_malloc(nDir+1);
   if( pCsr->zDir==0 ) return SQLITE_NOMEM;
   memcpy(pCsr->zDir, zDir, nDir+1);
@@ -273,7 +265,7 @@ static int fsdirFilter(
 ** xEof method implementation.
 */
 static int fsdirEof(sqlite3_vtab_cursor *cur){
-  FsdirCsr *pCsr = (FsdirCsr*)cur;
+  const FsdirCsr *const pCsr = (FsdirCsr*)cur;
   return pCsr->pDir==0;
 }
 
@@ -281,7 +273,7 @@ static int fsdirEof(sqlite3_vtab_cursor *cur){
 ** xColumn method implementation.
 */
 static int fsdirColumn(sqlite3_vtab_cursor *cur, sqlite3_context *ctx, int i){
-  FsdirCsr *pCsr = (FsdirCsr*)cur;
+  const FsdirCsr *const pCsr = (FsdirCsr*)cur;
   switch( i ){
     case 0: /* dir */
       sqlite3_result_text(ctx, pCsr->zDir, -1, SQLITE_STATIC);
@@ -302,7 +294,7 @@ static int fsdirColumn(sqlite3_vtab_cursor *cur, sqlite3_context *ctx, int i){
 ** xRowid method implementation.
 */
 static int fsdirRowid(sqlite3_vtab_cursor *cur, sqlite_int64 *pRowid){
-  FsdirCsr *pCsr = (FsdirCsr*)cur;
+  const FsdirCsr *const pCsr = (FsdirCsr*)cur;
   *pRowid = pCsr->iRowid;
   return SQLITE_OK;
 }
@@ -344,14 +336,12 @@ static int fstreeConnect(
   sqlite3_vtab **ppVtab,
   char **pzErr
 ){
-  FstreeVtab *pTab;
-
   if( argc!=3 ){
     *pzErr = sqlite3_mprintf("wrong number of arguments");
     return SQLITE_ERROR;
   }
 
-  pTab = (FstreeVtab *)sqlite3_malloc(sizeof(FstreeVtab));
+  FstreeVtab *const pTab = (FstreeVtab *)sqlite3_malloc(sizeof(FstreeVtab));
   if( !pTab ) return SQLITE_NOMEM;
   memset(pTab, 0, sizeof(FstreeVtab));
   pTab->db = db;
@@ -376,9 +366,7 @@ static int fstreeDisconnect(sqlite3_vtab *pVtab){
 **   (dir = ?)
 */
 static int fstreeBestIndex(sqlite3_vtab *tab, sqlite3_index_info *pIdxInfo){
-  int ii;
-
-  for(ii=0; ii<pIdxInfo->nConstraint; ii++){
+  for(int ii=0; ii<pIdxInfo->nConstraint; ii++){
     struct sqlite3_index_constraint const *p = &pIdxInfo->aConstraint[ii];
     if( p->iColumn==0 && p->usable && (
           p->op==SQLITE_INDEX_CONSTRAINT_GLOB
@@ -404,8 +392,7 @@ static int fstreeBestIndex(sqlite3_vtab *tab, sqlite3_index_info *pIdxInfo){
 ** Open a new fstree cursor.
 */
 static int fstreeOpen(sqlite3_vtab *pVTab, sqlite3_vtab_cursor **ppCursor){
-  FstreeCsr *pCur;
-  pCur = (FstreeCsr*)sqlite3_malloc(sizeof(FstreeCsr));
+  FstreeCsr *const pCur = (FstreeCsr*)sqlite3_malloc(sizeof(FstreeCsr));
   if( pCur==0 ) return SQLITE_NOMEM;
   memset(pCur, 0, sizeof(FstreeCsr));
   pCur->fd = -1;
@@ -424,7 +411,7 @@ static void fstreeCloseFd(FstreeCsr *pCsr){
 ** Close a fstree cursor.
 */
 static int fstreeClose(sqlite3_vtab_cursor *cur){
-  FstreeCsr *pCsr = (FstreeCsr*)cur;
+  FstreeCsr *const pCsr = (FstreeCsr*)cur;
   sqlite3_finalize(pCsr->pStmt);
   fstreeCloseFd(pCsr);
   sqlite3_free(pCsr);
@@ -435,11 +422,10 @@ static int fstreeClose(sqlite3_vtab_cursor *cur){
 ** Skip the cursor to the next entry.
 */
 static int fstreeNext(sqlite3_vtab_cursor *cur){
-  FstreeCsr *pCsr = (FstreeCsr*)cur;
-  int rc;
+  FstreeCsr *const pCsr = (FstreeCsr*)cur;
 
   fstreeCloseFd(pCsr);
-  rc = sqlite3_step(pCsr->pStmt);
+  int rc = sqlite3_step(pCsr->pStmt);
   if( rc!=SQLITE_ROW ){
     rc = sqlite3_finalize(pCsr->pStmt);
     pCsr->pStmt = 0;
@@ -459,8 +445,8 @@ static int fstreeFilter(
   int idxNum, const char *idxStr,
   int argc, sqlite3_value **argv
 ){
-  FstreeCsr *pCsr = (FstreeCsr*)pVtabCursor;
-  FstreeVtab *pTab = (FstreeVtab*)(pCsr->base.pVtab);
+  FstreeCsr *const pCsr = (FstreeCsr*)pVtabCursor;
+  FstreeVtab *const pTab = (FstreeVtab*)(pCsr->base.pVtab);
   int rc;
   const char *zSql = 
 "WITH r(d) AS ("
@@ -543,7 +529,7 @@ static int fstreeFilter(
 ** xEof method implementation.
 */
 static int fstreeEof(sqlite3_vtab_cursor *cur){
-  FstreeCsr *pCsr = (FstreeCsr*)cur;
+  const FstreeCsr *const pCsr = (FstreeCsr*)cur;
   return pCsr->pStmt==0;
 }
 
@@ -551,7 +537,7 @@ static int fstreeEof(sqlite3_vtab_cursor *cur){
 ** xColumn method implementation.
 */
 static int fstreeColumn(sqlite3_vtab_cursor *cur, sqlite3_context *ctx, int i){
-  FstreeCsr *pCsr = (FstreeCsr*)cur;
+  FstreeCsr *const pCsr = (FstreeCsr*)cur;
   if( i==0 ){      /* path */
     sqlite3_result_value(ctx, sqlite3_column_value(pCsr->pStmt, 0));
   }else{
@@ -562,10 +548,9 @@ static int fstreeColumn(sqlite3_vtab_cursor *cur, sqlite3_context *ctx, int i){
       if( i==1 ){
         sqlite3_result_int64(ctx, sBuf.st_size);
       }else{
-        int nRead;
         char *aBuf = (char*)sqlite3_malloc(sBuf.st_mode+1);
         if( !aBuf ) return SQLITE_NOMEM;
-        nRead = read(pCsr->fd, aBuf, sBuf.st_mode);
+        const int nRead = read(pCsr->fd, aBuf, sBuf.st_mode);
         if( nRead!=(int)sBuf.st_mode ){
           return SQLITE_IOERR;
         }
@@ -610,18 +595,16 @@ static int fsConnect(
   sqlite3_vtab **ppVtab,
   char **pzErr
 ){
-  fs_vtab *pVtab;
-  int nByte;
-  const char *zTbl;
-  const char *zDb = argv[1];
+  const char *const zDb = argv[1];
 
   if( argc!=4 ){
     *pzErr = sqlite3_mprintf("wrong number of arguments");
     return SQLITE_ERROR;
   }
-  zTbl = argv[3];
+  const char *const zTbl = argv[3];
 
-  nByte = sizeof(fs_vtab) + (int)strlen(zTbl) + 1 + (int)strlen(zDb) + 1;
+  const int nByte = sizeof(fs_vtab) + (int)strlen(zTbl) + 1 + (int)strlen(zDb) + 1;
+  fs_vtab *pVtab;
   pVtab = (fs_vtab *)sqlite3MallocZero( nByte );
   if( !pVtab ) return SQLITE_NOMEM;
 
@@ -648,8 +631,7 @@ static int fsDisconnect(sqlite3_vtab *pVtab){
 ** Open a new fs cursor.
 */
 static int fsOpen(sqlite3_vtab *pVTab, sqlite3_vtab_cursor **ppCursor){
-  fs_cursor *pCur;
-  pCur = (fs_cursor*)sqlite3MallocZero(sizeof(fs_cursor));
+  fs_cursor *const pCur = (fs_cursor*)sqlite3MallocZero(sizeof(fs_cursor));
   *ppCursor = &pCur->base;
   return SQLITE_OK;
 }
@@ -658,7 +640,7 @@ static int fsOpen(sqlite3_vtab *pVTab, sqlite3_vtab_cursor **ppCursor){
 ** Close a fs cursor.
 */
 static int fsClose(sqlite3_vtab_cursor *cur){
-  fs_cursor *pCur = (fs_cursor *)cur;
+  fs_cursor *const pCur = (fs_cursor *)cur;
   sqlite3_finalize(pCur->pStmt);
   sqlite3_free(pCur->zBuf);
   sqlite3_free(pCur);
@@ -666,10 +648,9 @@ static int fsClose(sqlite3_vtab_cursor *cur){
 }
 
 static int fsNext(sqlite3_vtab_cursor *cur){
-  fs_cursor *pCur = (fs_cursor *)cur;
-  int rc;
+  fs_cursor *const pCur = (fs_cursor *)cur;
 
-  rc = sqlite3_step(pCur->pStmt);
+  int rc = sqlite3_step(pCur->pStmt);
   if( rc==SQLITE_ROW || rc==SQLITE_DONE ) rc = SQLITE_OK;
 
   return rc;
@@ -681,8 +662,8 @@ static int fsFilter(
   int argc, sqlite3_value **argv
 ){
   int rc;
-  fs_cursor *pCur = (fs_cursor *)pVtabCursor;
-  fs_vtab *p = (fs_vtab *)(pVtabCursor->pVtab);
+  fs_cursor *const pCur = (fs_cursor *)pVtabCursor;
+  fs_vtab *const p = (fs_vtab *)(pVtabCursor->pVtab);
 
   assert( (idxNum==0 && argc==0) || (idxNum==1 && argc==1) );
   if( idxNum==1 ){
@@ -708,7 +689,7 @@ static int fsFilter(
 }
 
 static int fsColumn(sqlite3_vtab_cursor *cur, sqlite3_context *ctx, int i){
-  fs_cursor *pCur = (fs_cursor*)cur;
+  fs_cursor *const pCur = (fs_cursor*)cur;
 
   assert( i==0 || i==1 || i==2 );
   if( i==0 ){
@@ -716,10 +697,8 @@ static int fsColumn(sqlite3_vtab_cursor *cur, sqlite3_context *ctx, int i){
   }else{
     const char *zFile = (const char *)sqlite3_column_text(pCur->pStmt, 1);
     struct stat sbuf;
-    int fd;
 
-    int n;
-    fd = open(zFile, O_RDONLY);
+    const int fd = open(zFile, O_RDONLY);
     if( fd<0 ) return SQLITE_IOERR;
     fstat(fd, &sbuf);
 
@@ -737,7 +716,7 @@ static int fsColumn(sqlite3_vtab_cursor *cur, sqlite3_context *ctx, int i){
       pCur->nAlloc = nNew;
     }
 
-    n = (int)read(fd, pCur->zBuf, sbuf.st_size);
+    const int n = (int)read(fd, pCur->zBuf, sbuf.st_size);
     close(fd);
     if( n!=sbuf.st_size ) return SQLITE_ERROR;
     pCur->nBuf = sbuf.st_size;
@@ -749,20 +728,18 @@ static int fsColumn(sqlite3_vtab_cursor *cur, sqlite3_context *ctx, int i){
 }
 
 static int fsRowid(sqlite3_vtab_cursor *cur, sqlite_int64 *pRowid){
-  fs_cursor *pCur = (fs_cursor*)cur;
+  fs_cursor *const pCur = (fs_cursor*)cur;
   *pRowid = sqlite3_column_int64(pCur->pStmt, 0);
   return SQLITE_OK;
 }
 
 static int fsEof(sqlite3_vtab_cursor *cur){
-  fs_cursor *pCur = (fs_cursor*)cur;
+  fs_cursor *const pCur = (fs_cursor*)cur;
   return (sqlite3_data_count(pCur->pStmt)==0);
 }
 
 static int fsBestIndex(sqlite3_vtab *tab, sqlite3_index_info *pIdxInfo){
-  int ii;
-
-  for(ii=0; ii<pIdxInfo->nConstraint; ii++){
+  for(int ii=0; ii<pIdxInfo->nConstraint; ii++){
     struct sqlite3_index_constraint const *pCons = &pIdxInfo->aConstraint[ii];
     if( pCons->iColumn<0 && pCons->usable
            && pCons->op==SQLITE_INDEX_CONSTRAINT_EQ ){
@@ -910,8 +887,7 @@ int Sqlitetestfs_Init(Tcl_Interp *interp){
   } aObjCmd[] = {
      { "register_fs_module",   register_fs_module, 0 },
   };
-  int i;
-  for(i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
+  for(int i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
     Tcl_CreateObjCommand(interp, aObjCmd[i].zName, 
         aObjCmd[i].xProc, aObjCmd[i].clientData, 0);
   }

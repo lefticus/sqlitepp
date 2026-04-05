@@ -1841,32 +1841,32 @@
 [x] src/test_devsym.cpp::devsym_register
 [x] src/test_devsym.cpp::devsym_unregister
 [x] src/test_devsym.cpp::devsym_crash_on_write
-[ ] src/test_fs.cpp::fsdirDisconnect
-[ ] src/test_fs.cpp::fsdirBestIndex
-[ ] src/test_fs.cpp::fsdirOpen
-[ ] src/test_fs.cpp::fsdirClose
-[ ] src/test_fs.cpp::fsdirNext
-[ ] src/test_fs.cpp::fsdirEof
-[ ] src/test_fs.cpp::fsdirColumn
-[ ] src/test_fs.cpp::fsdirRowid
-[ ] src/test_fs.cpp::fstreeDisconnect
-[ ] src/test_fs.cpp::fstreeBestIndex
-[ ] src/test_fs.cpp::fstreeOpen
-[ ] src/test_fs.cpp::fstreeCloseFd
-[ ] src/test_fs.cpp::fstreeClose
-[ ] src/test_fs.cpp::fstreeNext
-[ ] src/test_fs.cpp::fstreeEof
-[ ] src/test_fs.cpp::fstreeColumn
-[ ] src/test_fs.cpp::fstreeRowid
-[ ] src/test_fs.cpp::fsDisconnect
-[ ] src/test_fs.cpp::fsOpen
-[ ] src/test_fs.cpp::fsClose
-[ ] src/test_fs.cpp::fsNext
-[ ] src/test_fs.cpp::fsColumn
-[ ] src/test_fs.cpp::fsRowid
-[ ] src/test_fs.cpp::fsEof
-[ ] src/test_fs.cpp::fsBestIndex
-[ ] src/test_fs.cpp::Sqlitetestfs_Init
+[x] src/test_fs.cpp::fsdirDisconnect
+[x] src/test_fs.cpp::fsdirBestIndex
+[x] src/test_fs.cpp::fsdirOpen
+[x] src/test_fs.cpp::fsdirClose
+[x] src/test_fs.cpp::fsdirNext
+[x] src/test_fs.cpp::fsdirEof
+[x] src/test_fs.cpp::fsdirColumn
+[x] src/test_fs.cpp::fsdirRowid
+[x] src/test_fs.cpp::fstreeDisconnect
+[x] src/test_fs.cpp::fstreeBestIndex
+[x] src/test_fs.cpp::fstreeOpen
+[x] src/test_fs.cpp::fstreeCloseFd
+[x] src/test_fs.cpp::fstreeClose
+[x] src/test_fs.cpp::fstreeNext
+[x] src/test_fs.cpp::fstreeEof
+[x] src/test_fs.cpp::fstreeColumn
+[x] src/test_fs.cpp::fstreeRowid
+[x] src/test_fs.cpp::fsDisconnect
+[x] src/test_fs.cpp::fsOpen
+[x] src/test_fs.cpp::fsClose
+[x] src/test_fs.cpp::fsNext
+[x] src/test_fs.cpp::fsColumn
+[x] src/test_fs.cpp::fsRowid
+[x] src/test_fs.cpp::fsEof
+[x] src/test_fs.cpp::fsBestIndex
+[x] src/test_fs.cpp::Sqlitetestfs_Init
 [ ] src/test_func.cpp::testContextMalloc
 [ ] src/test_func.cpp::randStr
 [ ] src/test_func.cpp::destructor
