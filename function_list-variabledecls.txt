@@ -3282,64 +3282,64 @@
 [x] src/vtab.cpp::sqlite3VtabEponymousTableClear
 [x] src/vtab.cpp::sqlite3_vtab_on_conflict
 [x] src/vtab.cpp::sqlite3_vtab_config
-[ ] src/wal.cpp::sehExceptionFilter
-[ ] src/wal.cpp::sehInjectFault
-[ ] src/wal.cpp::walCkptInfo
-[ ] src/wal.cpp::walIndexHdr
-[ ] src/wal.cpp::walShmBarrier
-[ ] src/wal.cpp::walIndexWriteHdr
-[ ] src/wal.cpp::walLockName
-[ ] src/wal.cpp::walLockShared
-[ ] src/wal.cpp::walUnlockShared
-[ ] src/wal.cpp::walLockExclusive
-[ ] src/wal.cpp::walUnlockExclusive
-[ ] src/wal.cpp::walHash
-[ ] src/wal.cpp::walNextHash
-[ ] src/wal.cpp::walFramePage
-[ ] src/wal.cpp::walFramePgno
-[ ] src/wal.cpp::walCleanupHash
-[ ] src/wal.cpp::walIndexAppend
-[ ] src/wal.cpp::walIndexRecover
-[ ] src/wal.cpp::walIndexClose
-[ ] src/wal.cpp::sqlite3WalLimit
-[ ] src/wal.cpp::walIteratorFree
-[ ] src/wal.cpp::walIteratorInit
-[ ] src/wal.cpp::walEnableBlockingMs
-[ ] src/wal.cpp::walEnableBlocking
-[ ] src/wal.cpp::walDisableBlocking
-[ ] src/wal.cpp::sqlite3WalWriteLock
-[ ] src/wal.cpp::sqlite3WalDb
-[ ] src/wal.cpp::walPagesize
-[ ] src/wal.cpp::walRestartHdr
-[ ] src/wal.cpp::walLimitSize
-[ ] src/wal.cpp::walHandleException
-[ ] src/wal.cpp::walAssertLockmask
-[ ] src/wal.cpp::sqlite3WalSystemErrno
-[ ] src/wal.cpp::walIndexTryHdr
-[ ] src/wal.cpp::walIndexReadHdr
-[ ] src/wal.cpp::walBeginShmUnreliable
-[ ] src/wal.cpp::walTryBeginRead
-[ ] src/wal.cpp::sqlite3WalSnapshotRecover
-[ ] src/wal.cpp::walBeginReadTransaction
-[ ] src/wal.cpp::sqlite3WalBeginReadTransaction
-[ ] src/wal.cpp::sqlite3WalEndReadTransaction
-[ ] src/wal.cpp::sqlite3WalDbsize
-[ ] src/wal.cpp::sqlite3WalBeginWriteTransaction
-[ ] src/wal.cpp::sqlite3WalEndWriteTransaction
-[ ] src/wal.cpp::sqlite3WalUndo
-[ ] src/wal.cpp::sqlite3WalSavepoint
-[ ] src/wal.cpp::sqlite3WalSavepointUndo
-[ ] src/wal.cpp::walRestartLog
-[ ] src/wal.cpp::walRewriteChecksums
-[ ] src/wal.cpp::sqlite3WalCallback
-[ ] src/wal.cpp::sqlite3WalExclusiveMode
-[ ] src/wal.cpp::sqlite3WalHeapMemory
-[ ] src/wal.cpp::sqlite3WalSnapshotGet
-[ ] src/wal.cpp::sqlite3_snapshot_cmp
-[ ] src/wal.cpp::sqlite3WalSnapshotCheck
-[ ] src/wal.cpp::sqlite3WalSnapshotUnlock
-[ ] src/wal.cpp::sqlite3WalFramesize
-[ ] src/wal.cpp::sqlite3WalFile
+[x] src/wal.cpp::sehExceptionFilter
+[x] src/wal.cpp::sehInjectFault
+[x] src/wal.cpp::walCkptInfo
+[x] src/wal.cpp::walIndexHdr
+[x] src/wal.cpp::walShmBarrier
+[x] src/wal.cpp::walIndexWriteHdr
+[x] src/wal.cpp::walLockName
+[x] src/wal.cpp::walLockShared
+[x] src/wal.cpp::walUnlockShared
+[x] src/wal.cpp::walLockExclusive
+[x] src/wal.cpp::walUnlockExclusive
+[x] src/wal.cpp::walHash
+[x] src/wal.cpp::walNextHash
+[x] src/wal.cpp::walFramePage
+[x] src/wal.cpp::walFramePgno
+[x] src/wal.cpp::walCleanupHash
+[x] src/wal.cpp::walIndexAppend
+[x] src/wal.cpp::walIndexRecover
+[x] src/wal.cpp::walIndexClose
+[x] src/wal.cpp::sqlite3WalLimit
+[x] src/wal.cpp::walIteratorFree
+[x] src/wal.cpp::walIteratorInit
+[x] src/wal.cpp::walEnableBlockingMs
+[x] src/wal.cpp::walEnableBlocking
+[x] src/wal.cpp::walDisableBlocking
+[x] src/wal.cpp::sqlite3WalWriteLock
+[x] src/wal.cpp::sqlite3WalDb
+[x] src/wal.cpp::walPagesize
+[x] src/wal.cpp::walRestartHdr
+[x] src/wal.cpp::walLimitSize
+[x] src/wal.cpp::walHandleException
+[x] src/wal.cpp::walAssertLockmask
+[x] src/wal.cpp::sqlite3WalSystemErrno
+[x] src/wal.cpp::walIndexTryHdr
+[x] src/wal.cpp::walIndexReadHdr
+[x] src/wal.cpp::walBeginShmUnreliable
+[x] src/wal.cpp::walTryBeginRead
+[x] src/wal.cpp::sqlite3WalSnapshotRecover
+[x] src/wal.cpp::walBeginReadTransaction
+[x] src/wal.cpp::sqlite3WalBeginReadTransaction
+[x] src/wal.cpp::sqlite3WalEndReadTransaction
+[x] src/wal.cpp::sqlite3WalDbsize
+[x] src/wal.cpp::sqlite3WalBeginWriteTransaction
+[x] src/wal.cpp::sqlite3WalEndWriteTransaction
+[x] src/wal.cpp::sqlite3WalUndo
+[x] src/wal.cpp::sqlite3WalSavepoint
+[x] src/wal.cpp::sqlite3WalSavepointUndo
+[x] src/wal.cpp::walRestartLog
+[x] src/wal.cpp::walRewriteChecksums
+[x] src/wal.cpp::sqlite3WalCallback
+[x] src/wal.cpp::sqlite3WalExclusiveMode
+[x] src/wal.cpp::sqlite3WalHeapMemory
+[x] src/wal.cpp::sqlite3WalSnapshotGet
+[x] src/wal.cpp::sqlite3_snapshot_cmp
+[x] src/wal.cpp::sqlite3WalSnapshotCheck
+[x] src/wal.cpp::sqlite3WalSnapshotUnlock
+[x] src/wal.cpp::sqlite3WalFramesize
+[x] src/wal.cpp::sqlite3WalFile
 [ ] src/walker.cpp::walkWindowList
 [ ] src/walker.cpp::sqlite3WalkExprNN
 [ ] src/walker.cpp::sqlite3WalkExpr
