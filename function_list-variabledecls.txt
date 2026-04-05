@@ -1879,11 +1879,11 @@
 [x] src/test_func.cpp::tFinal
 [x] src/test_func.cpp::rankfunc
 [x] src/test_func.cpp::Sqlitetest_func_Init
-[ ] src/test_hexio.cpp::sqlite3TestBinToHex
-[ ] src/test_hexio.cpp::sqlite3TestHexToBin
-[ ] src/test_hexio.cpp::getFts3Varint
-[ ] src/test_hexio.cpp::putFts3Varint
-[ ] src/test_hexio.cpp::Sqlitetest_hexio_Init
+[x] src/test_hexio.cpp::sqlite3TestBinToHex
+[x] src/test_hexio.cpp::sqlite3TestHexToBin
+[x] src/test_hexio.cpp::getFts3Varint
+[x] src/test_hexio.cpp::putFts3Varint
+[x] src/test_hexio.cpp::Sqlitetest_hexio_Init
 [ ] src/test_init.cpp::wrMemInit
 [ ] src/test_init.cpp::wrMemShutdown
 [ ] src/test_init.cpp::wrMemMalloc

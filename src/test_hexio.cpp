@@ -31,12 +31,10 @@
 */
 void sqlite3TestBinToHex(unsigned char *zBuf, int N){
   const unsigned char zHex[] = "0123456789ABCDEF";
-  int i, j;
-  unsigned char c;
-  i = N*2;
+  int i = N*2;
   zBuf[i--] = 0;
-  for(j=N-1; j>=0; j--){
-    c = zBuf[j];
+  for(int j=N-1; j>=0; j--){
+    const unsigned char c = zBuf[j];
     zBuf[i--] = zHex[c&0xf];
     zBuf[i--] = zHex[c>>4];
   }
@@ -70,10 +68,9 @@ int sqlite3TestHexToBin(const unsigned char *zIn, int N, unsigned char *aOut){
   };
   int i, j;
   int hi=1;
-  unsigned char c;
 
   for(i=j=0; i<N; i++){
-    c = aMap[zIn[i]];
+    const unsigned char c = aMap[zIn[i]];
     if( c==0 ) continue;
     if( hi ){
       aOut[j] = (c-1)<<4;
@@ -467,8 +464,7 @@ int Sqlitetest_hexio_Init(Tcl_Interp *interp){
      { "read_fts3varint",              read_fts3varint       },
      { "make_fts3record",              make_fts3record       },
   };
-  int i;
-  for(i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
+  for(int i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
     Tcl_CreateObjCommand(interp, aObjCmd[i].zName, aObjCmd[i].xProc, 0, 0);
   }
   return TCL_OK;
