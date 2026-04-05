@@ -1548,16 +1548,16 @@
 [x] src/random.cpp::sqlite3_randomness
 [x] src/random.cpp::sqlite3PrngSaveState
 [x] src/random.cpp::sqlite3PrngRestoreState
-[ ] src/resolve.cpp::incrAggDepth
-[ ] src/resolve.cpp::incrAggFunctionDepth
-[ ] src/resolve.cpp::areDoubleQuotedStringsEnabled
-[ ] src/resolve.cpp::sqlite3ExprColUsed
-[ ] src/resolve.cpp::sqlite3CreateColumnExpr
-[ ] src/resolve.cpp::exprProbability
-[ ] src/resolve.cpp::resolveExprStep
-[ ] src/resolve.cpp::resolveRemoveWindowsCb
-[ ] src/resolve.cpp::windowRemoveExprFromSelect
-[ ] src/resolve.cpp::resolveSelectStep
+[x] src/resolve.cpp::incrAggDepth
+[x] src/resolve.cpp::incrAggFunctionDepth
+[x] src/resolve.cpp::areDoubleQuotedStringsEnabled
+[x] src/resolve.cpp::sqlite3ExprColUsed
+[x] src/resolve.cpp::sqlite3CreateColumnExpr
+[x] src/resolve.cpp::exprProbability
+[x] src/resolve.cpp::resolveExprStep
+[x] src/resolve.cpp::resolveRemoveWindowsCb
+[x] src/resolve.cpp::windowRemoveExprFromSelect
+[x] src/resolve.cpp::resolveSelectStep
 [ ] src/rowset.cpp::sqlite3RowSetInit
 [ ] src/rowset.cpp::sqlite3RowSetClear
 [ ] src/rowset.cpp::sqlite3RowSetDelete

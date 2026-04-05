@@ -177,12 +177,9 @@ static int areDoubleQuotedStringsEnabled(sqlite3 *db, NameContext *pTopNC){
 ** return the appropriate colUsed mask.
 */
 Bitmask sqlite3ExprColUsed(Expr *pExpr){
-  int n;
-  Table *pExTab;
-
-  n = pExpr->iColumn;
+  int n = pExpr->iColumn;
   assert( ExprUseYTab(pExpr) );
-  pExTab = pExpr->y.pTab;
+  Table *const pExTab = pExpr->y.pTab;
   assert( pExTab!=0 );
   assert( n < pExTab->nCol );
   if( (pExTab->tabFlags & TF_HasGenerated)!=0
@@ -864,10 +861,9 @@ lookupname_end:
 Expr *sqlite3CreateColumnExpr(sqlite3 *db, SrcList *pSrc, int iSrc, int iCol){
   Expr *p = sqlite3ExprAlloc(db, TK_COLUMN, 0, 0);
   if( p ){
-    SrcItem *pItem = &pSrc->a[iSrc];
-    Table *pTab;
+    SrcItem *const pItem = &pSrc->a[iSrc];
     assert( ExprUseYTab(p) );
-    pTab = p->y.pTab = pItem->pSTab;
+    Table *const pTab = p->y.pTab = pItem->pSTab;
     p->iTable = pItem->iCursor;
     if( p->y.pTab->iPKey==iCol ){
       p->iColumn = -1;
@@ -955,12 +951,9 @@ static int exprProbability(Expr *p){
 ** to TK_AGG_FUNCTION.
 */
 static int resolveExprStep(Walker *pWalker, Expr *pExpr){
-  NameContext *pNC;
-  Parse *pParse;
-
-  pNC = pWalker->u.pNC;
+  NameContext *const pNC = pWalker->u.pNC;
   assert( pNC!=0 );
-  pParse = pNC->pParse;
+  Parse *const pParse = pNC->pParse;
   assert( pParse==pWalker->pParse );
 
 #ifndef NDEBUG
@@ -1840,24 +1833,16 @@ static int resolveOrderGroupBy(
 ** Resolve names in the SELECT statement p and all of its descendants.
 */
 static int resolveSelectStep(Walker *pWalker, Select *p){
-  NameContext *pOuterNC;  /* Context that contains this SELECT */
   NameContext sNC;        /* Name context of this SELECT */
-  int isCompound;         /* True if p is a compound select */
-  int nCompound;          /* Number of compound terms processed so far */
-  Parse *pParse;          /* Parsing context */
   int i;                  /* Loop counter */
-  ExprList *pGroupBy;     /* The GROUP BY clause */
-  Select *pLeftmost;      /* Left-most of SELECT of a compound */
-  sqlite3 *db;            /* Database connection */
- 
 
   assert( p!=0 );
   if( p->selFlags & SF_Resolved ){
     return WRC_Prune;
   }
-  pOuterNC = pWalker->u.pNC;
-  pParse = pWalker->pParse;
-  db = pParse->db;
+  NameContext *pOuterNC = pWalker->u.pNC;  /* Context that contains this SELECT */
+  Parse *const pParse = pWalker->pParse;          /* Parsing context */
+  sqlite3 *const db = pParse->db;            /* Database connection */
 
   /* Normally sqlite3SelectExpand() will be called first and will have
   ** already expanded this SELECT.  However, if this is a subquery within
@@ -1872,9 +1857,9 @@ static int resolveSelectStep(Walker *pWalker, Select *p){
     return pParse->nErr ? WRC_Abort : WRC_Prune;
   }
 
-  isCompound = p->pPrior!=0;
-  nCompound = 0;
-  pLeftmost = p;
+  const int isCompound = p->pPrior!=0;
+  int nCompound = 0;
+  Select *const pLeftmost = p;
   while( p ){
     assert( (p->selFlags & SF_Expanded)!=0 );
     assert( (p->selFlags & SF_Resolved)==0 );
@@ -1958,7 +1943,7 @@ static int resolveSelectStep(Walker *pWalker, Select *p){
     ** expression, do not allow aggregates in any of the other expressions.
     */
     assert( (p->selFlags & SF_Aggregate)==0 );
-    pGroupBy = p->pGroupBy;
+    ExprList *const pGroupBy = p->pGroupBy;
     if( pGroupBy || (sNC.ncFlags & NC_HasAgg)!=0 ){
       assert( NC_MinMaxAgg==SF_MinMaxAgg );
       assert( NC_OrderAgg==SF_OrderByReqd );
