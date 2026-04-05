@@ -31,10 +31,9 @@
 */
 static int execSql(sqlite3 *db, char **pzErrMsg, const char *zSql){
   sqlite3_stmt *pStmt;
-  int rc;
 
   /* printf("SQL: [%s]\n", zSql); fflush(stdout); */
-  rc = sqlite3_prepare_v2(db, zSql, -1, &pStmt, 0);
+  int rc = sqlite3_prepare_v2(db, zSql, -1, &pStmt, 0);
   if( rc!=SQLITE_OK ) return rc;
   while( SQLITE_ROW==(rc = sqlite3_step(pStmt)) ){
     const char *zSubSql = (const char*)sqlite3_column_text(pStmt,0);
@@ -60,14 +59,12 @@ static int execSql(sqlite3 *db, char **pzErrMsg, const char *zSql){
   return rc;
 }
 static int execSqlF(sqlite3 *db, char **pzErrMsg, const char *zSql, ...){
-  char *z;
   va_list ap;
-  int rc;
   va_start(ap, zSql);
-  z = sqlite3VMPrintf(db, zSql, ap);
+  char *z = sqlite3VMPrintf(db, zSql, ap);
   va_end(ap);
   if( z==0 ) return SQLITE_NOMEM;
-  rc = execSql(db, pzErrMsg, z);
+  const int rc = execSql(db, pzErrMsg, z);
   sqlite3DbFree(db, z);
   return rc;
 }
@@ -147,23 +144,10 @@ SQLITE_NOINLINE int sqlite3RunVacuum(
   sqlite3_value *pOut     /* Write results here, if not NULL. VACUUM INTO */
 ){
   int rc = SQLITE_OK;     /* Return code from service routines */
-  Btree *pMain;           /* The database being vacuumed */
-  Btree *pTemp;           /* The temporary database we vacuum into */
-  u32 saved_mDbFlags;     /* Saved value of db->mDbFlags */
-  u64 saved_flags;        /* Saved value of db->flags */
-  i64 saved_nChange;      /* Saved value of db->nChange */
-  i64 saved_nTotalChange; /* Saved value of db->nTotalChange */
-  u32 saved_openFlags;    /* Saved value of db->openFlags */
-  u8 saved_mTrace;        /* Saved trace settings */
   Db *pDb = 0;            /* Database to detach at end of vacuum */
-  int isMemDb;            /* True if vacuuming a :memory: database */
   int nRes;               /* Bytes of reserved space at the end of each page */
-  int nDb;                /* Number of attached databases */
-  const char *zDbMain;    /* Schema name of database to vacuum */
   const char *zOut;       /* Name of output file */
   u32 pgflags = PAGER_SYNCHRONOUS_OFF; /* sync flags for output db */
-  u64 iRandom;            /* Random value used for zDbVacuum[] */
-  char zDbVacuum[42];     /* Name of the ATTACH-ed database used for vacuum */
 
 
   if( !db->autoCommit ){
@@ -174,7 +158,7 @@ SQLITE_NOINLINE int sqlite3RunVacuum(
     sqlite3SetString(pzErrMsg, db,"cannot VACUUM - SQL statements in progress");
     return SQLITE_ERROR; /* IMP: R-15610-35227 */
   }
-  saved_openFlags = db->openFlags;
+  const u32 saved_openFlags = db->openFlags;
   if( pOut ){
     if( sqlite3_value_type(pOut)!=SQLITE_TEXT ){
       sqlite3SetString(pzErrMsg, db, "non-text filename");
@@ -190,11 +174,11 @@ SQLITE_NOINLINE int sqlite3RunVacuum(
   /* Save the current value of the database flags so that it can be 
   ** restored before returning. Then set the writable-schema flag, and
   ** disable CHECK and foreign key constraints.  */
-  saved_flags = db->flags;
-  saved_mDbFlags = db->mDbFlags;
-  saved_nChange = db->nChange;
-  saved_nTotalChange = db->nTotalChange;
-  saved_mTrace = db->mTrace;
+  const u64 saved_flags = db->flags;
+  const u32 saved_mDbFlags = db->mDbFlags;
+  const i64 saved_nChange = db->nChange;
+  const i64 saved_nTotalChange = db->nTotalChange;
+  const u8 saved_mTrace = db->mTrace;
   db->flags |= SQLITE_WriteSchema | SQLITE_IgnoreChecks | SQLITE_Comments
                | SQLITE_AttachCreate | SQLITE_AttachWrite;
   db->mDbFlags |= DBFLAG_PreferBuiltin | DBFLAG_Vacuum;
@@ -202,9 +186,9 @@ SQLITE_NOINLINE int sqlite3RunVacuum(
                    | SQLITE_Defensive | SQLITE_CountRows);
   db->mTrace = 0;
 
-  zDbMain = db->aDb[iDb].zDbSName;
-  pMain = db->aDb[iDb].pBt;
-  isMemDb = sqlite3PagerIsMemdb(sqlite3BtreePager(pMain));
+  const char *const zDbMain = db->aDb[iDb].zDbSName;
+  Btree *const pMain = db->aDb[iDb].pBt;
+  const int isMemDb = sqlite3PagerIsMemdb(sqlite3BtreePager(pMain));
 
   /* Attach the temporary database as 'vacuum_XXXXXX'. The synchronous pragma
   ** can be set to 'off' for this file, as it is not recovered if a crash
@@ -220,9 +204,12 @@ SQLITE_NOINLINE int sqlite3RunVacuum(
   ** time to parse and run the PRAGMA to turn journalling off than it does
   ** to write the journal header file.
   */
+  u64 iRandom;
   sqlite3_randomness(sizeof(iRandom),&iRandom);
+  char zDbVacuum[42];
   sqlite3_snprintf(sizeof(zDbVacuum), zDbVacuum, "vacuum_%016llx", iRandom);
-  nDb = db->nDb;
+  const int nDb = db->nDb;
+  Btree *pTemp;           /* The temporary database we vacuum into */
   rc = execSqlF(db, pzErrMsg, "ATTACH %Q AS %s", zOut, zDbVacuum);
   db->openFlags = saved_openFlags;
   if( rc!=SQLITE_OK ) goto end_of_vacuum;
@@ -232,9 +219,8 @@ SQLITE_NOINLINE int sqlite3RunVacuum(
   pTemp = pDb->pBt;
   nRes = sqlite3BtreeGetRequestedReserve(pMain);
   if( pOut ){
-    sqlite3_file *id = sqlite3PagerFile(sqlite3BtreePager(pTemp));
+    sqlite3_file *const id = sqlite3PagerFile(sqlite3BtreePager(pTemp));
     i64 sz = 0;
-    const char *zFilename;
     if( id->pMethods!=0 && (sqlite3OsFileSize(id, &sz)!=SQLITE_OK || sz>0) ){
       rc = SQLITE_ERROR;
       sqlite3SetString(pzErrMsg, db, "output file already exists");
@@ -250,9 +236,9 @@ SQLITE_NOINLINE int sqlite3RunVacuum(
     /* If the VACUUM INTO target file is a URI filename and if the
     ** "reserve=N" query parameter is present, reset the reserve to the
     ** amount specified, if the amount is within range */
-    zFilename = sqlite3BtreeGetFilename(pTemp);
+    const char *zFilename = sqlite3BtreeGetFilename(pTemp);
     if( ALWAYS(zFilename) ){
-      int nNew = (int)sqlite3_uri_int64(zFilename, "reserve", nRes);
+      const int nNew = (int)sqlite3_uri_int64(zFilename, "reserve", nRes);
       if( nNew>=0 && nNew<=255 ) nRes = nNew;
     }
   }
@@ -346,9 +332,6 @@ SQLITE_NOINLINE int sqlite3RunVacuum(
   ** call to sqlite3BtreeCommit().
   */
   {
-    u32 meta;
-    int i;
-
     /* This array determines which meta meta values are preserved in the
     ** vacuum.  Even entries are the meta value number and odd entries
     ** are an increment to apply to the meta value after the vacuum.
@@ -367,9 +350,10 @@ SQLITE_NOINLINE int sqlite3RunVacuum(
     assert( pOut!=0 || SQLITE_TXN_WRITE==sqlite3BtreeTxnState(pMain) );
 
     /* Copy Btree meta values */
-    for(i=0; i<ArraySize(aCopy); i+=2){
+    for(int i=0; i<ArraySize(aCopy); i+=2){
       /* GetMeta() and UpdateMeta() cannot fail in this context because
       ** we already have page 1 loaded into cache and marked dirty. */
+      u32 meta;
       sqlite3BtreeGetMeta(pMain, aCopy[i], &meta);
       rc = sqlite3BtreeUpdateMeta(pTemp, aCopy[i], meta+aCopy[i+1]);
       if( NEVER(rc!=SQLITE_OK) ) goto end_of_vacuum;

@@ -2856,10 +2856,16 @@
 [x] src/util.cpp::sqlite3LogEstToInt
 [x] src/util.cpp::sqlite3VListNumToName
 [x] src/util.cpp::sqlite3VListNameToNum
+<<<<<<< HEAD
 >>>>>>> cf303638b (Move variable declarations down and add const: src/util.cpp)
 [ ] src/vacuum.cpp::execSql
 [ ] src/vacuum.cpp::execSqlF
 [ ] src/vacuum.cpp::sqlite3Vacuum
+=======
+[x] src/vacuum.cpp::execSql
+[x] src/vacuum.cpp::execSqlF
+[x] src/vacuum.cpp::sqlite3Vacuum
+>>>>>>> b3a23a3e8 (Move variable declarations down and add const: src/vacuum.cpp)
 [ ] src/vdbe.cpp::updateMaxBlobsize
 [ ] src/vdbe.cpp::test_trace_breakpoint
 [ ] src/vdbe.cpp::alsoAnInt
