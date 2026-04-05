@@ -3139,12 +3139,12 @@
 [x] src/vdbeaux.cpp::sqlite3VtabImportErrmsg
 [x] src/vdbeaux.cpp::vdbeFreeUnpacked
 [x] src/vdbeaux.cpp::sqlite3VdbeFuncName
-[ ] src/vdbeblob.cpp::blobSeekToRow
-[ ] src/vdbeblob.cpp::sqlite3_blob_close
-[ ] src/vdbeblob.cpp::sqlite3_blob_read
-[ ] src/vdbeblob.cpp::sqlite3_blob_write
-[ ] src/vdbeblob.cpp::sqlite3_blob_bytes
-[ ] src/vdbeblob.cpp::sqlite3_blob_reopen
+[x] src/vdbeblob.cpp::blobSeekToRow
+[x] src/vdbeblob.cpp::sqlite3_blob_close
+[x] src/vdbeblob.cpp::sqlite3_blob_read
+[x] src/vdbeblob.cpp::sqlite3_blob_write
+[x] src/vdbeblob.cpp::sqlite3_blob_bytes
+[x] src/vdbeblob.cpp::sqlite3_blob_reopen
 [ ] src/vdbemem.cpp::sqlite3VdbeCheckMemInvariants
 [ ] src/vdbemem.cpp::vdbeMemRenderNum
 [ ] src/vdbemem.cpp::sqlite3VdbeMemValidStrRep

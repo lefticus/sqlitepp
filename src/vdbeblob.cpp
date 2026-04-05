@@ -54,7 +54,7 @@ struct Incrblob {
 static int blobSeekToRow(Incrblob *p, sqlite3_int64 iRow, char **pzErr){
   int rc;                         /* Error code */
   char *zErr = 0;                 /* Error message */
-  Vdbe *v = (Vdbe *)p->pStmt;
+  Vdbe *const v = (Vdbe *)p->pStmt;
 
   /* Set the value of r[1] in the SQL statement to integer iRow. 
   ** This is done directly as a performance optimization
@@ -73,11 +73,10 @@ static int blobSeekToRow(Incrblob *p, sqlite3_int64 iRow, char **pzErr){
     rc = sqlite3_step(p->pStmt);
   }
   if( rc==SQLITE_ROW ){
-    VdbeCursor *pC = v->apCsr[0];
-    u32 type;
+    VdbeCursor *const pC = v->apCsr[0];
     assert( pC!=0 );
     assert( pC->eCurType==CURTYPE_BTREE );
-    type = pC->nHdrParsed>p->iCol ? pC->aType[p->iCol] : 0;
+    const u32 type = pC->nHdrParsed>p->iCol ? pC->aType[p->iCol] : 0;
     testcase( pC->nHdrParsed==p->iCol );
     testcase( pC->nHdrParsed==p->iCol+1 );
     if( type<12 ){
@@ -358,13 +357,12 @@ blob_open_out:
 ** sqlite3_blob_open().
 */
 int sqlite3_blob_close(sqlite3_blob *pBlob){
-  Incrblob *p = (Incrblob *)pBlob;
+  Incrblob *const p = (Incrblob *)pBlob;
   int rc;
-  sqlite3 *db;
 
   if( p ){
-    sqlite3_stmt *pStmt = p->pStmt;
-    db = p->db;
+    sqlite3_stmt *const pStmt = p->pStmt;
+    sqlite3 *const db = p->db;
     sqlite3_mutex_enter(db->mutex);
     sqlite3DbFree(db, p);
     sqlite3_mutex_leave(db->mutex);
@@ -486,7 +484,7 @@ int sqlite3_blob_write(sqlite3_blob *pBlob, const void *z, int n, int iOffset){
 ** so no mutex is required for access.
 */
 int sqlite3_blob_bytes(sqlite3_blob *pBlob){
-  Incrblob *p = (Incrblob *)pBlob;
+  Incrblob *const p = (Incrblob *)pBlob;
   return (p && p->pStmt) ? p->nByte : 0;
 }
 
@@ -502,11 +500,10 @@ int sqlite3_blob_bytes(sqlite3_blob *pBlob){
 */
 int sqlite3_blob_reopen(sqlite3_blob *pBlob, sqlite3_int64 iRow){
   int rc;
-  Incrblob *p = (Incrblob *)pBlob;
-  sqlite3 *db;
+  Incrblob *const p = (Incrblob *)pBlob;
 
   if( p==0 ) return SQLITE_MISUSE_BKPT;
-  db = p->db;
+  sqlite3 *const db = p->db;
   sqlite3_mutex_enter(db->mutex);
 
   if( p->pStmt==0 ){
