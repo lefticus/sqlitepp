@@ -2472,6 +2472,7 @@
 [x] src/test_tclvar.cpp::tclvarSetOmit
 [x] src/test_tclvar.cpp::tclvarBestIndex
 [x] src/test_tclvar.cpp::Sqlitetesttclvar_Init
+<<<<<<< HEAD
 >>>>>>> daf0c9823 (Move variable declarations down and add const: src/test_tclvar.cpp)
 [ ] src/test_thread.cpp::tclScriptEvent
 [ ] src/test_thread.cpp::postToParent
@@ -2482,6 +2483,17 @@
 [ ] src/test_thread.cpp::sqlite3_blocking_step
 [ ] src/test_thread.cpp::SqlitetestThread_Init
 [ ] src/test_thread.cpp::SqlitetestThread_Init
+=======
+[x] src/test_thread.cpp::tclScriptEvent
+[x] src/test_thread.cpp::postToParent
+[x] src/test_thread.cpp::tclScriptThread
+[x] src/test_thread.cpp::xBusy
+[x] src/test_thread.cpp::unlock_notify_cb
+[x] src/test_thread.cpp::wait_for_unlock_notify
+[x] src/test_thread.cpp::sqlite3_blocking_step
+[x] src/test_thread.cpp::SqlitetestThread_Init
+[x] src/test_thread.cpp::SqlitetestThread_Init
+>>>>>>> b97868aad (Move variable declarations down and add const: src/test_thread.cpp)
 [ ] src/test_vdbecov.cpp::Sqlitetestvdbecov_Init
 [ ] src/test_vfs.cpp::tvfsResultCode
 [ ] src/test_vfs.cpp::tvfsInjectFault

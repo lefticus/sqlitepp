@@ -73,9 +73,8 @@ extern int sqlite3TestErrCode(Tcl_Interp *, sqlite3 *, int);
 ** Handler for events of type EvalEvent.
 */
 static int SQLITE_TCLAPI tclScriptEvent(Tcl_Event *evPtr, int flags){
-  int rc;
   EvalEvent *p = (EvalEvent *)evPtr;
-  rc = Tcl_Eval(p->interp, p->zScript);
+  const int rc = Tcl_Eval(p->interp, p->zScript);
   if( rc!=TCL_OK ){
     Tcl_BackgroundError(p->interp);
   }
@@ -88,12 +87,9 @@ static int SQLITE_TCLAPI tclScriptEvent(Tcl_Event *evPtr, int flags){
 ** parent interpreter/thread of SqlThread p.
 */
 static void postToParent(SqlThread *p, Tcl_Obj *pScript){
-  EvalEvent *pEvent;
-  char *zMsg;
   Tcl_Size nMsg;
-
-  zMsg = Tcl_GetStringFromObj(pScript, &nMsg); 
-  pEvent = (EvalEvent *)ckalloc(sizeof(EvalEvent)+nMsg+1);
+  char *zMsg = Tcl_GetStringFromObj(pScript, &nMsg);
+  EvalEvent *pEvent = (EvalEvent *)ckalloc(sizeof(EvalEvent)+nMsg+1);
   pEvent->base.nextPtr = 0;
   pEvent->base.proc = tclScriptEvent;
   pEvent->zScript = (char *)&pEvent[1];
@@ -108,14 +104,10 @@ static void postToParent(SqlThread *p, Tcl_Obj *pScript){
 ** The main function for threads created with [sqlthread spawn].
 */
 static Tcl_ThreadCreateType tclScriptThread(ClientData pSqlThread){
-  Tcl_Interp *interp;
-  Tcl_Obj *pRes;
-  Tcl_Obj *pList;
-  int rc;
   SqlThread *p = (SqlThread *)pSqlThread;
   extern int Sqlitetest_mutex_Init(Tcl_Interp*);
 
-  interp = Tcl_CreateInterp();
+  Tcl_Interp *interp = Tcl_CreateInterp();
   Tcl_CreateObjCommand(interp, "clock_seconds", clock_seconds_proc, 0, 0);
   Tcl_CreateObjCommand(interp, "sqlthread", sqlthread_proc, pSqlThread, 0);
 #if SQLITE_OS_UNIX && defined(SQLITE_ENABLE_UNLOCK_NOTIFY)
@@ -129,9 +121,9 @@ static Tcl_ThreadCreateType tclScriptThread(ClientData pSqlThread){
   Sqlitetest_mutex_Init(interp);
   Sqlite3_Init(interp);
 
-  rc = Tcl_Eval(interp, p->zScript);
-  pRes = Tcl_GetObjResult(interp);
-  pList = Tcl_NewObj();
+  const int rc = Tcl_Eval(interp, p->zScript);
+  Tcl_Obj *pRes = Tcl_GetObjResult(interp);
+  Tcl_Obj *pList = Tcl_NewObj();
   Tcl_IncrRefCount(pList);
   Tcl_IncrRefCount(pRes);
 
@@ -435,8 +427,7 @@ struct UnlockNotification {
 ** This function is an unlock-notify callback registered with SQLite.
 */
 static void unlock_notify_cb(void **apArg, int nArg){
-  int i;
-  for(i=0; i<nArg; i++){
+  for(int i=0; i<nArg; i++){
     UnlockNotification *p = (UnlockNotification *)apArg[i];
     pthread_mutex_lock(&p->mutex);
     p->fired = 1;
@@ -460,7 +451,6 @@ static void unlock_notify_cb(void **apArg, int nArg){
 ** back the current transaction (if any).
 */
 static int wait_for_unlock_notify(sqlite3 *db){
-  int rc;
   UnlockNotification un;
 
   /* Initialize the UnlockNotification structure. */
@@ -469,7 +459,7 @@ static int wait_for_unlock_notify(sqlite3 *db){
   pthread_cond_init(&un.cond, 0);
 
   /* Register for an unlock-notify callback. */
-  rc = sqlite3_unlock_notify(db, unlock_notify_cb, (void *)&un);
+  const int rc = sqlite3_unlock_notify(db, unlock_notify_cb, (void *)&un);
   assert( rc==SQLITE_LOCKED || rc==SQLITE_OK );
 
   /* The call to sqlite3_unlock_notify() always returns either SQLITE_LOCKED 
@@ -648,9 +638,8 @@ int SqlitetestThread_Init(Tcl_Interp *interp){
     { blocking_prepare_v2_proc, "sqlite3_nonblocking_prepare_v2", 0 },
 #endif
   };
-  int ii;
 
-  for(ii=0; ii<(int)(sizeof(aCmd)/sizeof(aCmd[0])); ii++){
+  for(int ii=0; ii<(int)(sizeof(aCmd)/sizeof(aCmd[0])); ii++){
     void *p = SQLITE_INT_TO_PTR(aCmd[ii].iCtx);
     Tcl_CreateObjCommand(interp, aCmd[ii].zName, aCmd[ii].xProc, p, 0);
   }
