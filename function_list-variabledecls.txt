@@ -1567,67 +1567,67 @@
 [x] src/rowset.cpp::rowSetListToTree
 [x] src/rowset.cpp::sqlite3RowSetNext
 [x] src/rowset.cpp::sqlite3RowSetTest
-[ ] src/select.cpp::clearSelect
-[ ] src/select.cpp::sqlite3SelectDestInit
-[ ] src/select.cpp::sqlite3SelectDelete
-[ ] src/select.cpp::sqlite3SelectDeleteGeneric
-[ ] src/select.cpp::findRightmost
-[ ] src/select.cpp::sqlite3JoinType
-[ ] src/select.cpp::sqlite3ColumnIndex
-[ ] src/select.cpp::sqlite3SrcItemColumnUsed
-[ ] src/select.cpp::sqlite3SetJoinExpr
-[ ] src/select.cpp::unsetJoinExpr
-[ ] src/select.cpp::sqlite3ProcessJoin
-[ ] src/select.cpp::sqlite3KeyInfoAlloc
-[ ] src/select.cpp::sqlite3KeyInfoUnref
-[ ] src/select.cpp::sqlite3KeyInfoRef
-[ ] src/select.cpp::sqlite3KeyInfoIsWriteable
-[ ] src/select.cpp::sqlite3SelectOpName
-[ ] src/select.cpp::explainTempTable
-[ ] src/select.cpp::sqlite3ResultSetOfSelect
-[ ] src/select.cpp::sqlite3GetVdbe
-[ ] src/select.cpp::computeLimitRegisters
-[ ] src/select.cpp::multiSelectCollSeq
-[ ] src/select.cpp::multiSelectByMergeKeyInfo
-[ ] src/select.cpp::hasAnchor
-[ ] src/select.cpp::sqlite3SelectWrongNumTermsError
-[ ] src/select.cpp::recomputeColumnsUsedExpr
-[ ] src/select.cpp::renumberCursorDoMapping
-[ ] src/select.cpp::renumberCursorsCb
-[ ] src/select.cpp::findLeftmostExprlist
-[ ] src/select.cpp::compoundHasDifferentAffinities
-[ ] src/select.cpp::findConstInWhere
-[ ] src/select.cpp::propagateConstantExprRewrite
-[ ] src/select.cpp::pushDownWindowCheck
-[ ] src/select.cpp::disableUnusedSubqueryResultColumns
-[ ] src/select.cpp::minMaxQuery
-[ ] src/select.cpp::isSimpleCount
-[ ] src/select.cpp::sqlite3IndexedByLookup
-[ ] src/select.cpp::convertCompoundSelectToSubquery
-[ ] src/select.cpp::cannotBeFunction
-[ ] src/select.cpp::sqlite3WithPush
-[ ] src/select.cpp::sqlite3SelectPopWith
-[ ] src/select.cpp::sqlite3ExpandSubquery
-[ ] src/select.cpp::selectExpander
-[ ] src/select.cpp::sqlite3SelectWalkAssert2
-[ ] src/select.cpp::sqlite3SelectExpand
-[ ] src/select.cpp::selectAddSubqueryTypeInfo
-[ ] src/select.cpp::sqlite3SelectAddTypeInfo
-[ ] src/select.cpp::printAggInfo
-[ ] src/select.cpp::aggregateIdxEprRefToColCallback
-[ ] src/select.cpp::aggregateConvertIndexedExprRefToColumn
-[ ] src/select.cpp::assignAggregateRegisters
-[ ] src/select.cpp::resetAccumulator
-[ ] src/select.cpp::finalizeAggFunctions
-[ ] src/select.cpp::havingToWhereExprCb
-[ ] src/select.cpp::havingToWhere
-[ ] src/select.cpp::agginfoFree
-[ ] src/select.cpp::countOfViewOptimization
-[ ] src/select.cpp::sameSrcAlias
-[ ] src/select.cpp::selectCheckOnClausesExpr
-[ ] src/select.cpp::selectCheckOnClausesSelect
-[ ] src/select.cpp::sqlite3SelectCheckOnClauses
-[ ] src/select.cpp::sqlite3CopySortOrder
+[x] src/select.cpp::clearSelect
+[x] src/select.cpp::sqlite3SelectDestInit
+[x] src/select.cpp::sqlite3SelectDelete
+[x] src/select.cpp::sqlite3SelectDeleteGeneric
+[x] src/select.cpp::findRightmost
+[x] src/select.cpp::sqlite3JoinType
+[x] src/select.cpp::sqlite3ColumnIndex
+[x] src/select.cpp::sqlite3SrcItemColumnUsed
+[x] src/select.cpp::sqlite3SetJoinExpr
+[x] src/select.cpp::unsetJoinExpr
+[x] src/select.cpp::sqlite3ProcessJoin
+[x] src/select.cpp::sqlite3KeyInfoAlloc
+[x] src/select.cpp::sqlite3KeyInfoUnref
+[x] src/select.cpp::sqlite3KeyInfoRef
+[x] src/select.cpp::sqlite3KeyInfoIsWriteable
+[x] src/select.cpp::sqlite3SelectOpName
+[x] src/select.cpp::explainTempTable
+[x] src/select.cpp::sqlite3ResultSetOfSelect
+[x] src/select.cpp::sqlite3GetVdbe
+[x] src/select.cpp::computeLimitRegisters
+[x] src/select.cpp::multiSelectCollSeq
+[x] src/select.cpp::multiSelectByMergeKeyInfo
+[x] src/select.cpp::hasAnchor
+[x] src/select.cpp::sqlite3SelectWrongNumTermsError
+[x] src/select.cpp::recomputeColumnsUsedExpr
+[x] src/select.cpp::renumberCursorDoMapping
+[x] src/select.cpp::renumberCursorsCb
+[x] src/select.cpp::findLeftmostExprlist
+[x] src/select.cpp::compoundHasDifferentAffinities
+[x] src/select.cpp::findConstInWhere
+[x] src/select.cpp::propagateConstantExprRewrite
+[x] src/select.cpp::pushDownWindowCheck
+[x] src/select.cpp::disableUnusedSubqueryResultColumns
+[x] src/select.cpp::minMaxQuery
+[x] src/select.cpp::isSimpleCount
+[x] src/select.cpp::sqlite3IndexedByLookup
+[x] src/select.cpp::convertCompoundSelectToSubquery
+[x] src/select.cpp::cannotBeFunction
+[x] src/select.cpp::sqlite3WithPush
+[x] src/select.cpp::sqlite3SelectPopWith
+[x] src/select.cpp::sqlite3ExpandSubquery
+[x] src/select.cpp::selectExpander
+[x] src/select.cpp::sqlite3SelectWalkAssert2
+[x] src/select.cpp::sqlite3SelectExpand
+[x] src/select.cpp::selectAddSubqueryTypeInfo
+[x] src/select.cpp::sqlite3SelectAddTypeInfo
+[x] src/select.cpp::printAggInfo
+[x] src/select.cpp::aggregateIdxEprRefToColCallback
+[x] src/select.cpp::aggregateConvertIndexedExprRefToColumn
+[x] src/select.cpp::assignAggregateRegisters
+[x] src/select.cpp::resetAccumulator
+[x] src/select.cpp::finalizeAggFunctions
+[x] src/select.cpp::havingToWhereExprCb
+[x] src/select.cpp::havingToWhere
+[x] src/select.cpp::agginfoFree
+[x] src/select.cpp::countOfViewOptimization
+[x] src/select.cpp::sameSrcAlias
+[x] src/select.cpp::selectCheckOnClausesExpr
+[x] src/select.cpp::selectCheckOnClausesSelect
+[x] src/select.cpp::sqlite3SelectCheckOnClauses
+[x] src/select.cpp::sqlite3CopySortOrder
 [ ] src/status.cpp::sqlite3StatusValue
 [ ] src/status.cpp::sqlite3StatusUp
 [ ] src/status.cpp::sqlite3StatusDown
