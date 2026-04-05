@@ -2445,6 +2445,7 @@
 [ ] src/test_tclsh.cpp::sqlite3TestInit
 =======
 [x] src/test_tclsh.cpp::sqlite3TestInit
+<<<<<<< HEAD
 >>>>>>> 952480881 (Move variable declarations down and add const: src/test_tclsh.cpp)
 [ ] src/test_tclvar.cpp::tclvarDisconnect
 [ ] src/test_tclvar.cpp::tclvarOpen
@@ -2458,6 +2459,20 @@
 [ ] src/test_tclvar.cpp::tclvarSetOmit
 [ ] src/test_tclvar.cpp::tclvarBestIndex
 [ ] src/test_tclvar.cpp::Sqlitetesttclvar_Init
+=======
+[x] src/test_tclvar.cpp::tclvarDisconnect
+[x] src/test_tclvar.cpp::tclvarOpen
+[x] src/test_tclvar.cpp::tclvarClose
+[x] src/test_tclvar.cpp::next2
+[x] src/test_tclvar.cpp::tclvarNext
+[x] src/test_tclvar.cpp::tclvarColumn
+[x] src/test_tclvar.cpp::tclvarRowid
+[x] src/test_tclvar.cpp::tclvarEof
+[x] src/test_tclvar.cpp::tclvarAddToIdxstr
+[x] src/test_tclvar.cpp::tclvarSetOmit
+[x] src/test_tclvar.cpp::tclvarBestIndex
+[x] src/test_tclvar.cpp::Sqlitetesttclvar_Init
+>>>>>>> daf0c9823 (Move variable declarations down and add const: src/test_tclvar.cpp)
 [ ] src/test_thread.cpp::tclScriptEvent
 [ ] src/test_thread.cpp::postToParent
 [ ] src/test_thread.cpp::tclScriptThread
