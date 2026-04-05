@@ -99,7 +99,7 @@ static int SQLITE_TCLAPI backupTestCmd(
 }
 
 static void SQLITE_TCLAPI backupTestFinish(ClientData clientData){
-  sqlite3_backup *pBackup = (sqlite3_backup *)clientData;
+  sqlite3_backup *const pBackup = (sqlite3_backup *)clientData;
   sqlite3_backup_finish(pBackup);
 }
 
