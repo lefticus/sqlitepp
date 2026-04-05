@@ -72,7 +72,7 @@ static int winMutexNotheld2(sqlite3_mutex *p, DWORD tid){
 }
 
 static int winMutexNotheld(sqlite3_mutex *p){
-  DWORD tid = GetCurrentThreadId();
+  const DWORD tid = GetCurrentThreadId();
   return winMutexNotheld2(p, tid);
 }
 #endif
@@ -127,8 +127,7 @@ void sqlite3_win32_sleep(DWORD milliseconds); /* os_win.cpp */
 static int winMutexInit(void){
   /* The first to increment to 1 does actual initialization */
   if( InterlockedCompareExchange(&winMutex_lock, 1, 0)==0 ){
-    int i;
-    for(i=0; i<ArraySize(winMutex_staticMutexes); i++){
+    for(int i=0; i<ArraySize(winMutex_staticMutexes); i++){
       InitializeCriticalSection(&winMutex_staticMutexes[i].mutex);
     }
     winMutex_isInit = 1;
@@ -147,8 +146,7 @@ static int winMutexEnd(void){
   ** (which should be the last to shutdown.) */
   if( InterlockedCompareExchange(&winMutex_lock, 0, 1)==1 ){
     if( winMutex_isInit==1 ){
-      int i;
-      for(i=0; i<ArraySize(winMutex_staticMutexes); i++){
+      for(int i=0; i<ArraySize(winMutex_staticMutexes); i++){
         DeleteCriticalSection(&winMutex_staticMutexes[i].mutex);
       }
       winMutex_isInit = 0;
@@ -275,7 +273,7 @@ static void winMutexFree(sqlite3_mutex *p){
 */
 static void winMutexEnter(sqlite3_mutex *p){
 #if defined(SQLITE_DEBUG) || defined(SQLITE_TEST)
-  DWORD tid = GetCurrentThreadId();
+  const DWORD tid = GetCurrentThreadId();
 #endif
 #ifdef SQLITE_DEBUG
   assert( p );
@@ -298,7 +296,7 @@ static void winMutexEnter(sqlite3_mutex *p){
 
 static int winMutexTry(sqlite3_mutex *p){
 #if defined(SQLITE_DEBUG) || defined(SQLITE_TEST)
-  DWORD tid = GetCurrentThreadId();
+  const DWORD tid = GetCurrentThreadId();
 #endif
   int rc = SQLITE_BUSY;
   assert( p );
@@ -348,7 +346,7 @@ static int winMutexTry(sqlite3_mutex *p){
 */
 static void winMutexLeave(sqlite3_mutex *p){
 #if defined(SQLITE_DEBUG) || defined(SQLITE_TEST)
-  DWORD tid = GetCurrentThreadId();
+  const DWORD tid = GetCurrentThreadId();
 #endif
   assert( p );
 #ifdef SQLITE_DEBUG
