@@ -2353,6 +2353,7 @@
 [x] src/test_schema.cpp::schemaNext
 [x] src/test_schema.cpp::schemaBestIndex
 [x] src/test_schema.cpp::Sqlitetestschema_Init
+<<<<<<< HEAD
 >>>>>>> 74679f2ef (Move variable declarations down and add const: src/test_schema.cpp)
 [ ] src/test_sqllog.cpp::getProcessId
 [ ] src/test_sqllog.cpp::sqllog_isspace
@@ -2364,6 +2365,18 @@
 [ ] src/test_sqllog.cpp::sqllogTraceDb
 [ ] src/test_sqllog.cpp::testSqllog
 [ ] src/test_sqllog.cpp::sqlite3_init_sqllog
+=======
+[x] src/test_sqllog.cpp::getProcessId
+[x] src/test_sqllog.cpp::sqllog_isspace
+[x] src/test_sqllog.cpp::sqllogTokenize
+[x] src/test_sqllog.cpp::sqllogFindFile
+[x] src/test_sqllog.cpp::sqllogCopydb
+[x] src/test_sqllog.cpp::sqllogOpenlog
+[x] src/test_sqllog.cpp::testSqllogStmt
+[x] src/test_sqllog.cpp::sqllogTraceDb
+[x] src/test_sqllog.cpp::testSqllog
+[x] src/test_sqllog.cpp::sqlite3_init_sqllog
+>>>>>>> c411528c7 (Move variable declarations down and add const: src/test_sqllog.cpp)
 [ ] src/test_superlock.cpp::superlockBusyHandler
 [ ] src/test_superlock.cpp::superlockIsWal
 [ ] src/test_superlock.cpp::sqlite3demo_superunlock

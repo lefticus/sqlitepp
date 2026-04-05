@@ -150,7 +150,6 @@ static int sqllog_isspace(char c){
 */
 static void sqllogTokenize(const char *z, const char **pz, int *pn){
   const char *p = z;
-  int n;
 
   /* Skip past any whitespace */
   while( sqllog_isspace(*p) ){
@@ -159,7 +158,7 @@ static void sqllogTokenize(const char *z, const char **pz, int *pn){
 
   /* Figure out how long the first token is */
   *pz = p;
-  n = 0;
+  int n = 0;
   while( (p[n]>='a' && p[n]<='z') || (p[n]>='A' && p[n]<='Z') ) n++;
   *pn = n;
 }
@@ -174,10 +173,9 @@ static void sqllogTokenize(const char *z, const char **pz, int *pn){
 */
 static char *sqllogFindFile(const char *zFile){
   char *zRet = 0;
-  FILE *fd = 0;
 
   /* Open the index file for reading */
-  fd = fopen(sqllogglobal.zIdx, "r");
+  FILE *fd = fopen(sqllogglobal.zIdx, "r");
   if( fd==0 ){
     sqlite3_log(SQLITE_IOERR, "sqllogFindFile(): error in fopen()");
     return 0;
@@ -189,15 +187,12 @@ static char *sqllogFindFile(const char *zFile){
   while( feof(fd)==0 ){
     char zLine[SQLLOG_NAMESZ*2+5];
     if( fgets(zLine, sizeof(zLine), fd) ){
-      int n;
-      char *z;
-
       zLine[sizeof(zLine)-1] = '\0';
-      z = zLine;
+      char *z = zLine;
       while( *z>='0' && *z<='9' ) z++;
       while( *z==' ' ) z++;
 
-      n = strlen(z);
+      int n = strlen(z);
       while( n>0 && sqllog_isspace(z[n-1]) ) n--;
 
       if( n==strlen(zFile) && 0==memcmp(zFile, z, n) ){
@@ -228,28 +223,23 @@ static int sqllogFindAttached(
   char *zName,                    /* OUT: Name of attached database */
   char *zFile                     /* OUT: Name of attached file */
 ){
-  sqlite3_stmt *pStmt;
-  int rc;
-
   /* The "PRAGMA database_list" command returns a list of databases in the
-  ** order that they were attached. So a newly attached database is 
+  ** order that they were attached. So a newly attached database is
   ** described by the last row returned.  */
   assert( sqllogglobal.bRec==0 );
   sqllogglobal.bRec = 1;
-  rc = sqlite3_prepare_v2(db, "PRAGMA database_list", -1, &pStmt, 0);
+  sqlite3_stmt *pStmt;
+  int rc = sqlite3_prepare_v2(db, "PRAGMA database_list", -1, &pStmt, 0);
   if( rc==SQLITE_OK ){
     while( SQLITE_ROW==sqlite3_step(pStmt) ){
-      const char *zVal1; int nVal1;
-      const char *zVal2; int nVal2;
-
-      zVal1 = (const char*)sqlite3_column_text(pStmt, 1);
-      nVal1 = sqlite3_column_bytes(pStmt, 1);
+      const char *const zVal1 = (const char*)sqlite3_column_text(pStmt, 1);
+      const int nVal1 = sqlite3_column_bytes(pStmt, 1);
       if( zName ){
         memcpy(zName, zVal1, nVal1+1);
       }
 
-      zVal2 = (const char*)sqlite3_column_text(pStmt, 2);
-      nVal2 = sqlite3_column_bytes(pStmt, 2);
+      const char *const zVal2 = (const char*)sqlite3_column_text(pStmt, 2);
+      const int nVal2 = sqlite3_column_bytes(pStmt, 2);
       memcpy(zFile, zVal2, nVal2+1);
 
       if( zSearch && strlen(zSearch)==nVal1 
@@ -291,11 +281,9 @@ static int sqllogFindAttached(
 static void sqllogCopydb(struct SLConn *p, const char *zSearch, int bLog){
   char zName[SQLLOG_NAMESZ];      /* Attached database name */
   char zFile[SQLLOG_NAMESZ];      /* Database file name */
-  char *zFree;
   char *zInit = 0;
-  int rc;
 
-  rc = sqllogFindAttached(p->db, zSearch, zName, zFile);
+  const int rc = sqllogFindAttached(p->db, zSearch, zName, zFile);
   if( rc!=SQLITE_OK ) return;
 
   if( zFile[0]=='\0' ){
@@ -307,22 +295,19 @@ static void sqllogCopydb(struct SLConn *p, const char *zSearch, int bLog){
       zInit = 0;
     }
     if( zInit==0 ){
-      int rc;
       sqlite3 *copy = 0;
-      int iDb;
 
       /* Generate a file-name to use for the copy of this database */
-      iDb = sqllogglobal.iNextDb++;
+      const int iDb = sqllogglobal.iNextDb++;
       zInit = sqlite3_mprintf("%s_%02d.db", sqllogglobal.zPrefix, iDb);
 
       /* Create the backup */
       assert( sqllogglobal.bRec==0 );
       sqllogglobal.bRec = 1;
-      rc = sqlite3_open(zInit, &copy);
+      int rc = sqlite3_open(zInit, &copy);
       if( rc==SQLITE_OK ){
-        sqlite3_backup *pBak;
         sqlite3_exec(copy, "PRAGMA synchronous = 0", 0, 0, 0);
-        pBak = sqlite3_backup_init(copy, "main", p->db, zName);
+        sqlite3_backup *const pBak = sqlite3_backup_init(copy, "main", p->db, zName);
         if( pBak ){
           sqlite3_backup_step(pBak, -1);
           rc = sqlite3_backup_finish(pBak);
@@ -346,8 +331,9 @@ static void sqllogCopydb(struct SLConn *p, const char *zSearch, int bLog){
     }
   }
 
+  char *zFree;
   if( bLog ){
-    zFree = sqlite3_mprintf("ATTACH '%q' AS '%q'; -- clock=%d\n", 
+    zFree = sqlite3_mprintf("ATTACH '%q' AS '%q'; -- clock=%d\n",
         zInit, zName, sqllogglobal.iClock++
     );
   }else{
@@ -367,13 +353,11 @@ static void sqllogCopydb(struct SLConn *p, const char *zSearch, int bLog){
 static void sqllogOpenlog(struct SLConn *p){
   /* If the log file has not yet been opened, open it now. */
   if( p->fd==0 ){
-    char *zLog;
 
-    /* If it is still NULL, have global.zPrefix point to a copy of 
+    /* If it is still NULL, have global.zPrefix point to a copy of
     ** environment variable $ENVIRONMENT_VARIABLE1_NAME.  */
     if( sqllogglobal.zPrefix[0]==0 ){
-      FILE *fd;
-      char *zVar = getenv(ENVIRONMENT_VARIABLE1_NAME);
+      char *const zVar = getenv(ENVIRONMENT_VARIABLE1_NAME);
       if( zVar==0 || strlen(zVar)+10>=(sizeof(sqllogglobal.zPrefix)) ) return;
       sqlite3_snprintf(sizeof(sqllogglobal.zPrefix), sqllogglobal.zPrefix,
                         "%s/sqllog_%05d", zVar, getProcessId());
@@ -382,12 +366,12 @@ static void sqllogOpenlog(struct SLConn *p){
       if( getenv(ENVIRONMENT_VARIABLE2_NAME) ){
         sqllogglobal.bReuse = atoi(getenv(ENVIRONMENT_VARIABLE2_NAME));
       }
-      fd = fopen(sqllogglobal.zIdx, "w");
+      FILE *const fd = fopen(sqllogglobal.zIdx, "w");
       if( fd ) fclose(fd);
     }
 
     /* Open the log file */
-    zLog = sqlite3_mprintf("%s_%05d.sql", sqllogglobal.zPrefix, p->iLog);
+    char *const zLog = sqlite3_mprintf("%s_%05d.sql", sqllogglobal.zPrefix, p->iLog);
     p->fd = fopen(zLog, "w");
     sqlite3_free(zLog);
     if( p->fd==0 ){
@@ -404,7 +388,6 @@ static void sqllogOpenlog(struct SLConn *p){
 static void testSqllogStmt(struct SLConn *p, const char *zSql){
   const char *zFirst;             /* Pointer to first token in zSql */
   int nFirst;                     /* Size of token zFirst in bytes */
-
   sqllogTokenize(zSql, &zFirst, &nFirst);
   if( nFirst!=6 || 0!=sqlite3_strnicmp("ATTACH", zFirst, 6) ){
     /* Not an ATTACH statement. Write this directly to the log. */
@@ -427,9 +410,9 @@ static int sqllogTraceDb(sqlite3 *db){
   int bRet = 1;
   if( sqllogglobal.bConditional ){
     char zFile[SQLLOG_NAMESZ];      /* Attached database name */
-    int rc = sqllogFindAttached(db, "main", 0, zFile);
+    const int rc = sqllogFindAttached(db, "main", 0, zFile);
     if( rc==SQLITE_OK ){
-      int nFile = strlen(zFile);
+      const int nFile = strlen(zFile);
       if( (SQLLOG_NAMESZ-nFile)<8 ){
         sqlite3_log(SQLITE_IOERR, 
             "sqllogTraceDb(): database name too long (%d bytes)", nFile
@@ -467,7 +450,7 @@ static int sqllogTraceDb(sqlite3 *db){
 */
 static void testSqllog(void *pCtx, sqlite3 *db, const char *zSql, int eType){
   struct SLConn *p = 0;
-  sqlite3_mutex *mainmtx = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_MAIN);
+  sqlite3_mutex *const mainmtx = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_MAIN);
 
   assert( eType==0 || eType==1 || eType==2 );
   assert( (eType==2)==(zSql==0) );
@@ -519,7 +502,7 @@ static void testSqllog(void *pCtx, sqlite3 *db, const char *zSql, int eType){
         sqlite3_mutex_free(sqllogglobal.mutex);
         sqllogglobal.mutex = 0;
       }else if( i<sqllogglobal.nConn ){
-        int nShift = &sqllogglobal.aConn[sqllogglobal.nConn] - p;
+        const int nShift = &sqllogglobal.aConn[sqllogglobal.nConn] - p;
         if( nShift>0 ){
           memmove(p, &p[1], nShift*sizeof(struct SLConn));
         }
