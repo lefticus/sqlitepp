@@ -76,12 +76,11 @@ static u8 getSafetyLevel(const char *z, int omitFull, u8 dflt){
   static const u8 iLength[] = {2, 2, 3,  5,    3,   4,   5,    4};
   static const u8 iValue[] =  {1, 0, 0,  0,    1,   1,   3,    2};
                             /* on no off false yes true extra full */
-  int i, n;
   if( sqlite3Isdigit(*z) ){
     return (u8)sqlite3Atoi(z);
   }
-  n = sqlite3Strlen30(z);
-  for(i=0; i<ArraySize(iLength); i++){
+  const int n = sqlite3Strlen30(z);
+  for(int i=0; i<ArraySize(iLength); i++){
     if( iLength[i]==n && sqlite3StrNICmp(&zText[iOffset[i]],z,n)==0
      && (!omitFull || iValue[i]<=1)
     ){
@@ -123,11 +122,10 @@ static int getLockingMode(const char *z){
 ** acceptable, as are their numeric equivalents: 0, 1 and 2 respectively.
 */
 static int getAutoVacuum(const char *z){
-  int i;
   if( 0==sqlite3StrICmp(z, "none") ) return BTREE_AUTOVACUUM_NONE;
   if( 0==sqlite3StrICmp(z, "full") ) return BTREE_AUTOVACUUM_FULL;
   if( 0==sqlite3StrICmp(z, "incremental") ) return BTREE_AUTOVACUUM_INCR;
-  i = sqlite3Atoi(z);
+  const int i = sqlite3Atoi(z);
   return (u8)((i>=0&&i<=2)?i:0);
 }
 #endif /* ifndef SQLITE_OMIT_AUTOVACUUM */
@@ -157,7 +155,7 @@ static int getTempStore(const char *z){
 ** from default, or when 'file' and the temp_store_directory has changed
 */
 static int invalidateTempStorage(Parse *pParse){
-  sqlite3 *db = pParse->db;
+  sqlite3 *const db = pParse->db;
   if( db->aDb[1].pBt!=0 ){
     if( !db->autoCommit
      || sqlite3BtreeTxnState(db->aDb[1].pBt)!=SQLITE_TXN_NONE
@@ -181,8 +179,8 @@ static int invalidateTempStorage(Parse *pParse){
 ** or DEFAULT_TEMP_STORE pragmas.
 */
 static int changeTempStorage(Parse *pParse, const char *zStorageType){
-  int ts = getTempStore(zStorageType);
-  sqlite3 *db = pParse->db;
+  const int ts = getTempStore(zStorageType);
+  sqlite3 *const db = pParse->db;
   if( db->temp_store==ts ) return SQLITE_OK;
   if( invalidateTempStorage( pParse ) != SQLITE_OK ){
     return SQLITE_ERROR;
@@ -309,12 +307,12 @@ const char *sqlite3JournalModename(int eMode){
 ** Locate a pragma in the aPragmaName[] array.
 */
 static const PragmaName *pragmaLocate(const char *zName){
-  int upr, lwr, mid = 0, rc;
-  lwr = 0;
-  upr = ArraySize(aPragmaName)-1;
+  int lwr = 0;
+  int upr = ArraySize(aPragmaName)-1;
+  int mid = 0;
   while( lwr<=upr ){
     mid = (lwr+upr)/2;
-    rc = sqlite3_stricmp(zName, aPragmaName[mid].zName);
+    const int rc = sqlite3_stricmp(zName, aPragmaName[mid].zName);
     if( rc==0 ) break;
     if( rc<0 ){
       upr = mid - 1;
@@ -383,9 +381,8 @@ static void pragmaFunclistLine(
 ** and halt if the maximum number of result rows have been issued.
 */
 static int integrityCheckResultRow(Vdbe *v){
-  int addr;
   sqlite3VdbeAddOp2(v, OP_ResultRow, 3, 1);
-  addr = sqlite3VdbeAddOp3(v, OP_IfPos, 1, sqlite3VdbeCurrentAddr(v)+2, 1);
+  const int addr = sqlite3VdbeAddOp3(v, OP_IfPos, 1, sqlite3VdbeCurrentAddr(v)+2, 1);
   VdbeCoverage(v);
   sqlite3VdbeAddOp0(v, OP_Halt);
   return addr;
@@ -2876,7 +2873,7 @@ static int pragmaVtabConnect(
 ** Pragma virtual table module xDisconnect method.
 */
 static int pragmaVtabDisconnect(sqlite3_vtab *pVtab){
-  PragmaVtab *pTab = (PragmaVtab*)pVtab;
+  PragmaVtab *const pTab = (PragmaVtab*)pVtab;
   sqlite3_free(pTab);
   return SQLITE_OK;
 }
@@ -2889,21 +2886,17 @@ static int pragmaVtabDisconnect(sqlite3_vtab *pVtab){
 ** high cost if hidden parameters are unconstrained.
 */
 static int pragmaVtabBestIndex(sqlite3_vtab *tab, sqlite3_index_info *pIdxInfo){
-  PragmaVtab *pTab = (PragmaVtab*)tab;
-  const struct sqlite3_index_constraint *pConstraint;
-  int i, j;
-  int seen[2];
+  const PragmaVtab *pTab = (const PragmaVtab*)tab;
 
   pIdxInfo->estimatedCost = (double)1;
   if( pTab->nHidden==0 ){ return SQLITE_OK; }
-  pConstraint = pIdxInfo->aConstraint;
-  seen[0] = 0;
-  seen[1] = 0;
-  for(i=0; i<pIdxInfo->nConstraint; i++, pConstraint++){
+  const struct sqlite3_index_constraint *pConstraint = pIdxInfo->aConstraint;
+  int seen[2] = {0, 0};
+  for(int i=0; i<pIdxInfo->nConstraint; i++, pConstraint++){
     if( pConstraint->iColumn < pTab->iHidden ) continue;
     if( pConstraint->op!=SQLITE_INDEX_CONSTRAINT_EQ ) continue;
     if( pConstraint->usable==0 ) return SQLITE_CONSTRAINT;
-    j = pConstraint->iColumn - pTab->iHidden;
+    int j = pConstraint->iColumn - pTab->iHidden;
     assert( j < 2 );
     seen[j] = i+1;
   }
@@ -2912,7 +2905,7 @@ static int pragmaVtabBestIndex(sqlite3_vtab *tab, sqlite3_index_info *pIdxInfo){
     pIdxInfo->estimatedRows = 2147483647;
     return SQLITE_OK;
   }
-  j = seen[0]-1;
+  int j = seen[0]-1;
   pIdxInfo->aConstraintUsage[j].argvIndex = 1;
   pIdxInfo->aConstraintUsage[j].omit = 1;
   pIdxInfo->estimatedCost = (double)20;
@@ -2927,8 +2920,7 @@ static int pragmaVtabBestIndex(sqlite3_vtab *tab, sqlite3_index_info *pIdxInfo){
 
 /* Create a new cursor for the pragma virtual table */
 static int pragmaVtabOpen(sqlite3_vtab *pVtab, sqlite3_vtab_cursor **ppCursor){
-  PragmaVtabCursor *pCsr;
-  pCsr = static_cast<PragmaVtabCursor*>(sqlite3_malloc(sizeof(*pCsr)));
+  PragmaVtabCursor *pCsr = static_cast<PragmaVtabCursor*>(sqlite3_malloc(sizeof(*pCsr)));
   if( pCsr==0 ) return SQLITE_NOMEM;
   memset(pCsr, 0, sizeof(PragmaVtabCursor));
   pCsr->base.pVtab = pVtab;
@@ -2938,11 +2930,10 @@ static int pragmaVtabOpen(sqlite3_vtab *pVtab, sqlite3_vtab_cursor **ppCursor){
 
 /* Clear all content from pragma virtual table cursor. */
 static void pragmaVtabCursorClear(PragmaVtabCursor *pCsr){
-  int i;
   sqlite3_finalize(pCsr->pPragma);
   pCsr->pPragma = 0;
   pCsr->iRowid = 0;
-  for(i=0; i<ArraySize(pCsr->azArg); i++){
+  for(int i=0; i<ArraySize(pCsr->azArg); i++){
     sqlite3_free(pCsr->azArg[i]);
     pCsr->azArg[i] = 0;
   }
@@ -2950,7 +2941,7 @@ static void pragmaVtabCursorClear(PragmaVtabCursor *pCsr){
 
 /* Close a pragma virtual table cursor */
 static int pragmaVtabClose(sqlite3_vtab_cursor *cur){
-  PragmaVtabCursor *pCsr = (PragmaVtabCursor*)cur;
+  PragmaVtabCursor *const pCsr = (PragmaVtabCursor*)cur;
   pragmaVtabCursorClear(pCsr);
   sqlite3_free(pCsr);
   return SQLITE_OK;
@@ -2958,7 +2949,7 @@ static int pragmaVtabClose(sqlite3_vtab_cursor *cur){
 
 /* Advance the pragma virtual table cursor to the next row */
 static int pragmaVtabNext(sqlite3_vtab_cursor *pVtabCursor){
-  PragmaVtabCursor *pCsr = (PragmaVtabCursor*)pVtabCursor;
+  PragmaVtabCursor *const pCsr = (PragmaVtabCursor*)pVtabCursor;
   int rc = SQLITE_OK;
 
   /* Increment the xRowid value */
@@ -3026,7 +3017,7 @@ static int pragmaVtabFilter(
 ** Pragma virtual table module xEof method.
 */
 static int pragmaVtabEof(sqlite3_vtab_cursor *pVtabCursor){
-  PragmaVtabCursor *pCsr = (PragmaVtabCursor*)pVtabCursor;
+  const PragmaVtabCursor *pCsr = (const PragmaVtabCursor*)pVtabCursor;
   return (pCsr->pPragma==0);
 }
 
@@ -3052,7 +3043,7 @@ static int pragmaVtabColumn(
 ** Pragma virtual table module xRowid method.
 */
 static int pragmaVtabRowid(sqlite3_vtab_cursor *pVtabCursor, sqlite_int64 *p){
-  PragmaVtabCursor *pCsr = (PragmaVtabCursor*)pVtabCursor;
+  const PragmaVtabCursor *pCsr = (const PragmaVtabCursor*)pVtabCursor;
   *p = pCsr->iRowid;
   return SQLITE_OK;
 }
@@ -3092,9 +3083,8 @@ static const sqlite3_module pragmaVtabModule = {
 ** a pointer to the Module object for the new virtual table.
 */
 Module *sqlite3PragmaVtabRegister(sqlite3 *db, const char *zName){
-  const PragmaName *pName;
   assert( sqlite3_strnicmp(zName, "pragma_", 7)==0 );
-  pName = pragmaLocate(zName+7);
+  const PragmaName *pName = pragmaLocate(zName+7);
   if( pName==0 ) return 0;
   if( (pName->mPragFlg & (PragFlg_Result0|PragFlg_Result1))==0 ) return 0;
   assert( sqlite3HashFind(&db->aModule, zName)==0 );

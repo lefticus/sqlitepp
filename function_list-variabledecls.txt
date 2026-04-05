@@ -1473,29 +1473,29 @@
 [x] src/pcache1.cpp::sqlite3HeaderSizePcache1
 [x] src/pcache1.cpp::sqlite3Pcache1Mutex
 [x] src/pcache1.cpp::sqlite3PcacheReleaseMemory
-[ ] src/pragma.cpp::getSafetyLevel
-[ ] src/pragma.cpp::sqlite3GetBoolean
-[ ] src/pragma.cpp::getLockingMode
-[ ] src/pragma.cpp::getAutoVacuum
-[ ] src/pragma.cpp::getTempStore
-[ ] src/pragma.cpp::invalidateTempStorage
-[ ] src/pragma.cpp::changeTempStorage
-[ ] src/pragma.cpp::returnSingleInt
-[ ] src/pragma.cpp::setAllPagerFlags
-[ ] src/pragma.cpp::actionName
-[ ] src/pragma.cpp::sqlite3JournalModename
-[ ] src/pragma.cpp::pragmaLocate
-[ ] src/pragma.cpp::integrityCheckResultRow
-[ ] src/pragma.cpp::tableSkipIntegrityCheck
-[ ] src/pragma.cpp::pragmaVtabDisconnect
-[ ] src/pragma.cpp::pragmaVtabBestIndex
-[ ] src/pragma.cpp::pragmaVtabOpen
-[ ] src/pragma.cpp::pragmaVtabCursorClear
-[ ] src/pragma.cpp::pragmaVtabClose
-[ ] src/pragma.cpp::pragmaVtabNext
-[ ] src/pragma.cpp::pragmaVtabEof
-[ ] src/pragma.cpp::pragmaVtabRowid
-[ ] src/pragma.cpp::sqlite3PragmaVtabRegister
+[x] src/pragma.cpp::getSafetyLevel
+[x] src/pragma.cpp::sqlite3GetBoolean
+[x] src/pragma.cpp::getLockingMode
+[x] src/pragma.cpp::getAutoVacuum
+[x] src/pragma.cpp::getTempStore
+[x] src/pragma.cpp::invalidateTempStorage
+[x] src/pragma.cpp::changeTempStorage
+[x] src/pragma.cpp::returnSingleInt
+[x] src/pragma.cpp::setAllPagerFlags
+[x] src/pragma.cpp::actionName
+[x] src/pragma.cpp::sqlite3JournalModename
+[x] src/pragma.cpp::pragmaLocate
+[x] src/pragma.cpp::integrityCheckResultRow
+[x] src/pragma.cpp::tableSkipIntegrityCheck
+[x] src/pragma.cpp::pragmaVtabDisconnect
+[x] src/pragma.cpp::pragmaVtabBestIndex
+[x] src/pragma.cpp::pragmaVtabOpen
+[x] src/pragma.cpp::pragmaVtabCursorClear
+[x] src/pragma.cpp::pragmaVtabClose
+[x] src/pragma.cpp::pragmaVtabNext
+[x] src/pragma.cpp::pragmaVtabEof
+[x] src/pragma.cpp::pragmaVtabRowid
+[x] src/pragma.cpp::sqlite3PragmaVtabRegister
 [ ] src/prepare.cpp::sqlite3IndexHasDuplicateRootPage
 [ ] src/prepare.cpp::sqlite3InitCallback
 [ ] src/prepare.cpp::sqlite3InitOne
