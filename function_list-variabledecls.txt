@@ -1792,7 +1792,7 @@
 [x] src/test_btree.cpp::sqlite3BtreeCursorList
 [x] src/test_config.cpp::set_options
 [x] src/test_config.cpp::Sqliteconfig_Init
-[ ] src/test_delete.cpp::sqlite3Delete83Name
+[x] src/test_delete.cpp::sqlite3Delete83Name
 [ ] src/test_demovfs.cpp::demoFlushBuffer
 [ ] src/test_demovfs.cpp::demoClose
 [ ] src/test_demovfs.cpp::demoTruncate

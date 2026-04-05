@@ -44,8 +44,8 @@
 ** same way as SQLite does when in 8.3 filenames mode.
 */
 static void sqlite3Delete83Name(char *z){
-  int i, sz;
-  sz = (int)strlen(z);
+  const int sz = (int)strlen(z);
+  int i;
   for(i=sz-1; i>0 && z[i]!='/' && z[i]!='.'; i--){}
   if( z[i]=='.' && (sz>i+4) ) memmove(&z[i+1], &z[sz-3], 4);
 }
