@@ -159,7 +159,7 @@ void sqlite3OsFileControlHint(sqlite3_file *id, int op, void *pArg){
 }
 
 int sqlite3OsSectorSize(sqlite3_file *id){
-  int (*xSectorSize)(sqlite3_file*) = id->pMethods->xSectorSize;
+  int (* const xSectorSize)(sqlite3_file*) = id->pMethods->xSectorSize;
   return (xSectorSize ? xSectorSize(id) : SQLITE_DEFAULT_SECTOR_SIZE);
 }
 int sqlite3OsDeviceCharacteristics(sqlite3_file *id){
@@ -313,8 +313,7 @@ int sqlite3OsOpenMalloc(
   int *pOutFlags
 ){
   int rc;
-  sqlite3_file *pFile;
-  pFile = (sqlite3_file *)sqlite3MallocZero(pVfs->szOsFile);
+  sqlite3_file *pFile = (sqlite3_file *)sqlite3MallocZero(pVfs->szOsFile);
   if( pFile ){
     rc = sqlite3OsOpen(pVfs, zFile, pFile, flags, pOutFlags);
     if( rc!=SQLITE_OK ){
@@ -343,7 +342,7 @@ void sqlite3OsCloseFree(sqlite3_file *pFile){
 ** error in sqlite3_os_init() by the upper layers can be tested.
 */
 int sqlite3OsInit(void){
-  void *p = sqlite3_malloc(10);
+  void * const p = sqlite3_malloc(10);
   if( p==0 ) return SQLITE_NOMEM_BKPT;
   sqlite3_free(p);
   return sqlite3_os_init();
@@ -361,15 +360,12 @@ static sqlite3_vfs * SQLITE_WSD vfsList = 0;
 */
 sqlite3_vfs *sqlite3_vfs_find(const char *zVfs){
   sqlite3_vfs *pVfs = 0;
-#if SQLITE_THREADSAFE
-  sqlite3_mutex *mutex;
-#endif
 #ifndef SQLITE_OMIT_AUTOINIT
-  int rc = sqlite3_initialize();
+  const int rc = sqlite3_initialize();
   if( rc ) return 0;
 #endif
 #if SQLITE_THREADSAFE
-  mutex = sqlite3MutexAlloc(SQLITE_MUTEX_STATIC_MAIN);
+  sqlite3_mutex * const mutex = sqlite3MutexAlloc(SQLITE_MUTEX_STATIC_MAIN);
 #endif
   sqlite3_mutex_enter(mutex);
   for(pVfs = vfsList; pVfs; pVfs=pVfs->pNext){

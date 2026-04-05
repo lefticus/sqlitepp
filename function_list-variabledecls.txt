@@ -1018,41 +1018,41 @@
 [x] src/notify.cpp::sqlite3ConnectionBlocked
 [x] src/notify.cpp::sqlite3ConnectionUnlocked
 [x] src/notify.cpp::sqlite3ConnectionClosed
-[ ] src/os.cpp::sqlite3OsClose
-[ ] src/os.cpp::sqlite3OsRead
-[ ] src/os.cpp::sqlite3OsWrite
-[ ] src/os.cpp::sqlite3OsTruncate
-[ ] src/os.cpp::sqlite3OsSync
-[ ] src/os.cpp::sqlite3OsFileSize
-[ ] src/os.cpp::sqlite3OsLock
-[ ] src/os.cpp::sqlite3OsUnlock
-[ ] src/os.cpp::sqlite3OsCheckReservedLock
-[ ] src/os.cpp::sqlite3OsFileControl
-[ ] src/os.cpp::sqlite3OsFileControlHint
-[ ] src/os.cpp::sqlite3OsSectorSize
-[ ] src/os.cpp::sqlite3OsDeviceCharacteristics
-[ ] src/os.cpp::sqlite3OsShmLock
-[ ] src/os.cpp::sqlite3OsShmBarrier
-[ ] src/os.cpp::sqlite3OsShmUnmap
-[ ] src/os.cpp::sqlite3OsFetch
-[ ] src/os.cpp::sqlite3OsUnfetch
-[ ] src/os.cpp::sqlite3OsFetch
-[ ] src/os.cpp::sqlite3OsUnfetch
-[ ] src/os.cpp::sqlite3OsDelete
-[ ] src/os.cpp::sqlite3OsDlOpen
-[ ] src/os.cpp::sqlite3OsDlError
-[ ] src/os.cpp::void
-[ ] src/os.cpp::sqlite3OsDlClose
-[ ] src/os.cpp::sqlite3OsRandomness
-[ ] src/os.cpp::sqlite3OsSleep
-[ ] src/os.cpp::sqlite3OsGetLastError
-[ ] src/os.cpp::sqlite3OsCurrentTimeInt64
-[ ] src/os.cpp::sqlite3OsCloseFree
-[ ] src/os.cpp::sqlite3OsInit
-[ ] src/os.cpp::sqlite3_vfs_find
-[ ] src/os.cpp::vfsUnlink
-[ ] src/os.cpp::sqlite3_vfs_register
-[ ] src/os.cpp::sqlite3_vfs_unregister
+[x] src/os.cpp::sqlite3OsClose
+[x] src/os.cpp::sqlite3OsRead
+[x] src/os.cpp::sqlite3OsWrite
+[x] src/os.cpp::sqlite3OsTruncate
+[x] src/os.cpp::sqlite3OsSync
+[x] src/os.cpp::sqlite3OsFileSize
+[x] src/os.cpp::sqlite3OsLock
+[x] src/os.cpp::sqlite3OsUnlock
+[x] src/os.cpp::sqlite3OsCheckReservedLock
+[x] src/os.cpp::sqlite3OsFileControl
+[x] src/os.cpp::sqlite3OsFileControlHint
+[x] src/os.cpp::sqlite3OsSectorSize
+[x] src/os.cpp::sqlite3OsDeviceCharacteristics
+[x] src/os.cpp::sqlite3OsShmLock
+[x] src/os.cpp::sqlite3OsShmBarrier
+[x] src/os.cpp::sqlite3OsShmUnmap
+[x] src/os.cpp::sqlite3OsFetch
+[x] src/os.cpp::sqlite3OsUnfetch
+[x] src/os.cpp::sqlite3OsFetch
+[x] src/os.cpp::sqlite3OsUnfetch
+[x] src/os.cpp::sqlite3OsDelete
+[x] src/os.cpp::sqlite3OsDlOpen
+[x] src/os.cpp::sqlite3OsDlError
+[x] src/os.cpp::void
+[x] src/os.cpp::sqlite3OsDlClose
+[x] src/os.cpp::sqlite3OsRandomness
+[x] src/os.cpp::sqlite3OsSleep
+[x] src/os.cpp::sqlite3OsGetLastError
+[x] src/os.cpp::sqlite3OsCurrentTimeInt64
+[x] src/os.cpp::sqlite3OsCloseFree
+[x] src/os.cpp::sqlite3OsInit
+[x] src/os.cpp::sqlite3_vfs_find
+[x] src/os.cpp::vfsUnlink
+[x] src/os.cpp::sqlite3_vfs_register
+[x] src/os.cpp::sqlite3_vfs_unregister
 [ ] src/os_kv.cpp::kvrecordDelete
 [ ] src/os_kv.cpp::kvvfsEncode
 [ ] src/os_kv.cpp::kvvfsDecode
