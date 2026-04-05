@@ -1911,16 +1911,16 @@
 [x] src/test_init.cpp::wrPCacheDestroy
 [x] src/test_init.cpp::installInitWrappers
 [x] src/test_init.cpp::Sqlitetest_init_Init
-[ ] src/test_intarray.cpp::intarrayFree
-[ ] src/test_intarray.cpp::intarrayDestroy
-[ ] src/test_intarray.cpp::intarrayOpen
-[ ] src/test_intarray.cpp::intarrayClose
-[ ] src/test_intarray.cpp::intarrayColumn
-[ ] src/test_intarray.cpp::intarrayRowid
-[ ] src/test_intarray.cpp::intarrayEof
-[ ] src/test_intarray.cpp::intarrayNext
-[ ] src/test_intarray.cpp::intarrayBestIndex
-[ ] src/test_intarray.cpp::Sqlitetestintarray_Init
+[x] src/test_intarray.cpp::intarrayFree
+[x] src/test_intarray.cpp::intarrayDestroy
+[x] src/test_intarray.cpp::intarrayOpen
+[x] src/test_intarray.cpp::intarrayClose
+[x] src/test_intarray.cpp::intarrayColumn
+[x] src/test_intarray.cpp::intarrayRowid
+[x] src/test_intarray.cpp::intarrayEof
+[x] src/test_intarray.cpp::intarrayNext
+[x] src/test_intarray.cpp::intarrayBestIndex
+[x] src/test_intarray.cpp::Sqlitetestintarray_Init
 [ ] src/test_journal.cpp::enterJtMutex
 [ ] src/test_journal.cpp::leaveJtMutex
 [ ] src/test_journal.cpp::stop_ioerr_simulation

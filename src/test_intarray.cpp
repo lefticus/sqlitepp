@@ -62,7 +62,7 @@ struct intarray_cursor {
 ** Free an sqlite3_intarray object.
 */
 static void intarrayFree(void *pX){
-  sqlite3_intarray *p = (sqlite3_intarray*)pX;
+  sqlite3_intarray *const p = (sqlite3_intarray*)pX;
   if( p->xFree ){
     p->xFree(p->a);
   }
@@ -73,7 +73,7 @@ static void intarrayFree(void *pX){
 ** Table destructor for the intarray module.
 */
 static int intarrayDestroy(sqlite3_vtab *p){
-  intarray_vtab *pVtab = (intarray_vtab*)p;
+  intarray_vtab *const pVtab = (intarray_vtab*)p;
   sqlite3_free(pVtab);
   return 0;
 }
@@ -106,8 +106,7 @@ static int intarrayCreate(
 */
 static int intarrayOpen(sqlite3_vtab *pVTab, sqlite3_vtab_cursor **ppCursor){
   int rc = SQLITE_NOMEM;
-  intarray_cursor *pCur;
-  pCur = (intarray_cursor*)sqlite3_malloc64(sizeof(intarray_cursor));
+  intarray_cursor *const pCur = (intarray_cursor*)sqlite3_malloc64(sizeof(intarray_cursor));
   if( pCur ){
     memset(pCur, 0, sizeof(intarray_cursor));
     *ppCursor = (sqlite3_vtab_cursor *)pCur;
@@ -120,7 +119,7 @@ static int intarrayOpen(sqlite3_vtab *pVTab, sqlite3_vtab_cursor **ppCursor){
 ** Close a intarray table cursor.
 */
 static int intarrayClose(sqlite3_vtab_cursor *cur){
-  intarray_cursor *pCur = (intarray_cursor *)cur;
+  intarray_cursor *const pCur = (intarray_cursor *)cur;
   sqlite3_free(pCur);
   return SQLITE_OK;
 }
@@ -129,8 +128,8 @@ static int intarrayClose(sqlite3_vtab_cursor *cur){
 ** Retrieve a column of data.
 */
 static int intarrayColumn(sqlite3_vtab_cursor *cur, sqlite3_context *ctx, int i){
-  intarray_cursor *pCur = (intarray_cursor*)cur;
-  intarray_vtab *pVtab = (intarray_vtab*)cur->pVtab;
+  const intarray_cursor *const pCur = (intarray_cursor*)cur;
+  const intarray_vtab *const pVtab = (intarray_vtab*)cur->pVtab;
   if( pCur->i>=0 && pCur->i<pVtab->pContent->n ){
     sqlite3_result_int64(ctx, pVtab->pContent->a[pCur->i]);
   }
@@ -141,14 +140,14 @@ static int intarrayColumn(sqlite3_vtab_cursor *cur, sqlite3_context *ctx, int i)
 ** Retrieve the current rowid.
 */
 static int intarrayRowid(sqlite3_vtab_cursor *cur, sqlite_int64 *pRowid){
-  intarray_cursor *pCur = (intarray_cursor *)cur;
+  const intarray_cursor *const pCur = (intarray_cursor *)cur;
   *pRowid = pCur->i;
   return SQLITE_OK;
 }
 
 static int intarrayEof(sqlite3_vtab_cursor *cur){
-  intarray_cursor *pCur = (intarray_cursor *)cur;
-  intarray_vtab *pVtab = (intarray_vtab *)cur->pVtab;
+  const intarray_cursor *const pCur = (intarray_cursor *)cur;
+  const intarray_vtab *const pVtab = (intarray_vtab *)cur->pVtab;
   return pCur->i>=pVtab->pContent->n;
 }
 
@@ -156,7 +155,7 @@ static int intarrayEof(sqlite3_vtab_cursor *cur){
 ** Advance the cursor to the next row.
 */
 static int intarrayNext(sqlite3_vtab_cursor *cur){
-  intarray_cursor *pCur = (intarray_cursor *)cur;
+  intarray_cursor *const pCur = (intarray_cursor *)cur;
   pCur->i++;
   return SQLITE_OK;
 }
@@ -380,8 +379,7 @@ int Sqlitetestintarray_Init(Tcl_Interp *interp){
      { "sqlite3_intarray_create", test_intarray_create, 0 },
      { "sqlite3_intarray_bind", test_intarray_bind, 0 },
   };
-  int i;
-  for(i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
+  for(int i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
     Tcl_CreateObjCommand(interp, aObjCmd[i].zName, 
         aObjCmd[i].xProc, aObjCmd[i].clientData, 0);
   }
