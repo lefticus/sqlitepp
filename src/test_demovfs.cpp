@@ -164,15 +164,12 @@ static int demoDirectWrite(
   int iAmt,                       /* Size of data to write in bytes */
   sqlite_int64 iOfst              /* File offset to write to */
 ){
-  off_t ofst;                     /* Return value from lseek() */
-  size_t nWrite;                  /* Return value from write() */
-
-  ofst = lseek(p->fd, iOfst, SEEK_SET);
+  const off_t ofst = lseek(p->fd, iOfst, SEEK_SET);
   if( ofst!=iOfst ){
     return SQLITE_IOERR_WRITE;
   }
 
-  nWrite = write(p->fd, zBuf, iAmt);
+  const size_t nWrite = write(p->fd, zBuf, iAmt);
   if( nWrite!=(size_t)iAmt ){
     return SQLITE_IOERR_WRITE;
   }
@@ -198,9 +195,8 @@ static int demoFlushBuffer(DemoFile *p){
 ** Close a file.
 */
 static int demoClose(sqlite3_file *pFile){
-  int rc;
   DemoFile *p = (DemoFile*)pFile;
-  rc = demoFlushBuffer(p);
+  const int rc = demoFlushBuffer(p);
   sqlite3_free(p->aBuffer);
   close(p->fd);
   return rc;
@@ -216,26 +212,23 @@ static int demoRead(
   sqlite_int64 iOfst
 ){
   DemoFile *p = (DemoFile*)pFile;
-  off_t ofst;                     /* Return value from lseek() */
-  int nRead;                      /* Return value from read() */
-  int rc;                         /* Return code from demoFlushBuffer() */
 
   /* Flush any data in the write buffer to disk in case this operation
   ** is trying to read data the file-region currently cached in the buffer.
-  ** It would be possible to detect this case and possibly save an 
+  ** It would be possible to detect this case and possibly save an
   ** unnecessary write here, but in practice SQLite will rarely read from
   ** a journal file when there is data cached in the write-buffer.
   */
-  rc = demoFlushBuffer(p);
+  const int rc = demoFlushBuffer(p);
   if( rc!=SQLITE_OK ){
     return rc;
   }
 
-  ofst = lseek(p->fd, iOfst, SEEK_SET);
+  const off_t ofst = lseek(p->fd, iOfst, SEEK_SET);
   if( ofst!=iOfst ){
     return SQLITE_IOERR_READ;
   }
-  nRead = read(p->fd, zBuf, iAmt);
+  const int nRead = read(p->fd, zBuf, iAmt);
 
   if( nRead==iAmt ){
     return SQLITE_OK;
@@ -316,9 +309,8 @@ static int demoTruncate(sqlite3_file *pFile, sqlite_int64 size){
 */
 static int demoSync(sqlite3_file *pFile, int flags){
   DemoFile *p = (DemoFile*)pFile;
-  int rc;
 
-  rc = demoFlushBuffer(p);
+  int rc = demoFlushBuffer(p);
   if( rc!=SQLITE_OK ){
     return rc;
   }
@@ -332,19 +324,18 @@ static int demoSync(sqlite3_file *pFile, int flags){
 */
 static int demoFileSize(sqlite3_file *pFile, sqlite_int64 *pSize){
   DemoFile *p = (DemoFile*)pFile;
-  int rc;                         /* Return code from fstat() call */
-  struct stat sStat;              /* Output of fstat() call */
 
   /* Flush the contents of the buffer to disk. As with the flush in the
   ** demoRead() method, it would be possible to avoid this and save a write
   ** here and there. But in practice this comes up so infrequently it is
   ** not worth the trouble.
   */
-  rc = demoFlushBuffer(p);
+  int rc = demoFlushBuffer(p);
   if( rc!=SQLITE_OK ){
     return rc;
   }
 
+  struct stat sStat;              /* Output of fstat() call */
   rc = fstat(p->fd, &sStat);
   if( rc!=0 ) return SQLITE_IOERR_FSTAT;
   *pSize = sStat.st_size;
@@ -454,24 +445,20 @@ static int demoOpen(
 ** file has been synced to disk before returning.
 */
 static int demoDelete(sqlite3_vfs *pVfs, const char *zPath, int dirSync){
-  int rc;                         /* Return code */
-
-  rc = unlink(zPath);
+  int rc = unlink(zPath);         /* Return code */
   if( rc!=0 && errno==ENOENT ) return SQLITE_OK;
 
   if( rc==0 && dirSync ){
-    int dfd;                      /* File descriptor open on directory */
-    char *zSlash;
     char zDir[MAXPATHNAME+1];     /* Name of directory containing file zPath */
 
     /* Figure out the directory name from the path of the file deleted. */
     sqlite3_snprintf(MAXPATHNAME, zDir, "%s", zPath);
     zDir[MAXPATHNAME] = '\0';
-    zSlash = strrchr(zDir,'/');
+    char *zSlash = strrchr(zDir,'/');
     if( zSlash ){
       /* Open a file-descriptor on the directory. Sync. Close. */
       zSlash[0] = 0;
-      dfd = open(zDir, O_RDONLY, 0);
+      const int dfd = open(zDir, O_RDONLY, 0);
       if( dfd<0 ){
         rc = -1;
       }else{
@@ -503,7 +490,6 @@ static int demoAccess(
   int flags, 
   int *pResOut
 ){
-  int rc;                         /* access() return code */
   int eAccess = F_OK;             /* Second argument to access() */
 
   assert( flags==SQLITE_ACCESS_EXISTS       /* access(zPath, F_OK) */
@@ -514,7 +500,7 @@ static int demoAccess(
   if( flags==SQLITE_ACCESS_READWRITE ) eAccess = R_OK|W_OK;
   if( flags==SQLITE_ACCESS_READ )      eAccess = R_OK;
 
-  rc = access(zPath, eAccess);
+  const int rc = access(zPath, eAccess);
   *pResOut = (rc==0);
   return SQLITE_OK;
 }

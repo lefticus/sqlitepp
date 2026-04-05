@@ -1793,28 +1793,28 @@
 [x] src/test_config.cpp::set_options
 [x] src/test_config.cpp::Sqliteconfig_Init
 [x] src/test_delete.cpp::sqlite3Delete83Name
-[ ] src/test_demovfs.cpp::demoFlushBuffer
-[ ] src/test_demovfs.cpp::demoClose
-[ ] src/test_demovfs.cpp::demoTruncate
-[ ] src/test_demovfs.cpp::demoSync
-[ ] src/test_demovfs.cpp::demoFileSize
-[ ] src/test_demovfs.cpp::demoLock
-[ ] src/test_demovfs.cpp::demoUnlock
-[ ] src/test_demovfs.cpp::demoCheckReservedLock
-[ ] src/test_demovfs.cpp::demoFileControl
-[ ] src/test_demovfs.cpp::demoSectorSize
-[ ] src/test_demovfs.cpp::demoDeviceCharacteristics
-[ ] src/test_demovfs.cpp::demoDelete
-[ ] src/test_demovfs.cpp::demoDlOpen
-[ ] src/test_demovfs.cpp::demoDlError
-[ ] src/test_demovfs.cpp::void
-[ ] src/test_demovfs.cpp::demoDlClose
-[ ] src/test_demovfs.cpp::demoRandomness
-[ ] src/test_demovfs.cpp::demoSleep
-[ ] src/test_demovfs.cpp::demoCurrentTime
-[ ] src/test_demovfs.cpp::sqlite3_demovfs
-[ ] src/test_demovfs.cpp::Sqlitetest_demovfs_Init
-[ ] src/test_demovfs.cpp::Sqlitetest_demovfs_Init
+[x] src/test_demovfs.cpp::demoFlushBuffer
+[x] src/test_demovfs.cpp::demoClose
+[x] src/test_demovfs.cpp::demoTruncate
+[x] src/test_demovfs.cpp::demoSync
+[x] src/test_demovfs.cpp::demoFileSize
+[x] src/test_demovfs.cpp::demoLock
+[x] src/test_demovfs.cpp::demoUnlock
+[x] src/test_demovfs.cpp::demoCheckReservedLock
+[x] src/test_demovfs.cpp::demoFileControl
+[x] src/test_demovfs.cpp::demoSectorSize
+[x] src/test_demovfs.cpp::demoDeviceCharacteristics
+[x] src/test_demovfs.cpp::demoDelete
+[x] src/test_demovfs.cpp::demoDlOpen
+[x] src/test_demovfs.cpp::demoDlError
+[x] src/test_demovfs.cpp::void
+[x] src/test_demovfs.cpp::demoDlClose
+[x] src/test_demovfs.cpp::demoRandomness
+[x] src/test_demovfs.cpp::demoSleep
+[x] src/test_demovfs.cpp::demoCurrentTime
+[x] src/test_demovfs.cpp::sqlite3_demovfs
+[x] src/test_demovfs.cpp::Sqlitetest_demovfs_Init
+[x] src/test_demovfs.cpp::Sqlitetest_demovfs_Init
 [ ] src/test_devsym.cpp::devsymClose
 [ ] src/test_devsym.cpp::devsymTruncate
 [ ] src/test_devsym.cpp::devsymSync
