@@ -1636,36 +1636,36 @@
 [x] src/status.cpp::countLookasideSlots
 [x] src/status.cpp::sqlite3LookasideUsed
 [x] src/table.cpp::sqlite3_get_table_cb
-[ ] src/tclsqlite.cpp::strlen30
-[ ] src/tclsqlite.cpp::closeIncrblobChannels
-[ ] src/tclsqlite.cpp::safeToUseEvalObjv
-[ ] src/tclsqlite.cpp::findSqlFunc
-[ ] src/tclsqlite.cpp::dbFreeStmt
-[ ] src/tclsqlite.cpp::flushStmtCache
-[ ] src/tclsqlite.cpp::addDatabaseRef
-[ ] src/tclsqlite.cpp::delDatabaseRef
-[ ] src/tclsqlite.cpp::DbDeleteCmd
-[ ] src/tclsqlite.cpp::DbBusyHandler
-[ ] src/tclsqlite.cpp::DbProgressHandler
-[ ] src/tclsqlite.cpp::DbTraceHandler
-[ ] src/tclsqlite.cpp::DbProfileHandler
-[ ] src/tclsqlite.cpp::DbCommitHandler
-[ ] src/tclsqlite.cpp::DbRollbackHandler
-[ ] src/tclsqlite.cpp::setTestUnlockNotifyVars
-[ ] src/tclsqlite.cpp::DbUnlockNotify
-[ ] src/tclsqlite.cpp::tclSqlFunc
-[ ] src/tclsqlite.cpp::local_getline
-[ ] src/tclsqlite.cpp::dbReleaseColumnNames
-[ ] src/tclsqlite.cpp::dbEvalStep
-[ ] src/tclsqlite.cpp::dbEvalFinalize
-[ ] src/tclsqlite.cpp::dbEvalColumnValue
-[ ] src/tclsqlite.cpp::DbUseNre
-[ ] src/tclsqlite.cpp::dbQrf
-[ ] src/tclsqlite.cpp::Tclsqlite3_Unload
-[ ] src/tclsqlite.cpp::Sqlite3_SafeInit
-[ ] src/tclsqlite.cpp::Sqlite3_SafeUnload
-[ ] src/tclsqlite.cpp::tclsh_main_loop
-[ ] src/tclsqlite.cpp::TCLSH_MAIN
+[x] src/tclsqlite.cpp::strlen30
+[x] src/tclsqlite.cpp::closeIncrblobChannels
+[x] src/tclsqlite.cpp::safeToUseEvalObjv
+[x] src/tclsqlite.cpp::findSqlFunc
+[x] src/tclsqlite.cpp::dbFreeStmt
+[x] src/tclsqlite.cpp::flushStmtCache
+[x] src/tclsqlite.cpp::addDatabaseRef
+[x] src/tclsqlite.cpp::delDatabaseRef
+[x] src/tclsqlite.cpp::DbDeleteCmd
+[x] src/tclsqlite.cpp::DbBusyHandler
+[x] src/tclsqlite.cpp::DbProgressHandler
+[x] src/tclsqlite.cpp::DbTraceHandler
+[x] src/tclsqlite.cpp::DbProfileHandler
+[x] src/tclsqlite.cpp::DbCommitHandler
+[x] src/tclsqlite.cpp::DbRollbackHandler
+[x] src/tclsqlite.cpp::setTestUnlockNotifyVars
+[x] src/tclsqlite.cpp::DbUnlockNotify
+[x] src/tclsqlite.cpp::tclSqlFunc
+[x] src/tclsqlite.cpp::local_getline
+[x] src/tclsqlite.cpp::dbReleaseColumnNames
+[x] src/tclsqlite.cpp::dbEvalStep
+[x] src/tclsqlite.cpp::dbEvalFinalize
+[x] src/tclsqlite.cpp::dbEvalColumnValue
+[x] src/tclsqlite.cpp::DbUseNre
+[x] src/tclsqlite.cpp::dbQrf
+[x] src/tclsqlite.cpp::Tclsqlite3_Unload
+[x] src/tclsqlite.cpp::Sqlite3_SafeInit
+[x] src/tclsqlite.cpp::Sqlite3_SafeUnload
+[x] src/tclsqlite.cpp::tclsh_main_loop
+[x] src/tclsqlite.cpp::TCLSH_MAIN
 [ ] src/test1.cpp::testHexToInt
 [ ] src/test1.cpp::sqlite3TestTextToPtr
 [ ] src/test1.cpp::getDbPointer

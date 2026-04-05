@@ -530,9 +530,8 @@ static int safeToUseEvalObjv(Tcl_Obj *pCmd){
   ** just do a search for forbidden characters.  If any of the forbidden
   ** characters appear in pCmd, we will report the string as unsafe.
   */
-  const char *z;
   Tcl_Size n;
-  z = Tcl_GetStringFromObj(pCmd, &n);
+  const char *z = Tcl_GetStringFromObj(pCmd, &n);
   while( n-- > 0 ){
     int c = *(z++);
     if( c=='$' || c=='[' || c==';' ) return 0;
@@ -547,7 +546,7 @@ static int safeToUseEvalObjv(Tcl_Obj *pCmd){
 */
 static SqlFunc *findSqlFunc(SqliteDb *pDb, const char *zName){
   SqlFunc *p, *pNew;
-  int nName = strlen30(zName);
+  const int nName = strlen30(zName);
   pNew = (SqlFunc*)Tcl_Alloc( sizeof(*pNew) + nName + 1 );
   pNew->zName = (char*)&pNew[1];
   memcpy(pNew->zName, zName, nName+1);
@@ -670,7 +669,7 @@ static void delDatabaseRef(SqliteDb *pDb){
 ** deleted.
 */
 static void SQLITE_TCLAPI DbDeleteCmd(void *db){
-  SqliteDb *pDb = (SqliteDb*)db;
+  SqliteDb *const pDb = (SqliteDb*)db;
   delDatabaseRef(pDb);
 }
 
@@ -679,12 +678,11 @@ static void SQLITE_TCLAPI DbDeleteCmd(void *db){
 ** to execute SQL.
 */
 static int DbBusyHandler(void *cd, int nTries){
-  SqliteDb *pDb = (SqliteDb*)cd;
-  int rc;
+  SqliteDb *const pDb = (SqliteDb*)cd;
   char zVal[30];
 
   sqlite3_snprintf(sizeof(zVal), zVal, "%d", nTries);
-  rc = Tcl_VarEval(pDb->interp, pDb->zBusy, " ", zVal, (char*)0);
+  const int rc = Tcl_VarEval(pDb->interp, pDb->zBusy, " ", zVal, (char*)0);
   if( rc!=TCL_OK || atoi(Tcl_GetStringResult(pDb->interp)) ){
     return 0;
   }
@@ -696,11 +694,10 @@ static int DbBusyHandler(void *cd, int nTries){
 ** This routine is invoked as the 'progress callback' for the database.
 */
 static int DbProgressHandler(void *cd){
-  SqliteDb *pDb = (SqliteDb*)cd;
-  int rc;
+  SqliteDb *const pDb = (SqliteDb*)cd;
 
   assert( pDb->zProgress );
-  rc = Tcl_Eval(pDb->interp, pDb->zProgress);
+  const int rc = Tcl_Eval(pDb->interp, pDb->zProgress);
   if( rc!=TCL_OK || atoi(Tcl_GetStringResult(pDb->interp)) ){
     return 1;
   }
@@ -715,7 +712,7 @@ static int DbProgressHandler(void *cd){
 ** block of SQL is executed.  The TCL script in pDb->zTrace is executed.
 */
 static void DbTraceHandler(void *cd, const char *zSql){
-  SqliteDb *pDb = (SqliteDb*)cd;
+  SqliteDb *const pDb = (SqliteDb*)cd;
   Tcl_DString str;
 
   Tcl_DStringInit(&str);
@@ -810,7 +807,7 @@ static int DbTraceV2Handler(
 ** SQL has executed.  The TCL script in pDb->zProfile is evaluated.
 */
 static void DbProfileHandler(void *cd, const char *zSql, sqlite_uint64 tm){
-  SqliteDb *pDb = (SqliteDb*)cd;
+  SqliteDb *const pDb = (SqliteDb*)cd;
   Tcl_DString str;
   char zTm[100];
 
@@ -832,10 +829,9 @@ static void DbProfileHandler(void *cd, const char *zSql, sqlite_uint64 tm){
 ** of being committed.
 */
 static int DbCommitHandler(void *cd){
-  SqliteDb *pDb = (SqliteDb*)cd;
-  int rc;
+  SqliteDb *const pDb = (SqliteDb*)cd;
 
-  rc = Tcl_Eval(pDb->interp, pDb->zCommit);
+  const int rc = Tcl_Eval(pDb->interp, pDb->zCommit);
   if( rc!=TCL_OK || atoi(Tcl_GetStringResult(pDb->interp)) ){
     return 1;
   }
@@ -843,7 +839,7 @@ static int DbCommitHandler(void *cd){
 }
 
 static void DbRollbackHandler(void *clientData){
-  SqliteDb *pDb = (SqliteDb*)clientData;
+  SqliteDb *const pDb = (SqliteDb*)clientData;
   assert(pDb->pRollbackHook);
   if( TCL_OK!=Tcl_EvalObjEx(pDb->interp, pDb->pRollbackHook, 0) ){
     Tcl_BackgroundError(pDb->interp);
@@ -894,8 +890,7 @@ static void setTestUnlockNotifyVars(Tcl_Interp *interp, int iArg, int nArg){
 
 #ifdef SQLITE_ENABLE_UNLOCK_NOTIFY
 static void DbUnlockNotify(void **apArg, int nArg){
-  int i;
-  for(i=0; i<nArg; i++){
+  for(int i=0; i<nArg; i++){
     const int flags = (TCL_EVAL_GLOBAL|TCL_EVAL_DIRECT);
     SqliteDb *pDb = (SqliteDb *)apArg[i];
     setTestUnlockNotifyVars(pDb->interp, i, nArg);
@@ -1013,9 +1008,8 @@ static int tclSqlCollate(
 ** using TCL script.
 */
 static void tclSqlFunc(sqlite3_context *context, int argc, sqlite3_value**argv){
-  SqlFunc *p = (SqlFunc*)sqlite3_user_data(context);
+  SqlFunc *const p = (SqlFunc*)sqlite3_user_data(context);
   Tcl_Obj *pCmd;
-  int i;
   int rc;
 
   if( argc==0 ){
@@ -1045,7 +1039,7 @@ static void tclSqlFunc(sqlite3_context *context, int argc, sqlite3_value**argv){
     }
     pCmd = Tcl_NewListObj(nArg, aArg);
     Tcl_IncrRefCount(pCmd);
-    for(i=0; i<argc; i++){
+    for(int i=0; i<argc; i++){
       sqlite3_value *pIn = argv[i];
       Tcl_Obj *pVal;
 
@@ -1262,14 +1256,10 @@ static int auth_callback(
 ** copied from shell.c from '.import' command
 */
 static char *local_getline(char *zPrompt, FILE *in){
-  char *zLine;
-  int nLine;
-  int n;
-
-  nLine = 100;
-  zLine = malloc( nLine );
+  int nLine = 100;
+  char *zLine = malloc( nLine );
   if( zLine==0 ) return 0;
-  n = 0;
+  int n = 0;
   while( 1 ){
     if( n+100>nLine ){
       nLine = nLine*2 + 100;
@@ -1644,8 +1634,7 @@ struct DbEvalContext {
 */
 static void dbReleaseColumnNames(DbEvalContext *p){
   if( p->apColName ){
-    int i;
-    for(i=0; i<p->nCol; i++){
+    for(int i=0; i<p->nCol; i++){
       Tcl_DecrRefCount(p->apColName[i]);
     }
     Tcl_Free((char *)p->apColName);
@@ -1848,7 +1837,7 @@ static void dbEvalFinalize(DbEvalContext *p){
 ** the DbEvalContext structure passed as the first argument.
 */
 static Tcl_Obj *dbEvalColumnValue(DbEvalContext *p, int iCol){
-  sqlite3_stmt *pStmt = p->pPreStmt->pStmt;
+  sqlite3_stmt *const pStmt = p->pPreStmt->pStmt;
   switch( sqlite3_column_type(pStmt, iCol) ){
     case SQLITE_BLOB: {
       int bytes = sqlite3_column_bytes(pStmt, iCol);
@@ -2115,7 +2104,6 @@ static int dbQrf(SqliteDb *pDb, int objc, Tcl_Obj *const*objv){
 #else
   char *zResult = 0;             /* Result to be returned */
   const char *zSql = 0;          /* SQL to run */
-  int i;                         /* Loop counter */
   int rc;                        /* Result code */
   sqlite3_qrf_spec qrf;          /* Formatting spec */
   static const char *azAlign[] = {
@@ -2138,7 +2126,7 @@ static int dbQrf(SqliteDb *pDb, int objc, Tcl_Obj *const*objv){
   memset(&qrf, 0, sizeof(qrf));
   qrf.iVersion = 1;
   qrf.pzOutput = &zResult;
-  for(i=2; i<objc; i++){
+  for(int i=2; i<objc; i++){
     const char *zArg = Tcl_GetString(objv[i]);
     const char *azBool[] = { "auto", "yes", "no", "on", "off", 0 };
     const unsigned char aBoolMap[] = { 0, 2, 1, 2, 1 };
@@ -4548,10 +4536,7 @@ static const char *tclsh_main_loop(void){
 # define TCLSH_MAIN main
 #endif
 int SQLITE_CDECL TCLSH_MAIN(int argc, char **argv){
-  Tcl_Interp *interp;
-  int i;
   const char *zScript = 0;
-  char zArgc[32];
 #if defined(TCLSH_INIT_PROC)
   extern const char *TCLSH_INIT_PROC(Tcl_Interp*);
 #endif
@@ -4580,14 +4565,15 @@ int SQLITE_CDECL TCLSH_MAIN(int argc, char **argv){
 
   Tcl_FindExecutable(argv[0]);
   Tcl_SetSystemEncoding(NULL, "utf-8");
-  interp = Tcl_CreateInterp();
+  Tcl_Interp *interp = Tcl_CreateInterp();
   Sqlite3_Init(interp);
 
+  char zArgc[32];
   sqlite3_snprintf(sizeof(zArgc), zArgc, "%d", argc-1);
   Tcl_SetVar(interp,"argc", zArgc, TCL_GLOBAL_ONLY);
   Tcl_SetVar(interp,"argv0",argv[0],TCL_GLOBAL_ONLY);
   Tcl_SetVar(interp,"argv", "", TCL_GLOBAL_ONLY);
-  for(i=1; i<argc; i++){
+  for(int i=1; i<argc; i++){
     Tcl_SetVar(interp, "argv", argv[i],
         TCL_GLOBAL_ONLY | TCL_LIST_ELEMENT | TCL_APPEND_VALUE);
   }
