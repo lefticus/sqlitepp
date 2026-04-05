@@ -676,9 +676,8 @@ int Sqlitetest3_Init(Tcl_Interp *interp){
      { "btree_ismemdb",            (Tcl_CmdProc*)btree_ismemdb            },
      { "btree_set_cache_size",     (Tcl_CmdProc*)btree_set_cache_size     }
   };
-  int i;
 
-  for(i=0; i<(int)(sizeof(aCmd)/sizeof(aCmd[0])); i++){
+  for(int i=0; i<(int)(sizeof(aCmd)/sizeof(aCmd[0])); i++){
     Tcl_CreateCommand(interp, aCmd[i].zName, aCmd[i].xProc, 0, 0);
   }
 

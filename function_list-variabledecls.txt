@@ -1703,7 +1703,7 @@
 [x] src/test2.cpp::pager_test_reiniter
 [x] src/test2.cpp::faultSimCallback
 [x] src/test2.cpp::Sqlitetest2_Init
-[ ] src/test3.cpp::Sqlitetest3_Init
+[x] src/test3.cpp::Sqlitetest3_Init
 [ ] src/test4.cpp::test_barrier
 [ ] src/test4.cpp::test_thread_main
 [ ] src/test4.cpp::parse_thread_id
