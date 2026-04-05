@@ -44,7 +44,6 @@ static void randStr(sqlite3_context *context, int argc, sqlite3_value **argv){
      "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
      "0123456789"
      ".-!,:*^+=_|?/<> ";
-  int iMin, iMax, n, r, i;
   unsigned char zBuf[1000];
 
   /* It used to be possible to call randstr() with any number of arguments,
@@ -52,21 +51,22 @@ static void randStr(sqlite3_context *context, int argc, sqlite3_value **argv){
   */
   assert(argc==2);
 
-  iMin = sqlite3_value_int(argv[0]);
+  int iMin = sqlite3_value_int(argv[0]);
   if( iMin<0 ) iMin = 0;
   if( iMin>=(int)sizeof(zBuf) ) iMin = sizeof(zBuf)-1;
-  iMax = sqlite3_value_int(argv[1]);
+  int iMax = sqlite3_value_int(argv[1]);
   if( iMax<iMin ) iMax = iMin;
   if( iMax>=(int)sizeof(zBuf) ) iMax = sizeof(zBuf)-1;
-  n = iMin;
+  int n = iMin;
   if( iMax>iMin ){
+    int r;
     sqlite3_randomness(sizeof(r), &r);
     r &= 0x7fffffff;
     n += r%(iMax + 1 - iMin);
   }
   assert( n<(int)sizeof(zBuf) );
   sqlite3_randomness(n, zBuf);
-  for(i=0; i<n; i++){
+  for(int i=0; i<n; i++){
     zBuf[i] = zSrc[zBuf[i]%(sizeof(zSrc)-1)];
   }
   zBuf[n] = 0;
@@ -97,14 +97,11 @@ static void test_destructor(
   int nArg,
   sqlite3_value **argv
 ){
-  char *zVal;
-  int len;
-  
   test_destructor_count_var++;
   assert( nArg==1 );
   if( sqlite3_value_type(argv[0])==SQLITE_NULL ) return;
-  len = sqlite3_value_bytes(argv[0]);
-  zVal = (char*)testContextMalloc(pCtx, len+3);
+  const int len = sqlite3_value_bytes(argv[0]);
+  char *zVal = (char*)testContextMalloc(pCtx, len+3);
   if( !zVal ){
     return;
   }
@@ -116,18 +113,15 @@ static void test_destructor(
 }
 #ifndef SQLITE_OMIT_UTF16
 static void test_destructor16(
-  sqlite3_context *pCtx, 
+  sqlite3_context *pCtx,
   int nArg,
   sqlite3_value **argv
 ){
-  char *zVal;
-  int len;
-  
   test_destructor_count_var++;
   assert( nArg==1 );
   if( sqlite3_value_type(argv[0])==SQLITE_NULL ) return;
-  len = sqlite3_value_bytes16(argv[0]);
-  zVal = (char*)testContextMalloc(pCtx, len+3);
+  const int len = sqlite3_value_bytes16(argv[0]);
+  char *zVal = (char*)testContextMalloc(pCtx, len+3);
   if( !zVal ){
     return;
   }
@@ -162,10 +156,9 @@ static void test_agg_errmsg16_step(sqlite3_context *a, int b,sqlite3_value **c){
 }
 static void test_agg_errmsg16_final(sqlite3_context *ctx){
 #ifndef SQLITE_OMIT_UTF16
-  const void *z;
-  sqlite3 * db = sqlite3_context_db_handle(ctx);
+  sqlite3 *const db = sqlite3_context_db_handle(ctx);
   sqlite3_aggregate_context(ctx, 2048);
-  z = sqlite3_errmsg16(db);
+  const void *z = sqlite3_errmsg16(db);
   sqlite3_result_text16(ctx, z, -1, SQLITE_TRANSIENT);
 #endif
 }
@@ -293,12 +286,9 @@ static void test_eval(
   sqlite3_value **argv
 ){
   sqlite3_stmt *pStmt;
-  int rc;
-  sqlite3 *db = sqlite3_context_db_handle(pCtx);
-  const char *zSql;
-
-  zSql = (char*)sqlite3_value_text(argv[0]);
-  rc = sqlite3_prepare_v2(db, zSql, -1, &pStmt, 0);
+  sqlite3 *const db = sqlite3_context_db_handle(pCtx);
+  const char *zSql = (char*)sqlite3_value_text(argv[0]);
+  int rc = sqlite3_prepare_v2(db, zSql, -1, &pStmt, 0);
   if( rc==SQLITE_OK ){
     rc = sqlite3_step(pStmt);
     if( rc==SQLITE_ROW ){
@@ -348,17 +338,14 @@ static void testHexToBin(const char *zIn, char *zOut){
 */
 #ifndef SQLITE_OMIT_UTF16
 static void testHexToUtf16be(
-  sqlite3_context *pCtx, 
+  sqlite3_context *pCtx,
   int nArg,
   sqlite3_value **argv
 ){
-  int n;
-  const char *zIn;
-  char *zOut;
   assert( nArg==1 );
-  n = sqlite3_value_bytes(argv[0]);
-  zIn = (const char*)sqlite3_value_text(argv[0]);
-  zOut = (char*)sqlite3_malloc( n/2 );
+  const int n = sqlite3_value_bytes(argv[0]);
+  const char *zIn = (const char*)sqlite3_value_text(argv[0]);
+  char *zOut = (char*)sqlite3_malloc( n/2 );
   if( zOut==0 ){
     sqlite3_result_error_nomem(pCtx);
   }else{
@@ -375,17 +362,14 @@ static void testHexToUtf16be(
 ** result using sqlite3_result_text16le().
 */
 static void testHexToUtf8(
-  sqlite3_context *pCtx, 
+  sqlite3_context *pCtx,
   int nArg,
   sqlite3_value **argv
 ){
-  int n;
-  const char *zIn;
-  char *zOut;
   assert( nArg==1 );
-  n = sqlite3_value_bytes(argv[0]);
-  zIn = (const char*)sqlite3_value_text(argv[0]);
-  zOut = (char*)sqlite3_malloc( n/2 );
+  const int n = sqlite3_value_bytes(argv[0]);
+  const char *zIn = (const char*)sqlite3_value_text(argv[0]);
+  char *zOut = (char*)sqlite3_malloc( n/2 );
   if( zOut==0 ){
     sqlite3_result_error_nomem(pCtx);
   }else{
@@ -402,17 +386,14 @@ static void testHexToUtf8(
 */
 #ifndef SQLITE_OMIT_UTF16
 static void testHexToUtf16le(
-  sqlite3_context *pCtx, 
+  sqlite3_context *pCtx,
   int nArg,
   sqlite3_value **argv
 ){
-  int n;
-  const char *zIn;
-  char *zOut;
   assert( nArg==1 );
-  n = sqlite3_value_bytes(argv[0]);
-  zIn = (const char*)sqlite3_value_text(argv[0]);
-  zOut = (char*)sqlite3_malloc( n/2 );
+  const int n = sqlite3_value_bytes(argv[0]);
+  const char *zIn = (const char*)sqlite3_value_text(argv[0]);
+  char *zOut = (char*)sqlite3_malloc( n/2 );
   if( zOut==0 ){
     sqlite3_result_error_nomem(pCtx);
   }else{
@@ -440,12 +421,10 @@ static void real2hex(
     unsigned char x[8];
   } v;
   char zOut[20];
-  int i;
-  int bigEndian;
   v.i = 1;
-  bigEndian = v.x[0]==0;
+  const int bigEndian = v.x[0]==0;
   v.r = sqlite3_value_double(argv[0]);
-  for(i=0; i<8; i++){
+  for(int i=0; i<8; i++){
     if( bigEndian ){
       zOut[i*2]   = "0123456789abcdef"[v.x[i]>>4];
       zOut[i*2+1] = "0123456789abcdef"[v.x[i]&0xf];
@@ -639,8 +618,7 @@ static void test_frombind(
   sqlite3_value **argv
 ){
   sqlite3_uint64 m = 0;
-  int i;
-  for(i=0; i<argc && i<63; i++){
+  for(int i=0; i<argc && i<63; i++){
     if( sqlite3_value_frombind(argv[i]) ) m |= ((sqlite3_uint64)1)<<i;
   }
   sqlite3_result_int64(context, (sqlite3_int64)m);
@@ -694,9 +672,8 @@ static int registerTestFunctions(
                                                test_setsubtype},
     { "test_frombind",        -1, SQLITE_UTF8, test_frombind},
   };
-  int i;
 
-  for(i=0; i<(int)(sizeof(aFuncs)/sizeof(aFuncs[0])); i++){
+  for(int i=0; i<(int)(sizeof(aFuncs)/sizeof(aFuncs[0])); i++){
     sqlite3_create_function(db, aFuncs[i].zName, aFuncs[i].nArg,
         aFuncs[i].eTextRep, 0, aFuncs[i].xFunc, 0, 0);
   }
@@ -848,7 +825,6 @@ static void rankfunc(sqlite3_context *pCtx, int nVal, sqlite3_value **apVal){
   int nMatchinfo;                 /* Number of elements in aMatchinfo[] */
   int nCol = 0;                   /* Number of columns in the table */
   int nPhrase = 0;                /* Number of phrases in the query */
-  int iPhrase;                    /* Current phrase */
   double score = 0.0;             /* Value to return */
 
   assert( sizeof(int)==4 );
@@ -875,7 +851,7 @@ static void rankfunc(sqlite3_context *pCtx, int nVal, sqlite3_value **apVal){
   if( nVal!=(1+nCol) ) goto wrong_number_args;
 
   /* Iterate through each phrase in the users query. */
-  for(iPhrase=0; iPhrase<nPhrase; iPhrase++){
+  for(int iPhrase=0; iPhrase<nPhrase; iPhrase++){
     int iCol;                     /* Current column */
 
     /* Now iterate through each column in the users query. For each column,
@@ -938,10 +914,9 @@ int Sqlitetest_func_Init(Tcl_Interp *interp){
      { "abuse_create_function",         abuse_create_function  },
      { "install_fts3_rank_function",    install_fts3_rank_function  },
   };
-  int i;
   extern int Md5_Register(sqlite3 *, char **, const sqlite3_api_routines *);
 
-  for(i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
+  for(int i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
     Tcl_CreateObjCommand(interp, aObjCmd[i].zName, aObjCmd[i].xProc, 0, 0);
   }
   sqlite3_initialize();

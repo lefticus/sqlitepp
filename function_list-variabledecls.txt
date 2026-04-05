@@ -1867,18 +1867,18 @@
 [x] src/test_fs.cpp::fsEof
 [x] src/test_fs.cpp::fsBestIndex
 [x] src/test_fs.cpp::Sqlitetestfs_Init
-[ ] src/test_func.cpp::testContextMalloc
-[ ] src/test_func.cpp::randStr
-[ ] src/test_func.cpp::destructor
-[ ] src/test_func.cpp::test_agg_errmsg16_step
-[ ] src/test_func.cpp::test_agg_errmsg16_final
-[ ] src/test_func.cpp::free_test_auxdata
-[ ] src/test_func.cpp::testHexChar
-[ ] src/test_func.cpp::testHexToBin
-[ ] src/test_func.cpp::tStep
-[ ] src/test_func.cpp::tFinal
-[ ] src/test_func.cpp::rankfunc
-[ ] src/test_func.cpp::Sqlitetest_func_Init
+[x] src/test_func.cpp::testContextMalloc
+[x] src/test_func.cpp::randStr
+[x] src/test_func.cpp::destructor
+[x] src/test_func.cpp::test_agg_errmsg16_step
+[x] src/test_func.cpp::test_agg_errmsg16_final
+[x] src/test_func.cpp::free_test_auxdata
+[x] src/test_func.cpp::testHexChar
+[x] src/test_func.cpp::testHexToBin
+[x] src/test_func.cpp::tStep
+[x] src/test_func.cpp::tFinal
+[x] src/test_func.cpp::rankfunc
+[x] src/test_func.cpp::Sqlitetest_func_Init
 [ ] src/test_hexio.cpp::sqlite3TestBinToHex
 [ ] src/test_hexio.cpp::sqlite3TestHexToBin
 [ ] src/test_hexio.cpp::getFts3Varint
