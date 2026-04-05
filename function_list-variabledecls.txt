@@ -3203,44 +3203,44 @@
 [x] src/vdbemem.cpp::sqlite3ValueFree
 [x] src/vdbemem.cpp::valueBytes
 [x] src/vdbemem.cpp::sqlite3ValueBytes
-[ ] src/vdbesort.cpp::vdbePmaReaderClear
-[ ] src/vdbesort.cpp::vdbePmaReadVarint
-[ ] src/vdbesort.cpp::vdbeSorterMapFile
-[ ] src/vdbesort.cpp::vdbePmaReaderNext
-[ ] src/vdbesort.cpp::vdbeSorterRecordFree
-[ ] src/vdbesort.cpp::vdbeSortSubtaskCleanup
-[ ] src/vdbesort.cpp::vdbeSorterWorkDebug
-[ ] src/vdbesort.cpp::vdbeSorterRewindDebug
-[ ] src/vdbesort.cpp::vdbeSorterJoinThread
-[ ] src/vdbesort.cpp::vdbeSorterJoinAll
-[ ] src/vdbesort.cpp::vdbeMergeEngineNew
-[ ] src/vdbesort.cpp::vdbeMergeEngineFree
-[ ] src/vdbesort.cpp::vdbeIncrFree
-[ ] src/vdbesort.cpp::sqlite3VdbeSorterReset
-[ ] src/vdbesort.cpp::sqlite3VdbeSorterClose
-[ ] src/vdbesort.cpp::vdbeSorterExtendFile
-[ ] src/vdbesort.cpp::vdbeSortAllocUnpacked
-[ ] src/vdbesort.cpp::vdbeSorterGetCompare
-[ ] src/vdbesort.cpp::vdbeSorterSort
-[ ] src/vdbesort.cpp::vdbePmaWriteBlob
-[ ] src/vdbesort.cpp::vdbePmaWriterFinish
-[ ] src/vdbesort.cpp::vdbePmaWriteVarint
-[ ] src/vdbesort.cpp::vdbeSorterListToPMA
-[ ] src/vdbesort.cpp::vdbeSorterFlushThread
-[ ] src/vdbesort.cpp::vdbeSorterFlushPMA
-[ ] src/vdbesort.cpp::vdbeIncrPopulate
-[ ] src/vdbesort.cpp::vdbeIncrPopulateThread
-[ ] src/vdbesort.cpp::vdbeIncrBgPopulate
-[ ] src/vdbesort.cpp::vdbeIncrSwap
-[ ] src/vdbesort.cpp::vdbeIncrMergerSetThreads
-[ ] src/vdbesort.cpp::vdbePmaReaderIncrMergeInit
-[ ] src/vdbesort.cpp::vdbePmaReaderBgIncrInit
-[ ] src/vdbesort.cpp::vdbePmaReaderIncrInit
-[ ] src/vdbesort.cpp::vdbeSorterTreeDepth
-[ ] src/vdbesort.cpp::vdbeSorterSetupMerge
-[ ] src/vdbesort.cpp::sqlite3VdbeSorterRewind
-[ ] src/vdbesort.cpp::sqlite3VdbeSorterNext
-[ ] src/vdbesort.cpp::sqlite3VdbeSorterRowkey
+[x] src/vdbesort.cpp::vdbePmaReaderClear
+[x] src/vdbesort.cpp::vdbePmaReadVarint
+[x] src/vdbesort.cpp::vdbeSorterMapFile
+[x] src/vdbesort.cpp::vdbePmaReaderNext
+[x] src/vdbesort.cpp::vdbeSorterRecordFree
+[x] src/vdbesort.cpp::vdbeSortSubtaskCleanup
+[x] src/vdbesort.cpp::vdbeSorterWorkDebug
+[x] src/vdbesort.cpp::vdbeSorterRewindDebug
+[x] src/vdbesort.cpp::vdbeSorterJoinThread
+[x] src/vdbesort.cpp::vdbeSorterJoinAll
+[x] src/vdbesort.cpp::vdbeMergeEngineNew
+[x] src/vdbesort.cpp::vdbeMergeEngineFree
+[x] src/vdbesort.cpp::vdbeIncrFree
+[x] src/vdbesort.cpp::sqlite3VdbeSorterReset
+[x] src/vdbesort.cpp::sqlite3VdbeSorterClose
+[x] src/vdbesort.cpp::vdbeSorterExtendFile
+[x] src/vdbesort.cpp::vdbeSortAllocUnpacked
+[x] src/vdbesort.cpp::vdbeSorterGetCompare
+[x] src/vdbesort.cpp::vdbeSorterSort
+[x] src/vdbesort.cpp::vdbePmaWriteBlob
+[x] src/vdbesort.cpp::vdbePmaWriterFinish
+[x] src/vdbesort.cpp::vdbePmaWriteVarint
+[x] src/vdbesort.cpp::vdbeSorterListToPMA
+[x] src/vdbesort.cpp::vdbeSorterFlushThread
+[x] src/vdbesort.cpp::vdbeSorterFlushPMA
+[x] src/vdbesort.cpp::vdbeIncrPopulate
+[x] src/vdbesort.cpp::vdbeIncrPopulateThread
+[x] src/vdbesort.cpp::vdbeIncrBgPopulate
+[x] src/vdbesort.cpp::vdbeIncrSwap
+[x] src/vdbesort.cpp::vdbeIncrMergerSetThreads
+[x] src/vdbesort.cpp::vdbePmaReaderIncrMergeInit
+[x] src/vdbesort.cpp::vdbePmaReaderBgIncrInit
+[x] src/vdbesort.cpp::vdbePmaReaderIncrInit
+[x] src/vdbesort.cpp::vdbeSorterTreeDepth
+[x] src/vdbesort.cpp::vdbeSorterSetupMerge
+[x] src/vdbesort.cpp::sqlite3VdbeSorterRewind
+[x] src/vdbesort.cpp::sqlite3VdbeSorterNext
+[x] src/vdbesort.cpp::sqlite3VdbeSorterRowkey
 [ ] src/vdbetrace.cpp::findNextHostParameter
 [ ] src/vdbevtab.cpp::bytecodevtabDisconnect
 [ ] src/vdbevtab.cpp::bytecodevtabOpen
