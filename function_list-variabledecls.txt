@@ -1411,42 +1411,42 @@
 [x] src/pager.cpp::sqlite3PagerSnapshotUnlock
 [x] src/pager.cpp::sqlite3PagerWalFramesize
 [x] src/pager.cpp::sqlite3PagerWalSystemErrno
-[ ] src/pcache.cpp::pageOnDirtyList
-[ ] src/pcache.cpp::pageNotOnDirtyList
-[ ] src/pcache.cpp::sqlite3PcachePageSanity
-[ ] src/pcache.cpp::pcacheManageDirtyList
-[ ] src/pcache.cpp::pcacheUnpin
-[ ] src/pcache.cpp::numberOfCachePages
-[ ] src/pcache.cpp::sqlite3PcacheInitialize
-[ ] src/pcache.cpp::sqlite3PcacheShutdown
-[ ] src/pcache.cpp::sqlite3PcacheSize
-[ ] src/pcache.cpp::sqlite3PcacheSetPageSize
-[ ] src/pcache.cpp::sqlite3PcacheRelease
-[ ] src/pcache.cpp::sqlite3PcacheRef
-[ ] src/pcache.cpp::sqlite3PcacheDrop
-[ ] src/pcache.cpp::sqlite3PcacheMakeDirty
-[ ] src/pcache.cpp::sqlite3PcacheMakeClean
-[ ] src/pcache.cpp::sqlite3PcacheCleanAll
-[ ] src/pcache.cpp::sqlite3PcacheClearWritable
-[ ] src/pcache.cpp::sqlite3PcacheClearSyncFlags
-[ ] src/pcache.cpp::sqlite3PcacheMove
-[ ] src/pcache.cpp::sqlite3PcacheTruncate
-[ ] src/pcache.cpp::sqlite3PcacheClose
-[ ] src/pcache.cpp::sqlite3PcacheClear
-[ ] src/pcache.cpp::pcacheMergeDirtyList
-[ ] src/pcache.cpp::pcacheSortDirtyList
-[ ] src/pcache.cpp::sqlite3PcacheDirtyList
-[ ] src/pcache.cpp::sqlite3PcacheRefCount
-[ ] src/pcache.cpp::sqlite3PcachePageRefcount
-[ ] src/pcache.cpp::sqlite3PcachePagecount
-[ ] src/pcache.cpp::sqlite3PcacheGetCachesize
-[ ] src/pcache.cpp::sqlite3PcacheSetCachesize
-[ ] src/pcache.cpp::sqlite3PcacheSetSpillsize
-[ ] src/pcache.cpp::sqlite3PcacheShrink
-[ ] src/pcache.cpp::sqlite3HeaderSizePcache
-[ ] src/pcache.cpp::sqlite3PCachePercentDirty
-[ ] src/pcache.cpp::sqlite3PCacheIsDirty
-[ ] src/pcache.cpp::sqlite3PcacheIterateDirty
+[x] src/pcache.cpp::pageOnDirtyList
+[x] src/pcache.cpp::pageNotOnDirtyList
+[x] src/pcache.cpp::sqlite3PcachePageSanity
+[x] src/pcache.cpp::pcacheManageDirtyList
+[x] src/pcache.cpp::pcacheUnpin
+[x] src/pcache.cpp::numberOfCachePages
+[x] src/pcache.cpp::sqlite3PcacheInitialize
+[x] src/pcache.cpp::sqlite3PcacheShutdown
+[x] src/pcache.cpp::sqlite3PcacheSize
+[x] src/pcache.cpp::sqlite3PcacheSetPageSize
+[x] src/pcache.cpp::sqlite3PcacheRelease
+[x] src/pcache.cpp::sqlite3PcacheRef
+[x] src/pcache.cpp::sqlite3PcacheDrop
+[x] src/pcache.cpp::sqlite3PcacheMakeDirty
+[x] src/pcache.cpp::sqlite3PcacheMakeClean
+[x] src/pcache.cpp::sqlite3PcacheCleanAll
+[x] src/pcache.cpp::sqlite3PcacheClearWritable
+[x] src/pcache.cpp::sqlite3PcacheClearSyncFlags
+[x] src/pcache.cpp::sqlite3PcacheMove
+[x] src/pcache.cpp::sqlite3PcacheTruncate
+[x] src/pcache.cpp::sqlite3PcacheClose
+[x] src/pcache.cpp::sqlite3PcacheClear
+[x] src/pcache.cpp::pcacheMergeDirtyList
+[x] src/pcache.cpp::pcacheSortDirtyList
+[x] src/pcache.cpp::sqlite3PcacheDirtyList
+[x] src/pcache.cpp::sqlite3PcacheRefCount
+[x] src/pcache.cpp::sqlite3PcachePageRefcount
+[x] src/pcache.cpp::sqlite3PcachePagecount
+[x] src/pcache.cpp::sqlite3PcacheGetCachesize
+[x] src/pcache.cpp::sqlite3PcacheSetCachesize
+[x] src/pcache.cpp::sqlite3PcacheSetSpillsize
+[x] src/pcache.cpp::sqlite3PcacheShrink
+[x] src/pcache.cpp::sqlite3HeaderSizePcache
+[x] src/pcache.cpp::sqlite3PCachePercentDirty
+[x] src/pcache.cpp::sqlite3PCacheIsDirty
+[x] src/pcache.cpp::sqlite3PcacheIterateDirty
 [ ] src/pcache1.cpp::sqlite3PCacheBufferSetup
 [ ] src/pcache1.cpp::pcache1InitBulk
 [ ] src/pcache1.cpp::pcache1Alloc
