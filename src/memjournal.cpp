@@ -131,29 +131,26 @@ static int memjrnlRead(
 ** Free the list of FileChunk structures headed at MemJournal.pFirst.
 */
 static void memjrnlFreeChunks(FileChunk *pFirst){
-  FileChunk *pIter;
-  FileChunk *pNext;
-  for(pIter=pFirst; pIter; pIter=pNext){
-    pNext = pIter->pNext;
+  for(FileChunk *pIter=pFirst; pIter; ){
+    FileChunk *pNext = pIter->pNext;
     sqlite3_free(pIter);
-  } 
+    pIter = pNext;
+  }
 }
 
 /*
 ** Flush the contents of memory to a real file on disk.
 */
 static int memjrnlCreateFile(MemJournal *p){
-  int rc;
   sqlite3_file *pReal = (sqlite3_file*)p;
-  MemJournal copy = *p;
+  const MemJournal copy = *p;
 
   memset(p, 0, sizeof(MemJournal));
-  rc = sqlite3OsOpen(copy.pVfs, copy.zJournal, pReal, copy.flags, 0);
+  int rc = sqlite3OsOpen(copy.pVfs, copy.zJournal, pReal, copy.flags, 0);
   if( rc==SQLITE_OK ){
     int nChunk = copy.nChunkSize;
     i64 iOff = 0;
-    FileChunk *pIter;
-    for(pIter=copy.pFirst; pIter; pIter=pIter->pNext){
+    for(FileChunk *pIter=copy.pFirst; pIter; pIter=pIter->pNext){
       if( iOff + nChunk > copy.endpoint.iOffset ){
         nChunk = copy.endpoint.iOffset - iOff;
       }
@@ -308,7 +305,7 @@ static int memjrnlSync(sqlite3_file *pJfd, int flags){
 ** Query the size of the file in bytes.
 */
 static int memjrnlFileSize(sqlite3_file *pJfd, sqlite_int64 *pSize){
-  MemJournal *p = (MemJournal *)pJfd;
+  const MemJournal *p = (const MemJournal *)pJfd;
   *pSize = (sqlite_int64) p->endpoint.iOffset;
   return SQLITE_OK;
 }

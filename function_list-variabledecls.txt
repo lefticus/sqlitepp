@@ -937,16 +937,16 @@
 [x] src/memdb.cpp::memdbFromDbSchema
 [x] src/memdb.cpp::sqlite3IsMemdb
 [x] src/memdb.cpp::sqlite3MemdbInit
-[ ] src/memjournal.cpp::memjrnlFreeChunks
-[ ] src/memjournal.cpp::memjrnlCreateFile
-[ ] src/memjournal.cpp::memjrnlTruncate
-[ ] src/memjournal.cpp::memjrnlClose
-[ ] src/memjournal.cpp::memjrnlSync
-[ ] src/memjournal.cpp::memjrnlFileSize
-[ ] src/memjournal.cpp::sqlite3MemJournalOpen
-[ ] src/memjournal.cpp::sqlite3JournalCreate
-[ ] src/memjournal.cpp::sqlite3JournalIsInMemory
-[ ] src/memjournal.cpp::sqlite3JournalSize
+[x] src/memjournal.cpp::memjrnlFreeChunks
+[x] src/memjournal.cpp::memjrnlCreateFile
+[x] src/memjournal.cpp::memjrnlTruncate
+[x] src/memjournal.cpp::memjrnlClose
+[x] src/memjournal.cpp::memjrnlSync
+[x] src/memjournal.cpp::memjrnlFileSize
+[x] src/memjournal.cpp::sqlite3MemJournalOpen
+[x] src/memjournal.cpp::sqlite3JournalCreate
+[x] src/memjournal.cpp::sqlite3JournalIsInMemory
+[x] src/memjournal.cpp::sqlite3JournalSize
 [ ] src/mutex.cpp::checkMutexHeld
 [ ] src/mutex.cpp::checkMutexNotheld
 [ ] src/mutex.cpp::checkMutexInit
