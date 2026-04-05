@@ -1815,32 +1815,32 @@
 [x] src/test_demovfs.cpp::sqlite3_demovfs
 [x] src/test_demovfs.cpp::Sqlitetest_demovfs_Init
 [x] src/test_demovfs.cpp::Sqlitetest_demovfs_Init
-[ ] src/test_devsym.cpp::devsymClose
-[ ] src/test_devsym.cpp::devsymTruncate
-[ ] src/test_devsym.cpp::devsymSync
-[ ] src/test_devsym.cpp::devsymFileSize
-[ ] src/test_devsym.cpp::devsymLock
-[ ] src/test_devsym.cpp::devsymUnlock
-[ ] src/test_devsym.cpp::devsymCheckReservedLock
-[ ] src/test_devsym.cpp::devsymFileControl
-[ ] src/test_devsym.cpp::devsymSectorSize
-[ ] src/test_devsym.cpp::devsymDeviceCharacteristics
-[ ] src/test_devsym.cpp::devsymShmLock
-[ ] src/test_devsym.cpp::devsymShmBarrier
-[ ] src/test_devsym.cpp::devsymShmUnmap
-[ ] src/test_devsym.cpp::devsymDelete
-[ ] src/test_devsym.cpp::devsymDlOpen
-[ ] src/test_devsym.cpp::devsymDlError
-[ ] src/test_devsym.cpp::void
-[ ] src/test_devsym.cpp::devsymDlClose
-[ ] src/test_devsym.cpp::devsymRandomness
-[ ] src/test_devsym.cpp::devsymSleep
-[ ] src/test_devsym.cpp::devsymCurrentTime
-[ ] src/test_devsym.cpp::writecrashSectorSize
-[ ] src/test_devsym.cpp::writecrashDeviceCharacteristics
-[ ] src/test_devsym.cpp::devsym_register
-[ ] src/test_devsym.cpp::devsym_unregister
-[ ] src/test_devsym.cpp::devsym_crash_on_write
+[x] src/test_devsym.cpp::devsymClose
+[x] src/test_devsym.cpp::devsymTruncate
+[x] src/test_devsym.cpp::devsymSync
+[x] src/test_devsym.cpp::devsymFileSize
+[x] src/test_devsym.cpp::devsymLock
+[x] src/test_devsym.cpp::devsymUnlock
+[x] src/test_devsym.cpp::devsymCheckReservedLock
+[x] src/test_devsym.cpp::devsymFileControl
+[x] src/test_devsym.cpp::devsymSectorSize
+[x] src/test_devsym.cpp::devsymDeviceCharacteristics
+[x] src/test_devsym.cpp::devsymShmLock
+[x] src/test_devsym.cpp::devsymShmBarrier
+[x] src/test_devsym.cpp::devsymShmUnmap
+[x] src/test_devsym.cpp::devsymDelete
+[x] src/test_devsym.cpp::devsymDlOpen
+[x] src/test_devsym.cpp::devsymDlError
+[x] src/test_devsym.cpp::void
+[x] src/test_devsym.cpp::devsymDlClose
+[x] src/test_devsym.cpp::devsymRandomness
+[x] src/test_devsym.cpp::devsymSleep
+[x] src/test_devsym.cpp::devsymCurrentTime
+[x] src/test_devsym.cpp::writecrashSectorSize
+[x] src/test_devsym.cpp::writecrashDeviceCharacteristics
+[x] src/test_devsym.cpp::devsym_register
+[x] src/test_devsym.cpp::devsym_unregister
+[x] src/test_devsym.cpp::devsym_crash_on_write
 [ ] src/test_fs.cpp::fsdirDisconnect
 [ ] src/test_fs.cpp::fsdirBestIndex
 [ ] src/test_fs.cpp::fsdirOpen

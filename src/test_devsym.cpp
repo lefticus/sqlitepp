@@ -85,7 +85,7 @@ struct DevsymGlobal g = {0, 0, 512, 0};
 ** Close an devsym-file.
 */
 static int devsymClose(sqlite3_file *pFile){
-  devsym_file *p = (devsym_file *)pFile;
+  devsym_file *const p = (devsym_file *)pFile;
   sqlite3OsClose(p->pReal);
   return SQLITE_OK;
 }
@@ -99,7 +99,7 @@ static int devsymRead(
   int iAmt, 
   sqlite_int64 iOfst
 ){
-  devsym_file *p = (devsym_file *)pFile;
+  devsym_file *const p = (devsym_file *)pFile;
   return sqlite3OsRead(p->pReal, zBuf, iAmt, iOfst);
 }
 
@@ -112,7 +112,7 @@ static int devsymWrite(
   int iAmt, 
   sqlite_int64 iOfst
 ){
-  devsym_file *p = (devsym_file *)pFile;
+  devsym_file *const p = (devsym_file *)pFile;
   return sqlite3OsWrite(p->pReal, zBuf, iAmt, iOfst);
 }
 
@@ -120,7 +120,7 @@ static int devsymWrite(
 ** Truncate an devsym-file.
 */
 static int devsymTruncate(sqlite3_file *pFile, sqlite_int64 size){
-  devsym_file *p = (devsym_file *)pFile;
+  devsym_file *const p = (devsym_file *)pFile;
   return sqlite3OsTruncate(p->pReal, size);
 }
 
@@ -128,7 +128,7 @@ static int devsymTruncate(sqlite3_file *pFile, sqlite_int64 size){
 ** Sync an devsym-file.
 */
 static int devsymSync(sqlite3_file *pFile, int flags){
-  devsym_file *p = (devsym_file *)pFile;
+  devsym_file *const p = (devsym_file *)pFile;
   return sqlite3OsSync(p->pReal, flags);
 }
 
@@ -136,7 +136,7 @@ static int devsymSync(sqlite3_file *pFile, int flags){
 ** Return the current file-size of an devsym-file.
 */
 static int devsymFileSize(sqlite3_file *pFile, sqlite_int64 *pSize){
-  devsym_file *p = (devsym_file *)pFile;
+  devsym_file *const p = (devsym_file *)pFile;
   return sqlite3OsFileSize(p->pReal, pSize);
 }
 
@@ -144,7 +144,7 @@ static int devsymFileSize(sqlite3_file *pFile, sqlite_int64 *pSize){
 ** Lock an devsym-file.
 */
 static int devsymLock(sqlite3_file *pFile, int eLock){
-  devsym_file *p = (devsym_file *)pFile;
+  devsym_file *const p = (devsym_file *)pFile;
   return sqlite3OsLock(p->pReal, eLock);
 }
 
@@ -152,7 +152,7 @@ static int devsymLock(sqlite3_file *pFile, int eLock){
 ** Unlock an devsym-file.
 */
 static int devsymUnlock(sqlite3_file *pFile, int eLock){
-  devsym_file *p = (devsym_file *)pFile;
+  devsym_file *const p = (devsym_file *)pFile;
   return sqlite3OsUnlock(p->pReal, eLock);
 }
 
@@ -160,7 +160,7 @@ static int devsymUnlock(sqlite3_file *pFile, int eLock){
 ** Check if another file-handle holds a RESERVED lock on an devsym-file.
 */
 static int devsymCheckReservedLock(sqlite3_file *pFile, int *pResOut){
-  devsym_file *p = (devsym_file *)pFile;
+  devsym_file *const p = (devsym_file *)pFile;
   return sqlite3OsCheckReservedLock(p->pReal, pResOut);
 }
 
@@ -168,7 +168,7 @@ static int devsymCheckReservedLock(sqlite3_file *pFile, int *pResOut){
 ** File control method. For custom operations on an devsym-file.
 */
 static int devsymFileControl(sqlite3_file *pFile, int op, void *pArg){
-  devsym_file *p = (devsym_file *)pFile;
+  devsym_file *const p = (devsym_file *)pFile;
   return sqlite3OsFileControl(p->pReal, op, pArg);
 }
 
@@ -190,7 +190,7 @@ static int devsymDeviceCharacteristics(sqlite3_file *pFile){
 ** Shared-memory methods are all pass-throughs.
 */
 static int devsymShmLock(sqlite3_file *pFile, int ofst, int n, int flags){
-  devsym_file *p = (devsym_file *)pFile;
+  devsym_file *const p = (devsym_file *)pFile;
   return p->pReal->pMethods->xShmLock(p->pReal, ofst, n, flags);
 }
 static int devsymShmMap(
@@ -200,15 +200,15 @@ static int devsymShmMap(
   int isWrite, 
   void volatile **pp
 ){
-  devsym_file *p = (devsym_file *)pFile;
+  devsym_file *const p = (devsym_file *)pFile;
   return p->pReal->pMethods->xShmMap(p->pReal, iRegion, szRegion, isWrite, pp);
 }
 static void devsymShmBarrier(sqlite3_file *pFile){
-  devsym_file *p = (devsym_file *)pFile;
+  devsym_file *const p = (devsym_file *)pFile;
   p->pReal->pMethods->xShmBarrier(p->pReal);
 }
 static int devsymShmUnmap(sqlite3_file *pFile, int delFlag){
-  devsym_file *p = (devsym_file *)pFile;
+  devsym_file *const p = (devsym_file *)pFile;
   return p->pReal->pMethods->xShmUnmap(p->pReal, delFlag);
 }
 
@@ -244,10 +244,9 @@ static sqlite3_io_methods devsym_io_methods = {
   devsymShmUnmap                    /* xShmUnmap */
 };
 
-  int rc;
-  devsym_file *p = (devsym_file *)pFile;
+  devsym_file *const p = (devsym_file *)pFile;
   p->pReal = (sqlite3_file *)&p[1];
-  rc = sqlite3OsOpen(g.pVfs, zName, p->pReal, flags, pOutFlags);
+  const int rc = sqlite3OsOpen(g.pVfs, zName, p->pReal, flags, pOutFlags);
   if( p->pReal->pMethods ){
     pFile->pMethods = &devsym_io_methods;
   }
@@ -349,7 +348,7 @@ static int devsymCurrentTime(sqlite3_vfs *pVfs, double *pTimeOut){
 ** Return the sector-size in bytes for an writecrash-file.
 */
 static int writecrashSectorSize(sqlite3_file *pFile){
-  devsym_file *p = (devsym_file *)pFile;
+  devsym_file *const p = (devsym_file *)pFile;
   return sqlite3OsSectorSize(p->pReal);
 }
 
@@ -357,7 +356,7 @@ static int writecrashSectorSize(sqlite3_file *pFile){
 ** Return the device characteristic flags supported by an writecrash-file.
 */
 static int writecrashDeviceCharacteristics(sqlite3_file *pFile){
-  devsym_file *p = (devsym_file *)pFile;
+  devsym_file *const p = (devsym_file *)pFile;
   return sqlite3OsDeviceCharacteristics(p->pReal);
 }
 
@@ -370,7 +369,7 @@ static int writecrashWrite(
   int iAmt, 
   sqlite_int64 iOfst
 ){
-  devsym_file *p = (devsym_file *)pFile;
+  devsym_file *const p = (devsym_file *)pFile;
   if( g.nWriteCrash>0 ){
     g.nWriteCrash--;
     if( g.nWriteCrash==0 ) abort();
@@ -408,10 +407,9 @@ static sqlite3_io_methods writecrash_io_methods = {
   devsymShmUnmap                    /* xShmUnmap */
 };
 
-  int rc;
-  devsym_file *p = (devsym_file *)pFile;
+  devsym_file *const p = (devsym_file *)pFile;
   p->pReal = (sqlite3_file *)&p[1];
-  rc = sqlite3OsOpen(g.pVfs, zName, p->pReal, flags, pOutFlags);
+  const int rc = sqlite3OsOpen(g.pVfs, zName, p->pReal, flags, pOutFlags);
   if( p->pReal->pMethods ){
     pFile->pMethods = &writecrash_io_methods;
   }
