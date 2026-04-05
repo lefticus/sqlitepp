@@ -2376,6 +2376,7 @@
 [x] src/test_sqllog.cpp::sqllogTraceDb
 [x] src/test_sqllog.cpp::testSqllog
 [x] src/test_sqllog.cpp::sqlite3_init_sqllog
+<<<<<<< HEAD
 >>>>>>> c411528c7 (Move variable declarations down and add const: src/test_sqllog.cpp)
 [ ] src/test_superlock.cpp::superlockBusyHandler
 [ ] src/test_superlock.cpp::superlockIsWal
@@ -2383,6 +2384,14 @@
 [ ] src/test_superlock.cpp::superunlock_del
 [ ] src/test_superlock.cpp::superlock_busy
 [ ] src/test_superlock.cpp::SqliteSuperlock_Init
+=======
+[x] src/test_superlock.cpp::superlockBusyHandler
+[x] src/test_superlock.cpp::superlockIsWal
+[x] src/test_superlock.cpp::sqlite3demo_superunlock
+[x] src/test_superlock.cpp::superunlock_del
+[x] src/test_superlock.cpp::superlock_busy
+[x] src/test_superlock.cpp::SqliteSuperlock_Init
+>>>>>>> b35463a8d (Move variable declarations down and add const: src/test_superlock.cpp)
 [ ] src/test_syscall.cpp::tsIsFail
 [ ] src/test_syscall.cpp::tsErrno
 [ ] src/test_syscall.cpp::tsIsFailErrno

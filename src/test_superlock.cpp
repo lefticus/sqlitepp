@@ -65,10 +65,8 @@ static int superlockBusyHandler(void *pCtx, int UNUSED){
 ** is undefined in this case.
 */
 static int superlockIsWal(Superlock *pLock){
-  int rc;                         /* Return Code */
   sqlite3_stmt *pStmt;            /* Compiled PRAGMA journal_mode statement */
-
-  rc = sqlite3_prepare(pLock->db, "PRAGMA main.journal_mode", -1, &pStmt, 0);
+  const int rc = sqlite3_prepare(pLock->db, "PRAGMA main.journal_mode", -1, &pStmt, 0);
   if( rc!=SQLITE_OK ) return rc;
 
   pLock->bWal = 0;
@@ -151,10 +149,9 @@ static int superlockWalLock(
 void sqlite3demo_superunlock(void *pLock){
   Superlock *p = (Superlock *)pLock;
   if( p->bWal ){
-    int rc;                         /* Return code */
-    int flags = SQLITE_SHM_UNLOCK | SQLITE_SHM_EXCLUSIVE;
+    const int flags = SQLITE_SHM_UNLOCK | SQLITE_SHM_EXCLUSIVE;
     sqlite3_file *fd = 0;
-    rc = sqlite3_file_control(p->db, "main", SQLITE_FCNTL_FILE_POINTER, (void *)&fd);
+    const int rc = sqlite3_file_control(p->db, "main", SQLITE_FCNTL_FILE_POINTER, (void *)&fd);
     if( rc==SQLITE_OK ){
       fd->pMethods->xShmLock(fd, 2, 1, flags);
       fd->pMethods->xShmLock(fd, 3, SQLITE_SHM_NLOCK-3, flags);
@@ -284,10 +281,9 @@ static int SQLITE_TCLAPI superunlock_cmd(
 
 static int superlock_busy(void *pCtx, int nBusy){
   InterpAndScript *p = (InterpAndScript *)pCtx;
-  Tcl_Obj *pEval;                 /* Script to evaluate */
   int iVal = 0;                   /* Value to return */
 
-  pEval = Tcl_DuplicateObj(p->pScript);
+  Tcl_Obj *pEval = Tcl_DuplicateObj(p->pScript);  /* Script to evaluate */
   Tcl_IncrRefCount(pEval);
   Tcl_ListObjAppendElement(p->interp, pEval, Tcl_NewIntObj(nBusy));
   Tcl_EvalObjEx(p->interp, pEval, TCL_EVAL_GLOBAL);
