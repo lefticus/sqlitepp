@@ -947,27 +947,27 @@
 [x] src/memjournal.cpp::sqlite3JournalCreate
 [x] src/memjournal.cpp::sqlite3JournalIsInMemory
 [x] src/memjournal.cpp::sqlite3JournalSize
-[ ] src/mutex.cpp::checkMutexHeld
-[ ] src/mutex.cpp::checkMutexNotheld
-[ ] src/mutex.cpp::checkMutexInit
-[ ] src/mutex.cpp::checkMutexEnd
-[ ] src/mutex.cpp::checkMutexAlloc
-[ ] src/mutex.cpp::checkMutexFree
-[ ] src/mutex.cpp::checkMutexEnter
-[ ] src/mutex.cpp::checkMutexTry
-[ ] src/mutex.cpp::checkMutexLeave
-[ ] src/mutex.cpp::multiThreadedCheckMutex
-[ ] src/mutex.cpp::sqlite3MutexWarnOnContention
-[ ] src/mutex.cpp::sqlite3MutexInit
-[ ] src/mutex.cpp::sqlite3MutexEnd
-[ ] src/mutex.cpp::sqlite3_mutex_alloc
-[ ] src/mutex.cpp::sqlite3MutexAlloc
-[ ] src/mutex.cpp::sqlite3_mutex_free
-[ ] src/mutex.cpp::sqlite3_mutex_enter
-[ ] src/mutex.cpp::sqlite3_mutex_try
-[ ] src/mutex.cpp::sqlite3_mutex_leave
-[ ] src/mutex.cpp::sqlite3_mutex_held
-[ ] src/mutex.cpp::sqlite3_mutex_notheld
+[x] src/mutex.cpp::checkMutexHeld
+[x] src/mutex.cpp::checkMutexNotheld
+[x] src/mutex.cpp::checkMutexInit
+[x] src/mutex.cpp::checkMutexEnd
+[x] src/mutex.cpp::checkMutexAlloc
+[x] src/mutex.cpp::checkMutexFree
+[x] src/mutex.cpp::checkMutexEnter
+[x] src/mutex.cpp::checkMutexTry
+[x] src/mutex.cpp::checkMutexLeave
+[x] src/mutex.cpp::multiThreadedCheckMutex
+[x] src/mutex.cpp::sqlite3MutexWarnOnContention
+[x] src/mutex.cpp::sqlite3MutexInit
+[x] src/mutex.cpp::sqlite3MutexEnd
+[x] src/mutex.cpp::sqlite3_mutex_alloc
+[x] src/mutex.cpp::sqlite3MutexAlloc
+[x] src/mutex.cpp::sqlite3_mutex_free
+[x] src/mutex.cpp::sqlite3_mutex_enter
+[x] src/mutex.cpp::sqlite3_mutex_try
+[x] src/mutex.cpp::sqlite3_mutex_leave
+[x] src/mutex.cpp::sqlite3_mutex_held
+[x] src/mutex.cpp::sqlite3_mutex_notheld
 [ ] src/mutex_noop.cpp::noopMutexInit
 [ ] src/mutex_noop.cpp::noopMutexEnd
 [ ] src/mutex_noop.cpp::noopMutexAlloc

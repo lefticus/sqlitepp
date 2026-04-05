@@ -87,7 +87,7 @@ static int checkMutexInit(void){
   return pGlobalMutexMethods->xMutexInit(); 
 }
 static int checkMutexEnd(void){ 
-  int rc = pGlobalMutexMethods->xMutexEnd(); 
+  const int rc = pGlobalMutexMethods->xMutexEnd();
   pGlobalMutexMethods = 0;
   return rc;
 }
@@ -158,7 +158,7 @@ static void checkMutexFree(sqlite3_mutex *p){
 ** Enter the mutex.
 */
 static void checkMutexEnter(sqlite3_mutex *p){
-  CheckMutex *pCheck = (CheckMutex*)p;
+  CheckMutex *const pCheck = (CheckMutex*)p;
   if( pCheck->iType==SQLITE_MUTEX_WARNONCONTENTION ){
     if( SQLITE_OK==pGlobalMutexMethods->xMutexTry(pCheck->mutex) ){
       return;
@@ -177,7 +177,7 @@ static void checkMutexEnter(sqlite3_mutex *p){
 ** Enter the mutex (do not block).
 */
 static int checkMutexTry(sqlite3_mutex *p){
-  CheckMutex *pCheck = (CheckMutex*)p;
+  CheckMutex *const pCheck = (CheckMutex*)p;
   return pGlobalMutexMethods->xMutexTry(pCheck->mutex);
 }
 
@@ -185,7 +185,7 @@ static int checkMutexTry(sqlite3_mutex *p){
 ** Leave the mutex.
 */
 static void checkMutexLeave(sqlite3_mutex *p){
-  CheckMutex *pCheck = (CheckMutex*)p;
+  CheckMutex *const pCheck = (CheckMutex*)p;
   pGlobalMutexMethods->xMutexLeave(pCheck->mutex);
 }
 
@@ -225,16 +225,15 @@ void sqlite3MutexWarnOnContention(sqlite3_mutex *p){
 /*
 ** Initialize the mutex system.
 */
-int sqlite3MutexInit(void){ 
-  int rc = SQLITE_OK;
+int sqlite3MutexInit(void){
   if( !sqlite3GlobalConfig.mutex.xMutexAlloc ){
     /* If the xMutexAlloc method has not been set, then the user did not
-    ** install a mutex implementation via sqlite3_config() prior to 
+    ** install a mutex implementation via sqlite3_config() prior to
     ** sqlite3_initialize() being called. This block copies pointers to
     ** the default implementation into the sqlite3GlobalConfig structure.
     */
     sqlite3_mutex_methods const *pFrom;
-    sqlite3_mutex_methods *pTo = &sqlite3GlobalConfig.mutex;
+    sqlite3_mutex_methods *const pTo = &sqlite3GlobalConfig.mutex;
 
     if( sqlite3GlobalConfig.bCoreMutex ){
 #ifdef SQLITE_THREAD_MISUSE_WARNINGS
@@ -257,7 +256,7 @@ int sqlite3MutexInit(void){
     pTo->xMutexAlloc = pFrom->xMutexAlloc;
   }
   assert( sqlite3GlobalConfig.mutex.xMutexInit );
-  rc = sqlite3GlobalConfig.mutex.xMutexInit();
+  int rc = sqlite3GlobalConfig.mutex.xMutexInit();
 
 #ifdef SQLITE_DEBUG
   GLOBAL(int, mutexIsInit) = 1;
@@ -331,7 +330,7 @@ void sqlite3_mutex_enter(sqlite3_mutex *p){
 ** thread holds the mutex and it cannot be obtained, return SQLITE_BUSY.
 */
 int sqlite3_mutex_try(sqlite3_mutex *p){
-  int rc = SQLITE_OK;
+  const int rc = SQLITE_OK;
   if( p ){
     assert( sqlite3GlobalConfig.mutex.xMutexTry );
     return sqlite3GlobalConfig.mutex.xMutexTry(p);
