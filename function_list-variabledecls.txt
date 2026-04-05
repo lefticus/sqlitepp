@@ -2063,6 +2063,7 @@
 [x] src/test_mutex.cpp::counterMutexLeave
 [x] src/test_mutex.cpp::getDbPointer
 [x] src/test_mutex.cpp::Sqlitetest_mutex_Init
+<<<<<<< HEAD
 >>>>>>> 74a5e1124 (Move variable declarations down and add const: src/test_mutex.cpp)
 [ ] src/test_onefile.cpp::tmpClose
 [ ] src/test_onefile.cpp::tmpTruncate
@@ -2093,6 +2094,37 @@
 [ ] src/test_onefile.cpp::fsSleep
 [ ] src/test_onefile.cpp::fsCurrentTime
 [ ] src/test_onefile.cpp::fs_register
+=======
+[x] src/test_onefile.cpp::tmpClose
+[x] src/test_onefile.cpp::tmpTruncate
+[x] src/test_onefile.cpp::tmpSync
+[x] src/test_onefile.cpp::tmpFileSize
+[x] src/test_onefile.cpp::tmpLock
+[x] src/test_onefile.cpp::tmpUnlock
+[x] src/test_onefile.cpp::tmpCheckReservedLock
+[x] src/test_onefile.cpp::tmpFileControl
+[x] src/test_onefile.cpp::tmpSectorSize
+[x] src/test_onefile.cpp::tmpDeviceCharacteristics
+[x] src/test_onefile.cpp::fsClose
+[x] src/test_onefile.cpp::fsTruncate
+[x] src/test_onefile.cpp::fsSync
+[x] src/test_onefile.cpp::fsFileSize
+[x] src/test_onefile.cpp::fsLock
+[x] src/test_onefile.cpp::fsUnlock
+[x] src/test_onefile.cpp::fsCheckReservedLock
+[x] src/test_onefile.cpp::fsFileControl
+[x] src/test_onefile.cpp::fsSectorSize
+[x] src/test_onefile.cpp::fsDeviceCharacteristics
+[x] src/test_onefile.cpp::fsDelete
+[x] src/test_onefile.cpp::fsDlOpen
+[x] src/test_onefile.cpp::fsDlError
+[x] src/test_onefile.cpp::void
+[x] src/test_onefile.cpp::fsDlClose
+[x] src/test_onefile.cpp::fsRandomness
+[x] src/test_onefile.cpp::fsSleep
+[x] src/test_onefile.cpp::fsCurrentTime
+[x] src/test_onefile.cpp::fs_register
+>>>>>>> 5532d70e0 (Move variable declarations down and add const: src/test_onefile.cpp)
 [ ] src/test_osinst.cpp::vfslog_time
 [ ] src/test_osinst.cpp::vfslog_time
 [ ] src/test_osinst.cpp::vfslog_time

@@ -255,7 +255,7 @@ static sqlite3_io_methods tmp_io_methods = {
 ** Close a tmp-file.
 */
 static int tmpClose(sqlite3_file *pFile){
-  tmp_file *pTmp = (tmp_file *)pFile;
+  tmp_file *const pTmp = (tmp_file *)pFile;
   sqlite3_free(pTmp->zAlloc);
   return SQLITE_OK;
 }
@@ -269,7 +269,7 @@ static int tmpRead(
   int iAmt, 
   sqlite_int64 iOfst
 ){
-  tmp_file *pTmp = (tmp_file *)pFile;
+  const tmp_file *const pTmp = (tmp_file *)pFile;
   if( (iAmt+iOfst)>pTmp->nSize ){
     return SQLITE_IOERR_SHORT_READ;
   }
@@ -286,10 +286,10 @@ static int tmpWrite(
   int iAmt, 
   sqlite_int64 iOfst
 ){
-  tmp_file *pTmp = (tmp_file *)pFile;
+  tmp_file *const pTmp = (tmp_file *)pFile;
   if( (iAmt+iOfst)>pTmp->nAlloc ){
-    int nNew = (int)(2*(iAmt+iOfst+pTmp->nAlloc));
-    char *zNew = (char*)sqlite3_realloc(pTmp->zAlloc, nNew);
+    const int nNew = (int)(2*(iAmt+iOfst+pTmp->nAlloc));
+    char *const zNew = (char*)sqlite3_realloc(pTmp->zAlloc, nNew);
     if( !zNew ){
       return SQLITE_NOMEM;
     }
@@ -305,7 +305,7 @@ static int tmpWrite(
 ** Truncate a tmp-file.
 */
 static int tmpTruncate(sqlite3_file *pFile, sqlite_int64 size){
-  tmp_file *pTmp = (tmp_file *)pFile;
+  tmp_file *const pTmp = (tmp_file *)pFile;
   pTmp->nSize = (int)MIN(pTmp->nSize, size);
   return SQLITE_OK;
 }
@@ -321,7 +321,7 @@ static int tmpSync(sqlite3_file *pFile, int flags){
 ** Return the current file-size of a tmp-file.
 */
 static int tmpFileSize(sqlite3_file *pFile, sqlite_int64 *pSize){
-  tmp_file *pTmp = (tmp_file *)pFile;
+  const tmp_file *const pTmp = (const tmp_file *)pFile;
   *pSize = pTmp->nSize;
   return SQLITE_OK;
 }
@@ -374,8 +374,8 @@ static int tmpDeviceCharacteristics(sqlite3_file *pFile){
 */
 static int fsClose(sqlite3_file *pFile){
   int rc = SQLITE_OK;
-  fs_file *p = (fs_file *)pFile;
-  fs_real_file *pReal = p->pReal;
+  const fs_file *const p = (fs_file *)pFile;
+  fs_real_file *const pReal = p->pReal;
 
   /* Decrement the real_file ref-count. */
   pReal->nRef--;
@@ -404,9 +404,9 @@ static int fsRead(
   sqlite_int64 iOfst
 ){
   int rc = SQLITE_OK;
-  fs_file *p = (fs_file *)pFile;
-  fs_real_file *pReal = p->pReal;
-  sqlite3_file *pF = pReal->pFile;
+  const fs_file *const p = (fs_file *)pFile;
+  const fs_real_file *const pReal = p->pReal;
+  sqlite3_file *const pF = pReal->pFile;
 
   if( (p->eType==DATABASE_FILE && (iAmt+iOfst)>pReal->nDatabase)
    || (p->eType==JOURNAL_FILE && (iAmt+iOfst)>pReal->nJournal)
@@ -443,9 +443,9 @@ static int fsWrite(
   sqlite_int64 iOfst
 ){
   int rc = SQLITE_OK;
-  fs_file *p = (fs_file *)pFile;
-  fs_real_file *pReal = p->pReal;
-  sqlite3_file *pF = pReal->pFile;
+  const fs_file *const p = (fs_file *)pFile;
+  fs_real_file *const pReal = p->pReal;
+  sqlite3_file *const pF = pReal->pFile;
 
   if( p->eType==DATABASE_FILE ){
     if( (iAmt+iOfst+BLOCKSIZE)>(pReal->nBlob-pReal->nJournal) ){
@@ -486,8 +486,8 @@ static int fsWrite(
 ** Truncate an fs-file.
 */
 static int fsTruncate(sqlite3_file *pFile, sqlite_int64 size){
-  fs_file *p = (fs_file *)pFile;
-  fs_real_file *pReal = p->pReal;
+  const fs_file *const p = (fs_file *)pFile;
+  fs_real_file *const pReal = p->pReal;
   if( p->eType==DATABASE_FILE ){
     pReal->nDatabase = (int)MIN(pReal->nDatabase, size);
   }else{
@@ -500,9 +500,9 @@ static int fsTruncate(sqlite3_file *pFile, sqlite_int64 size){
 ** Sync an fs-file.
 */
 static int fsSync(sqlite3_file *pFile, int flags){
-  fs_file *p = (fs_file *)pFile;
-  fs_real_file *pReal = p->pReal;
-  sqlite3_file *pRealFile = pReal->pFile;
+  const fs_file *const p = (fs_file *)pFile;
+  const fs_real_file *const pReal = p->pReal;
+  sqlite3_file *const pRealFile = pReal->pFile;
   int rc = SQLITE_OK;
 
   if( p->eType==DATABASE_FILE ){
@@ -524,8 +524,8 @@ static int fsSync(sqlite3_file *pFile, int flags){
 ** Return the current file-size of an fs-file.
 */
 static int fsFileSize(sqlite3_file *pFile, sqlite_int64 *pSize){
-  fs_file *p = (fs_file *)pFile;
-  fs_real_file *pReal = p->pReal;
+  const fs_file *const p = (fs_file *)pFile;
+  const fs_real_file *const pReal = p->pReal;
   if( p->eType==DATABASE_FILE ){
     *pSize = pReal->nDatabase;
   }else{
@@ -591,31 +591,28 @@ static int fsOpen(
   fs_vfs_t *pFsVfs = (fs_vfs_t *)pVfs;
   fs_file *p = (fs_file *)pFile;
   fs_real_file *pReal = 0;
-  int eType;
-  int nName;
   int rc = SQLITE_OK;
 
   if( 0==(flags&(SQLITE_OPEN_MAIN_DB|SQLITE_OPEN_MAIN_JOURNAL)) ){
-    tmp_file *p2 = (tmp_file *)pFile;
+    tmp_file *const p2 = (tmp_file *)pFile;
     memset(p2, 0, sizeof(*p2));
     p2->base.pMethods = &tmp_io_methods;
     return SQLITE_OK;
   }
 
-  eType = ((flags&(SQLITE_OPEN_MAIN_DB))?DATABASE_FILE:JOURNAL_FILE);
+  const int eType = ((flags&(SQLITE_OPEN_MAIN_DB))?DATABASE_FILE:JOURNAL_FILE);
   p->base.pMethods = &fs_io_methods;
   p->eType = eType;
 
   assert(strlen("-journal")==8);
-  nName = (int)strlen(zName)-((eType==JOURNAL_FILE)?8:0);
+  const int nName = (int)strlen(zName)-((eType==JOURNAL_FILE)?8:0);
   pReal=pFsVfs->pFileList; 
   for(; pReal && strncmp(pReal->zName, zName, nName); pReal=pReal->pNext);
 
   if( !pReal ){
-    int real_flags = (flags&~(SQLITE_OPEN_MAIN_DB))|SQLITE_OPEN_TEMP_DB;
+    const int real_flags = (flags&~(SQLITE_OPEN_MAIN_DB))|SQLITE_OPEN_TEMP_DB;
     sqlite3_int64 size;
-    sqlite3_file *pRealFile;
-    sqlite3_vfs *pParent = pFsVfs->pParent;
+    sqlite3_vfs *const pParent = pFsVfs->pParent;
     assert(eType==DATABASE_FILE);
 
     pReal = (fs_real_file *)sqlite3_malloc(sizeof(*pReal)+pParent->szOsFile);
@@ -631,7 +628,7 @@ static int fsOpen(
     if( rc!=SQLITE_OK ){
       goto open_out;
     }
-    pRealFile = pReal->pFile;
+    sqlite3_file *const pRealFile = pReal->pFile;
 
     rc = pRealFile->pMethods->xFileSize(pRealFile, &size);
     if( rc!=SQLITE_OK ){
@@ -685,18 +682,17 @@ open_out:
 */
 static int fsDelete(sqlite3_vfs *pVfs, const char *zPath, int dirSync){
   int rc = SQLITE_OK;
-  fs_vfs_t *pFsVfs = (fs_vfs_t *)pVfs;
+  const fs_vfs_t *const pFsVfs = (fs_vfs_t *)pVfs;
   fs_real_file *pReal;
-  sqlite3_file *pF;
-  int nName = (int)strlen(zPath) - 8;
+  const int nName = (int)strlen(zPath) - 8;
 
   assert(strlen("-journal")==8);
   assert(strcmp("-journal", &zPath[nName])==0);
 
-  pReal = pFsVfs->pFileList; 
+  pReal = pFsVfs->pFileList;
   for(; pReal && strncmp(pReal->zName, zPath, nName); pReal=pReal->pNext);
   if( pReal ){
-    pF = pReal->pFile;
+    sqlite3_file *const pF = pReal->pFile;
     rc = pF->pMethods->xWrite(pF, "\0\0\0\0", 4, pReal->nBlob-BLOCKSIZE);
     if( rc==SQLITE_OK ){
       pReal->nJournal = 0;
@@ -715,13 +711,13 @@ static int fsAccess(
   int flags, 
   int *pResOut
 ){
-  fs_vfs_t *pFsVfs = (fs_vfs_t *)pVfs;
+  const fs_vfs_t *const pFsVfs = (fs_vfs_t *)pVfs;
   fs_real_file *pReal;
   int isJournal = 0;
   int nName = (int)strlen(zPath);
 
   if( flags!=SQLITE_ACCESS_EXISTS ){
-    sqlite3_vfs *pParent = ((fs_vfs_t *)pVfs)->pParent;
+    sqlite3_vfs *const pParent = ((fs_vfs_t *)pVfs)->pParent;
     return pParent->xAccess(pParent, zPath, flags, pResOut);
   }
 
@@ -749,7 +745,7 @@ static int fsFullPathname(
   int nOut,                     /* Size of output buffer in bytes */
   char *zOut                    /* Output buffer */
 ){
-  sqlite3_vfs *pParent = ((fs_vfs_t *)pVfs)->pParent;
+  sqlite3_vfs *const pParent = ((fs_vfs_t *)pVfs)->pParent;
   return pParent->xFullPathname(pParent, zPath, nOut, zOut);
 }
 
@@ -757,7 +753,7 @@ static int fsFullPathname(
 ** Open the dynamic library located at zPath and return a handle.
 */
 static void *fsDlOpen(sqlite3_vfs *pVfs, const char *zPath){
-  sqlite3_vfs *pParent = ((fs_vfs_t *)pVfs)->pParent;
+  sqlite3_vfs *const pParent = ((fs_vfs_t *)pVfs)->pParent;
   return pParent->xDlOpen(pParent, zPath);
 }
 
@@ -767,7 +763,7 @@ static void *fsDlOpen(sqlite3_vfs *pVfs, const char *zPath){
 ** with dynamic libraries.
 */
 static void fsDlError(sqlite3_vfs *pVfs, int nByte, char *zErrMsg){
-  sqlite3_vfs *pParent = ((fs_vfs_t *)pVfs)->pParent;
+  sqlite3_vfs *const pParent = ((fs_vfs_t *)pVfs)->pParent;
   pParent->xDlError(pParent, nByte, zErrMsg);
 }
 
@@ -775,7 +771,7 @@ static void fsDlError(sqlite3_vfs *pVfs, int nByte, char *zErrMsg){
 ** Return a pointer to the symbol zSymbol in the dynamic library pHandle.
 */
 static void (*fsDlSym(sqlite3_vfs *pVfs, void *pH, const char *zSym))(void){
-  sqlite3_vfs *pParent = ((fs_vfs_t *)pVfs)->pParent;
+  sqlite3_vfs *const pParent = ((fs_vfs_t *)pVfs)->pParent;
   return pParent->xDlSym(pParent, pH, zSym);
 }
 
@@ -783,7 +779,7 @@ static void (*fsDlSym(sqlite3_vfs *pVfs, void *pH, const char *zSym))(void){
 ** Close the dynamic library handle pHandle.
 */
 static void fsDlClose(sqlite3_vfs *pVfs, void *pHandle){
-  sqlite3_vfs *pParent = ((fs_vfs_t *)pVfs)->pParent;
+  sqlite3_vfs *const pParent = ((fs_vfs_t *)pVfs)->pParent;
   pParent->xDlClose(pParent, pHandle);
 }
 
@@ -792,7 +788,7 @@ static void fsDlClose(sqlite3_vfs *pVfs, void *pHandle){
 ** random data.
 */
 static int fsRandomness(sqlite3_vfs *pVfs, int nByte, char *zBufOut){
-  sqlite3_vfs *pParent = ((fs_vfs_t *)pVfs)->pParent;
+  sqlite3_vfs *const pParent = ((fs_vfs_t *)pVfs)->pParent;
   return pParent->xRandomness(pParent, nByte, zBufOut);
 }
 
@@ -801,7 +797,7 @@ static int fsRandomness(sqlite3_vfs *pVfs, int nByte, char *zBufOut){
 ** actually slept.
 */
 static int fsSleep(sqlite3_vfs *pVfs, int nMicro){
-  sqlite3_vfs *pParent = ((fs_vfs_t *)pVfs)->pParent;
+  sqlite3_vfs *const pParent = ((fs_vfs_t *)pVfs)->pParent;
   return pParent->xSleep(pParent, nMicro);
 }
 
@@ -809,7 +805,7 @@ static int fsSleep(sqlite3_vfs *pVfs, int nMicro){
 ** Return the current time as a Julian Day number in *pTimeOut.
 */
 static int fsCurrentTime(sqlite3_vfs *pVfs, double *pTimeOut){
-  sqlite3_vfs *pParent = ((fs_vfs_t *)pVfs)->pParent;
+  sqlite3_vfs *const pParent = ((fs_vfs_t *)pVfs)->pParent;
   return pParent->xCurrentTime(pParent, pTimeOut);
 }
 
