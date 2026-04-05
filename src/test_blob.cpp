@@ -85,8 +85,7 @@ static int blobHandleFromObj(
 */
 static char *blobStringFromObj(Tcl_Obj *pObj){
   Tcl_Size n;
-  char *z;
-  z = Tcl_GetStringFromObj(pObj, &n);
+  char *z = Tcl_GetStringFromObj(pObj, &n);
   return (n ? z : 0);
 }
 
@@ -319,8 +318,7 @@ int Sqlitetest_blob_Init(Tcl_Interp *interp){
      { "sqlite3_blob_read",            test_blob_read        },
      { "sqlite3_blob_write",           test_blob_write       },
   };
-  int i;
-  for(i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
+  for(int i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
     Tcl_CreateObjCommand(interp, aObjCmd[i].zName, aObjCmd[i].xProc, 0, 0);
   }
 #endif /* SQLITE_OMIT_INCRBLOB */
