@@ -1953,24 +1953,24 @@
 [x] src/test_journal.cpp::jtGetLastError
 [x] src/test_journal.cpp::jt_register
 [x] src/test_journal.cpp::jt_unregister
-[ ] src/test_malloc.cpp::sqlite3Fault
-[ ] src/test_malloc.cpp::sqlite3FirstFault
-[ ] src/test_malloc.cpp::faultsimStep
-[ ] src/test_malloc.cpp::faultsimMalloc
-[ ] src/test_malloc.cpp::faultsimRealloc
-[ ] src/test_malloc.cpp::faultsimConfig
-[ ] src/test_malloc.cpp::faultsimFailures
-[ ] src/test_malloc.cpp::faultsimBenignFailures
-[ ] src/test_malloc.cpp::faultsimPending
-[ ] src/test_malloc.cpp::faultsimBeginBenign
-[ ] src/test_malloc.cpp::faultsimEndBenign
-[ ] src/test_malloc.cpp::faultsimInstall
-[ ] src/test_malloc.cpp::pointerToText
-[ ] src/test_malloc.cpp::hexToInt
-[ ] src/test_malloc.cpp::textToPointer
-[ ] src/test_malloc.cpp::test_memdebug_callback
-[ ] src/test_malloc.cpp::test_memdebug_log_clear
-[ ] src/test_malloc.cpp::Sqlitetest_malloc_Init
+[x] src/test_malloc.cpp::sqlite3Fault
+[x] src/test_malloc.cpp::sqlite3FirstFault
+[x] src/test_malloc.cpp::faultsimStep
+[x] src/test_malloc.cpp::faultsimMalloc
+[x] src/test_malloc.cpp::faultsimRealloc
+[x] src/test_malloc.cpp::faultsimConfig
+[x] src/test_malloc.cpp::faultsimFailures
+[x] src/test_malloc.cpp::faultsimBenignFailures
+[x] src/test_malloc.cpp::faultsimPending
+[x] src/test_malloc.cpp::faultsimBeginBenign
+[x] src/test_malloc.cpp::faultsimEndBenign
+[x] src/test_malloc.cpp::faultsimInstall
+[x] src/test_malloc.cpp::pointerToText
+[x] src/test_malloc.cpp::hexToInt
+[x] src/test_malloc.cpp::textToPointer
+[x] src/test_malloc.cpp::test_memdebug_callback
+[x] src/test_malloc.cpp::test_memdebug_log_clear
+[x] src/test_malloc.cpp::Sqlitetest_malloc_Init
 [ ] src/test_md5.cpp::byteReverse
 [ ] src/test_md5.cpp::MD5Transform
 [ ] src/test_md5.cpp::MD5Init

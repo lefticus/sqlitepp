@@ -236,22 +236,21 @@ extern const char *sqlite3ErrName(int);
 */
 static void pointerToText(void *p, char *z){
   static const char zHex[] = "0123456789abcdef";
-  int i, k;
-  unsigned int u;
-  sqlite3_uint64 n;
   if( p==0 ){
     strcpy(z, "0");
     return;
   }
+  sqlite3_uint64 n;
   if( sizeof(n)==sizeof(p) ){
     memcpy(&n, &p, sizeof(p));
-  }else if( sizeof(u)==sizeof(p) ){
+  }else if( sizeof(unsigned int)==sizeof(p) ){
+    unsigned int u;
     memcpy(&u, &p, sizeof(u));
     n = u;
   }else{
     assert( 0 );
   }
-  for(i=0, k=sizeof(p)*2-1; i<(int)sizeof(p)*2; i++, k--){
+  for(int i=0, k=sizeof(p)*2-1; i<(int)sizeof(p)*2; i++, k--){
     z[k] = zHex[n&0xf];
     n >>= 4;
   }
@@ -268,11 +267,9 @@ static int hexToInt(int h){
 }
 static int textToPointer(const char *z, void **pp){
   sqlite3_uint64 n = 0;
-  int i;
   unsigned int u;
-  for(i=0; i<(int)sizeof(void*)*2 && z[0]; i++){
-    int v;
-    v = hexToInt(*z++);
+  for(int i=0; i<(int)sizeof(void*)*2 && z[0]; i++){
+    const int v = hexToInt(*z++);
     if( v<0 ) return TCL_ERROR;
     n = n*16 + v;
   }
@@ -740,10 +737,6 @@ struct MallocLog {
 #ifdef SQLITE_MEMDEBUG
 static void test_memdebug_callback(int nByte, int nFrame, void **aFrame){
   if( mallocLogEnabled ){
-    MallocLog *pLog;
-    Tcl_HashEntry *pEntry;
-    int isNew;
-
     int aKey[MALLOC_LOG_KEYINTS];
     unsigned int nKey = sizeof(int)*MALLOC_LOG_KEYINTS;
 
@@ -753,7 +746,9 @@ static void test_memdebug_callback(int nByte, int nFrame, void **aFrame){
     }
     memcpy(aKey, aFrame, nKey);
 
-    pEntry = Tcl_CreateHashEntry(&aMallocLog, (const char *)aKey, &isNew);
+    int isNew;
+    Tcl_HashEntry *pEntry = Tcl_CreateHashEntry(&aMallocLog, (const char *)aKey, &isNew);
+    MallocLog *pLog;
     if( isNew ){
       pLog = (MallocLog *)Tcl_Alloc(sizeof(MallocLog));
       memset(pLog, 0, sizeof(MallocLog));
@@ -770,9 +765,8 @@ static void test_memdebug_callback(int nByte, int nFrame, void **aFrame){
 
 static void test_memdebug_log_clear(void){
   Tcl_HashSearch search;
-  Tcl_HashEntry *pEntry;
   for(
-    pEntry=Tcl_FirstHashEntry(&aMallocLog, &search);
+    Tcl_HashEntry *pEntry=Tcl_FirstHashEntry(&aMallocLog, &search);
     pEntry;
     pEntry=Tcl_NextHashEntry(&search)
   ){
@@ -1503,9 +1497,8 @@ int Sqlitetest_malloc_Init(Tcl_Interp *interp){
      { "sqlite3_install_memsys3",    test_install_memsys3          ,0 },
      { "sqlite3_memdebug_vfs_oom_test", test_vfs_oom_test          ,0 },
   };
-  int i;
-  for(i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
-    ClientData c = (ClientData)SQLITE_INT_TO_PTR(aObjCmd[i].clientData);
+  for(int i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
+    const ClientData c = (ClientData)SQLITE_INT_TO_PTR(aObjCmd[i].clientData);
     Tcl_CreateObjCommand(interp, aObjCmd[i].zName, aObjCmd[i].xProc, c, 0);
   }
   return TCL_OK;
