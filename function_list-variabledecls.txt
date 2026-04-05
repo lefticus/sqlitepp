@@ -2688,9 +2688,14 @@
 [x] src/trigger.cpp::sqlite3ReturningSubqueryCorrelated
 [x] src/trigger.cpp::onErrorText
 [x] src/trigger.cpp::transferParseError
+<<<<<<< HEAD
 >>>>>>> 67a75c2df (Move variable declarations down and add const: src/trigger.cpp)
 [ ] src/update.cpp::sqlite3ColumnDefault
 [ ] src/update.cpp::exprRowColumn
+=======
+[x] src/update.cpp::sqlite3ColumnDefault
+[x] src/update.cpp::exprRowColumn
+>>>>>>> de9f5d6b3 (Move variable declarations down and add const: src/update.cpp)
 [ ] src/upsert.cpp::upsertDelete
 [ ] src/upsert.cpp::sqlite3UpsertDelete
 [ ] src/upsert.cpp::sqlite3UpsertDup

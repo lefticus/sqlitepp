@@ -59,10 +59,9 @@ static void updateVirtualTable(
 ** it has been converted into REAL.
 */
 void sqlite3ColumnDefault(Vdbe *v, Table *pTab, int i, int iReg){
-  Column *pCol;
   assert( pTab!=0 );
   assert( pTab->nCol>i );
-  pCol = &pTab->aCol[i];
+  Column *const pCol = &pTab->aCol[i];
   if( pCol->iDflt ){
     sqlite3_value *pValue = 0;
     u8 enc = ENC(sqlite3VdbeDb(v));
