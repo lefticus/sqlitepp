@@ -2124,6 +2124,7 @@
 [x] src/test_onefile.cpp::fsSleep
 [x] src/test_onefile.cpp::fsCurrentTime
 [x] src/test_onefile.cpp::fs_register
+<<<<<<< HEAD
 >>>>>>> 5532d70e0 (Move variable declarations down and add const: src/test_onefile.cpp)
 [ ] src/test_osinst.cpp::vfslog_time
 [ ] src/test_osinst.cpp::vfslog_time
@@ -2169,6 +2170,52 @@
 [ ] src/test_osinst.cpp::vlogRowid
 [ ] src/test_osinst.cpp::sqlite3_vfslog_register
 [ ] src/test_osinst.cpp::SqlitetestOsinst_Init
+=======
+[x] src/test_osinst.cpp::vfslog_time
+[x] src/test_osinst.cpp::vfslog_time
+[x] src/test_osinst.cpp::vfslog_time
+[x] src/test_osinst.cpp::vfslogClose
+[x] src/test_osinst.cpp::vfslogTruncate
+[x] src/test_osinst.cpp::vfslogSync
+[x] src/test_osinst.cpp::vfslogFileSize
+[x] src/test_osinst.cpp::vfslogLock
+[x] src/test_osinst.cpp::vfslogUnlock
+[x] src/test_osinst.cpp::vfslogCheckReservedLock
+[x] src/test_osinst.cpp::vfslogFileControl
+[x] src/test_osinst.cpp::vfslogSectorSize
+[x] src/test_osinst.cpp::vfslogDeviceCharacteristics
+[x] src/test_osinst.cpp::vfslogShmLock
+[x] src/test_osinst.cpp::vfslogShmBarrier
+[x] src/test_osinst.cpp::vfslogShmUnmap
+[x] src/test_osinst.cpp::vfslogDelete
+[x] src/test_osinst.cpp::vfslogDlOpen
+[x] src/test_osinst.cpp::vfslogDlError
+[x] src/test_osinst.cpp::void
+[x] src/test_osinst.cpp::vfslogDlClose
+[x] src/test_osinst.cpp::vfslogRandomness
+[x] src/test_osinst.cpp::vfslogSleep
+[x] src/test_osinst.cpp::vfslogCurrentTime
+[x] src/test_osinst.cpp::vfslogGetLastError
+[x] src/test_osinst.cpp::vfslogCurrentTimeInt64
+[x] src/test_osinst.cpp::vfslog_flush
+[x] src/test_osinst.cpp::put32bits
+[x] src/test_osinst.cpp::vfslog_string
+[x] src/test_osinst.cpp::vfslog_finalize
+[x] src/test_osinst.cpp::sqlite3_vfslog_finalize
+[x] src/test_osinst.cpp::sqlite3_vfslog_annotate
+[x] src/test_osinst.cpp::vfslog_eventname
+[x] src/test_osinst.cpp::get32bits
+[x] src/test_osinst.cpp::dequote
+[x] src/test_osinst.cpp::vlogBestIndex
+[x] src/test_osinst.cpp::vlogDisconnect
+[x] src/test_osinst.cpp::vlogOpen
+[x] src/test_osinst.cpp::vlogClose
+[x] src/test_osinst.cpp::vlogNext
+[x] src/test_osinst.cpp::vlogEof
+[x] src/test_osinst.cpp::vlogRowid
+[x] src/test_osinst.cpp::sqlite3_vfslog_register
+[x] src/test_osinst.cpp::SqlitetestOsinst_Init
+>>>>>>> e77e97507 (Move variable declarations down and add const: src/test_osinst.cpp)
 [ ] src/test_pcache.cpp::testpcacheInit
 [ ] src/test_pcache.cpp::testpcacheShutdown
 [ ] src/test_pcache.cpp::testpcacheRandom
