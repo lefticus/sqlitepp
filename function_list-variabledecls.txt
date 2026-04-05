@@ -3145,64 +3145,64 @@
 [x] src/vdbeblob.cpp::sqlite3_blob_write
 [x] src/vdbeblob.cpp::sqlite3_blob_bytes
 [x] src/vdbeblob.cpp::sqlite3_blob_reopen
-[ ] src/vdbemem.cpp::sqlite3VdbeCheckMemInvariants
-[ ] src/vdbemem.cpp::vdbeMemRenderNum
-[ ] src/vdbemem.cpp::sqlite3VdbeMemValidStrRep
-[ ] src/vdbemem.cpp::sqlite3VdbeChangeEncoding
-[ ] src/vdbemem.cpp::sqlite3VdbeMemGrow
-[ ] src/vdbemem.cpp::sqlite3VdbeMemClearAndResize
-[ ] src/vdbemem.cpp::sqlite3VdbeMemZeroTerminateIfAble
-[ ] src/vdbemem.cpp::vdbeMemAddTerminator
-[ ] src/vdbemem.cpp::sqlite3VdbeMemMakeWriteable
-[ ] src/vdbemem.cpp::sqlite3VdbeMemExpandBlob
-[ ] src/vdbemem.cpp::sqlite3VdbeMemNulTerminate
-[ ] src/vdbemem.cpp::sqlite3VdbeMemStringify
-[ ] src/vdbemem.cpp::sqlite3VdbeMemFinalize
-[ ] src/vdbemem.cpp::sqlite3VdbeMemAggValue
-[ ] src/vdbemem.cpp::vdbeMemClearExternAndSetNull
-[ ] src/vdbemem.cpp::vdbeMemClear
-[ ] src/vdbemem.cpp::sqlite3VdbeMemRelease
-[ ] src/vdbemem.cpp::sqlite3VdbeMemReleaseMalloc
-[ ] src/vdbemem.cpp::memIntValue
-[ ] src/vdbemem.cpp::sqlite3VdbeIntValue
-[ ] src/vdbemem.cpp::sqlite3MemRealValueRC
-[ ] src/vdbemem.cpp::sqlite3MemRealValueNoRC
-[ ] src/vdbemem.cpp::sqlite3VdbeRealValue
-[ ] src/vdbemem.cpp::sqlite3VdbeBooleanValue
-[ ] src/vdbemem.cpp::sqlite3VdbeIntegerAffinity
-[ ] src/vdbemem.cpp::sqlite3VdbeMemIntegerify
-[ ] src/vdbemem.cpp::sqlite3VdbeMemRealify
-[ ] src/vdbemem.cpp::sqlite3RealSameAsInt
-[ ] src/vdbemem.cpp::sqlite3RealToI64
-[ ] src/vdbemem.cpp::sqlite3VdbeMemNumerify
-[ ] src/vdbemem.cpp::sqlite3VdbeMemCast
-[ ] src/vdbemem.cpp::sqlite3VdbeMemInit
-[ ] src/vdbemem.cpp::sqlite3VdbeMemSetNull
-[ ] src/vdbemem.cpp::sqlite3ValueSetNull
-[ ] src/vdbemem.cpp::sqlite3VdbeMemSetZeroBlob
-[ ] src/vdbemem.cpp::sqlite3VdbeMemSetZeroBlob
-[ ] src/vdbemem.cpp::vdbeReleaseAndSetInt64
-[ ] src/vdbemem.cpp::sqlite3VdbeMemSetInt64
-[ ] src/vdbemem.cpp::sqlite3MemSetArrayInt64
-[ ] src/vdbemem.cpp::sqlite3NoopDestructor
-[ ] src/vdbemem.cpp::sqlite3VdbeMemSetDouble
-[ ] src/vdbemem.cpp::sqlite3VdbeMemIsRowSet
-[ ] src/vdbemem.cpp::sqlite3VdbeMemSetRowSet
-[ ] src/vdbemem.cpp::sqlite3VdbeMemTooBig
-[ ] src/vdbemem.cpp::sqlite3VdbeMemAboutToChange
-[ ] src/vdbemem.cpp::vdbeClrCopy
-[ ] src/vdbemem.cpp::sqlite3VdbeMemShallowCopy
-[ ] src/vdbemem.cpp::sqlite3VdbeMemCopy
-[ ] src/vdbemem.cpp::sqlite3VdbeMemMove
-[ ] src/vdbemem.cpp::valueToText
-[ ] src/vdbemem.cpp::sqlite3ValueText
-[ ] src/vdbemem.cpp::sqlite3ValueIsOfClass
-[ ] src/vdbemem.cpp::sqlite3ValueNew
-[ ] src/vdbemem.cpp::valueNew
-[ ] src/vdbemem.cpp::sqlite3Stat4ProbeFree
-[ ] src/vdbemem.cpp::sqlite3ValueFree
-[ ] src/vdbemem.cpp::valueBytes
-[ ] src/vdbemem.cpp::sqlite3ValueBytes
+[x] src/vdbemem.cpp::sqlite3VdbeCheckMemInvariants
+[x] src/vdbemem.cpp::vdbeMemRenderNum
+[x] src/vdbemem.cpp::sqlite3VdbeMemValidStrRep
+[x] src/vdbemem.cpp::sqlite3VdbeChangeEncoding
+[x] src/vdbemem.cpp::sqlite3VdbeMemGrow
+[x] src/vdbemem.cpp::sqlite3VdbeMemClearAndResize
+[x] src/vdbemem.cpp::sqlite3VdbeMemZeroTerminateIfAble
+[x] src/vdbemem.cpp::vdbeMemAddTerminator
+[x] src/vdbemem.cpp::sqlite3VdbeMemMakeWriteable
+[x] src/vdbemem.cpp::sqlite3VdbeMemExpandBlob
+[x] src/vdbemem.cpp::sqlite3VdbeMemNulTerminate
+[x] src/vdbemem.cpp::sqlite3VdbeMemStringify
+[x] src/vdbemem.cpp::sqlite3VdbeMemFinalize
+[x] src/vdbemem.cpp::sqlite3VdbeMemAggValue
+[x] src/vdbemem.cpp::vdbeMemClearExternAndSetNull
+[x] src/vdbemem.cpp::vdbeMemClear
+[x] src/vdbemem.cpp::sqlite3VdbeMemRelease
+[x] src/vdbemem.cpp::sqlite3VdbeMemReleaseMalloc
+[x] src/vdbemem.cpp::memIntValue
+[x] src/vdbemem.cpp::sqlite3VdbeIntValue
+[x] src/vdbemem.cpp::sqlite3MemRealValueRC
+[x] src/vdbemem.cpp::sqlite3MemRealValueNoRC
+[x] src/vdbemem.cpp::sqlite3VdbeRealValue
+[x] src/vdbemem.cpp::sqlite3VdbeBooleanValue
+[x] src/vdbemem.cpp::sqlite3VdbeIntegerAffinity
+[x] src/vdbemem.cpp::sqlite3VdbeMemIntegerify
+[x] src/vdbemem.cpp::sqlite3VdbeMemRealify
+[x] src/vdbemem.cpp::sqlite3RealSameAsInt
+[x] src/vdbemem.cpp::sqlite3RealToI64
+[x] src/vdbemem.cpp::sqlite3VdbeMemNumerify
+[x] src/vdbemem.cpp::sqlite3VdbeMemCast
+[x] src/vdbemem.cpp::sqlite3VdbeMemInit
+[x] src/vdbemem.cpp::sqlite3VdbeMemSetNull
+[x] src/vdbemem.cpp::sqlite3ValueSetNull
+[x] src/vdbemem.cpp::sqlite3VdbeMemSetZeroBlob
+[x] src/vdbemem.cpp::sqlite3VdbeMemSetZeroBlob
+[x] src/vdbemem.cpp::vdbeReleaseAndSetInt64
+[x] src/vdbemem.cpp::sqlite3VdbeMemSetInt64
+[x] src/vdbemem.cpp::sqlite3MemSetArrayInt64
+[x] src/vdbemem.cpp::sqlite3NoopDestructor
+[x] src/vdbemem.cpp::sqlite3VdbeMemSetDouble
+[x] src/vdbemem.cpp::sqlite3VdbeMemIsRowSet
+[x] src/vdbemem.cpp::sqlite3VdbeMemSetRowSet
+[x] src/vdbemem.cpp::sqlite3VdbeMemTooBig
+[x] src/vdbemem.cpp::sqlite3VdbeMemAboutToChange
+[x] src/vdbemem.cpp::vdbeClrCopy
+[x] src/vdbemem.cpp::sqlite3VdbeMemShallowCopy
+[x] src/vdbemem.cpp::sqlite3VdbeMemCopy
+[x] src/vdbemem.cpp::sqlite3VdbeMemMove
+[x] src/vdbemem.cpp::valueToText
+[x] src/vdbemem.cpp::sqlite3ValueText
+[x] src/vdbemem.cpp::sqlite3ValueIsOfClass
+[x] src/vdbemem.cpp::sqlite3ValueNew
+[x] src/vdbemem.cpp::valueNew
+[x] src/vdbemem.cpp::sqlite3Stat4ProbeFree
+[x] src/vdbemem.cpp::sqlite3ValueFree
+[x] src/vdbemem.cpp::valueBytes
+[x] src/vdbemem.cpp::sqlite3ValueBytes
 [ ] src/vdbesort.cpp::vdbePmaReaderClear
 [ ] src/vdbesort.cpp::vdbePmaReadVarint
 [ ] src/vdbesort.cpp::vdbeSorterMapFile
