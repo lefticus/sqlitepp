@@ -130,7 +130,7 @@ struct RowSet {
 RowSet *sqlite3RowSetInit(sqlite3 *db){
   RowSet *p = static_cast<RowSet*>(sqlite3DbMallocRawNN(db, sizeof(*p)));
   if( p ){
-    int N = sqlite3DbMallocSize(db, p);
+    const int N = sqlite3DbMallocSize(db, p);
     p->pChunk = 0;
     p->db = db;
     p->pEntry = 0;
@@ -208,17 +208,15 @@ static struct RowSetEntry *rowSetEntryAlloc(RowSet *p){
 ** memory allocation fails.
 */
 void sqlite3RowSetInsert(RowSet *p, i64 rowid){
-  struct RowSetEntry *pEntry;  /* The new entry */
-  struct RowSetEntry *pLast;   /* The last prior entry */
 
   /* This routine is never called after sqlite3RowSetNext() */
   assert( p!=0 && (p->rsFlags & ROWSET_NEXT)==0 );
 
-  pEntry = rowSetEntryAlloc(p);
+  struct RowSetEntry *const pEntry = rowSetEntryAlloc(p);  /* The new entry */
   if( pEntry==0 ) return;
   pEntry->v = rowid;
   pEntry->pRight = 0;
-  pLast = p->pLast;
+  struct RowSetEntry *const pLast = p->pLast;   /* The last prior entry */
   if( pLast ){
     if( rowid<=pLast->v ){  /*OPTIMIZATION-IF-FALSE*/
       /* Avoid unnecessary sorts by preserving the ROWSET_SORTED flags
@@ -275,11 +273,11 @@ static struct RowSetEntry *rowSetEntryMerge(
 */
 static struct RowSetEntry *rowSetEntrySort(struct RowSetEntry *pIn){
   unsigned int i;
-  struct RowSetEntry *pNext, *aBucket[40];
+  struct RowSetEntry *aBucket[40];
 
   memset(aBucket, 0, sizeof(aBucket));
   while( pIn ){
-    pNext = pIn->pRight;
+    struct RowSetEntry *const pNext = pIn->pRight;
     pIn->pRight = 0;
     for(i=0; aBucket[i]; i++){
       pIn = rowSetEntryMerge(aBucket[i], pIn);
@@ -374,16 +372,13 @@ static struct RowSetEntry *rowSetNDeepTree(
 ** as deep as it needs to be in order to contain the entire list.
 */
 static struct RowSetEntry *rowSetListToTree(struct RowSetEntry *pList){
-  int iDepth;           /* Depth of the tree so far */
-  struct RowSetEntry *p;       /* Current tree root */
-  struct RowSetEntry *pLeft;   /* Left subtree */
 
   assert( pList!=0 );
-  p = pList;
+  struct RowSetEntry *p = pList;       /* Current tree root */
   pList = p->pRight;
   p->pLeft = p->pRight = 0;
-  for(iDepth=1; pList; iDepth++){
-    pLeft = p;
+  for(int iDepth=1; pList; iDepth++){
+    struct RowSetEntry *const pLeft = p;   /* Left subtree */
     p = pList;
     pList = p->pRight;
     p->pLeft = pLeft;

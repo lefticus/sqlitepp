@@ -1558,15 +1558,15 @@
 [x] src/resolve.cpp::resolveRemoveWindowsCb
 [x] src/resolve.cpp::windowRemoveExprFromSelect
 [x] src/resolve.cpp::resolveSelectStep
-[ ] src/rowset.cpp::sqlite3RowSetInit
-[ ] src/rowset.cpp::sqlite3RowSetClear
-[ ] src/rowset.cpp::sqlite3RowSetDelete
-[ ] src/rowset.cpp::rowSetEntryAlloc
-[ ] src/rowset.cpp::sqlite3RowSetInsert
-[ ] src/rowset.cpp::rowSetEntrySort
-[ ] src/rowset.cpp::rowSetListToTree
-[ ] src/rowset.cpp::sqlite3RowSetNext
-[ ] src/rowset.cpp::sqlite3RowSetTest
+[x] src/rowset.cpp::sqlite3RowSetInit
+[x] src/rowset.cpp::sqlite3RowSetClear
+[x] src/rowset.cpp::sqlite3RowSetDelete
+[x] src/rowset.cpp::rowSetEntryAlloc
+[x] src/rowset.cpp::sqlite3RowSetInsert
+[x] src/rowset.cpp::rowSetEntrySort
+[x] src/rowset.cpp::rowSetListToTree
+[x] src/rowset.cpp::sqlite3RowSetNext
+[x] src/rowset.cpp::sqlite3RowSetTest
 [ ] src/select.cpp::clearSelect
 [ ] src/select.cpp::sqlite3SelectDestInit
 [ ] src/select.cpp::sqlite3SelectDelete
