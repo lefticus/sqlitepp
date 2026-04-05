@@ -2440,8 +2440,12 @@
 [x] src/test_syscall.cpp::ts_getpagesize
 [x] src/test_syscall.cpp::SqlitetestSyscall_Init
 [x] src/test_syscall.cpp::SqlitetestSyscall_Init
+<<<<<<< HEAD
 >>>>>>> 2f6af4fef (Move variable declarations down and add const: src/test_syscall.cpp)
 [ ] src/test_tclsh.cpp::sqlite3TestInit
+=======
+[x] src/test_tclsh.cpp::sqlite3TestInit
+>>>>>>> 952480881 (Move variable declarations down and add const: src/test_tclsh.cpp)
 [ ] src/test_tclvar.cpp::tclvarDisconnect
 [ ] src/test_tclvar.cpp::tclvarOpen
 [ ] src/test_tclvar.cpp::tclvarClose

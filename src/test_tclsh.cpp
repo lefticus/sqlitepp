@@ -102,8 +102,6 @@ const char *sqlite3TestInit(Tcl_Interp *interp){
   extern int TestRecover_Init(Tcl_Interp*);
   extern int Sqlitetestintck_Init(Tcl_Interp*);
 
-  Tcl_CmdInfo cmdInfo;
-
   /* Since the primary use case for this binary is testing of SQLite,
   ** be sure to generate core files if we crash */
 #if defined(unix)
@@ -114,6 +112,7 @@ const char *sqlite3TestInit(Tcl_Interp *interp){
   }
 #endif /* unix */
 
+  Tcl_CmdInfo cmdInfo;
   if( Tcl_GetCommandInfo(interp, "sqlite3", &cmdInfo)==0 ){
     Sqlite3_Init(interp);
   }
