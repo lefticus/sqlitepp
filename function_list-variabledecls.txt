@@ -908,35 +908,35 @@
 [x] src/mem5.cpp::memsys5Shutdown
 [x] src/mem5.cpp::sqlite3Memsys5Dump
 [x] src/mem5.cpp::sqlite3MemGetMemsys5
-[ ] src/memdb.cpp::memdbEnter
-[ ] src/memdb.cpp::memdbLeave
-[ ] src/memdb.cpp::memdbEnter
-[ ] src/memdb.cpp::memdbLeave
-[ ] src/memdb.cpp::memdbClose
-[ ] src/memdb.cpp::memdbEnlarge
-[ ] src/memdb.cpp::memdbTruncate
-[ ] src/memdb.cpp::memdbSync
-[ ] src/memdb.cpp::memdbFileSize
-[ ] src/memdb.cpp::memdbLock
-[ ] src/memdb.cpp::memdbUnlock
-[ ] src/memdb.cpp::memdbCheckReservedLock
-[ ] src/memdb.cpp::memdbFileControl
-[ ] src/memdb.cpp::memdbSectorSize
-[ ] src/memdb.cpp::memdbDeviceCharacteristics
-[ ] src/memdb.cpp::memdbUnfetch
-[ ] src/memdb.cpp::memdbDelete
-[ ] src/memdb.cpp::memdbDlOpen
-[ ] src/memdb.cpp::memdbDlError
-[ ] src/memdb.cpp::void
-[ ] src/memdb.cpp::memdbDlClose
-[ ] src/memdb.cpp::memdbRandomness
-[ ] src/memdb.cpp::memdbSleep
-[ ] src/memdb.cpp::memdbCurrentTime
-[ ] src/memdb.cpp::memdbGetLastError
-[ ] src/memdb.cpp::memdbCurrentTimeInt64
-[ ] src/memdb.cpp::memdbFromDbSchema
-[ ] src/memdb.cpp::sqlite3IsMemdb
-[ ] src/memdb.cpp::sqlite3MemdbInit
+[x] src/memdb.cpp::memdbEnter
+[x] src/memdb.cpp::memdbLeave
+[x] src/memdb.cpp::memdbEnter
+[x] src/memdb.cpp::memdbLeave
+[x] src/memdb.cpp::memdbClose
+[x] src/memdb.cpp::memdbEnlarge
+[x] src/memdb.cpp::memdbTruncate
+[x] src/memdb.cpp::memdbSync
+[x] src/memdb.cpp::memdbFileSize
+[x] src/memdb.cpp::memdbLock
+[x] src/memdb.cpp::memdbUnlock
+[x] src/memdb.cpp::memdbCheckReservedLock
+[x] src/memdb.cpp::memdbFileControl
+[x] src/memdb.cpp::memdbSectorSize
+[x] src/memdb.cpp::memdbDeviceCharacteristics
+[x] src/memdb.cpp::memdbUnfetch
+[x] src/memdb.cpp::memdbDelete
+[x] src/memdb.cpp::memdbDlOpen
+[x] src/memdb.cpp::memdbDlError
+[x] src/memdb.cpp::void
+[x] src/memdb.cpp::memdbDlClose
+[x] src/memdb.cpp::memdbRandomness
+[x] src/memdb.cpp::memdbSleep
+[x] src/memdb.cpp::memdbCurrentTime
+[x] src/memdb.cpp::memdbGetLastError
+[x] src/memdb.cpp::memdbCurrentTimeInt64
+[x] src/memdb.cpp::memdbFromDbSchema
+[x] src/memdb.cpp::sqlite3IsMemdb
+[x] src/memdb.cpp::sqlite3MemdbInit
 [ ] src/memjournal.cpp::memjrnlFreeChunks
 [ ] src/memjournal.cpp::memjrnlCreateFile
 [ ] src/memjournal.cpp::memjrnlTruncate

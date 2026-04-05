@@ -208,14 +208,13 @@ static void memdbLeave(MemStore *p){
 ** or less.
 */
 static int memdbClose(sqlite3_file *pFile){
-  MemStore *p = ((MemFile*)pFile)->pStore;
+  MemStore *const p = ((MemFile*)pFile)->pStore;
   if( p->zFName ){
-    int i;
 #ifndef SQLITE_MUTEX_OMIT
-    sqlite3_mutex *pVfsMutex = sqlite3MutexAlloc(SQLITE_MUTEX_STATIC_VFS1);
+    sqlite3_mutex *const pVfsMutex = sqlite3MutexAlloc(SQLITE_MUTEX_STATIC_VFS1);
 #endif
     sqlite3_mutex_enter(pVfsMutex);
-    for(i=0; ALWAYS(i<memdb_g.nMemStore); i++){
+    for(int i=0; ALWAYS(i<memdb_g.nMemStore); i++){
       if( memdb_g.apMemStore[i]==p ){
         memdbEnter(p);
         if( p->nRef==1 ){
@@ -255,7 +254,7 @@ static int memdbRead(
   int iAmt, 
   sqlite_int64 iOfst
 ){
-  MemStore *p = ((MemFile*)pFile)->pStore;
+  MemStore *const p = ((MemFile*)pFile)->pStore;
   memdbEnter(p);
   if( iOfst+iAmt>p->sz ){
     memset(zBuf, 0, iAmt);
@@ -272,7 +271,6 @@ static int memdbRead(
 ** Try to enlarge the memory allocation to hold at least sz bytes
 */
 static int memdbEnlarge(MemStore *p, sqlite3_int64 newSz){
-  unsigned char *pNew;
   if( (p->mFlags & SQLITE_DESERIALIZE_RESIZEABLE)==0 || NEVER(p->nMmap>0) ){
     return SQLITE_FULL;
   }
@@ -281,7 +279,7 @@ static int memdbEnlarge(MemStore *p, sqlite3_int64 newSz){
   }
   newSz *= 2;
   if( newSz>p->szMax ) newSz = p->szMax;
-  pNew = static_cast<unsigned char*>(sqlite3Realloc(p->aData, newSz));
+  unsigned char *const pNew = static_cast<unsigned char*>(sqlite3Realloc(p->aData, newSz));
   if( pNew==0 ) return SQLITE_IOERR_NOMEM;
   p->aData = pNew;
   p->szAlloc = newSz;
@@ -297,7 +295,7 @@ static int memdbWrite(
   int iAmt,
   sqlite_int64 iOfst
 ){
-  MemStore *p = ((MemFile*)pFile)->pStore;
+  MemStore *const p = ((MemFile*)pFile)->pStore;
   memdbEnter(p);
   if( NEVER(p->mFlags & SQLITE_DESERIALIZE_READONLY) ){
     /* Can't happen: memdbLock() will return SQLITE_READONLY before
@@ -329,7 +327,7 @@ static int memdbWrite(
 ** the size of a file, never to increase the size.
 */
 static int memdbTruncate(sqlite3_file *pFile, sqlite_int64 size){
-  MemStore *p = ((MemFile*)pFile)->pStore;
+  MemStore *const p = ((MemFile*)pFile)->pStore;
   int rc = SQLITE_OK;
   memdbEnter(p);
   if( size>p->sz ){
@@ -355,7 +353,7 @@ static int memdbSync(sqlite3_file *pFile, int flags){
 ** Return the current file-size of an memdb-file.
 */
 static int memdbFileSize(sqlite3_file *pFile, sqlite_int64 *pSize){
-  MemStore *p = ((MemFile*)pFile)->pStore;
+  MemStore *const p = ((MemFile*)pFile)->pStore;
   memdbEnter(p);
   *pSize = p->sz;
   memdbLeave(p);
@@ -366,8 +364,8 @@ static int memdbFileSize(sqlite3_file *pFile, sqlite_int64 *pSize){
 ** Lock an memdb-file.
 */
 static int memdbLock(sqlite3_file *pFile, int eLock){
-  MemFile *pThis = (MemFile*)pFile;
-  MemStore *p = pThis->pStore;
+  MemFile *const pThis = (MemFile*)pFile;
+  MemStore *const p = pThis->pStore;
   int rc = SQLITE_OK;
   if( eLock<=pThis->eLock ) return SQLITE_OK;
   memdbEnter(p);
@@ -424,8 +422,8 @@ static int memdbLock(sqlite3_file *pFile, int eLock){
 ** Unlock an memdb-file.
 */
 static int memdbUnlock(sqlite3_file *pFile, int eLock){
-  MemFile *pThis = (MemFile*)pFile;
-  MemStore *p = pThis->pStore;
+  MemFile *const pThis = (MemFile*)pFile;
+  MemStore *const p = pThis->pStore;
   if( eLock>=pThis->eLock ) return SQLITE_OK;
   memdbEnter(p);
 
@@ -462,7 +460,7 @@ static int memdbCheckReservedLock(sqlite3_file *pFile, int *pResOut){
 ** File control method. For custom operations on an memdb-file.
 */
 static int memdbFileControl(sqlite3_file *pFile, int op, void *pArg){
-  MemStore *p = ((MemFile*)pFile)->pStore;
+  MemStore *const p = ((MemFile*)pFile)->pStore;
   int rc = SQLITE_NOTFOUND;
   memdbEnter(p);
   if( op==SQLITE_FCNTL_VFSNAME ){
@@ -513,7 +511,7 @@ static int memdbFetch(
   int iAmt,
   void **pp
 ){
-  MemStore *p = ((MemFile*)pFile)->pStore;
+  MemStore *const p = ((MemFile*)pFile)->pStore;
   memdbEnter(p);
   if( iOfst+iAmt>p->sz || (p->mFlags & SQLITE_DESERIALIZE_RESIZEABLE)!=0 ){
     *pp = 0;
@@ -527,7 +525,7 @@ static int memdbFetch(
 
 /* Release a memory-mapped page */
 static int memdbUnfetch(sqlite3_file *pFile, sqlite3_int64 iOfst, void *pPage){
-  MemStore *p = ((MemFile*)pFile)->pStore;
+  MemStore *const p = ((MemFile*)pFile)->pStore;
   UNUSED_PARAMETER(iOfst);
   UNUSED_PARAMETER(pPage);
   memdbEnter(p);
@@ -546,13 +544,12 @@ static int memdbOpen(
   int flags,
   int *pOutFlags
 ){
-  MemFile *pFile = (MemFile*)pFd;
+  MemFile *const pFile = (MemFile*)pFd;
   MemStore *p = 0;
-  int szName;
   UNUSED_PARAMETER(pVfs);
 
   memset(pFile, 0, sizeof(*pFile));
-  szName = sqlite3Strlen30(zName);
+  const int szName = sqlite3Strlen30(zName);
   if( szName>1 && (zName[0]=='/' || zName[0]=='\\') ){
     int i;
 #ifndef SQLITE_MUTEX_OMIT
@@ -733,11 +730,10 @@ static int memdbCurrentTimeInt64(sqlite3_vfs *pVfs, sqlite3_int64 *p){
 */
 static MemFile *memdbFromDbSchema(sqlite3 *db, const char *zSchema){
   MemFile *p = 0;
-  MemStore *pStore;
-  int rc = sqlite3_file_control(db, zSchema, SQLITE_FCNTL_FILE_POINTER, &p);
+  const int rc = sqlite3_file_control(db, zSchema, SQLITE_FCNTL_FILE_POINTER, &p);
   if( rc ) return 0;
   if( p->base.pMethods!=&memdb_io_methods ) return 0;
-  pStore = p->pStore;
+  MemStore *const pStore = p->pStore;
   memdbEnter(pStore);
   if( pStore->zFName!=0 ) p = 0;
   memdbLeave(pStore);
@@ -753,15 +749,7 @@ unsigned char *sqlite3_serialize(
   sqlite3_int64 *piSize,    /* Write size here, if not NULL */
   unsigned int mFlags       /* Maybe SQLITE_SERIALIZE_NOCOPY */
 ){
-  MemFile *p;
-  int iDb;
-  Btree *pBt;
-  sqlite3_int64 sz;
-  int szPage = 0;
-  sqlite3_stmt *pStmt = 0;
   unsigned char *pOut;
-  char *zSql;
-  int rc;
 
 #ifdef SQLITE_ENABLE_API_ARMOR
   if( !sqlite3SafetyCheckOk(db) ){
@@ -771,12 +759,12 @@ unsigned char *sqlite3_serialize(
 #endif
 
   if( zSchema==0 ) zSchema = db->aDb[0].zDbSName;
-  p = memdbFromDbSchema(db, zSchema);
-  iDb = sqlite3FindDbName(db, zSchema);
+  MemFile *const p = memdbFromDbSchema(db, zSchema);
+  const int iDb = sqlite3FindDbName(db, zSchema);
   if( piSize ) *piSize = -1;
   if( iDb<0 ) return 0;
   if( p ){
-    MemStore *pStore = p->pStore;
+    MemStore *const pStore = p->pStore;
     assert( pStore->pMutex==0 );
     if( piSize ) *piSize = pStore->sz;
     if( mFlags & SQLITE_SERIALIZE_NOCOPY ){
@@ -787,18 +775,19 @@ unsigned char *sqlite3_serialize(
     }
     return pOut;
   }
-  pBt = db->aDb[iDb].pBt;
+  Btree *const pBt = db->aDb[iDb].pBt;
   if( pBt==0 ) return 0;
-  szPage = sqlite3BtreeGetPageSize(pBt);
-  zSql = sqlite3_mprintf("PRAGMA \"%w\".page_count", zSchema);
-  rc = zSql ? sqlite3_prepare_v2(db, zSql, -1, &pStmt, 0) : SQLITE_NOMEM;
+  const int szPage = sqlite3BtreeGetPageSize(pBt);
+  char *const zSql = sqlite3_mprintf("PRAGMA \"%w\".page_count", zSchema);
+  sqlite3_stmt *pStmt = 0;
+  int rc = zSql ? sqlite3_prepare_v2(db, zSql, -1, &pStmt, 0) : SQLITE_NOMEM;
   sqlite3_free(zSql);
   if( rc ) return 0;
   rc = sqlite3_step(pStmt);
   if( rc!=SQLITE_ROW ){
     pOut = 0;
   }else{
-    sz = sqlite3_column_int64(pStmt, 0)*szPage;
+    sqlite3_int64 sz = sqlite3_column_int64(pStmt, 0)*szPage;
     if( sz==0 ){
       sqlite3_reset(pStmt);
       sqlite3_exec(db, "BEGIN IMMEDIATE; COMMIT;", 0, 0, 0);
@@ -813,12 +802,11 @@ unsigned char *sqlite3_serialize(
     }else{
       pOut = static_cast<unsigned char*>(sqlite3_malloc64( sz ));
       if( pOut ){
-        int nPage = sqlite3_column_int(pStmt, 0);
-        Pager *pPager = sqlite3BtreePager(pBt);
-        int pgno;
-        for(pgno=1; pgno<=nPage; pgno++){
+        const int nPage = sqlite3_column_int(pStmt, 0);
+        Pager *const pPager = sqlite3BtreePager(pBt);
+        for(int pgno=1; pgno<=nPage; pgno++){
           DbPage *pPage = 0;
-          unsigned char *pTo = pOut + szPage*(sqlite3_int64)(pgno-1);
+          unsigned char *const pTo = pOut + szPage*(sqlite3_int64)(pgno-1);
           rc = sqlite3PagerGet(pPager, pgno, (DbPage**)&pPage, 0);
           if( rc==SQLITE_OK ){
             memcpy(pTo, sqlite3PagerGetData(pPage), szPage);
@@ -848,7 +836,6 @@ int sqlite3_deserialize(
   char *zSql;
   sqlite3_stmt *pStmt = 0;
   int rc;
-  int iDb;
 
 #ifdef SQLITE_ENABLE_API_ARMOR
   if( !sqlite3SafetyCheckOk(db) ){
@@ -860,7 +847,7 @@ int sqlite3_deserialize(
 
   sqlite3_mutex_enter(db->mutex);
   if( zSchema==0 ) zSchema = db->aDb[0].zDbSName;
-  iDb = sqlite3FindDbName(db, zSchema);
+  const int iDb = sqlite3FindDbName(db, zSchema);
   testcase( iDb==1 );
   if( iDb<2 && iDb!=0 ){
     rc = SQLITE_ERROR;
@@ -920,7 +907,7 @@ int sqlite3IsMemdb(const sqlite3_vfs *pVfs){
 ** Register the new VFS.
 */
 int sqlite3MemdbInit(void){
-  sqlite3_vfs *pLower = sqlite3_vfs_find(0);
+  sqlite3_vfs *const pLower = sqlite3_vfs_find(0);
   unsigned int sz;
   if( NEVER(pLower==0) ) return SQLITE_ERROR;
   sz = pLower->szOsFile;
