@@ -39,7 +39,7 @@ static ProcessLocalStorage *pGlobal = 0;
 
 int sqlite3_wsd_init(int N, int J){
   if( !pGlobal ){
-    int nMalloc = N + sizeof(ProcessLocalStorage) + J*sizeof(ProcessLocalVar);
+    const int nMalloc = N + sizeof(ProcessLocalStorage) + J*sizeof(ProcessLocalVar);
     pGlobal = (ProcessLocalStorage *)malloc(nMalloc);
     if( pGlobal ){
       memset(pGlobal, 0, sizeof(ProcessLocalStorage));
@@ -52,22 +52,20 @@ int sqlite3_wsd_init(int N, int J){
 }
 
 void *sqlite3_wsd_find(void *K, int L){
-  int i;
-  int iHash = 0;
-  ProcessLocalVar *pVar;
-
   /* Calculate a hash of K */
-  for(i=0; i<(int)sizeof(void*); i++){
+  int iHash = 0;
+  for(int i=0; i<(int)sizeof(void*); i++){
     iHash = (iHash<<3) + ((unsigned char *)&K)[i];
   }
   iHash = iHash%PLS_HASHSIZE;
 
   /* Search the hash table for K. */
+  ProcessLocalVar *pVar;
   for(pVar=pGlobal->aData[iHash]; pVar && pVar->pKey!=K; pVar=pVar->pNext);
 
   /* If no entry for K was found, create and populate a new one. */
   if( !pVar ){
-    int nByte = ROUND8(sizeof(ProcessLocalVar) + L);
+    const int nByte = ROUND8(sizeof(ProcessLocalVar) + L);
     assert( pGlobal->nFree>=nByte );
     pVar = (ProcessLocalVar *)pGlobal->pFree;
     pVar->pKey = K;

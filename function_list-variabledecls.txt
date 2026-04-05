@@ -2573,9 +2573,14 @@
 [x] src/test_window.cpp::sumintFinal
 [x] src/test_window.cpp::sumintValue
 [x] src/test_window.cpp::Sqlitetest_window_Init
+<<<<<<< HEAD
 >>>>>>> 0be6fff5c (Move variable declarations down and add const: src/test_window.cpp)
 [ ] src/test_wsd.cpp::sqlite3_wsd_init
 [ ] src/test_wsd.cpp::sqlite3_wsd_find
+=======
+[x] src/test_wsd.cpp::sqlite3_wsd_init
+[x] src/test_wsd.cpp::sqlite3_wsd_find
+>>>>>>> 13fee0617 (Move variable declarations down and add const: src/test_wsd.cpp)
 [ ] src/threads.cpp::sqlite3ThreadJoin
 [ ] src/threads.cpp::sqlite3ThreadJoin
 [ ] src/threads.cpp::sqlite3ThreadJoin
