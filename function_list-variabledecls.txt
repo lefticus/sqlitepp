@@ -1053,34 +1053,34 @@
 [x] src/os.cpp::vfsUnlink
 [x] src/os.cpp::sqlite3_vfs_register
 [x] src/os.cpp::sqlite3_vfs_unregister
-[ ] src/os_kv.cpp::kvrecordDelete
-[ ] src/os_kv.cpp::kvvfsEncode
-[ ] src/os_kv.cpp::kvvfsDecode
-[ ] src/os_kv.cpp::kvvfsReadFileSize
-[ ] src/os_kv.cpp::kvvfsWriteFileSize
-[ ] src/os_kv.cpp::kvvfsClose
-[ ] src/os_kv.cpp::kvvfsTruncateJrnl
-[ ] src/os_kv.cpp::kvvfsTruncateDb
-[ ] src/os_kv.cpp::kvvfsSyncJrnl
-[ ] src/os_kv.cpp::kvvfsSyncDb
-[ ] src/os_kv.cpp::kvvfsFileSizeJrnl
-[ ] src/os_kv.cpp::kvvfsFileSizeDb
-[ ] src/os_kv.cpp::kvvfsLock
-[ ] src/os_kv.cpp::kvvfsUnlock
-[ ] src/os_kv.cpp::kvvfsCheckReservedLock
-[ ] src/os_kv.cpp::kvvfsFileControlJrnl
-[ ] src/os_kv.cpp::kvvfsFileControlDb
-[ ] src/os_kv.cpp::kvvfsSectorSize
-[ ] src/os_kv.cpp::kvvfsDeviceCharacteristics
-[ ] src/os_kv.cpp::kvvfsDelete
-[ ] src/os_kv.cpp::kvvfsDlOpen
-[ ] src/os_kv.cpp::kvvfsRandomness
-[ ] src/os_kv.cpp::kvvfsSleep
-[ ] src/os_kv.cpp::kvvfsCurrentTime
-[ ] src/os_kv.cpp::kvvfsCurrentTimeInt64
-[ ] src/os_kv.cpp::sqlite3_os_init
-[ ] src/os_kv.cpp::sqlite3_os_end
-[ ] src/os_kv.cpp::sqlite3KvvfsInit
+[x] src/os_kv.cpp::kvrecordDelete
+[x] src/os_kv.cpp::kvvfsEncode
+[x] src/os_kv.cpp::kvvfsDecode
+[x] src/os_kv.cpp::kvvfsReadFileSize
+[x] src/os_kv.cpp::kvvfsWriteFileSize
+[x] src/os_kv.cpp::kvvfsClose
+[x] src/os_kv.cpp::kvvfsTruncateJrnl
+[x] src/os_kv.cpp::kvvfsTruncateDb
+[x] src/os_kv.cpp::kvvfsSyncJrnl
+[x] src/os_kv.cpp::kvvfsSyncDb
+[x] src/os_kv.cpp::kvvfsFileSizeJrnl
+[x] src/os_kv.cpp::kvvfsFileSizeDb
+[x] src/os_kv.cpp::kvvfsLock
+[x] src/os_kv.cpp::kvvfsUnlock
+[x] src/os_kv.cpp::kvvfsCheckReservedLock
+[x] src/os_kv.cpp::kvvfsFileControlJrnl
+[x] src/os_kv.cpp::kvvfsFileControlDb
+[x] src/os_kv.cpp::kvvfsSectorSize
+[x] src/os_kv.cpp::kvvfsDeviceCharacteristics
+[x] src/os_kv.cpp::kvvfsDelete
+[x] src/os_kv.cpp::kvvfsDlOpen
+[x] src/os_kv.cpp::kvvfsRandomness
+[x] src/os_kv.cpp::kvvfsSleep
+[x] src/os_kv.cpp::kvvfsCurrentTime
+[x] src/os_kv.cpp::kvvfsCurrentTimeInt64
+[x] src/os_kv.cpp::sqlite3_os_init
+[x] src/os_kv.cpp::sqlite3_os_end
+[x] src/os_kv.cpp::sqlite3KvvfsInit
 [x] src/os_unix.cpp::posixOpen
 [x] src/os_unix.cpp::robustFchown
 [x] src/os_unix.cpp::unixNextSystemCall
