@@ -55,13 +55,12 @@ int sqlite3FaultSim(int iTest){
 ** Otherwise, we have our own implementation that works on most systems.
 */
 int sqlite3IsNaN(double x){
-  int rc;   /* The value return */
 #if !SQLITE_HAVE_ISNAN && !HAVE_ISNAN
   u64 y;
   memcpy(&y,&x,sizeof(y));
-  rc = IsNaN(y);
+  const int rc = IsNaN(y);
 #else
-  rc = isnan(x);
+  const int rc = isnan(x);
 #endif /* HAVE_ISNAN */
   testcase( rc );
   return rc;
@@ -73,10 +72,9 @@ int sqlite3IsNaN(double x){
 ** Return true if the floating point value is NaN or +Inf or -Inf.
 */
 int sqlite3IsOverflow(double x){
-  int rc;   /* The value return */
   u64 y;
   memcpy(&y,&x,sizeof(y));
-  rc = IsOvfl(y);
+  const int rc = IsOvfl(y);
   return rc;
 }
 #endif /* SQLITE_OMIT_FLOATING_POINT */
@@ -156,12 +154,10 @@ void sqlite3SystemError(sqlite3 *db, int rc){
   if( rc==SQLITE_IOERR_NOMEM ) return;
 #if defined(SQLITE_USE_SEH) && !defined(SQLITE_OMIT_WAL)
   if( rc==SQLITE_IOERR_IN_PAGE ){
-    int ii;
-    int iErr;
     sqlite3BtreeEnterAll(db);
-    for(ii=0; ii<db->nDb; ii++){
+    for(int ii=0; ii<db->nDb; ii++){
       if( db->aDb[ii].pBt ){
-        iErr = sqlite3PagerWalSystemErrno(sqlite3BtreePager(db->aDb[ii].pBt));
+        const int iErr = sqlite3PagerWalSystemErrno(sqlite3BtreePager(db->aDb[ii].pBt));
         if( iErr ){
           db->iSysErrno = iErr;
         }
@@ -196,10 +192,9 @@ void sqlite3ErrorWithMsg(sqlite3 *db, int err_code, const char *zFormat, ...){
   if( zFormat==0 ){
     sqlite3Error(db, err_code);
   }else if( db->pErr || (db->pErr = sqlite3ValueNew(db))!=0 ){
-    char *z;
     va_list ap;
     va_start(ap, zFormat);
-    z = sqlite3VMPrintf(db, zFormat, ap);
+    char *z = sqlite3VMPrintf(db, zFormat, ap);
     va_end(ap);
     sqlite3ValueSetStr(db->pErr, -1, z, SQLITE_UTF8, SQLITE_DYNAMIC);
   }
@@ -240,14 +235,13 @@ void sqlite3ProgressCheck(Parse *p){
 ** during statement execution (sqlite3_step() etc.).
 */
 void sqlite3ErrorMsg(Parse *pParse, const char *zFormat, ...){
-  char *zMsg;
-  va_list ap;
   sqlite3 *db = pParse->db;
   assert( db!=0 );
   assert( db->pParse==pParse || db->pParse->pToplevel==pParse );
   db->errByteOffset = -2;
+  va_list ap;
   va_start(ap, zFormat);
-  zMsg = sqlite3VMPrintf(db, zFormat, ap);
+  char *zMsg = sqlite3VMPrintf(db, zFormat, ap);
   va_end(ap);
   if( db->errByteOffset<-1 ) db->errByteOffset = -1;
   if( db->suppressErr ){
@@ -296,12 +290,12 @@ int sqlite3ErrorToParser(sqlite3 *db, int errCode){
 ** "a-b-c".
 */
 void sqlite3Dequote(char *z){
-  char quote;
-  int i, j;
   if( z==0 ) return;
-  quote = z[0];
+  char quote = z[0];
   if( !sqlite3Isquote(quote) ) return;
   if( quote=='[' ) quote = ']';
+  int j;
+  int i;
   for(i=1, j=0;; i++){
     assert( z[i] );
     if( z[i]==quote ){
@@ -334,8 +328,7 @@ void sqlite3DequoteNumber(Parse *pParse, Expr *p){
   if( p ){
     const char *pIn = p->u.zToken;
     char *pOut = p->u.zToken;
-    int bHex = (pIn[0]=='0' && (pIn[1]=='x' || pIn[1]=='X'));
-    int iValue;
+    const int bHex = (pIn[0]=='0' && (pIn[1]=='x' || pIn[1]=='X'));
     assert( p->op==TK_QNUMBER );
     p->op = TK_INTEGER;
     do {
@@ -355,6 +348,7 @@ void sqlite3DequoteNumber(Parse *pParse, Expr *p){
     /* tag-20240227-a: If after dequoting, the number is an integer that
     ** fits in 32 bits, then it must be converted into EP_IntValue.  Other
     ** parts of the code expect this.  See also tag-20240227-b. */
+    int iValue;
     if( p->op==TK_INTEGER && sqlite3GetInt32(p->u.zToken, &iValue) ){
       p->u.iValue = iValue;
       p->flags |= EP_IntValue;
@@ -414,13 +408,12 @@ int sqlite3_stricmp(const char *zLeft, const char *zRight){
   return sqlite3StrICmp(zLeft, zRight);
 }
 int sqlite3StrICmp(const char *zLeft, const char *zRight){
-  unsigned char *a, *b;
-  int c, x;
-  a = (unsigned char *)zLeft;
-  b = (unsigned char *)zRight;
+  unsigned char *a = (unsigned char *)zLeft;
+  unsigned char *b = (unsigned char *)zRight;
+  int c;
   for(;;){
     c = *a;
-    x = *b;
+    int x = *b;
     if( c==x ){
       if( c==0 ) break;
     }else{
@@ -433,14 +426,13 @@ int sqlite3StrICmp(const char *zLeft, const char *zRight){
   return c;
 }
 int sqlite3_strnicmp(const char *zLeft, const char *zRight, int N){
-  unsigned char *a, *b;
   if( zLeft==0 ){
     return zRight ? -1 : 0;
   }else if( zRight==0 ){
     return 1;
   }
-  a = (unsigned char *)zLeft;
-  b = (unsigned char *)zRight;
+  unsigned char *a = (unsigned char *)zLeft;
+  unsigned char *b = (unsigned char *)zRight;
   while( N-- > 0 && *a!=0 && UpperToLower[*a]==UpperToLower[*b]){ a++; b++; }
   return N<0 ? 0 : UpperToLower[*a] - UpperToLower[*b];
 }
@@ -664,8 +656,6 @@ static u64 powerOfTen(int p, u32 *pLo){
     0x6c07a2c2, /* 25: 1.0e+324 >> 1013 */
   };
   int g, n;
-  u64 s, x;
-  u32 lo;
 
   assert( p>=POWERSOF10_FIRST && p<=POWERSOF10_LAST );
   if( p<0 ){
@@ -686,12 +676,13 @@ static u64 powerOfTen(int p, u32 *pLo){
     g = p/27;
     n = p%27;
   }
-  s = aScale[g+13];
+  const u64 s = aScale[g+13];
   if( n==0 ){
     *pLo = aScaleLo[g+13];
     return s;
   }
-  x = sqlite3Multiply160(s,aScaleLo[g+13],aBase[n],&lo);
+  u32 lo;
+  u64 x = sqlite3Multiply160(s,aScaleLo[g+13],aBase[n],&lo);
   if( (U64_BIT(63) & x)==0 ){
     x  = x<<1 | ((lo>>31)&1);
     lo = (lo<<1) | 1;
@@ -749,12 +740,11 @@ static int countLeadingZeros(u64 m){
 ** m should be left-shifted, and e decremented, to maximize the value of m.
 */
 static void sqlite3Fp2Convert10(u64 m, int e, int n, u64 *pD, int *pP){
-  int p;
-  u64 h, d1;
-  u32 d2;
   assert( n>=1 && n<=18 );
-  p = n - 1 - pwr2to10(e+63);
-  h = sqlite3Multiply128(m, powerOfTen(p,&d2), &d1);
+  u32 d2;
+  const int p = n - 1 - pwr2to10(e+63);
+  u64 d1;
+  u64 h = sqlite3Multiply128(m, powerOfTen(p,&d2), &d1);
   assert( -(e + pwr10to2(p) + 2) >= 0  );
   assert( -(e + pwr10to2(p) + 1) <= 63 );
   if( n==18 ){
@@ -773,45 +763,44 @@ static void sqlite3Fp2Convert10(u64 m, int e, int n, u64 *pD, int *pP){
 ** https://github.com/rsc/fpfmt
 */
 static double sqlite3Fp10Convert2(u64 d, int p){
-  int b, lp, e, adj, s;
-  u32 pwr10l, mid1;
-  u64 pwr10h, x, hi, lo, sticky, u, m;
-  double r;
   if( p<POWERSOF10_FIRST ) return 0.0;
   if( p>POWERSOF10_LAST ) return INFINITY;
-  b = 64 - countLeadingZeros(d);
-  lp = pwr10to2(p);
-  e = 53 - b - lp;
+  const int b = 64 - countLeadingZeros(d);
+  const int lp = pwr10to2(p);
+  int e = 53 - b - lp;
   if( e > 1074 ){
     if( e>=1130 ) return 0.0;
     e = 1074;
   }
-  s = -(e-(64-b) + lp + 3);
-  pwr10h = powerOfTen(p, &pwr10l);
+  const int s = -(e-(64-b) + lp + 3);
+  u32 pwr10l;
+  u64 pwr10h = powerOfTen(p, &pwr10l);
   if( pwr10l!=0 ){
     pwr10h++;
     pwr10l = ~pwr10l;
   }
-  x = d<<(64-b);
-  hi = sqlite3Multiply128(x,pwr10h,&lo);
-  mid1 = lo>>32;
-  sticky = 1;
+  const u64 x = d<<(64-b);
+  u64 lo;
+  u64 hi = sqlite3Multiply128(x,pwr10h,&lo);
+  const u32 mid1 = lo>>32;
+  u64 sticky = 1;
   if( (hi & (U64_BIT(s)-1))==0 ) {
-    u32 mid2 = sqlite3Multiply128(x,((u64)pwr10l)<<32,&lo)>>32;
+    const u32 mid2 = sqlite3Multiply128(x,((u64)pwr10l)<<32,&lo)>>32;
     sticky = (mid1-mid2 > 1);
     hi -= mid1 < mid2;
   }
-  u = (hi>>s) | sticky;
-  adj = (u >= U64_BIT(55)-2);
+  u64 u = (hi>>s) | sticky;
+  const int adj = (u >= U64_BIT(55)-2);
   if( adj ){
     u = (u>>adj) | (u&1);
     e -= adj;
   }
-  m = (u + 1 + ((u>>2)&1)) >> 2;
+  u64 m = (u + 1 + ((u>>2)&1)) >> 2;
   if( e<=(-972) ) return INFINITY;
   if((m & U64_BIT(52)) != 0){
     m = (m & ~U64_BIT(52)) | ((u64)(1075-e)<<52);
   }
+  double r;
   memcpy(&r,&m,8);
   return r;
 }
@@ -1057,10 +1046,9 @@ int sqlite3Int64ToText(i64 v, char *zOut){
 */
 static int compare2pow63(const char *zNum, int incr){
   int c = 0;
-  int i;
                     /* 012345678901234567 */
   const char *pow63 = "922337203685477580";
-  for(i=0; c==0 && i<18; i++){
+  for(int i=0; c==0 && i<18; i++){
     c = (zNum[i*incr]-pow63[i])*10;
   }
   if( c==0 ){
@@ -1092,11 +1080,9 @@ int sqlite3Atoi64(const char *zNum, i64 *pNum, int length, u8 enc){
   int incr;
   u64 u = 0;
   int neg = 0; /* assume positive */
-  int i, j;
+  int i;
   unsigned int c = 0;
   int nonNum = 0;  /* True if input contains UTF16 with high byte non-zero */
-  int rc;          /* Baseline return code */
-  const char *zStart;
   const char *zEnd = zNum + length;
   assert( enc==SQLITE_UTF8 || enc==SQLITE_UTF16LE || enc==SQLITE_UTF16BE );
   if( enc==SQLITE_UTF8 ){
@@ -1119,7 +1105,7 @@ int sqlite3Atoi64(const char *zNum, i64 *pNum, int length, u8 enc){
       zNum+=incr;
     }
   }
-  zStart = zNum;
+  const char *zStart = zNum;
   while( zNum<zEnd && zNum[0]=='0' ){ zNum+=incr; } /* Skip leading zeros. */
   for(i=0; &zNum[i]<zEnd && (c=(unsigned)zNum[i]-'0')<=9; i+=incr){
     u = u*10 + c;
@@ -1138,7 +1124,7 @@ int sqlite3Atoi64(const char *zNum, i64 *pNum, int length, u8 enc){
   }else{
     *pNum = (i64)u;
   }
-  rc = 0;
+  int rc = 0;
   if( i==0 && zStart==zNum ){    /* No digits */
     rc = -1;
   }else if( nonNum ){            /* UTF16 with high-order bytes non-zero */
@@ -1159,7 +1145,7 @@ int sqlite3Atoi64(const char *zNum, i64 *pNum, int length, u8 enc){
     return rc;
   }else{
     /* zNum is a 19-digit numbers.  Compare it against 9223372036854775808. */
-    j = i>19*incr ? 1 : compare2pow63(zNum, incr);
+    const int j = i>19*incr ? 1 : compare2pow63(zNum, incr);
     if( j<0 ){
       /* zNum is less than 9223372036854775808 so it fits */
       assert( u<=LARGEST_INT64 );
@@ -1197,8 +1183,9 @@ int sqlite3DecOrHexToI64(const char *z, i64 *pOut){
    && (z[1]=='x' || z[1]=='X')
   ){
     u64 u = 0;
-    int i, k;
+    int i;
     for(i=2; z[i]=='0'; i++){}
+    int k;
     for(k=i; sqlite3Isxdigit(z[k]); k++){
       u = u*16 + sqlite3HexToInt(z[k]);
     }
@@ -1227,7 +1214,7 @@ int sqlite3DecOrHexToI64(const char *z, i64 *pOut){
 */
 int sqlite3GetInt32(const char *zNum, int *pValue){
   sqlite_int64 v = 0;
-  int i, c;
+  int i;
   int neg = 0;
   if( zNum[0]=='-' ){
     neg = 1;
@@ -1256,6 +1243,7 @@ int sqlite3GetInt32(const char *zNum, int *pValue){
 #endif
   if( !sqlite3Isdigit(zNum[0]) ) return 0;
   while( zNum[0]=='0' ) zNum++;
+  int c;
   for(i=0; i<11 && (c = zNum[i] - '0')>=0 && c<=9; i++){
     v = v*10 + c;
   }
@@ -1308,12 +1296,9 @@ int sqlite3Atoi(const char *z){
 ** The p->z[] array is *not* zero-terminated.
 */
 void sqlite3FpDecode(FpDecode *p, double r, int iRound, int mxRound){
-  int i;               /* Index into zBuf[] where to put next character */
   int n;               /* Number of digits */
   u64 v;               /* mantissa */
   int e, exp = 0;      /* Base-2 and base-10 exponent */
-  char *zBuf;          /* Local alias for p->zBuf */
-  char *z;             /* Local alias for p->z */
 
   p->isSpecial = 0;
   assert( mxRound>0 );
@@ -1356,8 +1341,8 @@ void sqlite3FpDecode(FpDecode *p, double r, int iRound, int mxRound){
   /* Extract significant digits, start at the right-most slot in p->zBuf
   ** and working back to the right.  "i" keeps track of the next slot in
   ** which to store a digit. */
-  i = sizeof(p->zBuf)-1;
-  zBuf = p->zBuf;
+  int i = sizeof(p->zBuf)-1;
+  char *zBuf = p->zBuf;
   assert( v>0 );
   while( v>=10 ){
     int kk = (v%100)*2;
@@ -1386,7 +1371,7 @@ void sqlite3FpDecode(FpDecode *p, double r, int iRound, int mxRound){
       p->iDP++;
     }
   }
-  z = &zBuf[i+1];  /* z points to the first digit */
+  char *z = &zBuf[i+1];  /* z points to the first digit */
   if( iRound>0 && (iRound<n || n>mxRound) ){
     if( iRound>mxRound ) iRound = mxRound;
     if( iRound==17 ){
@@ -1497,25 +1482,24 @@ int sqlite3GetUInt32(const char *z, u32 *pI){
 ** 8 bits and is the last byte.
 */
 static int SQLITE_NOINLINE putVarint64(unsigned char *p, u64 v){
-  int i, j, n;
   u8 buf[10];
   if( v & (((u64)0xff000000)<<32) ){
     p[8] = (u8)v;
     v >>= 8;
-    for(i=7; i>=0; i--){
+    for(int i=7; i>=0; i--){
       p[i] = (u8)((v & 0x7f) | 0x80);
       v >>= 7;
     }
     return 9;
   }   
-  n = 0;
+  int n = 0;
   do{
     buf[n++] = (u8)((v & 0x7f) | 0x80);
     v >>= 7;
   }while( v!=0 );
   buf[0] &= 0x7f;
   assert( n<=9 );
-  for(i=0, j=n-1; j>=0; j--, i++){
+  for(int i=0, j=n-1; j>=0; j--, i++){
     p[i] = buf[j];
   }
   return n;
@@ -1712,9 +1696,6 @@ u8 sqlite3GetVarint(const unsigned char *p, u64 *v){
 ** this function assumes the single-byte case has already been handled.
 */
 u8 sqlite3GetVarint32(const unsigned char *p, u32 *v){
-  u64 v64;
-  u8 n;
-
   /* Assume that the single-byte case has already been handled by
   ** the getVarint32() macro */
   assert( (p[0] & 0x80)!=0 );
@@ -1730,7 +1711,8 @@ u8 sqlite3GetVarint32(const unsigned char *p, u32 *v){
     return 3;
   }
   /* four or more bytes */
-  n = sqlite3GetVarint(p, &v64);
+  u64 v64;
+  const u8 n = sqlite3GetVarint(p, &v64);
   assert( n>3 && n<=9 );
   if( (v64 & SQLITE_MAX_U32)!=v64 ){
     *v = 0xffffffff;
@@ -1815,12 +1797,10 @@ u8 sqlite3HexToInt(int h){
 ** the calling routine.
 */
 void *sqlite3HexToBlob(sqlite3 *db, const char *z, int n){
-  char *zBlob;
-  int i;
-
-  zBlob = (char *)sqlite3DbMallocRawNN(db, n/2 + 1);
+  char *zBlob = (char *)sqlite3DbMallocRawNN(db, n/2 + 1);
   n--;
   if( zBlob ){
+    int i;
     for(i=0; i<n; i+=2){
       zBlob[i/2] = (sqlite3HexToInt(z[i])<<4) | sqlite3HexToInt(z[i+1]);
     }
@@ -1857,12 +1837,11 @@ static void logBadConnection(const char *zType){
 ** used as an argument to sqlite3_errmsg() or sqlite3_close().
 */
 int sqlite3SafetyCheckOk(sqlite3 *db){
-  u8 eOpenState;
   if( db==0 ){
     logBadConnection("NULL");
     return 0;
   }
-  eOpenState = db->eOpenState;
+  const u8 eOpenState = db->eOpenState;
   if( eOpenState!=SQLITE_STATE_OPEN ){
     if( sqlite3SafetyCheckSickOrOk(db) ){
       testcase( sqlite3GlobalConfig.xLog!=0 );
@@ -1874,8 +1853,7 @@ int sqlite3SafetyCheckOk(sqlite3 *db){
   }
 }
 int sqlite3SafetyCheckSickOrOk(sqlite3 *db){
-  u8 eOpenState;
-  eOpenState = db->eOpenState;
+  const u8 eOpenState = db->eOpenState;
   if( eOpenState!=SQLITE_STATE_SICK &&
       eOpenState!=SQLITE_STATE_OPEN &&
       eOpenState!=SQLITE_STATE_BUSY ){
@@ -1983,8 +1961,8 @@ void sqlite3FileSuffix3(const char *zBaseFilename, char *z){
   if( sqlite3_uri_boolean(zBaseFilename, "8_3_names", 0) )
 #endif
   {
-    int i, sz;
-    sz = sqlite3Strlen30(z);
+    const int sz = sqlite3Strlen30(z);
+    int i;
     for(i=sz-1; i>0 && z[i]!='/' && z[i]!='.'; i--){}
     if( z[i]=='.' && ALWAYS(sz>i+4) ) memmove(&z[i+1], &z[sz-3], 4);
   }
@@ -2048,13 +2026,12 @@ LogEst sqlite3LogEst(u64 x){
 ** In other words, compute an approximation for 10*log2(x).
 */
 LogEst sqlite3LogEstFromDouble(double x){
-  u64 a;
-  LogEst e;
-  assert( sizeof(x)==8 && sizeof(a)==8 );
+  assert( sizeof(x)==8 && sizeof(u64)==8 );
   if( x<=1 ) return 0;
   if( x<=2000000000 ) return sqlite3LogEst((u64)x);
+  u64 a;
   memcpy(&a, &x, 8);
-  e = (a>>52) - 1022;
+  const LogEst e = (a>>52) - 1022;
   return e*10;
 }
 
@@ -2146,10 +2123,9 @@ VList *sqlite3VListAdd(
 ** the list
 */
 const char *sqlite3VListNumToName(VList *pIn, int iVal){
-  int i, mx;
   if( pIn==0 ) return 0;
-  mx = pIn[1];
-  i = 2;
+  const int mx = pIn[1];
+  int i = 2;
   do{
     if( pIn[i]==iVal ) return (char*)&pIn[i+2];
     i += pIn[i+1];
@@ -2162,10 +2138,9 @@ const char *sqlite3VListNumToName(VList *pIn, int iVal){
 ** or return 0 if there is no such variable.
 */
 int sqlite3VListNameToNum(VList *pIn, const char *zName, int nName){
-  int i, mx;
   if( pIn==0 ) return 0;
-  mx = pIn[1];
-  i = 2;
+  const int mx = pIn[1];
+  int i = 2;
   do{
     const char *z = (const char*)&pIn[i+2];
     if( strncmp(z,zName,nName)==0 && z[nName]==0 ) return pIn[i];

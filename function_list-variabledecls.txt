@@ -2717,6 +2717,20 @@
 [ ] src/utf.cpp::sqlite3Utf16to8
 [ ] src/utf.cpp::sqlite3Utf16ByteLen
 [ ] src/utf.cpp::sqlite3UtfSelfTest
+<<<<<<< HEAD
+=======
+=======
+[x] src/utf.cpp::sqlite3AppendOneUtf8Character
+[x] src/utf.cpp::sqlite3VdbeMemTranslate
+[x] src/utf.cpp::sqlite3VdbeMemHandleBom
+[x] src/utf.cpp::sqlite3Utf8CharLen
+[x] src/utf.cpp::sqlite3Utf8To8
+[x] src/utf.cpp::sqlite3Utf16to8
+[x] src/utf.cpp::sqlite3Utf16ByteLen
+[x] src/utf.cpp::sqlite3UtfSelfTest
+<<<<<<< HEAD
+>>>>>>> 04a82c00a (Move variable declarations down and add const: src/utf.cpp)
+>>>>>>> 09fa8bf77 (Move variable declarations down and add const: src/util.cpp)
 [ ] src/util.cpp::sqlite3FaultSim
 [ ] src/util.cpp::sqlite3IsNaN
 [ ] src/util.cpp::sqlite3IsOverflow
@@ -2779,6 +2793,70 @@
 [ ] src/util.cpp::sqlite3LogEstToInt
 [ ] src/util.cpp::sqlite3VListNumToName
 [ ] src/util.cpp::sqlite3VListNameToNum
+=======
+[x] src/util.cpp::sqlite3FaultSim
+[x] src/util.cpp::sqlite3IsNaN
+[x] src/util.cpp::sqlite3IsOverflow
+[x] src/util.cpp::sqlite3Strlen30
+[x] src/util.cpp::sqlite3ColumnType
+[x] src/util.cpp::sqlite3ErrorFinish
+[x] src/util.cpp::sqlite3Error
+[x] src/util.cpp::sqlite3ErrorClear
+[x] src/util.cpp::sqlite3SystemError
+[x] src/util.cpp::sqlite3ErrorWithMsg
+[x] src/util.cpp::sqlite3ProgressCheck
+[x] src/util.cpp::sqlite3ErrorMsg
+[x] src/util.cpp::sqlite3ErrorToParser
+[x] src/util.cpp::sqlite3Dequote
+[x] src/util.cpp::sqlite3DequoteExpr
+[x] src/util.cpp::sqlite3DequoteNumber
+[x] src/util.cpp::sqlite3DequoteToken
+[x] src/util.cpp::sqlite3TokenInit
+[x] src/util.cpp::sqlite3_stricmp
+[x] src/util.cpp::sqlite3StrICmp
+[x] src/util.cpp::sqlite3_strnicmp
+[x] src/util.cpp::sqlite3StrIHash
+[x] src/util.cpp::sqlite3Multiply128
+[x] src/util.cpp::sqlite3Multiply160
+[x] src/util.cpp::powerOfTen
+[x] src/util.cpp::pwr10to2
+[x] src/util.cpp::pwr2to10
+[x] src/util.cpp::countLeadingZeros
+[x] src/util.cpp::sqlite3Fp2Convert10
+[x] src/util.cpp::sqlite3Fp10Convert2
+[x] src/util.cpp::sqlite3AtoF
+[x] src/util.cpp::sqlite3Int64ToText
+[x] src/util.cpp::compare2pow63
+[x] src/util.cpp::sqlite3Atoi64
+[x] src/util.cpp::sqlite3DecOrHexToI64
+[x] src/util.cpp::sqlite3GetInt32
+[x] src/util.cpp::sqlite3Atoi
+[x] src/util.cpp::sqlite3FpDecode
+[x] src/util.cpp::sqlite3GetUInt32
+[x] src/util.cpp::putVarint64
+[x] src/util.cpp::sqlite3PutVarint
+[x] src/util.cpp::sqlite3GetVarint
+[x] src/util.cpp::sqlite3GetVarint32
+[x] src/util.cpp::sqlite3VarintLen
+[x] src/util.cpp::sqlite3Get4byte
+[x] src/util.cpp::sqlite3Put4byte
+[x] src/util.cpp::sqlite3HexToInt
+[x] src/util.cpp::sqlite3HexToBlob
+[x] src/util.cpp::logBadConnection
+[x] src/util.cpp::sqlite3SafetyCheckOk
+[x] src/util.cpp::sqlite3SafetyCheckSickOrOk
+[x] src/util.cpp::sqlite3AddInt64
+[x] src/util.cpp::sqlite3SubInt64
+[x] src/util.cpp::sqlite3MulInt64
+[x] src/util.cpp::sqlite3AbsInt32
+[x] src/util.cpp::sqlite3FileSuffix3
+[x] src/util.cpp::sqlite3LogEstAdd
+[x] src/util.cpp::sqlite3LogEst
+[x] src/util.cpp::sqlite3LogEstFromDouble
+[x] src/util.cpp::sqlite3LogEstToInt
+[x] src/util.cpp::sqlite3VListNumToName
+[x] src/util.cpp::sqlite3VListNameToNum
+>>>>>>> cf303638b (Move variable declarations down and add const: src/util.cpp)
 [ ] src/vacuum.cpp::execSql
 [ ] src/vacuum.cpp::execSqlF
 [ ] src/vacuum.cpp::sqlite3Vacuum
