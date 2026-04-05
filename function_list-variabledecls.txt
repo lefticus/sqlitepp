@@ -1971,16 +1971,16 @@
 [x] src/test_malloc.cpp::test_memdebug_callback
 [x] src/test_malloc.cpp::test_memdebug_log_clear
 [x] src/test_malloc.cpp::Sqlitetest_malloc_Init
-[ ] src/test_md5.cpp::byteReverse
-[ ] src/test_md5.cpp::MD5Transform
-[ ] src/test_md5.cpp::MD5Init
-[ ] src/test_md5.cpp::MD5Update
-[ ] src/test_md5.cpp::MD5Final
-[ ] src/test_md5.cpp::MD5DigestToBase16
-[ ] src/test_md5.cpp::MD5DigestToBase10x8
-[ ] src/test_md5.cpp::Md5_Init
-[ ] src/test_md5.cpp::md5step
-[ ] src/test_md5.cpp::md5finalize
+[x] src/test_md5.cpp::byteReverse
+[x] src/test_md5.cpp::MD5Transform
+[x] src/test_md5.cpp::MD5Init
+[x] src/test_md5.cpp::MD5Update
+[x] src/test_md5.cpp::MD5Final
+[x] src/test_md5.cpp::MD5DigestToBase16
+[x] src/test_md5.cpp::MD5DigestToBase10x8
+[x] src/test_md5.cpp::Md5_Init
+[x] src/test_md5.cpp::md5step
+[x] src/test_md5.cpp::md5finalize
 [ ] src/test_multiplex.cpp::multiplexStrlen30
 [ ] src/test_multiplex.cpp::multiplexSubFilename
 [ ] src/test_multiplex.cpp::multiplexFreeComponents

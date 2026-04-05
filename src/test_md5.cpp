@@ -59,9 +59,8 @@ typedef struct MD5Context MD5Context;
  * Note: this code is harmless on little-endian machines.
  */
 static void byteReverse (unsigned char *buf, unsigned longs){
-        uint32 t;
         do {
-                t = (uint32)((unsigned)buf[3]<<8 | buf[2]) << 16 |
+                uint32 t = (uint32)((unsigned)buf[3]<<8 | buf[2]) << 16 |
                             ((unsigned)buf[1]<<8 | buf[0]);
                 *(uint32 *)buf = t;
                 buf += 4;
@@ -234,15 +233,12 @@ void MD5Update(MD5Context *ctx, const unsigned char *buf, unsigned int len){
  * 1 0* (64-bit count of bits processed, MSB-first)
  */
 static void MD5Final(unsigned char digest[16], MD5Context *ctx){
-        unsigned count;
-        unsigned char *p;
-
         /* Compute number of bytes mod 64 */
-        count = (ctx->bits[0] >> 3) & 0x3F;
+        unsigned count = (ctx->bits[0] >> 3) & 0x3F;
 
         /* Set the first char of padding to 0x80.  This is safe since there is
            always at least one byte free */
-        p = ctx->in + count;
+        unsigned char *p = ctx->in + count;
         *p++ = 0x80;
 
         /* Bytes of padding needed to make 64 bytes */
@@ -294,9 +290,8 @@ static void MD5DigestToBase16(unsigned char *digest, char *zBuf){
 */
 static void MD5DigestToBase10x8(unsigned char digest[16], char zDigest[50]){
   int i, j;
-  unsigned int x;
   for(i=j=0; i<16; i+=2){
-    x = digest[i]*256 + digest[i+1];
+    const unsigned int x = digest[i]*256 + digest[i+1];
     if( i>0 ) zDigest[j++] = '-';
     sqlite3_snprintf(50-j, &zDigest[j], "%05u", x);
     j += 5;
@@ -407,15 +402,13 @@ int Md5_Init(Tcl_Interp *interp){
 ** inside SQLite.  The following routines implement that function.
 */
 static void md5step(sqlite3_context *context, int argc, sqlite3_value **argv){
-  MD5Context *p;
-  int i;
   if( argc<1 ) return;
-  p = (MD5Context*)sqlite3_aggregate_context(context, sizeof(*p));
+  MD5Context *p = (MD5Context*)sqlite3_aggregate_context(context, sizeof(*p));
   if( p==0 ) return;
   if( !p->isInit ){
     MD5Init(p);
   }
-  for(i=0; i<argc; i++){
+  for(int i=0; i<argc; i++){
     const char *zData = (char*)sqlite3_value_text(argv[i]);
     if( zData ){
       MD5Update(p, (unsigned char*)zData, (int)strlen(zData));
@@ -423,10 +416,9 @@ static void md5step(sqlite3_context *context, int argc, sqlite3_value **argv){
   }
 }
 static void md5finalize(sqlite3_context *context){
-  MD5Context *p;
   unsigned char digest[16];
   char zBuf[33];
-  p = (MD5Context*)sqlite3_aggregate_context(context, sizeof(*p));
+  MD5Context *p = (MD5Context*)sqlite3_aggregate_context(context, sizeof(*p));
   MD5Final(digest,p);
   MD5DigestToBase16(digest, zBuf);
   sqlite3_result_text(context, zBuf, -1, SQLITE_TRANSIENT);
