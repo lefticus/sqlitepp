@@ -1496,16 +1496,16 @@
 [x] src/pragma.cpp::pragmaVtabEof
 [x] src/pragma.cpp::pragmaVtabRowid
 [x] src/pragma.cpp::sqlite3PragmaVtabRegister
-[ ] src/prepare.cpp::sqlite3IndexHasDuplicateRootPage
-[ ] src/prepare.cpp::sqlite3InitCallback
-[ ] src/prepare.cpp::sqlite3InitOne
-[ ] src/prepare.cpp::sqlite3Init
-[ ] src/prepare.cpp::sqlite3ReadSchema
-[ ] src/prepare.cpp::schemaIsValid
-[ ] src/prepare.cpp::sqlite3SchemaToIndex
-[ ] src/prepare.cpp::sqlite3ParseObjectReset
-[ ] src/prepare.cpp::sqlite3ParseObjectInit
-[ ] src/prepare.cpp::sqlite3Reprepare
+[x] src/prepare.cpp::sqlite3IndexHasDuplicateRootPage
+[x] src/prepare.cpp::sqlite3InitCallback
+[x] src/prepare.cpp::sqlite3InitOne
+[x] src/prepare.cpp::sqlite3Init
+[x] src/prepare.cpp::sqlite3ReadSchema
+[x] src/prepare.cpp::schemaIsValid
+[x] src/prepare.cpp::sqlite3SchemaToIndex
+[x] src/prepare.cpp::sqlite3ParseObjectReset
+[x] src/prepare.cpp::sqlite3ParseObjectInit
+[x] src/prepare.cpp::sqlite3Reprepare
 [ ] src/printf.cpp::sqlite3StrAccumSetError
 [ ] src/printf.cpp::getIntArg
 [ ] src/printf.cpp::getDoubleArg

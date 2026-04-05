@@ -94,9 +94,9 @@ static int sqlite3Prepare(
 **
 */
 int sqlite3InitCallback(void *pInit, int argc, char **argv, char **NotUsed){
-  InitData *pData = (InitData*)pInit;
-  sqlite3 *db = pData->db;
-  int iDb = pData->iDb;
+  InitData * const pData = (InitData*)pInit;
+  sqlite3 * const db = pData->db;
+  const int iDb = pData->iDb;
 
   assert( argc==5 );
   UNUSED_PARAMETER2(NotUsed, argc);
@@ -126,7 +126,7 @@ int sqlite3InitCallback(void *pInit, int argc, char **argv, char **NotUsed){
     ** schema.
     */
     int rc;
-    u8 saved_iDb = db->init.iDb;
+    const u8 saved_iDb = db->init.iDb;
     sqlite3_stmt *pStmt;
     TESTONLY(int rcp);            /* Return code from sqlite3_prepare() */
 
@@ -208,7 +208,7 @@ int sqlite3InitOne(sqlite3 *db, int iDb, char **pzErrMsg, u32 mFlags){
   InitData initData;
   const char *zSchemaTabName;
   int openedTransaction = 0;
-  int mask = ((db->mDbFlags & DBFLAG_EncodingFixed) | ~DBFLAG_EncodingFixed);
+  const int mask = ((db->mDbFlags & DBFLAG_EncodingFixed) | ~DBFLAG_EncodingFixed);
 
   assert( (db->mDbFlags & DBFLAG_SchemaKnownOk)==0 );
   assert( iDb>=0 && iDb<db->nDb );
@@ -436,8 +436,8 @@ error_out:
 ** bit is set in the flags field of the Db structure. 
 */
 int sqlite3Init(sqlite3 *db, char **pzErrMsg){
-  int i, rc;
-  int commit_internal = !(db->mDbFlags&DBFLAG_SchemaChange);
+  int rc;
+  const int commit_internal = !(db->mDbFlags&DBFLAG_SchemaChange);
   
   assert( sqlite3_mutex_held(db->mutex) );
   assert( sqlite3BtreeHoldsMutex(db->aDb[0].pBt) );
@@ -450,7 +450,7 @@ int sqlite3Init(sqlite3 *db, char **pzErrMsg){
     if( rc ) return rc;
   }
   /* All other schemas after the main schema. The "temp" schema must be last */
-  for(i=db->nDb-1; i>0; i--){
+  for(int i=db->nDb-1; i>0; i--){
     assert( i==1 || sqlite3BtreeHoldsMutex(db->aDb[i].pBt) );
     if( !DbHasProperty(db, i, DB_SchemaLoaded) ){
       rc = sqlite3InitOne(db, i, pzErrMsg, 0);
@@ -469,7 +469,7 @@ int sqlite3Init(sqlite3 *db, char **pzErrMsg){
 */
 int sqlite3ReadSchema(Parse *pParse){
   int rc = SQLITE_OK;
-  sqlite3 *db = pParse->db;
+  sqlite3 * const db = pParse->db;
   assert( sqlite3_mutex_held(db->mutex) );
   if( !db->init.busy ){
     rc = sqlite3Init(db, &pParse->zErrMsg);
@@ -490,14 +490,11 @@ int sqlite3ReadSchema(Parse *pParse){
 ** make no changes to pParse->rc.
 */
 static void schemaIsValid(Parse *pParse){
-  sqlite3 *db = pParse->db;
-  int iDb;
-  int rc;
-  int cookie;
+  sqlite3 * const db = pParse->db;
 
   assert( pParse->checkSchema );
   assert( sqlite3_mutex_held(db->mutex) );
-  for(iDb=0; iDb<db->nDb; iDb++){
+  for(int iDb=0; iDb<db->nDb; iDb++){
     int openedTransaction = 0;         /* True if a transaction is opened */
     Btree *pBt = db->aDb[iDb].pBt;     /* Btree database to read cookie from */
     if( pBt==0 ) continue;
@@ -506,7 +503,7 @@ static void schemaIsValid(Parse *pParse){
     ** on the b-tree database, open one now. If a transaction is opened, it 
     ** will be closed immediately after reading the meta-value. */
     if( sqlite3BtreeTxnState(pBt)==SQLITE_TXN_NONE ){
-      rc = sqlite3BtreeBeginTrans(pBt, 0, 0);
+      int rc = sqlite3BtreeBeginTrans(pBt, 0, 0);
       if( rc==SQLITE_NOMEM || rc==SQLITE_IOERR_NOMEM ){
         sqlite3OomFault(db);
         pParse->rc = SQLITE_NOMEM;
@@ -518,6 +515,7 @@ static void schemaIsValid(Parse *pParse){
     /* Read the schema cookie from the database. If it does not match the 
     ** value stored as part of the in-memory schema representation,
     ** set Parse.rc to SQLITE_SCHEMA. */
+    int cookie;
     sqlite3BtreeGetMeta(pBt, BTREE_SCHEMA_VERSION, (u32 *)&cookie);
     assert( sqlite3SchemaMutexHeld(db, iDb, 0) );
     if( cookie!=db->aDb[iDb].pSchema->schema_cookie ){
@@ -570,7 +568,7 @@ int sqlite3SchemaToIndex(sqlite3 *db, Schema *pSchema){
 ** Free all memory allocations in the pParse object
 */
 void sqlite3ParseObjectReset(Parse *pParse){
-  sqlite3 *db = pParse->db;
+  sqlite3 * const db = pParse->db;
   assert( db!=0 );
   assert( db->pParse==pParse );
   assert( pParse->nested==0 );
@@ -884,19 +882,14 @@ static int sqlite3LockAndPrepare(
 ** occurs, return SQLITE_SCHEMA.
 */
 int sqlite3Reprepare(Vdbe *p){
-  int rc;
-  sqlite3_stmt *pNew;
-  const char *zSql;
-  sqlite3 *db;
-  u8 prepFlags;
-
   assert( sqlite3_mutex_held(sqlite3VdbeDb(p)->mutex) );
-  zSql = sqlite3_sql((sqlite3_stmt *)p);
+  const char * const zSql = sqlite3_sql((sqlite3_stmt *)p);
   assert( zSql!=0 );  /* Reprepare only called for prepare_v2() statements */
-  db = sqlite3VdbeDb(p);
+  sqlite3 * const db = sqlite3VdbeDb(p);
   assert( sqlite3_mutex_held(db->mutex) );
-  prepFlags = sqlite3VdbePrepareFlags(p);
-  rc = sqlite3LockAndPrepare(db, zSql, -1, prepFlags, p, &pNew, 0);
+  const u8 prepFlags = sqlite3VdbePrepareFlags(p);
+  sqlite3_stmt *pNew;
+  const int rc = sqlite3LockAndPrepare(db, zSql, -1, prepFlags, p, &pNew, 0);
   if( rc ){
     if( rc==SQLITE_NOMEM ){
       sqlite3OomFault(db);
