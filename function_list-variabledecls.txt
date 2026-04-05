@@ -3340,18 +3340,18 @@
 [x] src/wal.cpp::sqlite3WalSnapshotUnlock
 [x] src/wal.cpp::sqlite3WalFramesize
 [x] src/wal.cpp::sqlite3WalFile
-[ ] src/walker.cpp::walkWindowList
-[ ] src/walker.cpp::sqlite3WalkExprNN
-[ ] src/walker.cpp::sqlite3WalkExpr
-[ ] src/walker.cpp::sqlite3WalkExprList
-[ ] src/walker.cpp::sqlite3WalkWinDefnDummyCallback
-[ ] src/walker.cpp::sqlite3WalkSelectExpr
-[ ] src/walker.cpp::sqlite3WalkSelectFrom
-[ ] src/walker.cpp::sqlite3WalkSelect
-[ ] src/walker.cpp::sqlite3WalkerDepthIncrease
-[ ] src/walker.cpp::sqlite3WalkerDepthDecrease
-[ ] src/walker.cpp::sqlite3ExprWalkNoop
-[ ] src/walker.cpp::sqlite3SelectWalkNoop
+[x] src/walker.cpp::walkWindowList
+[x] src/walker.cpp::sqlite3WalkExprNN
+[x] src/walker.cpp::sqlite3WalkExpr
+[x] src/walker.cpp::sqlite3WalkExprList
+[x] src/walker.cpp::sqlite3WalkWinDefnDummyCallback
+[x] src/walker.cpp::sqlite3WalkSelectExpr
+[x] src/walker.cpp::sqlite3WalkSelectFrom
+[x] src/walker.cpp::sqlite3WalkSelect
+[x] src/walker.cpp::sqlite3WalkerDepthIncrease
+[x] src/walker.cpp::sqlite3WalkerDepthDecrease
+[x] src/walker.cpp::sqlite3ExprWalkNoop
+[x] src/walker.cpp::sqlite3SelectWalkNoop
 [ ] src/where.cpp::sqlite3WhereOutputRowCount
 [ ] src/where.cpp::sqlite3WhereIsDistinct
 [ ] src/where.cpp::sqlite3WhereIsOrdered

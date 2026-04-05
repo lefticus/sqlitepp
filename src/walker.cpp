@@ -23,10 +23,8 @@
 ** as the second argument.
 */
 static int walkWindowList(Walker *pWalker, Window *pList, int bOneOnly){
-  Window *pWin;
-  for(pWin=pList; pWin; pWin=pWin->pNextWin){
-    int rc;
-    rc = sqlite3WalkExprList(pWalker, pWin->pOrderBy);
+  for(Window *pWin=pList; pWin; pWin=pWin->pNextWin){
+    int rc = sqlite3WalkExprList(pWalker, pWin->pOrderBy);
     if( rc ) return WRC_Abort;
     rc = sqlite3WalkExprList(pWalker, pWin->pPartition);
     if( rc ) return WRC_Abort;
@@ -62,11 +60,10 @@ static int walkWindowList(Walker *pWalker, Window *pList, int bOneOnly){
 ** and WRC_Continue to continue.
 */
 SQLITE_NOINLINE int sqlite3WalkExprNN(Walker *pWalker, Expr *pExpr){
-  int rc;
   testcase( ExprHasProperty(pExpr, EP_TokenOnly) );
   testcase( ExprHasProperty(pExpr, EP_Reduced) );
   while(1){
-    rc = pWalker->xExprCallback(pWalker, pExpr);
+    int rc = pWalker->xExprCallback(pWalker, pExpr);
     if( rc ) return rc & WRC_Abort;
     if( !ExprHasProperty(pExpr,(EP_TokenOnly|EP_Leaf)) ){
       assert( pExpr->x.pList==0 || pExpr->pRight==0 );
@@ -104,10 +101,9 @@ int sqlite3WalkExpr(Walker *pWalker, Expr *pExpr){
 ** an abort request is seen.
 */
 int sqlite3WalkExprList(Walker *pWalker, ExprList *p){
-  int i;
-  struct ExprList_item *pItem;
   if( p ){
-    for(i=p->nExpr, pItem=p->a; i>0; i--, pItem++){
+    struct ExprList_item *pItem = p->a;
+    for(int i=p->nExpr; i>0; i--, pItem++){
       if( sqlite3WalkExpr(pWalker, pItem->pExpr) ) return WRC_Abort;
     }
   }
@@ -164,13 +160,10 @@ int sqlite3WalkSelectExpr(Walker *pWalker, Select *p){
 ** WRC_Abort or WRC_Continue;
 */
 int sqlite3WalkSelectFrom(Walker *pWalker, Select *p){
-  SrcList *pSrc;
-  int i;
-  SrcItem *pItem;
-
-  pSrc = p->pSrc;
+  SrcList *const pSrc = p->pSrc;
   if( ALWAYS(pSrc) ){
-    for(i=pSrc->nSrc, pItem=pSrc->a; i>0; i--, pItem++){
+    SrcItem *pItem = pSrc->a;
+    for(int i=pSrc->nSrc; i>0; i--, pItem++){
       if( pItem->fg.isSubquery
        && sqlite3WalkSelect(pWalker, pItem->u4.pSubq->pSelect)
       ){
@@ -204,11 +197,10 @@ int sqlite3WalkSelectFrom(Walker *pWalker, Select *p){
 ** is a no-op returning WRC_Continue.
 */
 int sqlite3WalkSelect(Walker *pWalker, Select *p){
-  int rc;
   if( p==0 ) return WRC_Continue;
   if( pWalker->xSelectCallback==0 ) return WRC_Continue;
   do{
-    rc = pWalker->xSelectCallback(pWalker, p);
+    const int rc = pWalker->xSelectCallback(pWalker, p);
     if( rc ) return rc & WRC_Abort;
     if( sqlite3WalkSelectExpr(pWalker, p)
      || sqlite3WalkSelectFrom(pWalker, p)
