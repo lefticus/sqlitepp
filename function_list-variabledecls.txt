@@ -3241,7 +3241,7 @@
 [x] src/vdbesort.cpp::sqlite3VdbeSorterRewind
 [x] src/vdbesort.cpp::sqlite3VdbeSorterNext
 [x] src/vdbesort.cpp::sqlite3VdbeSorterRowkey
-[ ] src/vdbetrace.cpp::findNextHostParameter
+[x] src/vdbetrace.cpp::findNextHostParameter
 [ ] src/vdbevtab.cpp::bytecodevtabDisconnect
 [ ] src/vdbevtab.cpp::bytecodevtabOpen
 [ ] src/vdbevtab.cpp::bytecodevtabCursorClear

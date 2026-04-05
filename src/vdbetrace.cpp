@@ -27,13 +27,12 @@
 ** the total number of bytes in the text.
 */
 static i64 findNextHostParameter(const char *zSql, i64 *pnToken){
-  int tokenType;
   i64 nTotal = 0;
-  i64 n;
 
   *pnToken = 0;
   while( zSql[0] ){
-    n = sqlite3GetToken((u8*)zSql, &tokenType);
+    int tokenType;
+    const i64 n = sqlite3GetToken((u8*)zSql, &tokenType);
     assert( n>0 && tokenType!=TK_ILLEGAL );
     if( tokenType==TK_VARIABLE ){
       *pnToken = n;
