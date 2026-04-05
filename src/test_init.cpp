@@ -154,19 +154,19 @@ static void wrPCacheDestroy(sqlite3_pcache *p){
 }  
 
 static void installInitWrappers(void){
-  sqlite3_mutex_methods mutexmethods = {
+  const sqlite3_mutex_methods mutexmethods = {
     wrMutexInit,  wrMutexEnd,   wrMutexAlloc,
     wrMutexFree,  wrMutexEnter, wrMutexTry,
     wrMutexLeave, wrMutexHeld,  wrMutexNotheld
   };
-  sqlite3_pcache_methods2 pcachemethods = {
+  const sqlite3_pcache_methods2 pcachemethods = {
     1, 0,
     wrPCacheInit,      wrPCacheShutdown,  wrPCacheCreate, 
     wrPCacheCachesize, wrPCachePagecount, wrPCacheFetch,
     wrPCacheUnpin,     wrPCacheRekey,     wrPCacheTruncate,  
     wrPCacheDestroy
   };
-  sqlite3_mem_methods memmethods = {
+  const sqlite3_mem_methods memmethods = {
     wrMemMalloc,   wrMemFree,    wrMemRealloc,
     wrMemSize,     wrMemRoundup, wrMemInit,
     wrMemShutdown,
@@ -281,9 +281,7 @@ int Sqlitetest_init_Init(Tcl_Interp *interp){
     {"init_wrapper_uninstall", init_wrapper_uninstall},
     {"init_wrapper_clear",     init_wrapper_clear}
   };
-  int i;
-
-  for(i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
+  for(int i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
     Tcl_CreateObjCommand(interp, aObjCmd[i].zName, aObjCmd[i].xProc, 0, 0);
   }
 

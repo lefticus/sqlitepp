@@ -1884,33 +1884,33 @@
 [x] src/test_hexio.cpp::getFts3Varint
 [x] src/test_hexio.cpp::putFts3Varint
 [x] src/test_hexio.cpp::Sqlitetest_hexio_Init
-[ ] src/test_init.cpp::wrMemInit
-[ ] src/test_init.cpp::wrMemShutdown
-[ ] src/test_init.cpp::wrMemMalloc
-[ ] src/test_init.cpp::wrMemFree
-[ ] src/test_init.cpp::wrMemRealloc
-[ ] src/test_init.cpp::wrMemSize
-[ ] src/test_init.cpp::wrMemRoundup
-[ ] src/test_init.cpp::wrMutexInit
-[ ] src/test_init.cpp::wrMutexEnd
-[ ] src/test_init.cpp::wrMutexAlloc
-[ ] src/test_init.cpp::wrMutexFree
-[ ] src/test_init.cpp::wrMutexEnter
-[ ] src/test_init.cpp::wrMutexTry
-[ ] src/test_init.cpp::wrMutexLeave
-[ ] src/test_init.cpp::wrMutexHeld
-[ ] src/test_init.cpp::wrMutexNotheld
-[ ] src/test_init.cpp::wrPCacheInit
-[ ] src/test_init.cpp::wrPCacheShutdown
-[ ] src/test_init.cpp::wrPCacheCreate
-[ ] src/test_init.cpp::wrPCacheCachesize
-[ ] src/test_init.cpp::wrPCachePagecount
-[ ] src/test_init.cpp::wrPCacheFetch
-[ ] src/test_init.cpp::wrPCacheUnpin
-[ ] src/test_init.cpp::wrPCacheTruncate
-[ ] src/test_init.cpp::wrPCacheDestroy
-[ ] src/test_init.cpp::installInitWrappers
-[ ] src/test_init.cpp::Sqlitetest_init_Init
+[x] src/test_init.cpp::wrMemInit
+[x] src/test_init.cpp::wrMemShutdown
+[x] src/test_init.cpp::wrMemMalloc
+[x] src/test_init.cpp::wrMemFree
+[x] src/test_init.cpp::wrMemRealloc
+[x] src/test_init.cpp::wrMemSize
+[x] src/test_init.cpp::wrMemRoundup
+[x] src/test_init.cpp::wrMutexInit
+[x] src/test_init.cpp::wrMutexEnd
+[x] src/test_init.cpp::wrMutexAlloc
+[x] src/test_init.cpp::wrMutexFree
+[x] src/test_init.cpp::wrMutexEnter
+[x] src/test_init.cpp::wrMutexTry
+[x] src/test_init.cpp::wrMutexLeave
+[x] src/test_init.cpp::wrMutexHeld
+[x] src/test_init.cpp::wrMutexNotheld
+[x] src/test_init.cpp::wrPCacheInit
+[x] src/test_init.cpp::wrPCacheShutdown
+[x] src/test_init.cpp::wrPCacheCreate
+[x] src/test_init.cpp::wrPCacheCachesize
+[x] src/test_init.cpp::wrPCachePagecount
+[x] src/test_init.cpp::wrPCacheFetch
+[x] src/test_init.cpp::wrPCacheUnpin
+[x] src/test_init.cpp::wrPCacheTruncate
+[x] src/test_init.cpp::wrPCacheDestroy
+[x] src/test_init.cpp::installInitWrappers
+[x] src/test_init.cpp::Sqlitetest_init_Init
 [ ] src/test_intarray.cpp::intarrayFree
 [ ] src/test_intarray.cpp::intarrayDestroy
 [ ] src/test_intarray.cpp::intarrayOpen
