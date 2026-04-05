@@ -1790,8 +1790,8 @@
 [x] src/test_blob.cpp::blobStringFromObj
 [x] src/test_blob.cpp::Sqlitetest_blob_Init
 [x] src/test_btree.cpp::sqlite3BtreeCursorList
-[ ] src/test_config.cpp::set_options
-[ ] src/test_config.cpp::Sqliteconfig_Init
+[x] src/test_config.cpp::set_options
+[x] src/test_config.cpp::Sqliteconfig_Init
 [ ] src/test_delete.cpp::sqlite3Delete83Name
 [ ] src/test_demovfs.cpp::demoFlushBuffer
 [ ] src/test_demovfs.cpp::demoClose
