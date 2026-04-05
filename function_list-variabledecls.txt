@@ -987,17 +987,17 @@
 [x] src/mutex_noop.cpp::debugMutexLeave
 [x] src/mutex_noop.cpp::sqlite3NoopMutex
 [x] src/mutex_noop.cpp::sqlite3DefaultMutex
-[ ] src/mutex_unix.cpp::pthreadMutexHeld
-[ ] src/mutex_unix.cpp::pthreadMutexNotheld
-[ ] src/mutex_unix.cpp::sqlite3MemoryBarrier
-[ ] src/mutex_unix.cpp::pthreadMutexInit
-[ ] src/mutex_unix.cpp::pthreadMutexEnd
-[ ] src/mutex_unix.cpp::pthreadMutexAlloc
-[ ] src/mutex_unix.cpp::pthreadMutexFree
-[ ] src/mutex_unix.cpp::pthreadMutexEnter
-[ ] src/mutex_unix.cpp::pthreadMutexTry
-[ ] src/mutex_unix.cpp::pthreadMutexLeave
-[ ] src/mutex_unix.cpp::sqlite3DefaultMutex
+[x] src/mutex_unix.cpp::pthreadMutexHeld
+[x] src/mutex_unix.cpp::pthreadMutexNotheld
+[x] src/mutex_unix.cpp::sqlite3MemoryBarrier
+[x] src/mutex_unix.cpp::pthreadMutexInit
+[x] src/mutex_unix.cpp::pthreadMutexEnd
+[x] src/mutex_unix.cpp::pthreadMutexAlloc
+[x] src/mutex_unix.cpp::pthreadMutexFree
+[x] src/mutex_unix.cpp::pthreadMutexEnter
+[x] src/mutex_unix.cpp::pthreadMutexTry
+[x] src/mutex_unix.cpp::pthreadMutexLeave
+[x] src/mutex_unix.cpp::sqlite3DefaultMutex
 [ ] src/mutex_w32.cpp::winMutexHeld
 [ ] src/mutex_w32.cpp::winMutexNotheld2
 [ ] src/mutex_w32.cpp::winMutexNotheld
