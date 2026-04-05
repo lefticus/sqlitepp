@@ -1666,40 +1666,40 @@
 [x] src/tclsqlite.cpp::Sqlite3_SafeUnload
 [x] src/tclsqlite.cpp::tclsh_main_loop
 [x] src/tclsqlite.cpp::TCLSH_MAIN
-[ ] src/test1.cpp::testHexToInt
-[ ] src/test1.cpp::sqlite3TestTextToPtr
-[ ] src/test1.cpp::getDbPointer
-[ ] src/test1.cpp::getWin32Handle
-[ ] src/test1.cpp::sqlite3TestErrCode
-[ ] src/test1.cpp::sqlite3TestMakePointerStr
-[ ] src/test1.cpp::exec_printf_cb
-[ ] src/test1.cpp::io_trace_callback
-[ ] src/test1.cpp::hex8Func
-[ ] src/test1.cpp::hex16Func
-[ ] src/test1.cpp::dstrAppend
-[ ] src/test1.cpp::execFuncCallback
-[ ] src/test1.cpp::t1CountFinalize
-[ ] src/test1.cpp::legacyCountFinalize
-[ ] src/test1.cpp::testCreateCollationDel
-[ ] src/test1.cpp::cf2Func
-[ ] src/test1.cpp::cf2Step
-[ ] src/test1.cpp::cf2Final
-[ ] src/test1.cpp::cf2Destroy
-[ ] src/test1.cpp::testFunc
-[ ] src/test1.cpp::testCarrayAlloc
-[ ] src/test1.cpp::testCarrayFree
-[ ] src/test1.cpp::delIntptr
-[ ] src/test1.cpp::test_unlock_notify_cb
-[ ] src/test1.cpp::xLogcallback
-[ ] src/test1.cpp::printExplainQueryPlan
-[ ] src/test1.cpp::testLocaltime
-[ ] src/test1.cpp::win32_file_locker
-[ ] src/test1.cpp::Sqlitetest1_Init
-[ ] src/test1.cpp::"sqlite3_column_database_name",test_stmt_utf8,
-[ ] src/test1.cpp::"sqlite3_column_table_name",test_stmt_utf8,
-[ ] src/test1.cpp::"sqlite3_column_origin_name",test_stmt_utf8,
-[ ] src/test1.cpp::test_stmt_utf16,
-[ ] src/test1.cpp::test_stmt_utf16,
+[x] src/test1.cpp::testHexToInt
+[x] src/test1.cpp::sqlite3TestTextToPtr
+[x] src/test1.cpp::getDbPointer
+[x] src/test1.cpp::getWin32Handle
+[x] src/test1.cpp::sqlite3TestErrCode
+[x] src/test1.cpp::sqlite3TestMakePointerStr
+[x] src/test1.cpp::exec_printf_cb
+[x] src/test1.cpp::io_trace_callback
+[x] src/test1.cpp::hex8Func
+[x] src/test1.cpp::hex16Func
+[x] src/test1.cpp::dstrAppend
+[x] src/test1.cpp::execFuncCallback
+[x] src/test1.cpp::t1CountFinalize
+[x] src/test1.cpp::legacyCountFinalize
+[x] src/test1.cpp::testCreateCollationDel
+[x] src/test1.cpp::cf2Func
+[x] src/test1.cpp::cf2Step
+[x] src/test1.cpp::cf2Final
+[x] src/test1.cpp::cf2Destroy
+[x] src/test1.cpp::testFunc
+[x] src/test1.cpp::testCarrayAlloc
+[x] src/test1.cpp::testCarrayFree
+[x] src/test1.cpp::delIntptr
+[x] src/test1.cpp::test_unlock_notify_cb
+[x] src/test1.cpp::xLogcallback
+[x] src/test1.cpp::printExplainQueryPlan
+[x] src/test1.cpp::testLocaltime
+[x] src/test1.cpp::win32_file_locker
+[x] src/test1.cpp::Sqlitetest1_Init
+[x] src/test1.cpp::"sqlite3_column_database_name",test_stmt_utf8,
+[x] src/test1.cpp::"sqlite3_column_table_name",test_stmt_utf8,
+[x] src/test1.cpp::"sqlite3_column_origin_name",test_stmt_utf8,
+[x] src/test1.cpp::test_stmt_utf16,
+[x] src/test1.cpp::test_stmt_utf16,
 [ ] src/test2.cpp::pager_test_reiniter
 [ ] src/test2.cpp::faultSimCallback
 [ ] src/test2.cpp::Sqlitetest2_Init

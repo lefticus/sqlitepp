@@ -56,12 +56,10 @@ static int testHexToInt(int h){
 }
 void *sqlite3TestTextToPtr(const char *z){
   void *p;
-  u64 v;
-  u32 v2;
   if( z[0]=='0' && z[1]=='x' ){
     z += 2;
   }
-  v = 0;
+  u64 v = 0;
   while( *z ){
     v = (v<<4) + testHexToInt(*z);
     z++;
@@ -69,8 +67,8 @@ void *sqlite3TestTextToPtr(const char *z){
   if( sizeof(p)==sizeof(v) ){
     memcpy(&p, &v, sizeof(p));
   }else{
+    u32 v2 = (u32)v;
     assert( sizeof(p)==sizeof(v2) );
-    v2 = (u32)v;
     memcpy(&p, &v2, sizeof(p));
   }
   return p;
@@ -110,10 +108,9 @@ static int SQLITE_TCLAPI get_sqlite_pointer(
 ** Decode a pointer to an sqlite3 object.
 */
 int getDbPointer(Tcl_Interp *interp, const char *zA, sqlite3 **ppDb){
-  struct SqliteDb *p;
   Tcl_CmdInfo cmdInfo;
   if( Tcl_GetCommandInfo(interp, zA, &cmdInfo) ){
-    p = (struct SqliteDb*)cmdInfo.objClientData;
+    struct SqliteDb *p = (struct SqliteDb*)cmdInfo.objClientData;
     *ppDb = p->db;
   }else{
     *ppDb = (sqlite3*)sqlite3TestTextToPtr(zA);
@@ -147,7 +144,7 @@ int sqlite3TestErrCode(Tcl_Interp *interp, sqlite3 *db, int rc){
   if( sqlite3_threadsafe()==0 && rc!=SQLITE_MISUSE && rc!=SQLITE_OK
    && sqlite3_errcode(db)!=rc ){
     char zBuf[200];
-    int r2 = sqlite3_errcode(db);
+    const int r2 = sqlite3_errcode(db);
     sqlite3_snprintf(sizeof(zBuf), zBuf,
        "error code %s (%d) does not match sqlite3_errcode %s (%d)",
        t1ErrorName(rc), rc, t1ErrorName(r2), r2);
@@ -192,7 +189,7 @@ int sqlite3TestMakePointerStr(Tcl_Interp *interp, char *zPtr, void *p){
 ** The callback routine for sqlite3_exec_printf().
 */
 static int exec_printf_cb(void *pArg, int argc, char **argv, char **name){
-  Tcl_DString *str = (Tcl_DString*)pArg;
+  Tcl_DString * const str = (Tcl_DString*)pArg;
   int i;
 
   if( Tcl_DStringLength(str)==0 ){
@@ -749,10 +746,9 @@ static void t1_ifnullFunc(
 ** as UTF16le and returns a hex encoding.
 */
 static void hex8Func(sqlite3_context *p, int argc, sqlite3_value **argv){
-  const unsigned char *z;
-  int i;
   char zBuf[200];
-  z = sqlite3_value_text(argv[0]);
+  const unsigned char *z = sqlite3_value_text(argv[0]);
+  int i;
   for(i=0; i<(int)sizeof(zBuf)/2 - 2 && z[i]; i++){
     sqlite3_snprintf(sizeof(zBuf)-i*2, &zBuf[i*2], "%02x", z[i]);
   }
@@ -761,10 +757,9 @@ static void hex8Func(sqlite3_context *p, int argc, sqlite3_value **argv){
 }
 #ifndef SQLITE_OMIT_UTF16
 static void hex16Func(sqlite3_context *p, int argc, sqlite3_value **argv){
-  const unsigned short int *z;
-  int i;
   char zBuf[400];
-  z = (const unsigned short int *)sqlite3_value_text16(argv[0]);
+  const unsigned short int *z = (const unsigned short int *)sqlite3_value_text16(argv[0]);
+  int i;
   for(i=0; i<(int)sizeof(zBuf)/4 - 4 && z[i]; i++){
     sqlite3_snprintf(sizeof(zBuf)-i*4, &zBuf[i*4],"%04x", z[i]&0xff);
   }
@@ -786,11 +781,10 @@ struct dstr {
 ** Append text to a dstr
 */
 static void dstrAppend(struct dstr *p, const char *z, int divider){
-  int n = (int)strlen(z);
+  const int n = (int)strlen(z);
   if( p->nUsed + n + 2 > p->nAlloc ){
-    char *zNew;
     p->nAlloc = p->nAlloc*2 + n + 200;
-    zNew = (char*)sqlite3_realloc(p->z, p->nAlloc);
+    char *zNew = (char*)sqlite3_realloc(p->z, p->nAlloc);
     if( zNew==0 ){
       sqlite3_free(p->z);
       memset(p, 0, sizeof(*p));
@@ -809,7 +803,7 @@ static void dstrAppend(struct dstr *p, const char *z, int divider){
 ** Invoked for each callback from sqlite3ExecFunc
 */
 static int execFuncCallback(void *pData, int argc, char **argv, char **NotUsed){
-  struct dstr *p = (struct dstr*)pData;
+  struct dstr * const p = (struct dstr*)pData;
   int i;
   for(i=0; i<argc; i++){
     if( argv[i]==0 ){
@@ -1289,8 +1283,7 @@ static void t1CountStep(
   }
 }   
 static void t1CountFinalize(sqlite3_context *context){
-  t1CountCtx *p;
-  p = (t1CountCtx*)sqlite3_aggregate_context(context, sizeof(*p));
+  t1CountCtx *p = (t1CountCtx*)sqlite3_aggregate_context(context, sizeof(*p));
   if( p ){
     if( p->n==42 ){
       sqlite3_result_error(context, "x_count totals to 42", -1);
@@ -1863,7 +1856,7 @@ typedef struct TestCollationX TestCollationX;
 static void testCreateCollationDel(void *pCtx){
   TestCollationX *p = (TestCollationX *)pCtx;
 
-  int rc = Tcl_EvalObjEx(p->interp, p->pDel, TCL_EVAL_DIRECT|TCL_EVAL_GLOBAL);
+  const int rc = Tcl_EvalObjEx(p->interp, p->pDel, TCL_EVAL_DIRECT|TCL_EVAL_GLOBAL);
   if( rc!=TCL_OK ){
     Tcl_BackgroundError(p->interp);
   }
@@ -1961,7 +1954,7 @@ static void cf2Destroy(void *pUser){
   CreateFunctionV2 *p = (CreateFunctionV2 *)pUser;
 
   if( p->interp && p->pDestroy ){
-    int rc = Tcl_EvalObjEx(p->interp, p->pDestroy, 0);
+    const int rc = Tcl_EvalObjEx(p->interp, p->pDestroy, 0);
     if( rc!=TCL_OK ) Tcl_BackgroundError(p->interp);
   }
 
@@ -7865,18 +7858,14 @@ static int SQLITE_TCLAPI runAsObjProc(
 ** and prints the report to stdout using printf().
 */
 int printExplainQueryPlan(sqlite3_stmt *pStmt){
-  const char *zSql;               /* Input SQL */
-  char *zExplain;                 /* SQL with EXPLAIN QUERY PLAN prepended */
-  sqlite3_stmt *pExplain;         /* Compiled EXPLAIN QUERY PLAN command */
-  int rc;                         /* Return code from sqlite3_prepare_v2() */
-
-  zSql = sqlite3_sql(pStmt);
+  const char *zSql = sqlite3_sql(pStmt);
   if( zSql==0 ) return SQLITE_ERROR;
 
-  zExplain = sqlite3_mprintf("EXPLAIN QUERY PLAN %s", zSql);
+  char *zExplain = sqlite3_mprintf("EXPLAIN QUERY PLAN %s", zSql);
   if( zExplain==0 ) return SQLITE_NOMEM;
 
-  rc = sqlite3_prepare_v2(sqlite3_db_handle(pStmt), zExplain, -1, &pExplain, 0);
+  sqlite3_stmt *pExplain;         /* Compiled EXPLAIN QUERY PLAN command */
+  const int rc = sqlite3_prepare_v2(sqlite3_db_handle(pStmt), zExplain, -1, &pExplain, 0);
   sqlite3_free(zExplain);
   if( rc!=SQLITE_OK ) return rc;
 
@@ -7938,28 +7927,26 @@ static int SQLITE_TCLAPI test_print_eqp(
 static int testLocaltime(const void *aliasT, void *aliasTM){
   const time_t t = *(const time_t*)aliasT;
   struct tm *pTm = (struct tm *)aliasTM;
-  time_t altT;
-  sqlite3_int64 iJD;
-  int Z, A, B, C, D, E, X1, S;
 
+  time_t altT;
   if( (t/86400) & 1 ){
     altT = t + 1800;  /* 30 minutes later on odd days */
   }else{
     altT = t - 1800;  /* 30 minutes earlier on even days */
   }
-  iJD = (sqlite3_int64)(altT + 210866760000);
-  Z = (int)((iJD + 43200)/86400);
-  A = (int)((Z - 1867216.25)/36524.25);
+  const sqlite3_int64 iJD = (sqlite3_int64)(altT + 210866760000);
+  const int Z = (int)((iJD + 43200)/86400);
+  int A = (int)((Z - 1867216.25)/36524.25);
   A = Z + 1 + A - (A/4);
-  B = A + 1524;
-  C = (int)((B - 122.1)/365.25);
-  D = (36525*(C&32767))/100;
-  E = (int)((B-D)/30.6001);
-  X1 = (int)(30.6001*E);
+  const int B = A + 1524;
+  const int C = (int)((B - 122.1)/365.25);
+  const int D = (36525*(C&32767))/100;
+  const int E = (int)((B-D)/30.6001);
+  const int X1 = (int)(30.6001*E);
   pTm->tm_mday = B - D - X1;
   pTm->tm_mon = E<14 ? E-2 : E-14;
   pTm->tm_year = (pTm->tm_mon>1 ? C - 4716 : C - 4715) - 1900;
-  S = (int)((iJD + 43200)%86400);
+  const int S = (int)((iJD + 43200)%86400);
   pTm->tm_hour = S/3600;
   pTm->tm_min = (S/60)%60;
   pTm->tm_sec = S % 60;
@@ -8174,8 +8161,8 @@ struct win32FileLocker {
 ** The background thread that does file locking.
 */
 static void SQLITE_CDECL win32_file_locker(void *pAppData){
-  struct win32FileLocker *p = (struct win32FileLocker*)pAppData;
-  sqlite3_file *pFd = p->pFd;
+  struct win32FileLocker * const p = (struct win32FileLocker*)pAppData;
+  sqlite3_file * const pFd = p->pFd;
   HANDLE h = INVALID_HANDLE_VALUE;
   if( p->evName ){
     HANDLE ev = OpenEvent(EVENT_MODIFY_STATE, FALSE, p->evName);
