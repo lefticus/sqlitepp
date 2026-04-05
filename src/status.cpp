@@ -112,10 +112,9 @@ void sqlite3StatusDown(int op, int N){
 ** The caller must hold the appropriate mutex.
 */
 void sqlite3StatusHighwater(int op, int X){
-  sqlite3StatValueType newValue;
   wsdStatInit;
   assert( X>=0 );
-  newValue = (sqlite3StatValueType)X;
+  const sqlite3StatValueType newValue = (sqlite3StatValueType)X;
   assert( op>=0 && op<ArraySize(wsdStat.nowValue) );
   assert( op>=0 && op<ArraySize(statMutex) );
   assert( sqlite3_mutex_held(statMutex[op] ? sqlite3Pcache1Mutex()
@@ -158,11 +157,10 @@ int sqlite3_status64(
 }
 int sqlite3_status(int op, int *pCurrent, int *pHighwater, int resetFlag){
   sqlite3_int64 iCur = 0, iHwtr = 0;
-  int rc;
 #ifdef SQLITE_ENABLE_API_ARMOR
   if( pCurrent==0 || pHighwater==0 ) return SQLITE_MISUSE_BKPT;
 #endif
-  rc = sqlite3_status64(op, &iCur, &iHwtr, resetFlag);
+  const int rc = sqlite3_status64(op, &iCur, &iHwtr, resetFlag);
   if( rc==0 ){
     *pCurrent = (int)iCur;
     *pHighwater = (int)iHwtr;

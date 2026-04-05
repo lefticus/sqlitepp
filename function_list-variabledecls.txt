@@ -1628,13 +1628,13 @@
 [x] src/select.cpp::selectCheckOnClausesSelect
 [x] src/select.cpp::sqlite3SelectCheckOnClauses
 [x] src/select.cpp::sqlite3CopySortOrder
-[ ] src/status.cpp::sqlite3StatusValue
-[ ] src/status.cpp::sqlite3StatusUp
-[ ] src/status.cpp::sqlite3StatusDown
-[ ] src/status.cpp::sqlite3StatusHighwater
-[ ] src/status.cpp::sqlite3_status
-[ ] src/status.cpp::countLookasideSlots
-[ ] src/status.cpp::sqlite3LookasideUsed
+[x] src/status.cpp::sqlite3StatusValue
+[x] src/status.cpp::sqlite3StatusUp
+[x] src/status.cpp::sqlite3StatusDown
+[x] src/status.cpp::sqlite3StatusHighwater
+[x] src/status.cpp::sqlite3_status
+[x] src/status.cpp::countLookasideSlots
+[x] src/status.cpp::sqlite3LookasideUsed
 [ ] src/table.cpp::sqlite3_get_table_cb
 [ ] src/tclsqlite.cpp::strlen30
 [ ] src/tclsqlite.cpp::closeIncrblobChannels
