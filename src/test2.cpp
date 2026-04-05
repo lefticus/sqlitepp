@@ -584,14 +584,12 @@ static Tcl_Interp *faultSimInterp = 0;
 static int faultSimScriptSize = 0;
 static char *faultSimScript;
 static int faultSimCallback(int x){
-  char zInt[30];
-  int i;
-  int isNeg;
-  int rc;
   if( x==0 ){
     memcpy(faultSimScript+faultSimScriptSize, "0", 2);
   }else{
     /* Convert x to text without using any sqlite3 routines */
+    char zInt[30];
+    int isNeg;
     if( x<0 ){
       isNeg = 1;
       x = -x;
@@ -599,13 +597,14 @@ static int faultSimCallback(int x){
       isNeg = 0;
     }
     zInt[sizeof(zInt)-1] = 0;
+    int i;
     for(i=sizeof(zInt)-2; i>0 && x>0; i--, x /= 10){
       zInt[i] = (x%10) + '0';
     }
     if( isNeg ) zInt[i--] = '-';
     memcpy(faultSimScript+faultSimScriptSize, zInt+i+1, sizeof(zInt)-i-1);
   }
-  rc = Tcl_Eval(faultSimInterp, faultSimScript);
+  int rc = Tcl_Eval(faultSimInterp, faultSimScript);
   if( rc ){
     fprintf(stderr, "fault simulator script failed: [%s]", faultSimScript);
     rc = SQLITE_ERROR;
@@ -732,8 +731,7 @@ int Sqlitetest2_Init(Tcl_Interp *interp){
     { "sqlite3_test_control_pending_byte",  (Tcl_CmdProc*)testPendingByte },
     { "sqlite3_test_control_fault_install", (Tcl_CmdProc*)faultInstallCmd },
   };
-  int i;
-  for(i=0; i<(int)(sizeof(aCmd)/sizeof(aCmd[0])); i++){
+  for(int i=0; i<(int)(sizeof(aCmd)/sizeof(aCmd[0])); i++){
     Tcl_CreateCommand(interp, aCmd[i].zName, aCmd[i].xProc, 0, 0);
   }
   Tcl_LinkVar(interp, "sqlite_io_error_pending",
