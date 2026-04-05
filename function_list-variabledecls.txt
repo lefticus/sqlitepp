@@ -2215,6 +2215,7 @@
 [x] src/test_osinst.cpp::vlogRowid
 [x] src/test_osinst.cpp::sqlite3_vfslog_register
 [x] src/test_osinst.cpp::SqlitetestOsinst_Init
+<<<<<<< HEAD
 >>>>>>> e77e97507 (Move variable declarations down and add const: src/test_osinst.cpp)
 [ ] src/test_pcache.cpp::testpcacheInit
 [ ] src/test_pcache.cpp::testpcacheShutdown
@@ -2223,6 +2224,15 @@
 [ ] src/test_pcache.cpp::testpcachePagecount
 [ ] src/test_pcache.cpp::testpcacheTruncate
 [ ] src/test_pcache.cpp::testpcacheDestroy
+=======
+[x] src/test_pcache.cpp::testpcacheInit
+[x] src/test_pcache.cpp::testpcacheShutdown
+[x] src/test_pcache.cpp::testpcacheRandom
+[x] src/test_pcache.cpp::testpcacheCachesize
+[x] src/test_pcache.cpp::testpcachePagecount
+[x] src/test_pcache.cpp::testpcacheTruncate
+[x] src/test_pcache.cpp::testpcacheDestroy
+>>>>>>> 05b4378c9 (Move variable declarations down and add const: src/test_pcache.cpp)
 [ ] src/test_quota.cpp::quotaEnter
 [ ] src/test_quota.cpp::quotaLeave
 [ ] src/test_quota.cpp::quotaGroupOpenFileCount

@@ -118,8 +118,7 @@ struct testpcache {
 */
 static unsigned testpcacheRandom(testpcache *p){
   unsigned x = 0;
-  int i;
-  for(i=0; i<4; i++){
+  for(int i=0; i<4; i++){
     p->iRand = (p->iRand*69069 + 5);
     x = (x<<8) | ((p->iRand>>16)&0xff);
   }
@@ -167,7 +166,7 @@ static sqlite3_pcache *testpcacheCreate(
 ** Set the cache size
 */
 static void testpcacheCachesize(sqlite3_pcache *pCache, int newSize){
-  testpcache *p = (testpcache*)pCache;
+  testpcache *const p = (testpcache*)pCache;
   (void)p;
   assert( p->iMagic==TESTPCACHE_VALID );
   assert( testpcacheGlobal.pDummy!=0 );
@@ -179,7 +178,7 @@ static void testpcacheCachesize(sqlite3_pcache *pCache, int newSize){
 ** This includes both pinned and unpinned pages.
 */
 static int testpcachePagecount(sqlite3_pcache *pCache){
-  testpcache *p = (testpcache*)pCache;
+  testpcache *const p = (testpcache*)pCache;
   assert( p->iMagic==TESTPCACHE_VALID );
   assert( testpcacheGlobal.pDummy!=0 );
   assert( testpcacheGlobal.nInstance>0 );
@@ -382,12 +381,11 @@ static void testpcacheRekey(
 ** is discarded.
 */
 static void testpcacheTruncate(sqlite3_pcache *pCache, unsigned iLimit){
-  testpcache *p = (testpcache*)pCache;
-  unsigned int i;
+  testpcache *const p = (testpcache*)pCache;
   assert( p->iMagic==TESTPCACHE_VALID );
   assert( testpcacheGlobal.pDummy!=0 );
   assert( testpcacheGlobal.nInstance>0 );
-  for(i=0; i<TESTPCACHE_NPAGE; i++){
+  for(unsigned int i=0; i<TESTPCACHE_NPAGE; i++){
     if( p->a[i].key>=iLimit ){
       p->a[i].key = 0;
       if( p->a[i].isPinned ){
@@ -404,7 +402,7 @@ static void testpcacheTruncate(sqlite3_pcache *pCache, unsigned iLimit){
 ** Destroy a page cache.
 */
 static void testpcacheDestroy(sqlite3_pcache *pCache){
-  testpcache *p = (testpcache*)pCache;
+  testpcache *const p = (testpcache*)pCache;
   assert( p->iMagic==TESTPCACHE_VALID );
   assert( testpcacheGlobal.pDummy!=0 );
   assert( testpcacheGlobal.nInstance>0 );
