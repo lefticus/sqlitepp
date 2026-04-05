@@ -1704,16 +1704,16 @@
 [x] src/test2.cpp::faultSimCallback
 [x] src/test2.cpp::Sqlitetest2_Init
 [x] src/test3.cpp::Sqlitetest3_Init
-[ ] src/test4.cpp::test_barrier
-[ ] src/test4.cpp::test_thread_main
-[ ] src/test4.cpp::parse_thread_id
-[ ] src/test4.cpp::test_thread_wait
-[ ] src/test4.cpp::test_stop_thread
-[ ] src/test4.cpp::do_compile
-[ ] src/test4.cpp::do_step
-[ ] src/test4.cpp::do_finalize
-[ ] src/test4.cpp::Sqlitetest4_Init
-[ ] src/test4.cpp::Sqlitetest4_Init
+[x] src/test4.cpp::test_barrier
+[x] src/test4.cpp::test_thread_main
+[x] src/test4.cpp::parse_thread_id
+[x] src/test4.cpp::test_thread_wait
+[x] src/test4.cpp::test_stop_thread
+[x] src/test4.cpp::do_compile
+[x] src/test4.cpp::do_step
+[x] src/test4.cpp::do_finalize
+[x] src/test4.cpp::Sqlitetest4_Init
+[x] src/test4.cpp::Sqlitetest4_Init
 [ ] src/test5.cpp::name_to_enc
 [ ] src/test5.cpp::Sqlitetest5_Init
 [ ] src/test6.cpp::crash_malloc

@@ -56,7 +56,7 @@ struct Thread {
 static Thread threadset[N_THREAD];
 
 static void test_barrier(){
-  sqlite3_mutex *pMutex = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_APP1);
+  sqlite3_mutex *const pMutex = sqlite3_mutex_alloc(SQLITE_MUTEX_STATIC_APP1);
   sqlite3_mutex_enter(pMutex);
   sqlite3_mutex_leave(pMutex);
 }
@@ -65,7 +65,7 @@ static void test_barrier(){
 ** The main loop for a thread.  Threads use busy waiting. 
 */
 static void *test_thread_main(void *pArg){
-  Thread *p = (Thread*)pArg;
+  Thread *const p = (Thread*)pArg;
   if( p->db ){
     sqlite3_close(p->db);
   }
@@ -472,7 +472,6 @@ static int SQLITE_TCLAPI tcl_thread_compile(
 ** This procedure runs in the thread to step the virtual machine.
 */
 static void do_step(Thread *p){
-  int i;
   if( p->pStmt==0 ){
     p->zErr = p->zStaticErr = "no virtual machine available";
     p->rc = SQLITE_ERROR;
@@ -481,10 +480,10 @@ static void do_step(Thread *p){
   p->rc = sqlite3_step(p->pStmt);
   if( p->rc==SQLITE_ROW ){
     p->argc = sqlite3_column_count(p->pStmt);
-    for(i=0; i<sqlite3_data_count(p->pStmt); i++){
+    for(int i=0; i<sqlite3_data_count(p->pStmt); i++){
       p->argv[i] = (char*)sqlite3_column_text(p->pStmt, i);
     }
-    for(i=0; i<p->argc; i++){
+    for(int i=0; i<p->argc; i++){
       p->colv[i] = sqlite3_column_name(p->pStmt, i);
     }
   }
@@ -724,9 +723,7 @@ int Sqlitetest4_Init(Tcl_Interp *interp){
      { "thread_db_put",     (Tcl_CmdProc*)tcl_thread_db_put     },
      { "thread_stmt_get",   (Tcl_CmdProc*)tcl_thread_stmt_get   },
   };
-  int i;
-
-  for(i=0; i<(int)(sizeof(aCmd)/sizeof(aCmd[0])); i++){
+  for(int i=0; i<(int)(sizeof(aCmd)/sizeof(aCmd[0])); i++){
     Tcl_CreateCommand(interp, aCmd[i].zName, aCmd[i].xProc, 0, 0);
   }
   return TCL_OK;
