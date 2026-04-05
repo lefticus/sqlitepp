@@ -3352,67 +3352,67 @@
 [x] src/walker.cpp::sqlite3WalkerDepthDecrease
 [x] src/walker.cpp::sqlite3ExprWalkNoop
 [x] src/walker.cpp::sqlite3SelectWalkNoop
-[ ] src/where.cpp::sqlite3WhereOutputRowCount
-[ ] src/where.cpp::sqlite3WhereIsDistinct
-[ ] src/where.cpp::sqlite3WhereIsOrdered
-[ ] src/where.cpp::sqlite3WhereOrderByLimitOptLabel
-[ ] src/where.cpp::sqlite3WhereMinMaxOptEarlyOut
-[ ] src/where.cpp::sqlite3WhereContinueLabel
-[ ] src/where.cpp::sqlite3WhereBreakLabel
-[ ] src/where.cpp::sqlite3WhereOkOnePass
-[ ] src/where.cpp::sqlite3WhereUsesDeferredSeek
-[ ] src/where.cpp::whereOrMove
-[ ] src/where.cpp::sqlite3WhereGetMask
-[ ] src/where.cpp::sqlite3WhereMalloc
-[ ] src/where.cpp::sqlite3WhereRealloc
-[ ] src/where.cpp::createMask
-[ ] src/where.cpp::whereRightSubexprIsColumn
-[ ] src/where.cpp::whereScanNext
-[ ] src/where.cpp::whereScanInitIndexExpr
-[ ] src/where.cpp::indexColumnNotNull
-[ ] src/where.cpp::estLog
-[ ] src/where.cpp::termFromWhereClause
-[ ] src/where.cpp::freeIdxStr
-[ ] src/where.cpp::freeIndexInfo
-[ ] src/where.cpp::vtabBestIndex
-[ ] src/where.cpp::whereRangeAdjust
-[ ] src/where.cpp::sqlite3IndexColumnAffinity
-[ ] src/where.cpp::sqlite3WhereTermPrint
-[ ] src/where.cpp::sqlite3ShowWhereTerm
-[ ] src/where.cpp::sqlite3WhereClausePrint
-[ ] src/where.cpp::sqlite3WhereLoopPrint
-[ ] src/where.cpp::sqlite3ShowWhereLoop
-[ ] src/where.cpp::sqlite3ShowWhereLoopList
-[ ] src/where.cpp::whereLoopInit
-[ ] src/where.cpp::whereLoopClearUnion
-[ ] src/where.cpp::whereLoopClear
-[ ] src/where.cpp::whereLoopResize
-[ ] src/where.cpp::whereLoopXfer
-[ ] src/where.cpp::whereLoopDelete
-[ ] src/where.cpp::whereInfoFree
-[ ] src/where.cpp::whereLoopAdjustCost
-[ ] src/where.cpp::whereLoopInsert
-[ ] src/where.cpp::exprNodePatternLengthEst
-[ ] src/where.cpp::estLikePatternLength
-[ ] src/where.cpp::whereIsCoveringIndexWalkCallback
-[ ] src/where.cpp::whereIndexedExprCleanup
-[ ] src/where.cpp::isLimitTerm
-[ ] src/where.cpp::sqlite3_vtab_collation
-[ ] src/where.cpp::sqlite3_vtab_in
-[ ] src/where.cpp::sqlite3_vtab_distinct
-[ ] src/where.cpp::sqlite3VtabUsesAllSchemas
-[ ] src/where.cpp::whereLoopAddAll
-[ ] src/where.cpp::sqlite3WhereIsSorted
-[ ] src/where.cpp::wherePathName
-[ ] src/where.cpp::computeMxChoice
-[ ] src/where.cpp::wherePathSolver
-[ ] src/where.cpp::whereInterstageHeuristic
-[ ] src/where.cpp::whereShortCut
-[ ] src/where.cpp::exprNodeIsDeterministic
-[ ] src/where.cpp::exprIsDeterministic
-[ ] src/where.cpp::showAllWhereLoops
-[ ] src/where.cpp::whereReverseScanOrder
-[ ] src/where.cpp::sqlite3WhereEnd
+[x] src/where.cpp::sqlite3WhereOutputRowCount
+[x] src/where.cpp::sqlite3WhereIsDistinct
+[x] src/where.cpp::sqlite3WhereIsOrdered
+[x] src/where.cpp::sqlite3WhereOrderByLimitOptLabel
+[x] src/where.cpp::sqlite3WhereMinMaxOptEarlyOut
+[x] src/where.cpp::sqlite3WhereContinueLabel
+[x] src/where.cpp::sqlite3WhereBreakLabel
+[x] src/where.cpp::sqlite3WhereOkOnePass
+[x] src/where.cpp::sqlite3WhereUsesDeferredSeek
+[x] src/where.cpp::whereOrMove
+[x] src/where.cpp::sqlite3WhereGetMask
+[x] src/where.cpp::sqlite3WhereMalloc
+[x] src/where.cpp::sqlite3WhereRealloc
+[x] src/where.cpp::createMask
+[x] src/where.cpp::whereRightSubexprIsColumn
+[x] src/where.cpp::whereScanNext
+[x] src/where.cpp::whereScanInitIndexExpr
+[x] src/where.cpp::indexColumnNotNull
+[x] src/where.cpp::estLog
+[x] src/where.cpp::termFromWhereClause
+[x] src/where.cpp::freeIdxStr
+[x] src/where.cpp::freeIndexInfo
+[x] src/where.cpp::vtabBestIndex
+[x] src/where.cpp::whereRangeAdjust
+[x] src/where.cpp::sqlite3IndexColumnAffinity
+[x] src/where.cpp::sqlite3WhereTermPrint
+[x] src/where.cpp::sqlite3ShowWhereTerm
+[x] src/where.cpp::sqlite3WhereClausePrint
+[x] src/where.cpp::sqlite3WhereLoopPrint
+[x] src/where.cpp::sqlite3ShowWhereLoop
+[x] src/where.cpp::sqlite3ShowWhereLoopList
+[x] src/where.cpp::whereLoopInit
+[x] src/where.cpp::whereLoopClearUnion
+[x] src/where.cpp::whereLoopClear
+[x] src/where.cpp::whereLoopResize
+[x] src/where.cpp::whereLoopXfer
+[x] src/where.cpp::whereLoopDelete
+[x] src/where.cpp::whereInfoFree
+[x] src/where.cpp::whereLoopAdjustCost
+[x] src/where.cpp::whereLoopInsert
+[x] src/where.cpp::exprNodePatternLengthEst
+[x] src/where.cpp::estLikePatternLength
+[x] src/where.cpp::whereIsCoveringIndexWalkCallback
+[x] src/where.cpp::whereIndexedExprCleanup
+[x] src/where.cpp::isLimitTerm
+[x] src/where.cpp::sqlite3_vtab_collation
+[x] src/where.cpp::sqlite3_vtab_in
+[x] src/where.cpp::sqlite3_vtab_distinct
+[x] src/where.cpp::sqlite3VtabUsesAllSchemas
+[x] src/where.cpp::whereLoopAddAll
+[x] src/where.cpp::sqlite3WhereIsSorted
+[x] src/where.cpp::wherePathName
+[x] src/where.cpp::computeMxChoice
+[x] src/where.cpp::wherePathSolver
+[x] src/where.cpp::whereInterstageHeuristic
+[x] src/where.cpp::whereShortCut
+[x] src/where.cpp::exprNodeIsDeterministic
+[x] src/where.cpp::exprIsDeterministic
+[x] src/where.cpp::showAllWhereLoops
+[x] src/where.cpp::whereReverseScanOrder
+[x] src/where.cpp::sqlite3WhereEnd
 [ ] src/wherecode.cpp::explainIndexColumnName
 [ ] src/wherecode.cpp::explainIndexRange
 [ ] src/wherecode.cpp::disableTerm
