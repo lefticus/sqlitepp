@@ -159,13 +159,12 @@ static char *getTextArg(PrintfArguments *p){
 ** field of the printf() function.
 */
 static char *printfTempBuf(sqlite3_str *pAccum, sqlite3_int64 n){
-  char *z;
   if( pAccum->accError ) return 0;
   if( n>pAccum->nAlloc && n>pAccum->mxAlloc ){
     sqlite3StrAccumSetError(pAccum, SQLITE_TOOBIG);
     return 0;
   }
-  z = static_cast<char *>(sqlite3DbMallocRaw(pAccum->db, n));
+  char *z = static_cast<char *>(sqlite3DbMallocRaw(pAccum->db, n));
   if( z==0 ){
     sqlite3StrAccumSetError(pAccum, SQLITE_NOMEM);
   }
@@ -214,14 +213,10 @@ void sqlite3_str_vappendf(
   u8 bArgList;               /* True for SQLITE_PRINTF_SQLFUNC */
   char prefix;               /* Prefix character.  "+" or "-" or " " or '\0'. */
   sqlite_uint64 longvalue;   /* Value for integer types */
-  double realvalue;          /* Value for real types */
   const et_info *infop;      /* Pointer to the appropriate info structure */
   char *zOut;                /* Rendering buffer */
   int nOut;                  /* Size of the rendering buffer */
   char *zExtra = 0;          /* Malloced memory used by some conversion */
-  int exp, e2;               /* exponent of real numbers */
-  etByte flag_dp;            /* True if decimal point should be shown */
-  etByte flag_rtz;           /* True if trailing zeros should be removed */
 
   PrintfArguments *pArgList = 0; /* Arguments for SQLITE_PRINTF_SQLFUNC */
   char buf[etBUFSIZE];       /* Conversion buffer */
@@ -531,6 +526,10 @@ void sqlite3_str_vappendf(
         FpDecode s;
         int iRound;
         int j;
+        double realvalue;          /* Value for real types */
+        int exp, e2;               /* exponent of real numbers */
+        etByte flag_dp;            /* True if decimal point should be shown */
+        etByte flag_rtz;           /* True if trailing zeros should be removed */
 
         if( bArgList ){
           realvalue = getDoubleArg(pArgList);
@@ -1043,17 +1042,14 @@ void sqlite3_str_vappendf(
 ** z and set the error byte offset in db.
 */
 void sqlite3RecordErrorByteOffset(sqlite3 *db, const char *z){
-  const Parse *pParse;
-  const char *zText;
-  const char *zEnd;
   assert( z!=0 );
   if( NEVER(db==0) ) return;
   if( db->errByteOffset!=(-2) ) return;
-  pParse = db->pParse;
+  const Parse *const pParse = db->pParse;
   if( NEVER(pParse==0) ) return;
-  zText =pParse->zTail;
+  const char *const zText = pParse->zTail;
   if( NEVER(zText==0) ) return;
-  zEnd = &zText[strlen(zText)];
+  const char *const zEnd = &zText[strlen(zText)];
   if( SQLITE_WITHIN(z,zText,zEnd) ){
     db->errByteOffset = (int)(z-zText);
   }
@@ -1082,7 +1078,6 @@ void sqlite3RecordErrorOffsetOfExpr(sqlite3 *db, const Expr *pExpr){
 ** after the attempted enlargement.  The value returned might be zero.
 */
 int sqlite3StrAccumEnlarge(StrAccum *p, i64 N){
-  char *zNew;
   assert( p->nChar+N >= p->nAlloc ); /* Only called if really needed */
   if( p->accError ){
     testcase(p->accError==SQLITE_TOOBIG);
@@ -1107,6 +1102,7 @@ int sqlite3StrAccumEnlarge(StrAccum *p, i64 N){
     }else{
       p->nAlloc = (int)szNew;
     }
+    char *zNew;
     if( p->db ){
       zNew = static_cast<char *>(sqlite3DbRealloc(p->db, zOld, p->nAlloc));
     }else{
@@ -1187,9 +1183,8 @@ void sqlite3_str_appendall(sqlite3_str *p, const char *z){
 ** pointer if any kind of error was encountered.
 */
 static SQLITE_NOINLINE char *strAccumFinishRealloc(StrAccum *p){
-  char *zText;
   assert( p->mxAlloc>0 && !isMalloced(p) );
-  zText = static_cast<char *>(sqlite3DbMallocRaw(p->db, 1+(u64)p->nChar ));
+  char *zText = static_cast<char *>(sqlite3DbMallocRaw(p->db, 1+(u64)p->nChar ));
   if( zText ){
     memcpy(zText, p->zText, p->nChar+1);
     p->printfFlags |= SQLITE_PRINTF_MALLOCED;
@@ -1338,7 +1333,6 @@ sqlite3_str *sqlite3_str_new(sqlite3 *db){
 ** %-conversion extensions.
 */
 char *sqlite3VMPrintf(sqlite3 *db, const char *zFormat, va_list ap){
-  char *z;
   char zBase[SQLITE_PRINT_BUF_SIZE];
   StrAccum acc;
   assert( db!=0 );
@@ -1346,7 +1340,7 @@ char *sqlite3VMPrintf(sqlite3 *db, const char *zFormat, va_list ap){
                       db->aLimit[SQLITE_LIMIT_LENGTH]);
   acc.printfFlags = SQLITE_PRINTF_INTERNAL;
   sqlite3_str_vappendf(&acc, zFormat, ap);
-  z = sqlite3StrAccumFinish(&acc);
+  char *const z = sqlite3StrAccumFinish(&acc);
   if( acc.accError==SQLITE_NOMEM ){
     sqlite3OomFault(db);
   }
@@ -1359,9 +1353,8 @@ char *sqlite3VMPrintf(sqlite3 *db, const char *zFormat, va_list ap){
 */
 char *sqlite3MPrintf(sqlite3 *db, const char *zFormat, ...){
   va_list ap;
-  char *z;
   va_start(ap, zFormat);
-  z = sqlite3VMPrintf(db, zFormat, ap);
+  char *const z = sqlite3VMPrintf(db, zFormat, ap);
   va_end(ap);
   return z;
 }
@@ -1371,11 +1364,10 @@ char *sqlite3MPrintf(sqlite3 *db, const char *zFormat, ...){
 ** %-conversion extensions.
 */
 char *sqlite3_vmprintf(const char *zFormat, va_list ap){
-  char *z;
   char zBase[SQLITE_PRINT_BUF_SIZE];
   StrAccum acc;
 
-#ifdef SQLITE_ENABLE_API_ARMOR  
+#ifdef SQLITE_ENABLE_API_ARMOR
   if( zFormat==0 ){
     (void)SQLITE_MISUSE_BKPT;
     return 0;
@@ -1386,7 +1378,7 @@ char *sqlite3_vmprintf(const char *zFormat, va_list ap){
 #endif
   sqlite3StrAccumInit(&acc, 0, zBase, sizeof(zBase), SQLITE_MAX_LENGTH);
   sqlite3_str_vappendf(&acc, zFormat, ap);
-  z = sqlite3StrAccumFinish(&acc);
+  char *const z = sqlite3StrAccumFinish(&acc);
   return z;
 }
 
@@ -1396,12 +1388,11 @@ char *sqlite3_vmprintf(const char *zFormat, va_list ap){
 */
 char *sqlite3_mprintf(const char *zFormat, ...){
   va_list ap;
-  char *z;
 #ifndef SQLITE_OMIT_AUTOINIT
   if( sqlite3_initialize() ) return 0;
 #endif
   va_start(ap, zFormat);
-  z = sqlite3_vmprintf(zFormat, ap);
+  char *const z = sqlite3_vmprintf(zFormat, ap);
   va_end(ap);
   return z;
 }
@@ -1593,11 +1584,10 @@ char *sqlite3RCStrNew(u64 N){
 */
 char *sqlite3RCStrResize(char *z, u64 N){
   RCStr *p = (RCStr*)z;
-  RCStr *pNew;
   assert( p!=0 );
   p--;
   assert( p->nRCRef==1 );
-  pNew = static_cast<RCStr *>(sqlite3_realloc64(p, N+sizeof(RCStr)+1));
+  RCStr *const pNew = static_cast<RCStr *>(sqlite3_realloc64(p, N+sizeof(RCStr)+1));
   if( pNew==0 ){
     sqlite3_free(p);
     return 0;

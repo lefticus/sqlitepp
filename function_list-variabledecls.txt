@@ -1506,44 +1506,44 @@
 [x] src/prepare.cpp::sqlite3ParseObjectReset
 [x] src/prepare.cpp::sqlite3ParseObjectInit
 [x] src/prepare.cpp::sqlite3Reprepare
-[ ] src/printf.cpp::sqlite3StrAccumSetError
-[ ] src/printf.cpp::getIntArg
-[ ] src/printf.cpp::getDoubleArg
-[ ] src/printf.cpp::getTextArg
-[ ] src/printf.cpp::printfTempBuf
-[ ] src/printf.cpp::sqlite3RecordErrorByteOffset
-[ ] src/printf.cpp::sqlite3RecordErrorOffsetOfExpr
-[ ] src/printf.cpp::sqlite3StrAccumEnlarge
-[ ] src/printf.cpp::sqlite3_str_appendchar
-[ ] src/printf.cpp::enlargeAndAppend
-[ ] src/printf.cpp::sqlite3_str_append
-[ ] src/printf.cpp::sqlite3_str_appendall
-[ ] src/printf.cpp::strAccumFinishRealloc
-[ ] src/printf.cpp::sqlite3StrAccumFinish
-[ ] src/printf.cpp::sqlite3ResultStrAccum
-[ ] src/printf.cpp::sqlite3_str_finish
-[ ] src/printf.cpp::sqlite3_str_errcode
-[ ] src/printf.cpp::sqlite3_str_length
-[ ] src/printf.cpp::sqlite3_str_truncate
-[ ] src/printf.cpp::sqlite3_str_value
-[ ] src/printf.cpp::sqlite3_str_reset
-[ ] src/printf.cpp::sqlite3_str_free
-[ ] src/printf.cpp::sqlite3StrAccumInit
-[ ] src/printf.cpp::sqlite3_str_new
-[ ] src/printf.cpp::sqlite3VMPrintf
-[ ] src/printf.cpp::sqlite3MPrintf
-[ ] src/printf.cpp::sqlite3_vmprintf
-[ ] src/printf.cpp::sqlite3_mprintf
-[ ] src/printf.cpp::sqlite3_vsnprintf
-[ ] src/printf.cpp::sqlite3_snprintf
-[ ] src/printf.cpp::renderLogMsg
-[ ] src/printf.cpp::sqlite3_log
-[ ] src/printf.cpp::sqlite3DebugPrintf
-[ ] src/printf.cpp::sqlite3_str_appendf
-[ ] src/printf.cpp::sqlite3RCStrRef
-[ ] src/printf.cpp::sqlite3RCStrUnref
-[ ] src/printf.cpp::sqlite3RCStrNew
-[ ] src/printf.cpp::sqlite3RCStrResize
+[x] src/printf.cpp::sqlite3StrAccumSetError
+[x] src/printf.cpp::getIntArg
+[x] src/printf.cpp::getDoubleArg
+[x] src/printf.cpp::getTextArg
+[x] src/printf.cpp::printfTempBuf
+[x] src/printf.cpp::sqlite3RecordErrorByteOffset
+[x] src/printf.cpp::sqlite3RecordErrorOffsetOfExpr
+[x] src/printf.cpp::sqlite3StrAccumEnlarge
+[x] src/printf.cpp::sqlite3_str_appendchar
+[x] src/printf.cpp::enlargeAndAppend
+[x] src/printf.cpp::sqlite3_str_append
+[x] src/printf.cpp::sqlite3_str_appendall
+[x] src/printf.cpp::strAccumFinishRealloc
+[x] src/printf.cpp::sqlite3StrAccumFinish
+[x] src/printf.cpp::sqlite3ResultStrAccum
+[x] src/printf.cpp::sqlite3_str_finish
+[x] src/printf.cpp::sqlite3_str_errcode
+[x] src/printf.cpp::sqlite3_str_length
+[x] src/printf.cpp::sqlite3_str_truncate
+[x] src/printf.cpp::sqlite3_str_value
+[x] src/printf.cpp::sqlite3_str_reset
+[x] src/printf.cpp::sqlite3_str_free
+[x] src/printf.cpp::sqlite3StrAccumInit
+[x] src/printf.cpp::sqlite3_str_new
+[x] src/printf.cpp::sqlite3VMPrintf
+[x] src/printf.cpp::sqlite3MPrintf
+[x] src/printf.cpp::sqlite3_vmprintf
+[x] src/printf.cpp::sqlite3_mprintf
+[x] src/printf.cpp::sqlite3_vsnprintf
+[x] src/printf.cpp::sqlite3_snprintf
+[x] src/printf.cpp::renderLogMsg
+[x] src/printf.cpp::sqlite3_log
+[x] src/printf.cpp::sqlite3DebugPrintf
+[x] src/printf.cpp::sqlite3_str_appendf
+[x] src/printf.cpp::sqlite3RCStrRef
+[x] src/printf.cpp::sqlite3RCStrUnref
+[x] src/printf.cpp::sqlite3RCStrNew
+[x] src/printf.cpp::sqlite3RCStrResize
 [ ] src/random.cpp::chacha_block
 [ ] src/random.cpp::sqlite3_randomness
 [ ] src/random.cpp::sqlite3PrngSaveState
