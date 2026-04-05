@@ -80,16 +80,14 @@ static void doTestWindowFinalize(int bValue, sqlite3_context *ctx){
 
   Tcl_IncrRefCount(pEval);
   if( pCtx ){
-    const char *zResult;
-    int rc;
     if( pCtx->pVal ){
       Tcl_ListObjAppendElement(p->interp, pEval, Tcl_DuplicateObj(pCtx->pVal));
     }else{
       Tcl_ListObjAppendElement(p->interp, pEval, Tcl_NewStringObj("", -1));
     }
 
-    rc = Tcl_EvalObjEx(p->interp, pEval, TCL_EVAL_GLOBAL);
-    zResult = Tcl_GetStringResult(p->interp);
+    const int rc = Tcl_EvalObjEx(p->interp, pEval, TCL_EVAL_GLOBAL);
+    const char *zResult = Tcl_GetStringResult(p->interp);
     if( rc!=TCL_OK ){
       sqlite3_result_error(ctx, zResult, -1);
     }else{
@@ -258,8 +256,7 @@ static void sumintInverse(
 */
 static void sumintFinal(sqlite3_context *ctx){
   sqlite3_int64 res = 0;
-  sqlite3_int64 *pInt;
-  pInt = (sqlite3_int64*)sqlite3_aggregate_context(ctx, 0);
+  sqlite3_int64 *pInt = (sqlite3_int64*)sqlite3_aggregate_context(ctx, 0);
   if( pInt ) res = *pInt;
   sqlite3_result_int64(ctx, res);
 }
@@ -269,8 +266,7 @@ static void sumintFinal(sqlite3_context *ctx){
 */
 static void sumintValue(sqlite3_context *ctx){
   sqlite3_int64 res = 0;
-  sqlite3_int64 *pInt;
-  pInt = (sqlite3_int64*)sqlite3_aggregate_context(ctx, 0);
+  sqlite3_int64 *pInt = (sqlite3_int64*)sqlite3_aggregate_context(ctx, 0);
   if( pInt ) res = *pInt;
   sqlite3_result_int64(ctx, res);
 }
@@ -339,8 +335,7 @@ int Sqlitetest_window_Init(Tcl_Interp *interp){
      { "test_create_sumint", test_create_sumint, 0 },
      { "test_override_sum", test_override_sum, 0 },
   };
-  int i;
-  for(i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
+  for(int i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
     ClientData c = (ClientData)SQLITE_INT_TO_PTR(aObjCmd[i].clientData);
     Tcl_CreateObjCommand(interp, aObjCmd[i].zName, aObjCmd[i].xProc, c, 0);
   }

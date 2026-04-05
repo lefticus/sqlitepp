@@ -2556,6 +2556,7 @@
 [x] src/test_vfs.cpp::tvfsUnfetch
 [x] src/test_vfs.cpp::testvfs_obj_del
 [x] src/test_vfs.cpp::Sqlitetestvfs_Init
+<<<<<<< HEAD
 >>>>>>> 17dfcc87b (Move variable declarations down and add const: src/test_vfs.cpp)
 [ ] src/test_window.cpp::doTestWindowFinalize
 [ ] src/test_window.cpp::testWindowFinal
@@ -2564,6 +2565,15 @@
 [ ] src/test_window.cpp::sumintFinal
 [ ] src/test_window.cpp::sumintValue
 [ ] src/test_window.cpp::Sqlitetest_window_Init
+=======
+[x] src/test_window.cpp::doTestWindowFinalize
+[x] src/test_window.cpp::testWindowFinal
+[x] src/test_window.cpp::testWindowValue
+[x] src/test_window.cpp::testWindowDestroy
+[x] src/test_window.cpp::sumintFinal
+[x] src/test_window.cpp::sumintValue
+[x] src/test_window.cpp::Sqlitetest_window_Init
+>>>>>>> 0be6fff5c (Move variable declarations down and add const: src/test_window.cpp)
 [ ] src/test_wsd.cpp::sqlite3_wsd_init
 [ ] src/test_wsd.cpp::sqlite3_wsd_find
 [ ] src/threads.cpp::sqlite3ThreadJoin
