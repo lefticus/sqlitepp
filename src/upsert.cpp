@@ -225,9 +225,8 @@ int sqlite3UpsertAnalyzeTarget(
 ** clause that targets the INTEGER PRIMARY KEY.
 */
 int sqlite3UpsertNextIsIPK(Upsert *pUpsert){
-  Upsert *pNext;
   if( NEVER(pUpsert==0) ) return 0;
-  pNext = pUpsert->pNextUpsert;
+  Upsert *pNext = pUpsert->pNextUpsert;
   while( 1 /*exit-by-return*/ ){
     if( pNext==0 ) return 1;
     if( pNext->pUpsertTarget==0 ) return 1;

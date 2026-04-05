@@ -2695,12 +2695,20 @@
 =======
 [x] src/update.cpp::sqlite3ColumnDefault
 [x] src/update.cpp::exprRowColumn
+<<<<<<< HEAD
 >>>>>>> de9f5d6b3 (Move variable declarations down and add const: src/update.cpp)
 [ ] src/upsert.cpp::upsertDelete
 [ ] src/upsert.cpp::sqlite3UpsertDelete
 [ ] src/upsert.cpp::sqlite3UpsertDup
 [ ] src/upsert.cpp::sqlite3UpsertNextIsIPK
 [ ] src/upsert.cpp::sqlite3UpsertOfIndex
+=======
+[x] src/upsert.cpp::upsertDelete
+[x] src/upsert.cpp::sqlite3UpsertDelete
+[x] src/upsert.cpp::sqlite3UpsertDup
+[x] src/upsert.cpp::sqlite3UpsertNextIsIPK
+[x] src/upsert.cpp::sqlite3UpsertOfIndex
+>>>>>>> ad6e95896 (Move variable declarations down and add const: src/upsert.cpp)
 [ ] src/utf.cpp::sqlite3AppendOneUtf8Character
 [ ] src/utf.cpp::sqlite3VdbeMemTranslate
 [ ] src/utf.cpp::sqlite3VdbeMemHandleBom
