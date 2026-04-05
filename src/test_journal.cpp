@@ -247,12 +247,12 @@ static void closeTransaction(jt_file *p){
 ** Close an jt-file.
 */
 static int jtClose(sqlite3_file *pFile){
-  jt_file **pp;
-  jt_file *p = (jt_file *)pFile;
+  jt_file *const p = (jt_file *)pFile;
 
   closeTransaction(p);
   enterJtMutex();
   if( p->zName ){
+    jt_file **pp;
     for(pp=&g.pList; *pp!=p; pp=&(*pp)->pNext);
     *pp = p->pNext;
   }
@@ -270,7 +270,7 @@ static int jtRead(
   int iAmt, 
   sqlite_int64 iOfst
 ){
-  jt_file *p = (jt_file *)pFile;
+  jt_file *const p = (jt_file *)pFile;
   return sqlite3OsRead(p->pReal, zBuf, iAmt, iOfst);
 }
 
@@ -293,7 +293,7 @@ static jt_file *locateDatabaseHandle(const char *zJournal, int noLock){
   jt_file *pMain = 0;
   enterJtMutex();
   for(pMain=g.pList; pMain; pMain=pMain->pNext){
-    int nName = (int)(strlen(zJournal) - strlen("-journal"));
+    const int nName = (int)(strlen(zJournal) - strlen("-journal"));
     if( (pMain->flags&SQLITE_OPEN_MAIN_DB)
      && ((int)strlen(pMain->zName)==nName)
      && 0==memcmp(pMain->zName, zJournal, nName)
@@ -320,9 +320,8 @@ static u32 decodeUint32(const unsigned char *z){
 ** by parameter z.
 */
 static u32 genCksum(const unsigned char *z, int n){
-  int i;
   u32 cksum = 0;
-  for(i=0; i<n; i++){
+  for(int i=0; i<n; i++){
     cksum = cksum + z[i] + (cksum<<3);
   }
   return cksum;
@@ -358,12 +357,11 @@ static int decodeJournalHdr(
 ** the first journal-header is written to the journal file.
 */
 static int openTransaction(jt_file *pMain, jt_file *pJournal){
-  unsigned char *aData;
-  sqlite3_file *p = pMain->pReal;
+  sqlite3_file *const p = pMain->pReal;
   int rc = SQLITE_OK;
 
   closeTransaction(pMain);
-  aData = (unsigned char*)sqlite3_malloc(pMain->nPagesize);
+  unsigned char *aData = (unsigned char*)sqlite3_malloc(pMain->nPagesize);
   pMain->pWritable = sqlite3BitvecCreate(pMain->nPage);
   pMain->aCksum = (u32*)sqlite3_malloc(sizeof(u32) * (pMain->nPage + 1));
   pJournal->iMaxOff = 0;
@@ -371,10 +369,8 @@ static int openTransaction(jt_file *pMain, jt_file *pJournal){
   if( !pMain->pWritable || !pMain->aCksum || !aData ){
     rc = SQLITE_IOERR_NOMEM;
   }else if( pMain->nPage>0 ){
-    u32 iTrunk;
     int iSave;
     int iSave2;
-
     stop_ioerr_simulation(&iSave, &iSave2);
 
     /* Read the database free-list. Add the page-number for each free-list
@@ -390,7 +386,7 @@ static int openTransaction(jt_file *pMain, jt_file *pJournal){
         }
       }
     }
-    iTrunk = decodeUint32(&aData[32]);
+    u32 iTrunk = decodeUint32(&aData[32]);
     while( rc==SQLITE_OK && iTrunk>0 ){
       u32 nLeaf;
       u32 iLeaf;
@@ -433,14 +429,13 @@ static int openTransaction(jt_file *pMain, jt_file *pJournal){
 static int readJournalFile(jt_file *p, jt_file *pMain){
   int rc = SQLITE_OK;
   unsigned char zBuf[28];
-  sqlite3_file *pReal = p->pReal;
+  sqlite3_file *const pReal = p->pReal;
   sqlite3_int64 iOff = 0;
-  sqlite3_int64 iSize = p->iMaxOff;
-  unsigned char *aPage;
+  const sqlite3_int64 iSize = p->iMaxOff;
   int iSave;
   int iSave2;
 
-  aPage = (unsigned char*)sqlite3_malloc(pMain->nPagesize);
+  unsigned char *aPage = (unsigned char*)sqlite3_malloc(pMain->nPagesize);
   if( !aPage ){
     return SQLITE_IOERR_NOMEM;
   }
@@ -516,8 +511,7 @@ static int jtWrite(
   int iAmt, 
   sqlite_int64 iOfst
 ){
-  int rc;
-  jt_file *p = (jt_file *)pFile;
+  jt_file *const p = (jt_file *)pFile;
   if( p->flags&SQLITE_OPEN_MAIN_JOURNAL ){
     if( iOfst==0 ){
       jt_file *pMain = locateDatabaseHandle(p->zName, 0);
@@ -530,11 +524,12 @@ static int jtWrite(
       }else if( iAmt!=12 ){
         /* Writing the first journal header to a journal file. This happens
         ** when a transaction is first started.  */
-        u8 *z = (u8 *)zBuf;
+        const u8 *z = (const u8 *)zBuf;
         pMain->nPage = decodeUint32(&z[16]);
         pMain->nPagesize = decodeUint32(&z[24]);
-        if( SQLITE_OK!=(rc=openTransaction(pMain, p)) ){
-          return rc;
+        {
+          const int rc = openTransaction(pMain, p);
+          if( rc!=SQLITE_OK ) return rc;
         }
       }
     }
@@ -555,7 +550,7 @@ static int jtWrite(
       ** pending-byte page.
       */
     }else{
-      u32 pgno = (u32)(iOfst/p->nPagesize + 1);
+      const u32 pgno = (u32)(iOfst/p->nPagesize + 1);
       (void)pgno;
       assert( (iAmt==1||iAmt==(int)p->nPagesize) &&
               ((iOfst+iAmt)%p->nPagesize)==0 );
@@ -567,10 +562,10 @@ static int jtWrite(
     }
   }
 
-  rc = sqlite3OsWrite(p->pReal, zBuf, iAmt, iOfst);
+  int rc = sqlite3OsWrite(p->pReal, zBuf, iAmt, iOfst);
   if( (p->flags&SQLITE_OPEN_MAIN_JOURNAL) && iAmt==12 ){
     jt_file *pMain = locateDatabaseHandle(p->zName, 0);
-    int rc2 = readJournalFile(p, pMain);
+    const int rc2 = readJournalFile(p, pMain);
     if( rc==SQLITE_OK ) rc = rc2;
   }
   return rc;
@@ -580,17 +575,16 @@ static int jtWrite(
 ** Truncate an jt-file.
 */
 static int jtTruncate(sqlite3_file *pFile, sqlite_int64 size){
-  jt_file *p = (jt_file *)pFile;
+  jt_file *const p = (jt_file *)pFile;
   if( p->flags&SQLITE_OPEN_MAIN_JOURNAL && size==0 ){
     /* Truncating a journal file. This is the end of a transaction. */
     jt_file *pMain = locateDatabaseHandle(p->zName, 0);
     closeTransaction(pMain);
   }
   if( p->flags&SQLITE_OPEN_MAIN_DB && p->pWritable ){
-    u32 pgno;
-    u32 locking_page = (u32)(PENDING_BYTE/p->nPagesize+1);
+    const u32 locking_page = (u32)(PENDING_BYTE/p->nPagesize+1);
     (void)locking_page;
-    for(pgno=(u32)(size/p->nPagesize+1); pgno<=p->nPage; pgno++){
+    for(u32 pgno=(u32)(size/p->nPagesize+1); pgno<=p->nPage; pgno++){
       assert( pgno==locking_page || sqlite3BitvecTest(p->pWritable, pgno) );
     }
   }
@@ -601,23 +595,20 @@ static int jtTruncate(sqlite3_file *pFile, sqlite_int64 size){
 ** Sync an jt-file.
 */
 static int jtSync(sqlite3_file *pFile, int flags){
-  jt_file *p = (jt_file *)pFile;
+  jt_file *const p = (jt_file *)pFile;
 
   if( p->flags&SQLITE_OPEN_MAIN_JOURNAL ){
-    int rc;
-    jt_file *pMain;                   /* The associated database file */
-
-    /* The journal file is being synced. At this point, we inspect the 
-    ** contents of the file up to this point and set each bit in the 
+    /* The journal file is being synced. At this point, we inspect the
+    ** contents of the file up to this point and set each bit in the
     ** jt_file.pWritable bitvec of the main database file associated with
     ** this journal file.
     */
-    pMain = locateDatabaseHandle(p->zName, 0);
+    jt_file *pMain = locateDatabaseHandle(p->zName, 0);
 
     /* Set the bitvec values */
     if( pMain && pMain->pWritable ){
       pMain->nSync++;
-      rc = readJournalFile(p, pMain);
+      const int rc = readJournalFile(p, pMain);
       if( rc!=SQLITE_OK ){
         return rc;
       }
@@ -631,7 +622,7 @@ static int jtSync(sqlite3_file *pFile, int flags){
 ** Return the current file-size of an jt-file.
 */
 static int jtFileSize(sqlite3_file *pFile, sqlite_int64 *pSize){
-  jt_file *p = (jt_file *)pFile;
+  jt_file *const p = (jt_file *)pFile;
   return sqlite3OsFileSize(p->pReal, pSize);
 }
 
@@ -639,9 +630,8 @@ static int jtFileSize(sqlite3_file *pFile, sqlite_int64 *pSize){
 ** Lock an jt-file.
 */
 static int jtLock(sqlite3_file *pFile, int eLock){
-  int rc;
-  jt_file *p = (jt_file *)pFile;
-  rc = sqlite3OsLock(p->pReal, eLock);
+  jt_file *const p = (jt_file *)pFile;
+  int rc = sqlite3OsLock(p->pReal, eLock);
   if( rc==SQLITE_OK && eLock>p->eLock ){
     p->eLock = eLock;
   }
@@ -652,9 +642,8 @@ static int jtLock(sqlite3_file *pFile, int eLock){
 ** Unlock an jt-file.
 */
 static int jtUnlock(sqlite3_file *pFile, int eLock){
-  int rc;
   jt_file *p = (jt_file *)pFile;
-  rc = sqlite3OsUnlock(p->pReal, eLock);
+  int rc = sqlite3OsUnlock(p->pReal, eLock);
   if( rc==SQLITE_OK && eLock<p->eLock ){
     p->eLock = eLock;
   }
@@ -665,7 +654,7 @@ static int jtUnlock(sqlite3_file *pFile, int eLock){
 ** Check if another file-handle holds a RESERVED lock on an jt-file.
 */
 static int jtCheckReservedLock(sqlite3_file *pFile, int *pResOut){
-  jt_file *p = (jt_file *)pFile;
+  jt_file *const p = (jt_file *)pFile;
   return sqlite3OsCheckReservedLock(p->pReal, pResOut);
 }
 
@@ -673,7 +662,7 @@ static int jtCheckReservedLock(sqlite3_file *pFile, int *pResOut){
 ** File control method. For custom operations on an jt-file.
 */
 static int jtFileControl(sqlite3_file *pFile, int op, void *pArg){
-  jt_file *p = (jt_file *)pFile;
+  jt_file *const p = (jt_file *)pFile;
   return p->pReal->pMethods->xFileControl(p->pReal, op, pArg);
 }
 
@@ -681,7 +670,7 @@ static int jtFileControl(sqlite3_file *pFile, int op, void *pArg){
 ** Return the sector-size in bytes for an jt-file.
 */
 static int jtSectorSize(sqlite3_file *pFile){
-  jt_file *p = (jt_file *)pFile;
+  jt_file *const p = (jt_file *)pFile;
   return sqlite3OsSectorSize(p->pReal);
 }
 
@@ -689,7 +678,7 @@ static int jtSectorSize(sqlite3_file *pFile){
 ** Return the device characteristic flags supported by an jt-file.
 */
 static int jtDeviceCharacteristics(sqlite3_file *pFile){
-  jt_file *p = (jt_file *)pFile;
+  jt_file *const p = (jt_file *)pFile;
   return sqlite3OsDeviceCharacteristics(p->pReal);
 }
 
@@ -703,12 +692,11 @@ static int jtOpen(
   int flags,
   int *pOutFlags
 ){
-  int rc;
-  jt_file *p = (jt_file *)pFile;
+  jt_file *const p = (jt_file *)pFile;
   pFile->pMethods = 0;
   p->pReal = (sqlite3_file *)&p[1];
   p->pReal->pMethods = 0;
-  rc = sqlite3OsOpen(g.pVfs, zName, p->pReal, flags, pOutFlags);
+  const int rc = sqlite3OsOpen(g.pVfs, zName, p->pReal, flags, pOutFlags);
   assert( rc==SQLITE_OK || p->pReal->pMethods==0 );
   if( rc==SQLITE_OK ){
     pFile->pMethods = &jt_io_methods;
@@ -734,7 +722,7 @@ static int jtOpen(
 ** returning.
 */
 static int jtDelete(sqlite3_vfs *pVfs, const char *zPath, int dirSync){
-  int nPath = (int)strlen(zPath);
+  const int nPath = (int)strlen(zPath);
   if( nPath>8 && 0==strcmp("-journal", &zPath[nPath-8]) ){
     /* Deleting a journal file. The end of a transaction. */
     jt_file *pMain = locateDatabaseHandle(zPath, 0);

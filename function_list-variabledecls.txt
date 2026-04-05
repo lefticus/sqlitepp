@@ -1921,38 +1921,38 @@
 [x] src/test_intarray.cpp::intarrayNext
 [x] src/test_intarray.cpp::intarrayBestIndex
 [x] src/test_intarray.cpp::Sqlitetestintarray_Init
-[ ] src/test_journal.cpp::enterJtMutex
-[ ] src/test_journal.cpp::leaveJtMutex
-[ ] src/test_journal.cpp::stop_ioerr_simulation
-[ ] src/test_journal.cpp::start_ioerr_simulation
-[ ] src/test_journal.cpp::closeTransaction
-[ ] src/test_journal.cpp::jtClose
-[ ] src/test_journal.cpp::locateDatabaseHandle
-[ ] src/test_journal.cpp::decodeUint32
-[ ] src/test_journal.cpp::genCksum
-[ ] src/test_journal.cpp::openTransaction
-[ ] src/test_journal.cpp::readJournalFile
-[ ] src/test_journal.cpp::jtTruncate
-[ ] src/test_journal.cpp::jtSync
-[ ] src/test_journal.cpp::jtFileSize
-[ ] src/test_journal.cpp::jtLock
-[ ] src/test_journal.cpp::jtUnlock
-[ ] src/test_journal.cpp::jtCheckReservedLock
-[ ] src/test_journal.cpp::jtFileControl
-[ ] src/test_journal.cpp::jtSectorSize
-[ ] src/test_journal.cpp::jtDeviceCharacteristics
-[ ] src/test_journal.cpp::jtDelete
-[ ] src/test_journal.cpp::jtDlOpen
-[ ] src/test_journal.cpp::jtDlError
-[ ] src/test_journal.cpp::void
-[ ] src/test_journal.cpp::jtDlClose
-[ ] src/test_journal.cpp::jtRandomness
-[ ] src/test_journal.cpp::jtSleep
-[ ] src/test_journal.cpp::jtCurrentTime
-[ ] src/test_journal.cpp::jtCurrentTimeInt64
-[ ] src/test_journal.cpp::jtGetLastError
-[ ] src/test_journal.cpp::jt_register
-[ ] src/test_journal.cpp::jt_unregister
+[x] src/test_journal.cpp::enterJtMutex
+[x] src/test_journal.cpp::leaveJtMutex
+[x] src/test_journal.cpp::stop_ioerr_simulation
+[x] src/test_journal.cpp::start_ioerr_simulation
+[x] src/test_journal.cpp::closeTransaction
+[x] src/test_journal.cpp::jtClose
+[x] src/test_journal.cpp::locateDatabaseHandle
+[x] src/test_journal.cpp::decodeUint32
+[x] src/test_journal.cpp::genCksum
+[x] src/test_journal.cpp::openTransaction
+[x] src/test_journal.cpp::readJournalFile
+[x] src/test_journal.cpp::jtTruncate
+[x] src/test_journal.cpp::jtSync
+[x] src/test_journal.cpp::jtFileSize
+[x] src/test_journal.cpp::jtLock
+[x] src/test_journal.cpp::jtUnlock
+[x] src/test_journal.cpp::jtCheckReservedLock
+[x] src/test_journal.cpp::jtFileControl
+[x] src/test_journal.cpp::jtSectorSize
+[x] src/test_journal.cpp::jtDeviceCharacteristics
+[x] src/test_journal.cpp::jtDelete
+[x] src/test_journal.cpp::jtDlOpen
+[x] src/test_journal.cpp::jtDlError
+[x] src/test_journal.cpp::void
+[x] src/test_journal.cpp::jtDlClose
+[x] src/test_journal.cpp::jtRandomness
+[x] src/test_journal.cpp::jtSleep
+[x] src/test_journal.cpp::jtCurrentTime
+[x] src/test_journal.cpp::jtCurrentTimeInt64
+[x] src/test_journal.cpp::jtGetLastError
+[x] src/test_journal.cpp::jt_register
+[x] src/test_journal.cpp::jt_unregister
 [ ] src/test_malloc.cpp::sqlite3Fault
 [ ] src/test_malloc.cpp::sqlite3FirstFault
 [ ] src/test_malloc.cpp::faultsimStep
