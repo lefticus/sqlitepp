@@ -1714,8 +1714,8 @@
 [x] src/test4.cpp::do_finalize
 [x] src/test4.cpp::Sqlitetest4_Init
 [x] src/test4.cpp::Sqlitetest4_Init
-[ ] src/test5.cpp::name_to_enc
-[ ] src/test5.cpp::Sqlitetest5_Init
+[x] src/test5.cpp::name_to_enc
+[x] src/test5.cpp::Sqlitetest5_Init
 [ ] src/test6.cpp::crash_malloc
 [ ] src/test6.cpp::crash_free
 [ ] src/test6.cpp::crash_realloc

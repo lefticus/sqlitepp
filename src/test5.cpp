@@ -100,7 +100,7 @@ static u8 name_to_enc(Tcl_Interp *interp, Tcl_Obj *pObj){
     { 0, 0 }
   };
   struct EncName *pEnc;
-  char *z = Tcl_GetString(pObj);
+  const char *z = Tcl_GetString(pObj);
   for(pEnc=&encnames[0]; pEnc->zName; pEnc++){
     if( 0==sqlite3StrICmp(z, pEnc->zName) ){
       break;
@@ -209,8 +209,7 @@ int Sqlitetest5_Init(Tcl_Interp *interp){
     { "test_translate",          (Tcl_ObjCmdProc*)test_translate     },
     { "translate_selftest",      (Tcl_ObjCmdProc*)test_translate_selftest},
   };
-  int i;
-  for(i=0; i<(int)(sizeof(aCmd)/sizeof(aCmd[0])); i++){
+  for(int i=0; i<(int)(sizeof(aCmd)/sizeof(aCmd[0])); i++){
     Tcl_CreateObjCommand(interp, aCmd[i].zName, aCmd[i].xProc, 0, 0);
   }
   return SQLITE_OK;
