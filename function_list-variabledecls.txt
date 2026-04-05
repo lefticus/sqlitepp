@@ -2317,12 +2317,20 @@
 [x] src/test_quota.cpp::sqlite3_quota_remove
 [x] src/test_quota.cpp::tclCallbackDestructor
 [x] src/test_quota.cpp::Sqlitequota_Init
+<<<<<<< HEAD
 >>>>>>> 8197803b1 (Move variable declarations down and add const: src/test_quota.cpp)
 [ ] src/test_rtree.cpp::circle_del
 [ ] src/test_rtree.cpp::circle_query_func
 [ ] src/test_rtree.cpp::bfs_query_func
 [ ] src/test_rtree.cpp::cube_context_free
 [ ] src/test_rtree.cpp::Sqlitetestrtree_Init
+=======
+[x] src/test_rtree.cpp::circle_del
+[x] src/test_rtree.cpp::circle_query_func
+[x] src/test_rtree.cpp::bfs_query_func
+[x] src/test_rtree.cpp::cube_context_free
+[x] src/test_rtree.cpp::Sqlitetestrtree_Init
+>>>>>>> def1a02b4 (Move variable declarations down and add const: src/test_rtree.cpp)
 [ ] src/test_schema.cpp::schemaDestroy
 [ ] src/test_schema.cpp::schemaOpen
 [ ] src/test_schema.cpp::schemaClose

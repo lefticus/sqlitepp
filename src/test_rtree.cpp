@@ -162,17 +162,12 @@ static int circle_geom(
 **          Qcircle('x:X y:Y r:R e:ETYPE')   -- Single string parameter
 */
 static int circle_query_func(sqlite3_rtree_query_info *p){
-  int i;                          /* Iterator variable */
-  Circle *pCircle;                /* Structure defining circular region */
-  double xmin, xmax;              /* X dimensions of box being tested */
-  double ymin, ymax;              /* X dimensions of box being tested */
+  const double xmin = p->aCoord[0];
+  const double xmax = p->aCoord[1];
+  const double ymin = p->aCoord[2];
+  const double ymax = p->aCoord[3];
+  Circle *pCircle = (Circle *)p->pUser;
   int nWithin = 0;                /* Number of corners inside the circle */
-
-  xmin = p->aCoord[0];
-  xmax = p->aCoord[1];
-  ymin = p->aCoord[2];
-  ymax = p->aCoord[3];
-  pCircle = (Circle *)p->pUser;
   if( pCircle==0 ){
     /* If pUser is still 0, then the parameter values have not been tested
     ** for correctness or stored into a Circle structure yet. Do this now. */
@@ -254,11 +249,11 @@ static int circle_query_func(sqlite3_rtree_query_info *p){
   ** inside the circular region. If they do, then the bounding-box does
   ** intersect the region of interest. Set the output variable to true and
   ** return SQLITE_OK in this case. */
-  for(i=0; i<4; i++){
-    double x = (i&0x01) ? xmax : xmin;
-    double y = (i&0x02) ? ymax : ymin;
+  for(int i=0; i<4; i++){
+    const double x = (i&0x01) ? xmax : xmin;
+    const double y = (i&0x02) ? ymax : ymin;
     double d2;
-    
+
     d2  = (x-pCircle->centerx)*(x-pCircle->centerx);
     d2 += (y-pCircle->centery)*(y-pCircle->centery);
     if( d2<(pCircle->radius*pCircle->radius) ) nWithin++;
@@ -269,7 +264,7 @@ static int circle_query_func(sqlite3_rtree_query_info *p){
   ** cover part of the circular region, set the output variable to true
   ** and return SQLITE_OK. */
   if( nWithin==0 ){
-    for(i=0; i<2; i++){
+    for(int i=0; i<2; i++){
       if( xmin<=pCircle->aBox[i].xmin 
        && xmax>=pCircle->aBox[i].xmax 
        && ymin<=pCircle->aBox[i].ymin 
@@ -323,18 +318,15 @@ static int circle_query_func(sqlite3_rtree_query_info *p){
 ** It returns all entries whose bounding boxes overlap with $x0,$x1,$y0,$y1.
 */
 static int bfs_query_func(sqlite3_rtree_query_info *p){
-  double x0,x1,y0,y1;        /* Dimensions of box being tested */
-  double bx0,bx1,by0,by1;    /* Boundary of the query function */
-
   if( p->nParam!=4 ) return SQLITE_ERROR;
-  x0 = p->aCoord[0];
-  x1 = p->aCoord[1];
-  y0 = p->aCoord[2];
-  y1 = p->aCoord[3];
-  bx0 = p->aParam[0];
-  bx1 = p->aParam[1];
-  by0 = p->aParam[2];
-  by1 = p->aParam[3];
+  const double x0 = p->aCoord[0];
+  const double x1 = p->aCoord[1];
+  const double y0 = p->aCoord[2];
+  const double y1 = p->aCoord[3];
+  const double bx0 = p->aParam[0];
+  const double bx1 = p->aParam[1];
+  const double by0 = p->aParam[2];
+  const double by1 = p->aParam[3];
   p->rScore = 100 - p->iLevel;
   if( p->eParentWithin==FULLY_WITHIN ){
     p->eWithin = FULLY_WITHIN;
