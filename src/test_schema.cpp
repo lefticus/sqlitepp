@@ -105,8 +105,7 @@ static int schemaCreate(
 */
 static int schemaOpen(sqlite3_vtab *pVTab, sqlite3_vtab_cursor **ppCursor){
   int rc = SQLITE_NOMEM;
-  schema_cursor *pCur;
-  pCur = (schema_cursor*)sqlite3_malloc(sizeof(schema_cursor));
+  schema_cursor *const pCur = (schema_cursor*)sqlite3_malloc(sizeof(schema_cursor));
   if( pCur ){
     memset(pCur, 0, sizeof(schema_cursor));
     *ppCursor = (sqlite3_vtab_cursor *)pCur;
@@ -119,7 +118,7 @@ static int schemaOpen(sqlite3_vtab *pVTab, sqlite3_vtab_cursor **ppCursor){
 ** Close a schema table cursor.
 */
 static int schemaClose(sqlite3_vtab_cursor *cur){
-  schema_cursor *pCur = (schema_cursor *)cur;
+  schema_cursor *const pCur = (schema_cursor *)cur;
   sqlite3_finalize(pCur->pDbList);
   sqlite3_finalize(pCur->pTableList);
   sqlite3_finalize(pCur->pColumnList);
@@ -131,7 +130,7 @@ static int schemaClose(sqlite3_vtab_cursor *cur){
 ** Retrieve a column of data.
 */
 static int schemaColumn(sqlite3_vtab_cursor *cur, sqlite3_context *ctx, int i){
-  schema_cursor *pCur = (schema_cursor *)cur;
+  schema_cursor *const pCur = (schema_cursor *)cur;
   switch( i ){
     case 0:
       sqlite3_result_value(ctx, sqlite3_column_value(pCur->pDbList, 1));
@@ -150,19 +149,19 @@ static int schemaColumn(sqlite3_vtab_cursor *cur, sqlite3_context *ctx, int i){
 ** Retrieve the current rowid.
 */
 static int schemaRowid(sqlite3_vtab_cursor *cur, sqlite_int64 *pRowid){
-  schema_cursor *pCur = (schema_cursor *)cur;
+  schema_cursor *const pCur = (schema_cursor *)cur;
   *pRowid = pCur->rowid;
   return SQLITE_OK;
 }
 
 static int finalize(sqlite3_stmt **ppStmt){
-  int rc = sqlite3_finalize(*ppStmt);
+  const int rc = sqlite3_finalize(*ppStmt);
   *ppStmt = 0;
   return rc;
 }
 
 static int schemaEof(sqlite3_vtab_cursor *cur){
-  schema_cursor *pCur = (schema_cursor *)cur;
+  schema_cursor *const pCur = (schema_cursor *)cur;
   return (pCur->pDbList ? 0 : 1);
 }
 
@@ -171,8 +170,8 @@ static int schemaEof(sqlite3_vtab_cursor *cur){
 */
 static int schemaNext(sqlite3_vtab_cursor *cur){
   int rc = SQLITE_OK;
-  schema_cursor *pCur = (schema_cursor *)cur;
-  schema_vtab *pVtab = (schema_vtab *)(cur->pVtab);
+  schema_cursor *const pCur = (schema_cursor *)cur;
+  schema_vtab *const pVtab = (schema_vtab *)(cur->pVtab);
   char *zSql = 0;
 
   while( !pCur->pColumnList || SQLITE_ROW!=sqlite3_step(pCur->pColumnList) ){
@@ -336,8 +335,7 @@ int Sqlitetestschema_Init(Tcl_Interp *interp){
   } aObjCmd[] = {
      { "register_schema_module", register_schema_module, 0 },
   };
-  int i;
-  for(i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
+  for(int i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
     Tcl_CreateObjCommand(interp, aObjCmd[i].zName, 
         aObjCmd[i].xProc, aObjCmd[i].clientData, 0);
   }

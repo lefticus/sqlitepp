@@ -2330,6 +2330,7 @@
 [x] src/test_rtree.cpp::bfs_query_func
 [x] src/test_rtree.cpp::cube_context_free
 [x] src/test_rtree.cpp::Sqlitetestrtree_Init
+<<<<<<< HEAD
 >>>>>>> def1a02b4 (Move variable declarations down and add const: src/test_rtree.cpp)
 [ ] src/test_schema.cpp::schemaDestroy
 [ ] src/test_schema.cpp::schemaOpen
@@ -2341,6 +2342,18 @@
 [ ] src/test_schema.cpp::schemaNext
 [ ] src/test_schema.cpp::schemaBestIndex
 [ ] src/test_schema.cpp::Sqlitetestschema_Init
+=======
+[x] src/test_schema.cpp::schemaDestroy
+[x] src/test_schema.cpp::schemaOpen
+[x] src/test_schema.cpp::schemaClose
+[x] src/test_schema.cpp::schemaColumn
+[x] src/test_schema.cpp::schemaRowid
+[x] src/test_schema.cpp::finalize
+[x] src/test_schema.cpp::schemaEof
+[x] src/test_schema.cpp::schemaNext
+[x] src/test_schema.cpp::schemaBestIndex
+[x] src/test_schema.cpp::Sqlitetestschema_Init
+>>>>>>> 74679f2ef (Move variable declarations down and add const: src/test_schema.cpp)
 [ ] src/test_sqllog.cpp::getProcessId
 [ ] src/test_sqllog.cpp::sqllog_isspace
 [ ] src/test_sqllog.cpp::sqllogTokenize
