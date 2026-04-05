@@ -3413,16 +3413,16 @@
 [x] src/where.cpp::showAllWhereLoops
 [x] src/where.cpp::whereReverseScanOrder
 [x] src/where.cpp::sqlite3WhereEnd
-[ ] src/wherecode.cpp::explainIndexColumnName
-[ ] src/wherecode.cpp::explainIndexRange
-[ ] src/wherecode.cpp::disableTerm
-[ ] src/wherecode.cpp::codeApplyAffinity
-[ ] src/wherecode.cpp::adjustOrderByCol
-[ ] src/wherecode.cpp::codeCursorHintCheckExpr
-[ ] src/wherecode.cpp::codeCursorHintIsOrFunction
-[ ] src/wherecode.cpp::codeCursorHintFixExpr
-[ ] src/wherecode.cpp::codeExprOrVector
-[ ] src/wherecode.cpp::whereLoopIsOneRow
+[x] src/wherecode.cpp::explainIndexColumnName
+[x] src/wherecode.cpp::explainIndexRange
+[x] src/wherecode.cpp::disableTerm
+[x] src/wherecode.cpp::codeApplyAffinity
+[x] src/wherecode.cpp::adjustOrderByCol
+[x] src/wherecode.cpp::codeCursorHintCheckExpr
+[x] src/wherecode.cpp::codeCursorHintIsOrFunction
+[x] src/wherecode.cpp::codeCursorHintFixExpr
+[x] src/wherecode.cpp::codeExprOrVector
+[x] src/wherecode.cpp::whereLoopIsOneRow
 [ ] src/whereexpr.cpp::whereOrInfoDelete
 [ ] src/whereexpr.cpp::whereAndInfoDelete
 [ ] src/whereexpr.cpp::whereClauseInsert

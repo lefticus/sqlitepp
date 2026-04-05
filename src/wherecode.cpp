@@ -85,10 +85,10 @@ static void explainAppendTerm(
 **   "a=? AND b>?"
 */
 static void explainIndexRange(StrAccum *pStr, WhereLoop *pLoop){
-  Index *pIndex = pLoop->u.btree.pIndex;
-  u16 nEq = pLoop->u.btree.nEq;
-  u16 nSkip = pLoop->nSkip;
-  int i, j;
+  Index *const pIndex = pLoop->u.btree.pIndex;
+  const u16 nEq = pLoop->u.btree.nEq;
+  const u16 nSkip = pLoop->nSkip;
+  int i;
 
   if( nEq==0 && (pLoop->wsFlags&(WHERE_BTM_LIMIT|WHERE_TOP_LIMIT))==0 ) return;
   sqlite3_str_append(pStr, " (", 2);
@@ -98,7 +98,7 @@ static void explainIndexRange(StrAccum *pStr, WhereLoop *pLoop){
     sqlite3_str_appendf(pStr, i>=nSkip ? "%s=?" : "ANY(%s)", z);
   }
 
-  j = i;
+  const int j = i;
   if( pLoop->wsFlags&WHERE_BTM_LIMIT ){
     explainAppendTerm(pStr, pIndex, pLoop->u.btree.nBtm, j, i, ">");
     i = 1;
@@ -455,7 +455,7 @@ static void disableTerm(WhereLevel *pLevel, WhereTerm *pTerm){
 ** to modify zAff after this routine returns.
 */
 static void codeApplyAffinity(Parse *pParse, int base, int n, char *zAff){
-  Vdbe *v = pParse->pVdbe;
+  Vdbe *const v = pParse->pVdbe;
   if( zAff==0 ){
     assert( pParse->db->mallocFailed );
     return;
@@ -1051,7 +1051,7 @@ struct CCurHint {
 ** accessed through the index.  If it cannot, then set pWalker->eCode to 1.
 */
 static int codeCursorHintCheckExpr(Walker *pWalker, Expr *pExpr){
-  struct CCurHint *pHint = pWalker->u.pCCurHint;
+  const struct CCurHint *pHint = pWalker->u.pCCurHint;
   assert( pHint->pIdx!=0 );
   if( pExpr->op==TK_COLUMN
    && pExpr->iTable==pHint->iTabCur
@@ -1114,11 +1114,10 @@ static int codeCursorHintIsOrFunction(Walker *pWalker, Expr *pExpr){
 */
 static int codeCursorHintFixExpr(Walker *pWalker, Expr *pExpr){
   int rc = WRC_Continue;
-  int reg;
-  struct CCurHint *pHint = pWalker->u.pCCurHint;
+  const struct CCurHint *pHint = pWalker->u.pCCurHint;
   if( pExpr->op==TK_COLUMN ){
     if( pExpr->iTable!=pHint->iTabCur ){
-      reg = ++pWalker->pParse->nMem;   /* Register for column value */
+      int reg = ++pWalker->pParse->nMem;   /* Register for column value */
       reg = sqlite3ExprCodeTarget(pWalker->pParse, pExpr, reg);
       pExpr->op = TK_REGISTER;
       pExpr->iTable = reg;
@@ -1129,7 +1128,7 @@ static int codeCursorHintFixExpr(Walker *pWalker, Expr *pExpr){
     }
   }else if( pExpr->pAggInfo ){
     rc = WRC_Prune;
-    reg = ++pWalker->pParse->nMem;   /* Register for column value */
+    int reg = ++pWalker->pParse->nMem;   /* Register for column value */
     reg = sqlite3ExprCodeTarget(pWalker->pParse, pExpr, reg);
     pExpr->op = TK_REGISTER;
     pExpr->iTable = reg;
@@ -1322,20 +1321,17 @@ static void codeExprOrVector(Parse *pParse, Expr *p, int iReg, int nReg){
   if( p && sqlite3ExprIsVector(p) ){
 #ifndef SQLITE_OMIT_SUBQUERY
     if( ExprUseXSelect(p) ){
-      Vdbe *v = pParse->pVdbe;
-      int iSelect;
+      Vdbe *const v = pParse->pVdbe;
       assert( p->op==TK_SELECT );
-      iSelect = sqlite3CodeSubselect(pParse, p);
+      const int iSelect = sqlite3CodeSubselect(pParse, p);
       sqlite3VdbeAddOp3(v, OP_Copy, iSelect, iReg, nReg-1);
     }else
 #endif
     {
-      int i;
-      const ExprList *pList;
       assert( ExprUseXList(p) );
-      pList = p->x.pList;
+      const ExprList *const pList = p->x.pList;
       assert( nReg<=pList->nExpr );
-      for(i=0; i<nReg; i++){
+      for(int i=0; i<nReg; i++){
         sqlite3ExprCode(pParse, pList->a[i].pExpr, iReg+i);
       }
     }
@@ -1448,8 +1444,7 @@ static int whereLoopIsOneRow(WhereLoop *pLoop){
    && pLoop->nSkip==0
    && pLoop->u.btree.nEq==pLoop->u.btree.pIndex->nKeyCol
   ){
-    int ii;
-    for(ii=0; ii<pLoop->u.btree.nEq; ii++){
+    for(int ii=0; ii<pLoop->u.btree.nEq; ii++){
       if( pLoop->aLTerm[ii]->eOperator & (WO_IS|WO_ISNULL) ){
         return 0;
       }
