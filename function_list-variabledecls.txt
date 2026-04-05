@@ -1447,32 +1447,32 @@
 [x] src/pcache.cpp::sqlite3PCachePercentDirty
 [x] src/pcache.cpp::sqlite3PCacheIsDirty
 [x] src/pcache.cpp::sqlite3PcacheIterateDirty
-[ ] src/pcache1.cpp::sqlite3PCacheBufferSetup
-[ ] src/pcache1.cpp::pcache1InitBulk
-[ ] src/pcache1.cpp::pcache1Alloc
-[ ] src/pcache1.cpp::pcache1Free
-[ ] src/pcache1.cpp::pcache1MemSize
-[ ] src/pcache1.cpp::pcache1AllocPage
-[ ] src/pcache1.cpp::pcache1FreePage
-[ ] src/pcache1.cpp::sqlite3PageMalloc
-[ ] src/pcache1.cpp::sqlite3PageFree
-[ ] src/pcache1.cpp::pcache1UnderMemoryPressure
-[ ] src/pcache1.cpp::pcache1ResizeHash
-[ ] src/pcache1.cpp::pcache1PinPage
-[ ] src/pcache1.cpp::pcache1RemoveFromHash
-[ ] src/pcache1.cpp::pcache1EnforceMaxPage
-[ ] src/pcache1.cpp::pcache1Init
-[ ] src/pcache1.cpp::pcache1Shutdown
-[ ] src/pcache1.cpp::pcache1Create
-[ ] src/pcache1.cpp::pcache1Cachesize
-[ ] src/pcache1.cpp::pcache1Shrink
-[ ] src/pcache1.cpp::pcache1Pagecount
-[ ] src/pcache1.cpp::pcache1Truncate
-[ ] src/pcache1.cpp::pcache1Destroy
-[ ] src/pcache1.cpp::sqlite3PCacheSetDefault
-[ ] src/pcache1.cpp::sqlite3HeaderSizePcache1
-[ ] src/pcache1.cpp::sqlite3Pcache1Mutex
-[ ] src/pcache1.cpp::sqlite3PcacheReleaseMemory
+[x] src/pcache1.cpp::sqlite3PCacheBufferSetup
+[x] src/pcache1.cpp::pcache1InitBulk
+[x] src/pcache1.cpp::pcache1Alloc
+[x] src/pcache1.cpp::pcache1Free
+[x] src/pcache1.cpp::pcache1MemSize
+[x] src/pcache1.cpp::pcache1AllocPage
+[x] src/pcache1.cpp::pcache1FreePage
+[x] src/pcache1.cpp::sqlite3PageMalloc
+[x] src/pcache1.cpp::sqlite3PageFree
+[x] src/pcache1.cpp::pcache1UnderMemoryPressure
+[x] src/pcache1.cpp::pcache1ResizeHash
+[x] src/pcache1.cpp::pcache1PinPage
+[x] src/pcache1.cpp::pcache1RemoveFromHash
+[x] src/pcache1.cpp::pcache1EnforceMaxPage
+[x] src/pcache1.cpp::pcache1Init
+[x] src/pcache1.cpp::pcache1Shutdown
+[x] src/pcache1.cpp::pcache1Create
+[x] src/pcache1.cpp::pcache1Cachesize
+[x] src/pcache1.cpp::pcache1Shrink
+[x] src/pcache1.cpp::pcache1Pagecount
+[x] src/pcache1.cpp::pcache1Truncate
+[x] src/pcache1.cpp::pcache1Destroy
+[x] src/pcache1.cpp::sqlite3PCacheSetDefault
+[x] src/pcache1.cpp::sqlite3HeaderSizePcache1
+[x] src/pcache1.cpp::sqlite3Pcache1Mutex
+[x] src/pcache1.cpp::sqlite3PcacheReleaseMemory
 [ ] src/pragma.cpp::getSafetyLevel
 [ ] src/pragma.cpp::sqlite3GetBoolean
 [ ] src/pragma.cpp::getLockingMode
