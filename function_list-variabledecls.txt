@@ -2589,6 +2589,7 @@
 [x] src/threads.cpp::sqlite3ThreadJoin
 [x] src/threads.cpp::sqlite3ThreadJoin
 [x] src/threads.cpp::sqlite3ThreadJoin
+<<<<<<< HEAD
 >>>>>>> 1acfad96e (Move variable declarations down and add const: src/threads.cpp)
 [ ] src/tokenize.cpp::sqlite3IsIdChar
 [ ] src/tokenize.cpp::getToken
@@ -2598,6 +2599,16 @@
 [ ] src/tokenize.cpp::sqlite3GetToken
 [ ] src/tokenize.cpp::sqlite3RunParser
 [ ] src/tokenize.cpp::addSpaceSeparator
+=======
+[x] src/tokenize.cpp::sqlite3IsIdChar
+[x] src/tokenize.cpp::getToken
+[x] src/tokenize.cpp::analyzeWindowKeyword
+[x] src/tokenize.cpp::analyzeOverKeyword
+[x] src/tokenize.cpp::analyzeFilterKeyword
+[x] src/tokenize.cpp::sqlite3GetToken
+[x] src/tokenize.cpp::sqlite3RunParser
+[x] src/tokenize.cpp::addSpaceSeparator
+>>>>>>> 231035605 (Move variable declarations down and add const: src/tokenize.cpp)
 [ ] src/treeview.cpp::sqlite3TreeViewPush
 [ ] src/treeview.cpp::sqlite3TreeViewPop
 [ ] src/treeview.cpp::sqlite3TreeViewLine

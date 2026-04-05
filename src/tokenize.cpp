@@ -244,8 +244,7 @@ static int getToken(const unsigned char **pz){
 **   * the next token is TK_LP.
 */
 static int analyzeWindowKeyword(const unsigned char *z){
-  int t;
-  t = getToken(&z);
+  int t = getToken(&z);
   if( t!=TK_ID ) return TK_ID;
   t = getToken(&z);
   if( t!=TK_AS ) return TK_ID;
@@ -604,15 +603,13 @@ int sqlite3RunParser(Parse *pParse, const char *zSql){
   int tokenType;                  /* type of the next token */
   int lastTokenParsed = -1;       /* type of the previous token */
   sqlite3 *db = pParse->db;       /* The database connection */
-  i64 mxSqlLen;                   /* Max length of an SQL string */
-  Parse *pParentParse = 0;        /* Outer parse context, if any */
 #ifdef sqlite3Parser_ENGINEALWAYSONSTACK
   yyParser sEngine;    /* Space to hold the Lemon-generated Parser object */
 #endif
   VVA_ONLY( u8 startedWithOom = db->mallocFailed );
 
   assert( zSql!=0 );
-  mxSqlLen = db->aLimit[SQLITE_LIMIT_SQL_LENGTH];
+  i64 mxSqlLen = db->aLimit[SQLITE_LIMIT_SQL_LENGTH];
   if( db->nVdbeActive==0 ){
     AtomicStore(&db->u1.isInterrupted, 0);
   }
@@ -640,7 +637,7 @@ int sqlite3RunParser(Parse *pParse, const char *zSql){
   assert( pParse->pNewTrigger==0 );
   assert( pParse->nVar==0 );
   assert( pParse->pVList==0 );
-  pParentParse = db->pParse;
+  Parse *const pParentParse = db->pParse;
   db->pParse = pParse;
   while( 1 ){
     n = sqlite3GetToken((u8*)zSql, &tokenType);
