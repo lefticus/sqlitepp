@@ -1771,7 +1771,7 @@
 [x] src/test8.cpp::echoRollbackTo
 [x] src/test8.cpp::moduleDestroy
 [x] src/test8.cpp::Sqlitetest8_Init
-[ ] src/test9.cpp::Sqlitetest9_Init
+[x] src/test9.cpp::Sqlitetest9_Init
 [ ] src/test_autoext.cpp::Sqlitetest_autoext_Init
 [ ] src/test_backup.cpp::backupTestFinish
 [ ] src/test_backup.cpp::Sqlitetestbackup_Init
