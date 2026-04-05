@@ -1,0 +1,142 @@
+---
+# Clang-format configuration for SQLite coding style
+# Generated for clang-format-19
+
+Language: Cpp
+BasedOnStyle: LLVM
+
+# Indentation: 2 spaces, no tabs
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never
+ContinuationIndentWidth: 4
+
+# Column limit: SQLite strictly uses 80 columns
+ColumnLimit: 80
+
+# Brace wrapping: SQLite uses "attach" style - opening brace on same line
+# for everything (functions, if, else, for, while, switch, case)
+# }else{ with no spaces around else
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterCaseLabel: false
+  AfterClass: false
+  AfterControlStatement: Never
+  AfterEnum: false
+  AfterFunction: false
+  AfterNamespace: false
+  AfterStruct: false
+  AfterUnion: false
+  AfterExternBlock: false
+  BeforeCatch: false
+  BeforeElse: false
+  BeforeLambdaBody: false
+  BeforeWhile: false
+  IndentBraces: false
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+
+# No space before parens in control statements: if( not if (
+SpaceBeforeParens: Never
+
+# Spaces inside parentheses for control statements: if( x ) not if(x)
+# But NOT for function calls/declarations: f(x) not f( x )
+SpacesInParens: Custom
+SpacesInParensOptions:
+  InConditionalStatements: true
+  InCStyleCasts: false
+  InEmptyParentheses: false
+  Other: false
+
+# Pointer alignment: int *p (right-aligned, next to variable name)
+PointerAlignment: Right
+
+# Switch/case: case labels are indented within the switch
+IndentCaseLabels: true
+IndentCaseBlocks: false
+
+# Allow short constructs on a single line
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+AllowShortLoopsOnASingleLine: true
+AllowShortBlocksOnASingleLine: Empty
+AllowShortFunctionsOnASingleLine: All
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortEnumsOnASingleLine: true
+
+# Function declaration/definition style
+# SQLite puts return type on same line for simple functions,
+# but when parameters are long they wrap to next line with
+# continuation indent (not aligned to opening paren)
+AlignAfterOpenBracket: Align
+BinPackArguments: true
+BinPackParameters: true
+AllowAllParametersOfDeclarationOnNextLine: true
+AllowAllArgumentsOnNextLine: true
+
+# Return type stays on same line when possible
+AlwaysBreakAfterReturnType: None
+
+# Alignment
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+AlignConsecutiveMacros: false
+AlignEscapedNewlines: Left
+AlignOperands: Align
+AlignTrailingComments:
+  Kind: Always
+  OverEmptyLines: 0
+
+# Spaces
+SpaceAfterCStyleCast: false
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeSquareBrackets: false
+SpaceInEmptyBlock: false
+SpacesInSquareBrackets: false
+SpacesBeforeTrailingComments: 2
+SpacesInContainerLiterals: false
+
+# Preprocessor directives
+IndentPPDirectives: None
+
+# Comments: SQLite uses /* */ block comments with ** continuation
+# and occasional // comments
+ReflowComments: false
+
+# Keep empty lines as-is (SQLite sometimes uses multiple blank lines)
+MaxEmptyLinesToKeep: 3
+
+# Don't sort includes - SQLite has specific include ordering
+SortIncludes: Never
+
+# Penalties to guide line-breaking decisions
+PenaltyBreakAssignment: 25
+PenaltyBreakBeforeFirstCallParameter: 50
+PenaltyBreakComment: 300
+PenaltyBreakFirstLessLess: 120
+PenaltyBreakString: 1000
+PenaltyExcessCharacter: 1000000
+PenaltyReturnTypeOnItsOwnLine: 200
+
+# For statements: no space after ; in for loops like for(i=0; i<n; i++)
+SpaceBeforeRangeBasedForLoopColon: true
+
+# Indent inside extern "C" blocks
+IndentExternBlock: NoIndent
+
+# Don't break before binary operators (SQLite puts operator at end of line
+# or aligns multi-line conditions)
+BreakBeforeBinaryOperators: None
+
+# Multi-line condition alignment
+# SQLite aligns continuation lines with || and && at the start
+# e.g.:
+#   if( (pBtree->sharable==0)
+#    || (eLockType==READ_LOCK && ...)
+#   ){
+BreakBeforeTernaryOperators: true
+
+# Insert braces - never (SQLite has many brace-less single-line ifs)
+InsertBraces: false
+RemoveBracesLLVM: false
+...
