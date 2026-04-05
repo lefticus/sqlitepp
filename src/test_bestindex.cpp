@@ -248,7 +248,7 @@ static int tclConnect(
 
 /* The xDisconnect and xDestroy methods are also the same */
 static int tclDisconnect(sqlite3_vtab *pVtab){
-  tcl_vtab *pTab = (tcl_vtab*)pVtab;
+  tcl_vtab *const pTab = (tcl_vtab*)pVtab;
   while( pTab->pFindFunctionList ){
     TestFindFunction *p = pTab->pFindFunctionList;
     pTab->pFindFunctionList = p->pNext;
@@ -263,8 +263,7 @@ static int tclDisconnect(sqlite3_vtab *pVtab){
 ** Open a new tcl cursor.
 */
 static int tclOpen(sqlite3_vtab *pVTab, sqlite3_vtab_cursor **ppCursor){
-  tcl_cursor *pCur;
-  pCur = (tcl_cursor*)sqlite3_malloc(sizeof(tcl_cursor));
+  tcl_cursor *pCur = (tcl_cursor*)sqlite3_malloc(sizeof(tcl_cursor));
   if( pCur==0 ) return SQLITE_NOMEM;
   memset(pCur, 0, sizeof(tcl_cursor));
   *ppCursor = &pCur->base;
@@ -275,7 +274,7 @@ static int tclOpen(sqlite3_vtab *pVTab, sqlite3_vtab_cursor **ppCursor){
 ** Close a tcl cursor.
 */
 static int tclClose(sqlite3_vtab_cursor *cur){
-  tcl_cursor *pCur = (tcl_cursor *)cur;
+  tcl_cursor *const pCur = (tcl_cursor *)cur;
   if( pCur ){
     sqlite3_finalize(pCur->pStmt);
     sqlite3_free(pCur);
@@ -284,7 +283,7 @@ static int tclClose(sqlite3_vtab_cursor *cur){
 }
 
 static int tclNext(sqlite3_vtab_cursor *pVtabCursor){
-  tcl_cursor *pCsr = (tcl_cursor*)pVtabCursor;
+  tcl_cursor *const pCsr = (tcl_cursor*)pVtabCursor;
   if( pCsr->pStmt ){
     tcl_vtab *pTab = (tcl_vtab*)(pVtabCursor->pVtab);
     int rc = sqlite3_step(pCsr->pStmt);
@@ -407,13 +406,13 @@ static int tclColumn(
 }
 
 static int tclRowid(sqlite3_vtab_cursor *pVtabCursor, sqlite_int64 *pRowid){
-  tcl_cursor *pCsr = (tcl_cursor*)pVtabCursor;
+  tcl_cursor *const pCsr = (tcl_cursor*)pVtabCursor;
   *pRowid = sqlite3_column_int64(pCsr->pStmt, 0);
   return SQLITE_OK;
 }
 
 static int tclEof(sqlite3_vtab_cursor *pVtabCursor){
-  tcl_cursor *pCsr = (tcl_cursor*)pVtabCursor;
+  const tcl_cursor *pCsr = (const tcl_cursor*)pVtabCursor;
   return (pCsr->pStmt==0);
 }
 
@@ -645,9 +644,8 @@ static int tclBestIndex(sqlite3_vtab *tab, sqlite3_index_info *pIdxInfo){
 
   static int iNext = 43;
   char zHdl[24];
-  Tcl_Obj *pScript;
 
-  pScript = Tcl_DuplicateObj(pTab->pCmd);
+  Tcl_Obj *pScript = Tcl_DuplicateObj(pTab->pCmd);
   Tcl_IncrRefCount(pScript);
   Tcl_ListObjAppendElement(interp, pScript, Tcl_NewStringObj("xBestIndex", -1));
 
@@ -745,16 +743,13 @@ static int tclBestIndex(sqlite3_vtab *tab, sqlite3_index_info *pIdxInfo){
 static void tclFunction(sqlite3_context *pCtx, int nArg, sqlite3_value **apArg){
   TestFindFunction *p = (TestFindFunction*)sqlite3_user_data(pCtx);
   Tcl_Interp *interp = p->pTab->interp;
-  Tcl_Obj *pScript = 0;
-  Tcl_Obj *pRet = 0;
-  int ii;
 
-  pScript = Tcl_DuplicateObj(p->pTab->pCmd);
+  Tcl_Obj *pScript = Tcl_DuplicateObj(p->pTab->pCmd);
   Tcl_IncrRefCount(pScript);
   Tcl_ListObjAppendElement(interp, pScript, Tcl_NewStringObj("function", -1));
   Tcl_ListObjAppendElement(interp, pScript, Tcl_NewStringObj(p->zName, -1));
 
-  for(ii=0; ii<nArg; ii++){
+  for(int ii=0; ii<nArg; ii++){
     const char *zArg = (const char*)sqlite3_value_text(apArg[ii]);
     Tcl_ListObjAppendElement(interp, pScript,
         (zArg ? Tcl_NewStringObj(zArg, -1) : Tcl_NewObj())
@@ -763,7 +758,7 @@ static void tclFunction(sqlite3_context *pCtx, int nArg, sqlite3_value **apArg){
   Tcl_EvalObjEx(interp, pScript, TCL_EVAL_GLOBAL);
   Tcl_DecrRefCount(pScript);
 
-  pRet = Tcl_GetObjResult(interp);
+  Tcl_Obj *const pRet = Tcl_GetObjResult(interp);
   sqlite3_result_text(pCtx, Tcl_GetString(pRet), -1, SQLITE_TRANSIENT);
 }
 
@@ -916,7 +911,7 @@ static sqlite3_module tclModuleUpdate = {
 extern int getDbPointer(Tcl_Interp *interp, const char *zA, sqlite3 **ppDb);
 
 static void delTestVtabCtx(void *p){
-  TestVtabContext *pCtx = (TestVtabContext*)p;
+  TestVtabContext *const pCtx = (TestVtabContext*)p;
   if( pCtx->pDefault ){
     Tcl_DecrRefCount(pCtx->pDefault);
   }
@@ -971,8 +966,7 @@ int Sqlitetesttcl_Init(Tcl_Interp *interp){
   } aObjCmd[] = {
      { "register_tcl_module",   register_tcl_module, 0 },
   };
-  int i;
-  for(i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
+  for(int i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
     Tcl_CreateObjCommand(interp, aObjCmd[i].zName, 
         aObjCmd[i].xProc, aObjCmd[i].clientData, 0);
   }

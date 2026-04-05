@@ -1775,17 +1775,17 @@
 [x] src/test_autoext.cpp::Sqlitetest_autoext_Init
 [x] src/test_backup.cpp::backupTestFinish
 [x] src/test_backup.cpp::Sqlitetestbackup_Init
-[ ] src/test_bestindex.cpp::tclDequote
-[ ] src/test_bestindex.cpp::tclDisconnect
-[ ] src/test_bestindex.cpp::tclOpen
-[ ] src/test_bestindex.cpp::tclClose
-[ ] src/test_bestindex.cpp::tclNext
-[ ] src/test_bestindex.cpp::tclRowid
-[ ] src/test_bestindex.cpp::tclEof
-[ ] src/test_bestindex.cpp::tclBestIndex
-[ ] src/test_bestindex.cpp::tclFunction
-[ ] src/test_bestindex.cpp::delTestVtabCtx
-[ ] src/test_bestindex.cpp::Sqlitetesttcl_Init
+[x] src/test_bestindex.cpp::tclDequote
+[x] src/test_bestindex.cpp::tclDisconnect
+[x] src/test_bestindex.cpp::tclOpen
+[x] src/test_bestindex.cpp::tclClose
+[x] src/test_bestindex.cpp::tclNext
+[x] src/test_bestindex.cpp::tclRowid
+[x] src/test_bestindex.cpp::tclEof
+[x] src/test_bestindex.cpp::tclBestIndex
+[x] src/test_bestindex.cpp::tclFunction
+[x] src/test_bestindex.cpp::delTestVtabCtx
+[x] src/test_bestindex.cpp::Sqlitetesttcl_Init
 [ ] src/test_blob.cpp::ptrToText
 [ ] src/test_blob.cpp::blobStringFromObj
 [ ] src/test_blob.cpp::Sqlitetest_blob_Init
