@@ -47,9 +47,8 @@ int SQLITE_TCLAPI sqlite3BtreeSharedCacheReport(
 */
 void sqlite3BtreeCursorList(Btree *p){
 #ifdef SQLITE_DEBUG
-  BtCursor *pCur;
-  BtShared *pBt = p->pBt;
-  for(pCur=pBt->pCursor; pCur; pCur=pCur->pNext){
+  BtShared *const pBt = p->pBt;
+  for(BtCursor *pCur=pBt->pCursor; pCur; pCur=pCur->pNext){
     MemPage *pPage = pCur->apPage[pCur->iPage];
     const char *zMode = (pCur->curFlags & BTCF_WriteFlag) ? "rw" : "ro";
     sqlite3DebugPrintf("CURSOR %p rooted at %4d(%s) currently at %d.%d%s\n",
