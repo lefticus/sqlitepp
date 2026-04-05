@@ -55,16 +55,14 @@ static sqlite3 *SQLITE_WSD sqlite3BlockedList = 0;
 **      set to db. This is used when closing connection db.
 */
 static void checkListProperties(sqlite3 *db){
-  sqlite3 *p;
-  for(p=sqlite3BlockedList; p; p=p->pNextBlocked){
+  for(sqlite3 *p=sqlite3BlockedList; p; p=p->pNextBlocked){
     int seen = 0;
-    sqlite3 *p2;
 
     /* Verify property (1) */
     assert( p->pUnlockConnection || p->pBlockingConnection );
 
     /* Verify property (2) */
-    for(p2=sqlite3BlockedList; p2!=p; p2=p2->pNextBlocked){
+    for(sqlite3 *p2=sqlite3BlockedList; p2!=p; p2=p2->pNextBlocked){
       if( p2->xUnlockNotify==p->xUnlockNotify ) seen = 1;
       assert( p2->xUnlockNotify==p->xUnlockNotify || !seen );
       assert( db==0 || p->pUnlockConnection!=db );
@@ -81,9 +79,8 @@ static void checkListProperties(sqlite3 *db){
 ** db is not currently a part of the list, this function is a no-op.
 */
 static void removeFromBlockedList(sqlite3 *db){
-  sqlite3 **pp;
   assertMutexHeld();
-  for(pp=&sqlite3BlockedList; *pp; pp = &(*pp)->pNextBlocked){
+  for(sqlite3 **pp=&sqlite3BlockedList; *pp; pp = &(*pp)->pNextBlocked){
     if( *pp==db ){
       *pp = (*pp)->pNextBlocked;
       break;
@@ -96,11 +93,11 @@ static void removeFromBlockedList(sqlite3 *db){
 ** that it is not already a part of the list.
 */
 static void addToBlockedList(sqlite3 *db){
-  sqlite3 **pp;
   assertMutexHeld();
+  sqlite3 **pp;
   for(
-    pp=&sqlite3BlockedList; 
-    *pp && (*pp)->xUnlockNotify!=db->xUnlockNotify; 
+    pp=&sqlite3BlockedList;
+    *pp && (*pp)->xUnlockNotify!=db->xUnlockNotify;
     pp=&(*pp)->pNextBlocked
   );
   db->pNextBlocked = *pp;
@@ -229,16 +226,14 @@ void sqlite3ConnectionBlocked(sqlite3 *db, sqlite3 *pBlocker){
 void sqlite3ConnectionUnlocked(sqlite3 *db){
   void (*xUnlockNotify)(void **, int) = 0; /* Unlock-notify cb to invoke */
   int nArg = 0;                            /* Number of entries in aArg[] */
-  sqlite3 **pp;                            /* Iterator variable */
-  void **aArg;               /* Arguments to the unlock callback */
   void **aDyn = 0;           /* Dynamically allocated space for aArg[] */
   void *aStatic[16];         /* Starter space for aArg[].  No malloc required */
+  void **aArg = aStatic;    /* Arguments to the unlock callback */
 
-  aArg = aStatic;
   enterMutex();         /* Enter STATIC_MAIN mutex */
 
   /* This loop runs once for each entry in the blocked-connections list. */
-  for(pp=&sqlite3BlockedList; *pp; /* no-op */ ){
+  for(sqlite3 **pp=&sqlite3BlockedList; *pp; /* no-op */ ){
     sqlite3 *p = *pp;
 
     /* Step 1. */

@@ -1010,14 +1010,14 @@
 [x] src/mutex_w32.cpp::winMutexTry
 [x] src/mutex_w32.cpp::winMutexLeave
 [x] src/mutex_w32.cpp::sqlite3DefaultMutex
-[ ] src/notify.cpp::checkListProperties
-[ ] src/notify.cpp::removeFromBlockedList
-[ ] src/notify.cpp::addToBlockedList
-[ ] src/notify.cpp::enterMutex
-[ ] src/notify.cpp::leaveMutex
-[ ] src/notify.cpp::sqlite3ConnectionBlocked
-[ ] src/notify.cpp::sqlite3ConnectionUnlocked
-[ ] src/notify.cpp::sqlite3ConnectionClosed
+[x] src/notify.cpp::checkListProperties
+[x] src/notify.cpp::removeFromBlockedList
+[x] src/notify.cpp::addToBlockedList
+[x] src/notify.cpp::enterMutex
+[x] src/notify.cpp::leaveMutex
+[x] src/notify.cpp::sqlite3ConnectionBlocked
+[x] src/notify.cpp::sqlite3ConnectionUnlocked
+[x] src/notify.cpp::sqlite3ConnectionClosed
 [ ] src/os.cpp::sqlite3OsClose
 [ ] src/os.cpp::sqlite3OsRead
 [ ] src/os.cpp::sqlite3OsWrite
