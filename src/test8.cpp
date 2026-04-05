@@ -91,11 +91,10 @@ struct echo_cursor {
 };
 
 static int simulateVtabError(echo_vtab *p, const char *zMethod){
-  const char *zErr;
   char zVarname[128];
   zVarname[127] = '\0';
   sqlite3_snprintf(127, zVarname, "echo_module_fail(%s,%s)", zMethod, p->zTableName);
-  zErr = Tcl_GetVar(p->interp, zVarname, TCL_GLOBAL_ONLY);
+  const char *zErr = Tcl_GetVar(p->interp, zVarname, TCL_GLOBAL_ONLY);
   if( zErr ){
     p->base.zErrMsg = sqlite3_mprintf("echo-vtab-error: %s", zErr);
   }
@@ -116,10 +115,8 @@ static int simulateVtabError(echo_vtab *p, const char *zMethod){
 **     `mno`   becomes   mno
 */
 static void dequoteString(char *z){
-  int quote;
-  int i, j;
   if( z==0 ) return;
-  quote = z[0];
+  int quote = z[0];
   switch( quote ){
     case '\'':  break;
     case '"':   break;
@@ -127,7 +124,7 @@ static void dequoteString(char *z){
     case '[':   quote = ']';  break;  /* For MS SqlServer compatibility */
     default:    return;
   }
-  for(i=1, j=0; z[i]; i++){
+  for(int i=1, j=0; z[i]; i++){
     if( z[i]==quote ){
       if( z[i+1]==quote ){
         z[j++] = quote;
@@ -307,7 +304,7 @@ get_index_array_out:
 ** the string element zArg to that list in interpreter interp.
 */
 static void appendToEchoModule(Tcl_Interp *interp, const char *zArg){
-  int flags = (TCL_APPEND_VALUE | TCL_LIST_ELEMENT | TCL_GLOBAL_ONLY);
+  const int flags = (TCL_APPEND_VALUE | TCL_LIST_ELEMENT | TCL_GLOBAL_ONLY);
   Tcl_SetVar(interp, "echo_module", (zArg?zArg:""), flags);
 }
 
@@ -551,11 +548,10 @@ static int echoDestroy(sqlite3_vtab *pVtab){
 ** Echo virtual table module xOpen method.
 */
 static int echoOpen(sqlite3_vtab *pVTab, sqlite3_vtab_cursor **ppCursor){
-  echo_cursor *pCur;
   if( simulateVtabError((echo_vtab *)pVTab, "xOpen") ){
     return SQLITE_ERROR;
   }
-  pCur = (echo_cursor*)sqlite3MallocZero(sizeof(echo_cursor));
+  echo_cursor *const pCur = (echo_cursor*)sqlite3MallocZero(sizeof(echo_cursor));
   *ppCursor = (sqlite3_vtab_cursor *)pCur;
   return (pCur ? SQLITE_OK : SQLITE_NOMEM);
 }
@@ -564,12 +560,11 @@ static int echoOpen(sqlite3_vtab *pVTab, sqlite3_vtab_cursor **ppCursor){
 ** Echo virtual table module xClose method.
 */
 static int echoClose(sqlite3_vtab_cursor *cur){
-  int rc;
-  echo_cursor *pCur = (echo_cursor *)cur;
-  sqlite3_stmt *pStmt = pCur->pStmt;
+  echo_cursor *const pCur = (echo_cursor *)cur;
+  sqlite3_stmt *const pStmt = pCur->pStmt;
   pCur->pStmt = 0;
   sqlite3_free(pCur);
-  rc = sqlite3_finalize(pStmt);
+  const int rc = sqlite3_finalize(pStmt);
   return rc;
 }
 
@@ -586,7 +581,7 @@ static int echoEof(sqlite3_vtab_cursor *cur){
 */
 static int echoNext(sqlite3_vtab_cursor *cur){
   int rc = SQLITE_OK;
-  echo_cursor *pCur = (echo_cursor *)cur;
+  echo_cursor *const pCur = (echo_cursor *)cur;
 
   if( simulateVtabError((echo_vtab *)(cur->pVtab), "xNext") ){
     return SQLITE_ERROR;
@@ -609,8 +604,8 @@ static int echoNext(sqlite3_vtab_cursor *cur){
 ** Echo virtual table module xColumn method.
 */
 static int echoColumn(sqlite3_vtab_cursor *cur, sqlite3_context *ctx, int i){
-  int iCol = i + 1;
-  sqlite3_stmt *pStmt = ((echo_cursor *)cur)->pStmt;
+  const int iCol = i + 1;
+  sqlite3_stmt *const pStmt = ((echo_cursor *)cur)->pStmt;
 
   if( simulateVtabError((echo_vtab *)(cur->pVtab), "xColumn") ){
     return SQLITE_ERROR;
@@ -629,7 +624,7 @@ static int echoColumn(sqlite3_vtab_cursor *cur, sqlite3_context *ctx, int i){
 ** Echo virtual table module xRowid method.
 */
 static int echoRowid(sqlite3_vtab_cursor *cur, sqlite_int64 *pRowid){
-  sqlite3_stmt *pStmt = ((echo_cursor *)cur)->pStmt;
+  sqlite3_stmt *const pStmt = ((echo_cursor *)cur)->pStmt;
 
   if( simulateVtabError((echo_vtab *)(cur->pVtab), "xRowid") ){
     return SQLITE_ERROR;
@@ -650,8 +645,7 @@ static int echoRowid(sqlite3_vtab_cursor *cur, sqlite_int64 *pRowid){
 */
 static int hashString(const char *zString){
   u32 val = 0;
-  int ii;
-  for(ii=0; zString[ii]; ii++){
+  for(int ii=0; zString[ii]; ii++){
     val = (val << 3) + (int)zString[ii];
   }
   return (int)(val&0x7fffffff);
@@ -730,7 +724,7 @@ static void string_concat(char **pzStr, const char *zAppend, int doFree, int *pR
     zIn = 0;
   }else{
     if( zIn ){
-      char *zTemp = zIn;
+      char *const zTemp = zIn;
       zIn = sqlite3_mprintf("%s%s", zIn, zAppend);
       sqlite3_free(zTemp);
     }else{
@@ -761,8 +755,7 @@ static char *echoSelectList(echo_vtab *pTab, sqlite3_index_info *pIdxInfo){
   if( sqlite3_libversion_number()<3010000 ){
     zRet = sqlite3_mprintf(", *");
   }else{
-    int i;
-    for(i=0; i<pTab->nCol; i++){
+    for(int i=0; i<pTab->nCol; i++){
       if( pIdxInfo->colUsed & ((sqlite3_uint64)1 << (i>=63 ? 63 : i)) ){
         zRet = sqlite3_mprintf("%z, %s", zRet, pTab->aCol[i]);
       }else{
@@ -799,13 +792,12 @@ static char *echoSelectList(echo_vtab *pTab, sqlite3_index_info *pIdxInfo){
 static int echoBestIndex(sqlite3_vtab *tab, sqlite3_index_info *pIdxInfo){
   int ii;
   char *zQuery = 0;
-  char *zCol = 0;
   char *zNew;
   int nArg = 0;
   const char *zSep = "WHERE";
-  echo_vtab *pVtab = (echo_vtab *)tab;
+  echo_vtab *const pVtab = (echo_vtab *)tab;
   sqlite3_stmt *pStmt = 0;
-  Tcl_Interp *interp = pVtab->interp;
+  Tcl_Interp *const interp = pVtab->interp;
 
   int nRow = 0;
   int useIdx = 0;
@@ -847,7 +839,7 @@ static int echoBestIndex(sqlite3_vtab *tab, sqlite3_index_info *pIdxInfo){
     }
   }
 
-  zCol = echoSelectList(pVtab, pIdxInfo);
+  char *const zCol = echoSelectList(pVtab, pIdxInfo);
   if( !zCol ) return SQLITE_NOMEM;
   zQuery = sqlite3_mprintf("SELECT rowid%z FROM %Q", zCol, pVtab->zTableName);
   if( !zQuery ) return SQLITE_NOMEM;
@@ -1096,9 +1088,8 @@ int echoUpdate(
 ** to the $::echo_module Tcl variable.
 */
 static int echoTransactionCall(sqlite3_vtab *tab, const char *zCall){
-  char *z;
-  echo_vtab *pVtab = (echo_vtab *)tab;
-  z = sqlite3_mprintf("echo(%s)", pVtab->zTableName);
+  echo_vtab *const pVtab = (echo_vtab *)tab;
+  char *const z = sqlite3_mprintf("echo(%s)", pVtab->zTableName);
   if( z==0 ) return SQLITE_NOMEM;
   appendToEchoModule(pVtab->interp, zCall);
   appendToEchoModule(pVtab->interp, z);
@@ -1106,10 +1097,8 @@ static int echoTransactionCall(sqlite3_vtab *tab, const char *zCall){
   return SQLITE_OK;
 }
 static int echoBegin(sqlite3_vtab *tab){
-  int rc;
-  echo_vtab *pVtab = (echo_vtab *)tab;
-  Tcl_Interp *interp = pVtab->interp;
-  const char *zVal; 
+  echo_vtab *const pVtab = (echo_vtab *)tab;
+  Tcl_Interp *const interp = pVtab->interp;
 
   /* Ticket #3083 - do not start a transaction if we are already in
   ** a transaction */
@@ -1119,14 +1108,14 @@ static int echoBegin(sqlite3_vtab *tab){
     return SQLITE_ERROR;
   }
 
-  rc = echoTransactionCall(tab, "xBegin");
+  int rc = echoTransactionCall(tab, "xBegin");
 
   if( rc==SQLITE_OK ){
     /* Check if the $::echo_module_begin_fail variable is defined. If it is,
     ** and it is set to the name of the real table underlying this virtual
     ** echo module table, then cause this xSync operation to fail.
     */
-    zVal = Tcl_GetVar(interp, "echo_module_begin_fail", TCL_GLOBAL_ONLY);
+    const char *zVal = Tcl_GetVar(interp, "echo_module_begin_fail", TCL_GLOBAL_ONLY);
     if( zVal && 0==strcmp(zVal, pVtab->zTableName) ){
       rc = SQLITE_ERROR;
     }
@@ -1137,10 +1126,8 @@ static int echoBegin(sqlite3_vtab *tab){
   return rc;
 }
 static int echoSync(sqlite3_vtab *tab){
-  int rc;
-  echo_vtab *pVtab = (echo_vtab *)tab;
-  Tcl_Interp *interp = pVtab->interp;
-  const char *zVal; 
+  echo_vtab *const pVtab = (echo_vtab *)tab;
+  Tcl_Interp *const interp = pVtab->interp;
 
   /* Ticket #3083 - Only call xSync if we have previously started a
   ** transaction */
@@ -1150,14 +1137,14 @@ static int echoSync(sqlite3_vtab *tab){
     return SQLITE_ERROR;
   }
 
-  rc = echoTransactionCall(tab, "xSync");
+  int rc = echoTransactionCall(tab, "xSync");
 
   if( rc==SQLITE_OK ){
     /* Check if the $::echo_module_sync_fail variable is defined. If it is,
     ** and it is set to the name of the real table underlying this virtual
     ** echo module table, then cause this xSync operation to fail.
     */
-    zVal = Tcl_GetVar(interp, "echo_module_sync_fail", TCL_GLOBAL_ONLY);
+    const char *zVal = Tcl_GetVar(interp, "echo_module_sync_fail", TCL_GLOBAL_ONLY);
     if( zVal && 0==strcmp(zVal, pVtab->zTableName) ){
       rc = -1;
     }
@@ -1165,8 +1152,7 @@ static int echoSync(sqlite3_vtab *tab){
   return rc;
 }
 static int echoCommit(sqlite3_vtab *tab){
-  echo_vtab *pVtab = (echo_vtab*)tab;
-  int rc;
+  echo_vtab *const pVtab = (echo_vtab*)tab;
 
   /* Ticket #3083 - Only call xCommit if we have previously started
   ** a transaction */
@@ -1177,20 +1163,19 @@ static int echoCommit(sqlite3_vtab *tab){
   }
 
   sqlite3BeginBenignMalloc();
-  rc = echoTransactionCall(tab, "xCommit");
+  const int rc = echoTransactionCall(tab, "xCommit");
   sqlite3EndBenignMalloc();
   pVtab->inTransaction = 0;
   return rc;
 }
 static int echoRollback(sqlite3_vtab *tab){
-  int rc;
-  echo_vtab *pVtab = (echo_vtab*)tab;
+  echo_vtab *const pVtab = (echo_vtab*)tab;
 
   /* Ticket #3083 - Only call xRollback if we have previously started
   ** a transaction */
   assert( pVtab->inTransaction );
 
-  rc = echoTransactionCall(tab, "xRollback");
+  const int rc = echoTransactionCall(tab, "xRollback");
   pVtab->inTransaction = 0;
   return rc;
 }
@@ -1256,7 +1241,7 @@ static int echoFindFunction(
 
 static int echoRename(sqlite3_vtab *vtab, const char *zNewName){
   int rc = SQLITE_OK;
-  echo_vtab *p = (echo_vtab *)vtab;
+  echo_vtab *const p = (echo_vtab *)vtab;
 
   if( simulateVtabError(p, "xRename") ){
     return SQLITE_ERROR;
@@ -1356,7 +1341,7 @@ extern int getDbPointer(Tcl_Interp *interp, const char *zA, sqlite3 **ppDb);
 extern const char *sqlite3ErrName(int);
 
 static void moduleDestroy(void *p){
-  EchoModule *pMod = (EchoModule*)p;
+  EchoModule *const pMod = (EchoModule*)p;
   sqlite3_create_function(pMod->db, "function_that_does_not_exist_0982ma98",
                           SQLITE_ANY, 1, 0, 0, 0, 0);
   sqlite3_free(p);
@@ -1443,8 +1428,7 @@ int Sqlitetest8_Init(Tcl_Interp *interp){
      { "register_echo_module",       register_echo_module, 0 },
      { "sqlite3_declare_vtab",       declare_vtab, 0 },
   };
-  int i;
-  for(i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
+  for(int i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
     Tcl_CreateObjCommand(interp, aObjCmd[i].zName, 
         aObjCmd[i].xProc, aObjCmd[i].clientData, 0);
   }

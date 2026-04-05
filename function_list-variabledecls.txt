@@ -1744,33 +1744,33 @@
 [x] src/test6.cpp::cfCurrentTime
 [x] src/test6.cpp::cfGetLastError
 [x] src/test6.cpp::Sqlitetest6_Init
-[ ] src/test8.cpp::simulateVtabError
-[ ] src/test8.cpp::dequoteString
-[ ] src/test8.cpp::appendToEchoModule
-[ ] src/test8.cpp::echoDestructor
-[ ] src/test8.cpp::echoDisconnect
-[ ] src/test8.cpp::echoDestroy
-[ ] src/test8.cpp::echoOpen
-[ ] src/test8.cpp::echoClose
-[ ] src/test8.cpp::echoEof
-[ ] src/test8.cpp::echoNext
-[ ] src/test8.cpp::echoColumn
-[ ] src/test8.cpp::echoRowid
-[ ] src/test8.cpp::hashString
-[ ] src/test8.cpp::string_concat
-[ ] src/test8.cpp::echoSelectList
-[ ] src/test8.cpp::echoBestIndex
-[ ] src/test8.cpp::echoTransactionCall
-[ ] src/test8.cpp::echoBegin
-[ ] src/test8.cpp::echoSync
-[ ] src/test8.cpp::echoCommit
-[ ] src/test8.cpp::echoRollback
-[ ] src/test8.cpp::echoRename
-[ ] src/test8.cpp::echoSavepoint
-[ ] src/test8.cpp::echoRelease
-[ ] src/test8.cpp::echoRollbackTo
-[ ] src/test8.cpp::moduleDestroy
-[ ] src/test8.cpp::Sqlitetest8_Init
+[x] src/test8.cpp::simulateVtabError
+[x] src/test8.cpp::dequoteString
+[x] src/test8.cpp::appendToEchoModule
+[x] src/test8.cpp::echoDestructor
+[x] src/test8.cpp::echoDisconnect
+[x] src/test8.cpp::echoDestroy
+[x] src/test8.cpp::echoOpen
+[x] src/test8.cpp::echoClose
+[x] src/test8.cpp::echoEof
+[x] src/test8.cpp::echoNext
+[x] src/test8.cpp::echoColumn
+[x] src/test8.cpp::echoRowid
+[x] src/test8.cpp::hashString
+[x] src/test8.cpp::string_concat
+[x] src/test8.cpp::echoSelectList
+[x] src/test8.cpp::echoBestIndex
+[x] src/test8.cpp::echoTransactionCall
+[x] src/test8.cpp::echoBegin
+[x] src/test8.cpp::echoSync
+[x] src/test8.cpp::echoCommit
+[x] src/test8.cpp::echoRollback
+[x] src/test8.cpp::echoRename
+[x] src/test8.cpp::echoSavepoint
+[x] src/test8.cpp::echoRelease
+[x] src/test8.cpp::echoRollbackTo
+[x] src/test8.cpp::moduleDestroy
+[x] src/test8.cpp::Sqlitetest8_Init
 [ ] src/test9.cpp::Sqlitetest9_Init
 [ ] src/test_autoext.cpp::Sqlitetest_autoext_Init
 [ ] src/test_backup.cpp::backupTestFinish
