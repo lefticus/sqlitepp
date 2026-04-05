@@ -2232,6 +2232,7 @@
 [x] src/test_pcache.cpp::testpcachePagecount
 [x] src/test_pcache.cpp::testpcacheTruncate
 [x] src/test_pcache.cpp::testpcacheDestroy
+<<<<<<< HEAD
 >>>>>>> 05b4378c9 (Move variable declarations down and add const: src/test_pcache.cpp)
 [ ] src/test_quota.cpp::quotaEnter
 [ ] src/test_quota.cpp::quotaLeave
@@ -2274,6 +2275,49 @@
 [ ] src/test_quota.cpp::sqlite3_quota_remove
 [ ] src/test_quota.cpp::tclCallbackDestructor
 [ ] src/test_quota.cpp::Sqlitequota_Init
+=======
+[x] src/test_quota.cpp::quotaEnter
+[x] src/test_quota.cpp::quotaLeave
+[x] src/test_quota.cpp::quotaGroupOpenFileCount
+[x] src/test_quota.cpp::quotaRemoveFile
+[x] src/test_quota.cpp::quotaRemoveAllFiles
+[x] src/test_quota.cpp::quotaGroupDeref
+[x] src/test_quota.cpp::quotaStrglob
+[x] src/test_quota.cpp::quotaGroupFind
+[x] src/test_quota.cpp::quotaSubOpen
+[x] src/test_quota.cpp::quota_utf8_to_mbcs
+[x] src/test_quota.cpp::quota_mbcs_free
+[x] src/test_quota.cpp::quotaClose
+[x] src/test_quota.cpp::quotaTruncate
+[x] src/test_quota.cpp::quotaSync
+[x] src/test_quota.cpp::quotaFileSize
+[x] src/test_quota.cpp::quotaLock
+[x] src/test_quota.cpp::quotaUnlock
+[x] src/test_quota.cpp::quotaCheckReservedLock
+[x] src/test_quota.cpp::quotaFileControl
+[x] src/test_quota.cpp::quotaSectorSize
+[x] src/test_quota.cpp::quotaDeviceCharacteristics
+[x] src/test_quota.cpp::quotaShmBarrier
+[x] src/test_quota.cpp::quotaShmUnmap
+[x] src/test_quota.cpp::sqlite3_quota_initialize
+[x] src/test_quota.cpp::sqlite3_quota_shutdown
+[x] src/test_quota.cpp::sqlite3_quota_file
+[x] src/test_quota.cpp::sqlite3_quota_fopen
+[x] src/test_quota.cpp::sqlite3_quota_fclose
+[x] src/test_quota.cpp::sqlite3_quota_fflush
+[x] src/test_quota.cpp::sqlite3_quota_fseek
+[x] src/test_quota.cpp::sqlite3_quota_rewind
+[x] src/test_quota.cpp::sqlite3_quota_ftell
+[x] src/test_quota.cpp::sqlite3_quota_ferror
+[x] src/test_quota.cpp::sqlite3_quota_ftruncate
+[x] src/test_quota.cpp::sqlite3_quota_file_mtime
+[x] src/test_quota.cpp::sqlite3_quota_file_truesize
+[x] src/test_quota.cpp::sqlite3_quota_file_size
+[x] src/test_quota.cpp::sqlite3_quota_file_available
+[x] src/test_quota.cpp::sqlite3_quota_remove
+[x] src/test_quota.cpp::tclCallbackDestructor
+[x] src/test_quota.cpp::Sqlitequota_Init
+>>>>>>> 8197803b1 (Move variable declarations down and add const: src/test_quota.cpp)
 [ ] src/test_rtree.cpp::circle_del
 [ ] src/test_rtree.cpp::circle_query_func
 [ ] src/test_rtree.cpp::bfs_query_func
