@@ -3401,7 +3401,7 @@ static void freeColumnList(char **azCol){
   for(i=1; azCol[i]; i++){
     sqlite3_free(azCol[i]);
   }
-  /* azCol[0] is a static string */
+  sqlite3_free(azCol[0]);
   sqlite3_free(azCol);
 }
 

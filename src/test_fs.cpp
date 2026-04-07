@@ -517,10 +517,8 @@ static int fstreeFilter(
   sqlite3_bind_text(pCsr->pStmt, 2, zRoot, nRoot, SQLITE_TRANSIENT);
   sqlite3_bind_text(pCsr->pStmt, 3, zPrefix, nPrefix, SQLITE_TRANSIENT);
 
-#ifdef _WIN32
   sqlite3_free(zPrefix);
   sqlite3_free(zRoot);
-#endif
 
   return fstreeNext(pVtabCursor); 
 }
