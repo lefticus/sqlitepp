@@ -2984,7 +2984,7 @@ static int pragmaVtabFilter(
   j = (pTab->pName->mPragFlg & PragFlg_Result1)!=0 ? 0 : 1;
   for(i=0; i<argc; i++, j++){
     const char *zText = (const char*)sqlite3_value_text(argv[i]);
-    assert( j<pCsr->azArg.size() );
+    assert( j<static_cast<int>(pCsr->azArg.size()) );
     assert( pCsr->azArg[j]==0 );
     if( zText ){
       pCsr->azArg[j] = sqlite3_mprintf("%s", zText);

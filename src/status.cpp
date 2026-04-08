@@ -68,8 +68,8 @@ static const std::array<char, 10> statMutex = {{
 */
 sqlite3_int64 sqlite3StatusValue(int op){
   wsdStatInit;
-  assert( op>=0 && op<wsdStat.nowValue.size() );
-  assert( op>=0 && op<statMutex.size() );
+  assert( op>=0 && op<static_cast<int>(wsdStat.nowValue.size()) );
+  assert( op>=0 && op<static_cast<int>(statMutex.size()) );
   assert( sqlite3_mutex_held(statMutex[op] ? sqlite3Pcache1Mutex()
                                            : sqlite3MallocMutex()) );
   return wsdStat.nowValue[op];
@@ -88,8 +88,8 @@ sqlite3_int64 sqlite3StatusValue(int op){
 */
 void sqlite3StatusUp(int op, int N){
   wsdStatInit;
-  assert( op>=0 && op<wsdStat.nowValue.size() );
-  assert( op>=0 && op<statMutex.size() );
+  assert( op>=0 && op<static_cast<int>(wsdStat.nowValue.size()) );
+  assert( op>=0 && op<static_cast<int>(statMutex.size()) );
   assert( sqlite3_mutex_held(statMutex[op] ? sqlite3Pcache1Mutex()
                                            : sqlite3MallocMutex()) );
   wsdStat.nowValue[op] += N;
@@ -100,10 +100,10 @@ void sqlite3StatusUp(int op, int N){
 void sqlite3StatusDown(int op, int N){
   wsdStatInit;
   assert( N>=0 );
-  assert( op>=0 && op<statMutex.size() );
+  assert( op>=0 && op<static_cast<int>(statMutex.size()) );
   assert( sqlite3_mutex_held(statMutex[op] ? sqlite3Pcache1Mutex()
                                            : sqlite3MallocMutex()) );
-  assert( op>=0 && op<wsdStat.nowValue.size() );
+  assert( op>=0 && op<static_cast<int>(wsdStat.nowValue.size()) );
   wsdStat.nowValue[op] -= N;
 }
 
@@ -115,8 +115,8 @@ void sqlite3StatusHighwater(int op, int X){
   wsdStatInit;
   assert( X>=0 );
   const sqlite3StatValueType newValue = (sqlite3StatValueType)X;
-  assert( op>=0 && op<wsdStat.nowValue.size() );
-  assert( op>=0 && op<statMutex.size() );
+  assert( op>=0 && op<static_cast<int>(wsdStat.nowValue.size()) );
+  assert( op>=0 && op<static_cast<int>(statMutex.size()) );
   assert( sqlite3_mutex_held(statMutex[op] ? sqlite3Pcache1Mutex()
                                            : sqlite3MallocMutex()) );
   assert( op==SQLITE_STATUS_MALLOC_SIZE

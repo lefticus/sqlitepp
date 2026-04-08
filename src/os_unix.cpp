@@ -4318,8 +4318,8 @@ static int unixFileControl(sqlite3_file *id, int op, void *pArg){
             sqlite3_str_appendf(pStr, "%c{\"fd\":%d,\"flags\":%d",
                                 cSep, pUFd->fd, pUFd->flags);
             cSep = ',';
-            if( unixPosixAdvisoryLocks(pUFd->fd, aLck)==SQLITE_OK ){
-              sqlite3_str_appendf(pStr, ",\"pal\":\"%s\"", aLck);
+            if( unixPosixAdvisoryLocks(pUFd->fd, aLck.data())==SQLITE_OK ){
+              sqlite3_str_appendf(pStr, ",\"pal\":\"%s\"", aLck.data());
             }
             sqlite3_str_append(pStr, "}", 1);
             pUFd = pUFd->pNext;
