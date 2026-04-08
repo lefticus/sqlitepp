@@ -100,7 +100,7 @@ int sqlite3UpsertAnalyzeTarget(
   ExprList *pTarget;      /* The conflict-target clause */
   Expr *pTerm;            /* One term of the conflict-target clause */
   NameContext sNC;        /* Context for resolving symbolic names */
-  Expr sCol[2];           /* Index column converted into an Expr */
+  std::array<Expr, 2> sCol;           /* Index column converted into an Expr */
   int nClause = 0;        /* Counter of ON CONFLICT clauses */
 
   assert( pTabList->nSrc==1 );
@@ -142,7 +142,7 @@ int sqlite3UpsertAnalyzeTarget(
     ** will populate the specific collation and column number values
     ** prior to comparing against the conflict-target expression.
     */
-    memset(sCol, 0, sizeof(sCol));
+    memset(sCol.data(), 0, sizeof(sCol));
     sCol[0].op = TK_COLLATE;
     sCol[0].pLeft = &sCol[1];
     sCol[1].op = TK_COLUMN;
@@ -205,14 +205,14 @@ int sqlite3UpsertAnalyzeTarget(
       break;
     }
     if( pUpsert->pUpsertIdx==0 ){
-      char zWhich[16];
+      std::array<char, 16> zWhich;
       if( nClause==0 && pUpsert->pNextUpsert==0 ){
         zWhich[0] = 0;
       }else{
-        sqlite3_snprintf(sizeof(zWhich),zWhich,"%r ", nClause+1);
+        sqlite3_snprintf(zWhich.size(),zWhich.data(),"%r ", nClause+1);
       }
       sqlite3ErrorMsg(pParse, "%sON CONFLICT clause does not match any "
-                              "PRIMARY KEY or UNIQUE constraint", zWhich);
+                              "PRIMARY KEY or UNIQUE constraint", zWhich.data());
       return SQLITE_ERROR;
     }
   }

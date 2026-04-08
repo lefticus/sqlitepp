@@ -2020,18 +2020,18 @@ static int winLogErrorAtLine(
   const char *zPath,              /* File path associated with error */
   int iLine                       /* Source line number where error occurred */
 ){
-  char zMsg[500];                 /* Human readable error text */
+  std::array<char, 500> zMsg;     /* Human readable error text */
   int i;                          /* Loop counter */
 
   zMsg[0] = 0;
-  winGetLastErrorMsg(lastErrno, sizeof(zMsg), zMsg);
+  winGetLastErrorMsg(lastErrno, zMsg.size(), zMsg.data());
   assert( errcode!=SQLITE_OK );
   if( zPath==0 ) zPath = "";
   for(i=0; zMsg[i] && zMsg[i]!='\r' && zMsg[i]!='\n'; i++){}
   zMsg[i] = 0;
   sqlite3_log(errcode,
       "os_win.cpp:%d: (%lu) %s(%s) - %s",
-      iLine, lastErrno, zFunc, zPath, zMsg
+      iLine, lastErrno, zFunc, zPath, zMsg.data()
   );
 
   return errcode;

@@ -2466,7 +2466,7 @@ int sqlite3BtreeOpen(
   sqlite3_mutex *mutexOpen = 0;  /* Prevents a race condition. Ticket #3537 */
   int rc = SQLITE_OK;            /* Result code from this function */
   u8 nReserve;                   /* Byte of unused space on each page */
-  unsigned char zDbHeader[100];  /* Database header content */
+  std::array<unsigned char, 100> zDbHeader;  /* Database header content */
 
   /* True if opening an ephemeral, temporary database */
   const int isTempDb = zFilename==0 || zFilename[0]==0;
@@ -2596,7 +2596,7 @@ int sqlite3BtreeOpen(
     assert( sizeof(Pgno)==4 );
 
     /* Suppress false-positive compiler warning from PVS-Studio */
-    memset(&zDbHeader[16], 0, 8);
+    std::fill_n(&zDbHeader[16], 8, static_cast<unsigned char>(0));
  
     pBt = static_cast<BtShared*>(sqlite3MallocZero( sizeof(*pBt) ));
     if( pBt==0 ){
@@ -2607,7 +2607,7 @@ int sqlite3BtreeOpen(
                           sizeof(MemPage), flags, vfsFlags, pageReinit);
     if( rc==SQLITE_OK ){
       sqlite3PagerSetMmapLimit(pBt->pPager, db->szMmap);
-      rc = sqlite3PagerReadFileheader(pBt->pPager,sizeof(zDbHeader),zDbHeader);
+      rc = sqlite3PagerReadFileheader(pBt->pPager,zDbHeader.size(),zDbHeader.data());
     }
     if( rc!=SQLITE_OK ){
       goto btree_open_out;
@@ -5166,13 +5166,13 @@ static int accessPayload(
          && &pBuf[-4]>=pBufStart                               /* (6) */
         ){
           sqlite3_file *fd = sqlite3PagerFile(pBt->pPager);
-          u8 aSave[4];
+          std::array<u8, 4> aSave;
           u8 *aWrite = &pBuf[-4];
           assert( aWrite>=pBufStart );                         /* due to (6) */
-          memcpy(aSave, aWrite, 4);
+          memcpy(aSave.data(), aWrite, 4);
           rc = sqlite3OsRead(fd, aWrite, a+4, (i64)pBt->pageSize*(nextPage-1));
           nextPage = get4byte(aWrite);
-          memcpy(aWrite, aSave, 4);
+          memcpy(aWrite, aSave.data(), 4);
         }else
 #endif
 
@@ -7667,8 +7667,8 @@ static int pageFreeArray(
   int i, j;
   int iEnd = iFirst + nCell;
   int nFree = 0;
-  int aOfst[10];
-  int aAfter[10];
+  std::array<int, 10> aOfst;
+  std::array<int, 10> aAfter;
 
   for(i=iFirst; i<iEnd; i++){
     u8 *pCell = pCArray->apCell[i];
@@ -7692,7 +7692,7 @@ static int pageFreeArray(
         }
       }
       if( j>=nFree ){
-        if( nFree>=(int)(sizeof(aOfst)/sizeof(aOfst[0])) ){
+        if( nFree>=(int)aOfst.size() ){
           for(j=0; j<nFree; j++){
             freeSpace(pPg, aOfst[j], aAfter[j]-aOfst[j]);
           }
@@ -8928,9 +8928,9 @@ static int balance_deeper(MemPage *pRoot, MemPage **ppChild){
   TRACE(("BALANCE: copy root %u into %u\n", pRoot->pgno, pChild->pgno));
 
   /* Copy the overflow cells from pRoot to pChild */
-  memcpy(pChild->aiOvfl, pRoot->aiOvfl,
+  memcpy(pChild->aiOvfl.data(), pRoot->aiOvfl.data(),
          pRoot->nOverflow*sizeof(pRoot->aiOvfl[0]));
-  memcpy(pChild->apOvfl, pRoot->apOvfl,
+  memcpy(pChild->apOvfl.data(), pRoot->apOvfl.data(),
          pRoot->nOverflow*sizeof(pRoot->apOvfl[0]));
   pChild->nOverflow = pRoot->nOverflow;
 
@@ -8977,7 +8977,7 @@ static int anotherValidCursor(BtCursor *pCur){
 */
 static int balance(BtCursor *pCur){
   int rc = SQLITE_OK;
-  u8 aBalanceQuickSpace[13];
+  std::array<u8, 13> aBalanceQuickSpace;
   u8 *pFree = 0;
 
   VVA_ONLY( int balance_quick_called = 0 );
@@ -9051,7 +9051,7 @@ static int balance(BtCursor *pCur){
           */
           assert( balance_quick_called==0 );
           VVA_ONLY( balance_quick_called++ );
-          rc = balance_quick(pParent, pPage, aBalanceQuickSpace);
+          rc = balance_quick(pParent, pPage, aBalanceQuickSpace.data());
         }else
 #endif
         {
@@ -10981,7 +10981,7 @@ int sqlite3BtreeIntegrityCheck(
   IntegrityCk sCheck;
   BtShared *pBt = p->pBt;
   u64 savedDbFlags = pBt->db->flags;
-  char zErr[100];
+  std::array<char, 100> zErr;
   int bPartial = 0;            /* True if not checking all btrees */
   int bCkFreelist = 1;         /* True to scan the freelist */
   VVA_ONLY( int nRef );
@@ -11006,7 +11006,7 @@ int sqlite3BtreeIntegrityCheck(
   sCheck.pPager = pBt->pPager;
   sCheck.nCkPage = btreePagecount(sCheck.pBt);
   sCheck.mxErr = mxErr;
-  sqlite3StrAccumInit(&sCheck.errMsg, 0, zErr, sizeof(zErr), SQLITE_MAX_LENGTH);
+  sqlite3StrAccumInit(&sCheck.errMsg, 0, zErr.data(), zErr.size(), SQLITE_MAX_LENGTH);
   sCheck.errMsg.printfFlags = SQLITE_PRINTF_INTERNAL;
   if( sCheck.nCkPage==0 ){
     goto integrity_ck_cleanup;

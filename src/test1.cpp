@@ -88,7 +88,7 @@ static int SQLITE_TCLAPI get_sqlite_pointer(
 ){
   struct SqliteDb *p;
   Tcl_CmdInfo cmdInfo;
-  char zBuf[100];
+  std::array<char, 100> zBuf;
   if( objc!=2 ){
     Tcl_WrongNumArgs(interp, 1, objv, "SQLITE-CONNECTION");
     return TCL_ERROR;
@@ -99,8 +99,8 @@ static int SQLITE_TCLAPI get_sqlite_pointer(
     return TCL_ERROR;
   }
   p = (struct SqliteDb*)cmdInfo.objClientData;
-  sqlite3_snprintf(sizeof(zBuf), zBuf, "%p", p->db);
-  Tcl_AppendResult(interp, zBuf, NULL);
+  sqlite3_snprintf(zBuf.size(), zBuf.data(), "%p", p->db);
+  Tcl_AppendResult(interp, zBuf.data(), NULL);
   return TCL_OK;
 }
 
@@ -143,13 +143,13 @@ extern const char *sqlite3ErrName(int);
 int sqlite3TestErrCode(Tcl_Interp *interp, sqlite3 *db, int rc){
   if( sqlite3_threadsafe()==0 && rc!=SQLITE_MISUSE && rc!=SQLITE_OK
    && sqlite3_errcode(db)!=rc ){
-    char zBuf[200];
+    std::array<char, 200> zBuf;
     const int r2 = sqlite3_errcode(db);
-    sqlite3_snprintf(sizeof(zBuf), zBuf,
+    sqlite3_snprintf(zBuf.size(), zBuf.data(),
        "error code %s (%d) does not match sqlite3_errcode %s (%d)",
        t1ErrorName(rc), rc, t1ErrorName(r2), r2);
     Tcl_ResetResult(interp);
-    Tcl_AppendResult(interp, zBuf, NULL);
+    Tcl_AppendResult(interp, zBuf.data(), NULL);
     return 1;
   }
   return 0;
@@ -303,9 +303,9 @@ static int SQLITE_TCLAPI test_exec_printf(
   int rc;
   char *zErr = 0;
   char *zSql;
-  char zBuf[30];
+  std::array<char, 30> zBuf;
   if( argc!=4 ){
-    Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0], 
+    Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0],
        " DB FORMAT STRING", 0);
     return TCL_ERROR;
   }
@@ -314,8 +314,8 @@ static int SQLITE_TCLAPI test_exec_printf(
   zSql = sqlite3_mprintf(argv[2], argv[3]);
   rc = sqlite3_exec(db, zSql, exec_printf_cb, &str, &zErr);
   sqlite3_free(zSql);
-  sqlite3_snprintf(sizeof(zBuf), zBuf, "%d", rc);
-  Tcl_AppendElement(interp, zBuf);
+  sqlite3_snprintf(zBuf.size(), zBuf.data(), "%d", rc);
+  Tcl_AppendElement(interp, zBuf.data());
   Tcl_AppendElement(interp, rc==SQLITE_OK ? Tcl_DStringValue(&str) : zErr);
   Tcl_DStringFree(&str);
   if( zErr ) sqlite3_free(zErr);
@@ -341,16 +341,16 @@ static int SQLITE_TCLAPI test_exec_hex(
   int rc, i, j;
   char *zErr = 0;
   char *zHex;
-  char zSql[501];
-  char zBuf[30];
+  std::array<char, 501> zSql;
+  std::array<char, 30> zBuf;
   if( argc!=3 ){
-    Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0], 
+    Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0],
        " DB HEX", 0);
     return TCL_ERROR;
   }
   if( getDbPointer(interp, argv[1], &db) ) return TCL_ERROR;
   zHex = argv[2];
-  for(i=j=0; i<(int)(sizeof(zSql)-1) && zHex[j]; i++, j++){
+  for(i=j=0; i<(int)(zSql.size()-1) && zHex[j]; i++, j++){
     if( zHex[j]=='%' && zHex[j+2] && zHex[j+2] ){
       zSql[i] = (testHexToInt(zHex[j+1])<<4) + testHexToInt(zHex[j+2]);
       j += 2;
@@ -360,9 +360,9 @@ static int SQLITE_TCLAPI test_exec_hex(
   }
   zSql[i] = 0;
   Tcl_DStringInit(&str);
-  rc = sqlite3_exec(db, zSql, exec_printf_cb, &str, &zErr);
-  sqlite3_snprintf(sizeof(zBuf), zBuf, "%d", rc);
-  Tcl_AppendElement(interp, zBuf);
+  rc = sqlite3_exec(db, zSql.data(), exec_printf_cb, &str, &zErr);
+  sqlite3_snprintf(zBuf.size(), zBuf.data(), "%d", rc);
+  Tcl_AppendElement(interp, zBuf.data());
   Tcl_AppendElement(interp, rc==SQLITE_OK ? Tcl_DStringValue(&str) : zErr);
   Tcl_DStringFree(&str);
   if( zErr ) sqlite3_free(zErr);
@@ -426,9 +426,9 @@ static int SQLITE_TCLAPI test_exec(
   char *zErr = 0;
   char *zSql;
   int i, j;
-  char zBuf[30];
+  std::array<char, 30> zBuf;
   if( argc!=3 ){
-    Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0], 
+    Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0],
        " DB SQL", 0);
     return TCL_ERROR;
   }
@@ -446,8 +446,8 @@ static int SQLITE_TCLAPI test_exec(
   zSql[j] = 0;
   rc = sqlite3_exec(db, zSql, exec_printf_cb, &str, &zErr);
   sqlite3_free(zSql);
-  sqlite3_snprintf(sizeof(zBuf), zBuf, "%d", rc);
-  Tcl_AppendElement(interp, zBuf);
+  sqlite3_snprintf(zBuf.size(), zBuf.data(), "%d", rc);
+  Tcl_AppendElement(interp, zBuf.data());
   Tcl_AppendElement(interp, rc==SQLITE_OK ? Tcl_DStringValue(&str) : zErr);
   Tcl_DStringFree(&str);
   if( zErr ) sqlite3_free(zErr);
@@ -541,14 +541,14 @@ static int SQLITE_TCLAPI test_snprintf_int(
   int argc,              /* Number of arguments */
   char **argv            /* Text of each argument */
 ){
-  char zStr[100];
+  std::array<char, 100> zStr;
   int n = atoi(argv[1]);
   const char *zFormat = argv[2];
   int a1 = atoi(argv[3]);
-  if( n>(int)sizeof(zStr) ) n = sizeof(zStr);
-  sqlite3_snprintf(sizeof(zStr), zStr, "abcdefghijklmnopqrstuvwxyz");
-  sqlite3_snprintf(n, zStr, zFormat, a1);
-  Tcl_AppendResult(interp, zStr, NULL);
+  if( n>(int)zStr.size() ) n = zStr.size();
+  sqlite3_snprintf(zStr.size(), zStr.data(), "abcdefghijklmnopqrstuvwxyz");
+  sqlite3_snprintf(n, zStr.data(), zFormat, a1);
+  Tcl_AppendResult(interp, zStr.data(), NULL);
   return TCL_OK;
 }
 

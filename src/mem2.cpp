@@ -102,7 +102,7 @@ static struct {
   ** Title text to insert in front of each block
   */
   int nTitle;        /* Bytes of zTitle to save.  Includes '\0' and padding */
-  char zTitle[100];  /* The title text */
+  std::array<char, 100> zTitle;  /* The title text */
 
   /* 
   ** sqlite3MallocDisallow() increments the following counter.
@@ -116,9 +116,9 @@ static struct {
   ** bytes.  i==NCSIZE is the number of allocation attempts for
   ** sizes more than NCSIZE*8 bytes.
   */
-  int nAlloc[NCSIZE];      /* Total number of allocations */
-  int nCurrent[NCSIZE];    /* Current number of allocations */
-  int mxCurrent[NCSIZE];   /* Highwater mark for nCurrent */
+  std::array<int, NCSIZE> nAlloc;      /* Total number of allocations */
+  std::array<int, NCSIZE> nCurrent;    /* Current number of allocations */
+  std::array<int, NCSIZE> mxCurrent;   /* Highwater mark for nCurrent */
 
 } mem;
 
@@ -258,8 +258,8 @@ static void *sqlite3MemMalloc(int nByte){
     pHdr->nBacktraceSlots = mem.nBacktrace;
     pHdr->nTitle = mem.nTitle;
     if( mem.nBacktrace ){
-      void *aAddr[40];
-      pHdr->nBacktrace = backtrace(aAddr, mem.nBacktrace+1)-1;
+      std::array<void*, 40> aAddr;
+      pHdr->nBacktrace = backtrace(aAddr.data(), mem.nBacktrace+1)-1;
       memcpy(pBt, &aAddr[1], pHdr->nBacktrace*sizeof(void*));
       assert(pBt[0]);
       if( mem.xBacktrace ){
@@ -269,7 +269,7 @@ static void *sqlite3MemMalloc(int nByte){
       pHdr->nBacktrace = 0;
     }
     if( mem.nTitle ){
-      memcpy(z, mem.zTitle, mem.nTitle);
+      memcpy(z, mem.zTitle.data(), mem.nTitle);
     }
     pHdr->iSize = nByte;
     adjustStats(nByte, +1);
@@ -433,8 +433,8 @@ void sqlite3MemdebugBacktraceCallback(void (*xBacktrace)(int, int, void **)){
 void sqlite3MemdebugSettitle(const char *zTitle){
   unsigned int n = sqlite3Strlen30(zTitle) + 1;
   sqlite3_mutex_enter(mem.mutex);
-  if( n>=sizeof(mem.zTitle) ) n = sizeof(mem.zTitle)-1;
-  memcpy(mem.zTitle, zTitle, n);
+  if( n>=mem.zTitle.size() ) n = mem.zTitle.size()-1;
+  memcpy(mem.zTitle.data(), zTitle, n);
   mem.zTitle[n] = 0;
   mem.nTitle = ROUND8(n);
   sqlite3_mutex_leave(mem.mutex);

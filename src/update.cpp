@@ -331,7 +331,7 @@ void sqlite3Update(
   int newmask;           /* Mask of NEW.* columns accessed by BEFORE triggers */
   int iEph = 0;          /* Ephemeral table holding all primary key values */
   int nKey = 0;          /* Number of elements in regKey for WITHOUT ROWID */
-  int aiCurOnePass[2];   /* The write cursors opened by WHERE_ONEPASS */
+  std::array<int, 2> aiCurOnePass;   /* The write cursors opened by WHERE_ONEPASS */
   int addrOpen = 0;      /* Address of OP_OpenEphemeral */
   int iPk = 0;           /* First of nPk cells holding PRIMARY KEY value */
   i16 nPk = 0;           /* Number of components of the PRIMARY KEY */
@@ -751,7 +751,7 @@ void sqlite3Update(
       ** Fall back to ONEPASS_OFF if where.cpp has selected a ONEPASS_MULTI
       ** strategy that uses an index for which one or more columns are being
       ** updated.  */
-      eOnePass = sqlite3WhereOkOnePass(pWInfo, aiCurOnePass);
+      eOnePass = sqlite3WhereOkOnePass(pWInfo, aiCurOnePass.data());
       bFinishSeek = sqlite3WhereUsesDeferredSeek(pWInfo);
       if( eOnePass!=ONEPASS_SINGLE ){
         sqlite3MultiWrite(pParse);
@@ -1213,7 +1213,7 @@ static void updateVirtualTable(
   int regRec;                     /* Register in which to assemble record */
   int regRowid;                   /* Register for ephemeral table rowid */
   int iCsr = pSrc->a[0].iCursor;  /* Cursor used for virtual table scan */
-  int aDummy[2];                  /* Unused arg for sqlite3WhereOkOnePass() */
+  std::array<int, 2> aDummy;                  /* Unused arg for sqlite3WhereOkOnePass() */
   int eOnePass;                   /* True to use onepass strategy */
   int addr;                       /* Address of OP_OpenEphemeral */
 
@@ -1302,7 +1302,7 @@ static void updateVirtualTable(
       sqlite3VdbeAddOp2(v, OP_SCopy, regArg+2+iPk, regArg+1);
     }
 
-    eOnePass = sqlite3WhereOkOnePass(pWInfo, aDummy);
+    eOnePass = sqlite3WhereOkOnePass(pWInfo, aDummy.data());
 
     /* There is no ONEPASS_MULTI on virtual tables */
     assert( eOnePass==ONEPASS_OFF || eOnePass==ONEPASS_SINGLE );

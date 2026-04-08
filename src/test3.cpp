@@ -40,7 +40,7 @@ static int SQLITE_TCLAPI btree_open(
 ){
   Btree *pBt;
   int rc, nCache;
-  char zBuf[100];
+  std::array<char, 100> zBuf;
   int n;
   char *zFilename;
   if( argc!=3 ){
@@ -61,7 +61,7 @@ static int SQLITE_TCLAPI btree_open(
   if( zFilename==0 ) return TCL_ERROR;
   memcpy(zFilename, argv[1], n+1);
   zFilename[n+1] = 0;
-  rc = sqlite3BtreeOpen(sDb.pVfs, zFilename, &sDb, &pBt, 0, 
+  rc = sqlite3BtreeOpen(sDb.pVfs, zFilename, &sDb, &pBt, 0,
      SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_MAIN_DB);
   sqlite3_free(zFilename);
   if( rc!=SQLITE_OK ){
@@ -69,8 +69,8 @@ static int SQLITE_TCLAPI btree_open(
     return TCL_ERROR;
   }
   sqlite3BtreeSetCacheSize(pBt, nCache);
-  sqlite3_snprintf(sizeof(zBuf), zBuf,"%p", pBt);
-  Tcl_AppendResult(interp, zBuf, NULL);
+  sqlite3_snprintf(zBuf.size(), zBuf.data(),"%p", pBt);
+  Tcl_AppendResult(interp, zBuf.data(), NULL);
   return TCL_OK;
 }
 
@@ -176,10 +176,10 @@ static int SQLITE_TCLAPI btree_pager_stats(
       "ref", "page", "max", "size", "state", "err",
       "hit", "miss", "ovfl", "read", "write"
     };
-    char zBuf[100];
+    std::array<char, 100> zBuf;
     Tcl_AppendElement(interp, zName[i]);
-    sqlite3_snprintf(sizeof(zBuf), zBuf,"%d",a[i]);
-    Tcl_AppendElement(interp, zBuf);
+    sqlite3_snprintf(zBuf.size(), zBuf.data(),"%d",a[i]);
+    Tcl_AppendElement(interp, zBuf.data());
   }
   sqlite3BtreeLeave(pBt);
 
@@ -204,7 +204,7 @@ static int SQLITE_TCLAPI btree_cursor(
   BtCursor *pCur;
   int rc = SQLITE_OK;
   int wrFlag;
-  char zBuf[30];
+  std::array<char, 30> zBuf;
 
   if( argc!=4 ){
     Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0],
@@ -232,8 +232,8 @@ static int SQLITE_TCLAPI btree_cursor(
     Tcl_AppendResult(interp, sqlite3ErrName(rc), NULL);
     return TCL_ERROR;
   }
-  sqlite3_snprintf(sizeof(zBuf), zBuf,"%p", pCur);
-  Tcl_AppendResult(interp, zBuf, NULL);
+  sqlite3_snprintf(zBuf.size(), zBuf.data(),"%p", pCur);
+  Tcl_AppendResult(interp, zBuf.data(), NULL);
   return SQLITE_OK;
 }
 
@@ -293,7 +293,7 @@ static int SQLITE_TCLAPI btree_next(
   BtCursor *pCur;
   int rc;
   int res = 0;
-  char zBuf[100];
+  std::array<char, 100> zBuf;
 
   if( argc!=2 ){
     Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0],
@@ -312,8 +312,8 @@ static int SQLITE_TCLAPI btree_next(
     Tcl_AppendResult(interp, sqlite3ErrName(rc), NULL);
     return TCL_ERROR;
   }
-  sqlite3_snprintf(sizeof(zBuf),zBuf,"%d",res);
-  Tcl_AppendResult(interp, zBuf, NULL);
+  sqlite3_snprintf(zBuf.size(),zBuf.data(),"%d",res);
+  Tcl_AppendResult(interp, zBuf.data(), NULL);
   return SQLITE_OK;
 }
 
@@ -332,7 +332,7 @@ static int SQLITE_TCLAPI btree_first(
   BtCursor *pCur;
   int rc;
   int res = 0;
-  char zBuf[100];
+  std::array<char, 100> zBuf;
 
   if( argc!=2 ){
     Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0],
@@ -347,8 +347,8 @@ static int SQLITE_TCLAPI btree_first(
     Tcl_AppendResult(interp, sqlite3ErrName(rc), NULL);
     return TCL_ERROR;
   }
-  sqlite3_snprintf(sizeof(zBuf),zBuf,"%d",res);
-  Tcl_AppendResult(interp, zBuf, NULL);
+  sqlite3_snprintf(zBuf.size(),zBuf.data(),"%d",res);
+  Tcl_AppendResult(interp, zBuf.data(), NULL);
   return SQLITE_OK;
 }
 
@@ -366,7 +366,7 @@ static int SQLITE_TCLAPI btree_eof(
 ){
   BtCursor *pCur;
   int rc;
-  char zBuf[50];
+  std::array<char, 50> zBuf;
 
   if( argc!=2 ){
     Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0],
@@ -377,8 +377,8 @@ static int SQLITE_TCLAPI btree_eof(
   sqlite3BtreeEnter(pCur->pBtree);
   rc = sqlite3BtreeEof(pCur);
   sqlite3BtreeLeave(pCur->pBtree);
-  sqlite3_snprintf(sizeof(zBuf),zBuf, "%d", rc);
-  Tcl_AppendResult(interp, zBuf, NULL);
+  sqlite3_snprintf(zBuf.size(),zBuf.data(), "%d", rc);
+  Tcl_AppendResult(interp, zBuf.data(), NULL);
   return SQLITE_OK;
 }
 
@@ -395,7 +395,7 @@ static int SQLITE_TCLAPI btree_payload_size(
 ){
   BtCursor *pCur;
   u32 n;
-  char zBuf[50];
+  std::array<char, 50> zBuf;
 
   if( argc!=2 ){
     Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0],
@@ -406,8 +406,8 @@ static int SQLITE_TCLAPI btree_payload_size(
   sqlite3BtreeEnter(pCur->pBtree);
   n = sqlite3BtreePayloadSize(pCur);
   sqlite3BtreeLeave(pCur->pBtree);
-  sqlite3_snprintf(sizeof(zBuf),zBuf, "%u", n);
-  Tcl_AppendResult(interp, zBuf, NULL);
+  sqlite3_snprintf(zBuf.size(),zBuf.data(), "%u", n);
+  Tcl_AppendResult(interp, zBuf.data(), NULL);
   return SQLITE_OK;
 }
 
@@ -434,7 +434,7 @@ static int SQLITE_TCLAPI btree_varint_test(
   u32 start, mult, count, incr;
   u64 in, out;
   int n1, n2, i, j;
-  unsigned char zBuf[100];
+  std::array<unsigned char, 100> zBuf;
   if( argc!=5 ){
     Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0],
        " START MULTIPLIER COUNT INCREMENT\"", NULL);
@@ -447,43 +447,43 @@ static int SQLITE_TCLAPI btree_varint_test(
   in = start;
   in *= mult;
   for(i=0; i<(int)count; i++){
-    char zErr[200];
-    n1 = putVarint(zBuf, in);
+    std::array<char, 200> zErr;
+    n1 = putVarint(zBuf.data(), in);
     if( n1>9 || n1<1 ){
-      sqlite3_snprintf(sizeof(zErr), zErr,
+      sqlite3_snprintf(zErr.size(), zErr.data(),
          "putVarint returned %d - should be between 1 and 9", n1);
-      Tcl_AppendResult(interp, zErr, NULL);
+      Tcl_AppendResult(interp, zErr.data(), NULL);
       return TCL_ERROR;
     }
-    n2 = getVarint(zBuf, &out);
+    n2 = getVarint(zBuf.data(), &out);
     if( n1!=n2 ){
-      sqlite3_snprintf(sizeof(zErr), zErr,
+      sqlite3_snprintf(zErr.size(), zErr.data(),
           "putVarint returned %d and getVarint returned %d", n1, n2);
-      Tcl_AppendResult(interp, zErr, NULL);
+      Tcl_AppendResult(interp, zErr.data(), NULL);
       return TCL_ERROR;
     }
     if( in!=out ){
-      sqlite3_snprintf(sizeof(zErr), zErr,
+      sqlite3_snprintf(zErr.size(), zErr.data(),
           "Wrote 0x%016llx and got back 0x%016llx", in, out);
-      Tcl_AppendResult(interp, zErr, NULL);
+      Tcl_AppendResult(interp, zErr.data(), NULL);
       return TCL_ERROR;
     }
     if( (in & 0xffffffff)==in ){
       u32 out32;
-      n2 = getVarint32(zBuf, out32);
+      n2 = getVarint32(zBuf.data(), out32);
       out = out32;
       if( n1!=n2 ){
-        sqlite3_snprintf(sizeof(zErr), zErr,
-          "putVarint returned %d and GetVarint32 returned %d", 
+        sqlite3_snprintf(zErr.size(), zErr.data(),
+          "putVarint returned %d and GetVarint32 returned %d",
                   n1, n2);
-        Tcl_AppendResult(interp, zErr, NULL);
+        Tcl_AppendResult(interp, zErr.data(), NULL);
         return TCL_ERROR;
       }
       if( in!=out ){
-        sqlite3_snprintf(sizeof(zErr), zErr,
+        sqlite3_snprintf(zErr.size(), zErr.data(),
           "Wrote 0x%016llx and got back 0x%016llx from GetVarint32",
             in, out);
-        Tcl_AppendResult(interp, zErr, NULL);
+        Tcl_AppendResult(interp, zErr.data(), NULL);
         return TCL_ERROR;
       }
     }
@@ -493,7 +493,7 @@ static int SQLITE_TCLAPI btree_varint_test(
     ** than putVarint.
     */
     for(j=0; j<19; j++){
-      getVarint(zBuf, &out);
+      getVarint(zBuf.data(), &out);
     }
     in += incr;
   }
@@ -515,7 +515,7 @@ static int SQLITE_TCLAPI btree_from_db(
   int argc,              /* Number of arguments */
   const char **argv      /* Text of each argument */
 ){
-  char zBuf[100];
+  std::array<char, 100> zBuf;
   Tcl_CmdInfo info;
   sqlite3 *db;
   Btree *pBt;
@@ -539,8 +539,8 @@ static int SQLITE_TCLAPI btree_from_db(
   assert( db );
 
   pBt = db->aDb[iDb].pBt;
-  sqlite3_snprintf(sizeof(zBuf), zBuf, "%p", pBt);
-  Tcl_SetResult(interp, zBuf, TCL_VOLATILE);
+  sqlite3_snprintf(zBuf.size(), zBuf.data(), "%p", pBt);
+  Tcl_SetResult(interp, zBuf.data(), TCL_VOLATILE);
   return TCL_OK;
 }
 

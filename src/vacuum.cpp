@@ -206,16 +206,16 @@ SQLITE_NOINLINE int sqlite3RunVacuum(
   */
   u64 iRandom;
   sqlite3_randomness(sizeof(iRandom),&iRandom);
-  char zDbVacuum[42];
-  sqlite3_snprintf(sizeof(zDbVacuum), zDbVacuum, "vacuum_%016llx", iRandom);
+  std::array<char, 42> zDbVacuum;
+  sqlite3_snprintf(zDbVacuum.size(), zDbVacuum.data(), "vacuum_%016llx", iRandom);
   const int nDb = db->nDb;
   Btree *pTemp;           /* The temporary database we vacuum into */
-  rc = execSqlF(db, pzErrMsg, "ATTACH %Q AS %s", zOut, zDbVacuum);
+  rc = execSqlF(db, pzErrMsg, "ATTACH %Q AS %s", zOut, zDbVacuum.data());
   db->openFlags = saved_openFlags;
   if( rc!=SQLITE_OK ) goto end_of_vacuum;
   assert( (db->nDb-1)==nDb );
   pDb = &db->aDb[nDb];
-  assert( strcmp(pDb->zDbSName,zDbVacuum)==0 );
+  assert( strcmp(pDb->zDbSName,zDbVacuum.data())==0 );
   pTemp = pDb->pBt;
   nRes = sqlite3BtreeGetRequestedReserve(pMain);
   if( pOut ){
@@ -305,7 +305,7 @@ SQLITE_NOINLINE int sqlite3RunVacuum(
       "||' SELECT*FROM\"%w\".'||quote(name)"
       "FROM %s.sqlite_schema "
       "WHERE type='table'AND coalesce(rootpage,1)>0",
-      zDbVacuum, zDbMain, zDbVacuum
+      zDbVacuum.data(), zDbMain, zDbVacuum.data()
   );
   assert( (db->mDbFlags & DBFLAG_Vacuum)!=0 );
   db->mDbFlags &= ~DBFLAG_Vacuum;
@@ -321,7 +321,7 @@ SQLITE_NOINLINE int sqlite3RunVacuum(
       " SELECT*FROM \"%w\".sqlite_schema"
       " WHERE type IN('view','trigger')"
       " OR(type='table'AND rootpage=0)",
-      zDbVacuum, zDbMain
+      zDbVacuum.data(), zDbMain
   );
   if( rc ) goto end_of_vacuum;
 
@@ -338,19 +338,19 @@ SQLITE_NOINLINE int sqlite3RunVacuum(
     ** The increment is used to increase the schema cookie so that other
     ** connections to the same database will know to reread the schema.
     */
-    static const unsigned char aCopy[] = {
+    static const std::array<unsigned char, 10> aCopy = {{
        BTREE_SCHEMA_VERSION,     1,  /* Add one to the old schema cookie */
        BTREE_DEFAULT_CACHE_SIZE, 0,  /* Preserve the default page cache size */
        BTREE_TEXT_ENCODING,      0,  /* Preserve the text encoding */
        BTREE_USER_VERSION,       0,  /* Preserve the user version */
        BTREE_APPLICATION_ID,     0,  /* Preserve the application id */
-    };
+    }};
 
     assert( SQLITE_TXN_WRITE==sqlite3BtreeTxnState(pTemp) );
     assert( pOut!=0 || SQLITE_TXN_WRITE==sqlite3BtreeTxnState(pMain) );
 
     /* Copy Btree meta values */
-    for(int i=0; i<ArraySize(aCopy); i+=2){
+    for(size_t i=0; i<aCopy.size(); i+=2){
       /* GetMeta() and UpdateMeta() cannot fail in this context because
       ** we already have page 1 loaded into cache and marked dirty. */
       u32 meta;

@@ -427,7 +427,7 @@ struct sqlite3_context {
 typedef struct ScanStatus ScanStatus;
 struct ScanStatus {
   int addrExplain;                /* OP_Explain for loop */
-  int aAddrRange[6];
+  std::array<int, 6> aAddrRange;
   int addrLoop;                   /* Address of "loops" counter */
   int addrVisit;                  /* Address of "rows visited" counter */
   int iSelectID;                  /* The "Select-ID" for this loop */
@@ -445,7 +445,7 @@ struct ScanStatus {
 typedef struct DblquoteStr DblquoteStr;
 struct DblquoteStr {
   DblquoteStr *pNextStr;   /* Next string literal in the list */
-  char z[8];               /* Dequoted value for the string */
+  std::array<char, 8> z;   /* Dequoted value for the string */
 };
 
 /*
@@ -509,7 +509,7 @@ struct Vdbe {
   bft haveEqpOps:1;       /* Bytecode supports EXPLAIN QUERY PLAN */
   yDbMask btreeMask;      /* Bitmask of db->aDb[] entries referenced */
   yDbMask lockMask;       /* Subset of btreeMask that requires a lock */
-  u32 aCounter[9];        /* Counters used by sqlite3_stmt_status() */
+  std::array<u32, 9> aCounter; /* Counters used by sqlite3_stmt_status() */
   char *zSql;             /* Text of the SQL statement that generated this */
 #ifdef SQLITE_ENABLE_NORMALIZE
   char *zNormSql;         /* Normalization of the associated SQL statement */
@@ -584,7 +584,7 @@ struct ValueList {
 ** single-byte varint.
 */
 #ifndef SQLITE_AMALGAMATION
-extern const u8 sqlite3SmallTypeSizes[];
+extern const std::array<u8, 128> sqlite3SmallTypeSizes;
 #endif
 
 /*

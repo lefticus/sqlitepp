@@ -72,15 +72,15 @@
 static u8 getSafetyLevel(const char *z, int omitFull, u8 dflt){
                              /* 123456789 123456789 123 */
   static const char zText[] = "onoffalseyestruextrafull";
-  static const u8 iOffset[] = {0, 1, 2,  4,    9,  12,  15,   20};
-  static const u8 iLength[] = {2, 2, 3,  5,    3,   4,   5,    4};
-  static const u8 iValue[] =  {1, 0, 0,  0,    1,   1,   3,    2};
+  static const std::array<u8, 8> iOffset = {{0, 1, 2,  4,    9,  12,  15,   20}};
+  static const std::array<u8, 8> iLength = {{2, 2, 3,  5,    3,   4,   5,    4}};
+  static const std::array<u8, 8> iValue =  {{1, 0, 0,  0,    1,   1,   3,    2}};
                             /* on no off false yes true extra full */
   if( sqlite3Isdigit(*z) ){
     return (u8)sqlite3Atoi(z);
   }
   const int n = sqlite3Strlen30(z);
-  for(int i=0; i<ArraySize(iLength); i++){
+  for(int i=0; i<static_cast<int>(iLength.size()); i++){
     if( iLength[i]==n && sqlite3StrNICmp(&zText[iOffset[i]],z,n)==0
      && (!omitFull || iValue[i]<=1)
     ){
@@ -2804,7 +2804,7 @@ struct PragmaVtabCursor {
   sqlite3_vtab_cursor base; /* Base class.  Must be first */
   sqlite3_stmt *pPragma;    /* The pragma statement to run */
   sqlite_int64 iRowid;      /* Current rowid */
-  char *azArg[2];           /* Value of the argument and schema */
+  std::array<char*, 2> azArg;  /* Value of the argument and schema */
 };
 
 /*
@@ -2823,11 +2823,11 @@ static int pragmaVtabConnect(
   int i, j;
   char cSep = '(';
   StrAccum acc;
-  char zBuf[200];
+  std::array<char, 200> zBuf;
 
   UNUSED_PARAMETER(argc);
   UNUSED_PARAMETER(argv);
-  sqlite3StrAccumInit(&acc, 0, zBuf, sizeof(zBuf), 0);
+  sqlite3StrAccumInit(&acc, 0, zBuf.data(), zBuf.size(), 0);
   sqlite3_str_appendall(&acc, "CREATE TABLE x");
   for(i=0, j=pPragma->iPragCName; i<pPragma->nPragCName; i++, j++){
     sqlite3_str_appendf(&acc, "%c\"%s\"", cSep, pragCName[j]);
@@ -2848,8 +2848,8 @@ static int pragmaVtabConnect(
   }
   sqlite3_str_append(&acc, ")", 1);
   sqlite3StrAccumFinish(&acc);
-  assert( strlen(zBuf) < sizeof(zBuf)-1 );
-  rc = sqlite3_declare_vtab(db, zBuf);
+  assert( strlen(zBuf.data()) < zBuf.size()-1 );
+  rc = sqlite3_declare_vtab(db, zBuf.data());
   if( rc==SQLITE_OK ){
     pTab = static_cast<PragmaVtab*>(sqlite3_malloc(sizeof(PragmaVtab)));
     if( pTab==0 ){
@@ -2891,7 +2891,7 @@ static int pragmaVtabBestIndex(sqlite3_vtab *tab, sqlite3_index_info *pIdxInfo){
   pIdxInfo->estimatedCost = (double)1;
   if( pTab->nHidden==0 ){ return SQLITE_OK; }
   const struct sqlite3_index_constraint *pConstraint = pIdxInfo->aConstraint;
-  int seen[2] = {0, 0};
+  std::array<int, 2> seen = {};
   for(int i=0; i<pIdxInfo->nConstraint; i++, pConstraint++){
     if( pConstraint->iColumn < pTab->iHidden ) continue;
     if( pConstraint->op!=SQLITE_INDEX_CONSTRAINT_EQ ) continue;
@@ -2933,7 +2933,7 @@ static void pragmaVtabCursorClear(PragmaVtabCursor *pCsr){
   sqlite3_finalize(pCsr->pPragma);
   pCsr->pPragma = 0;
   pCsr->iRowid = 0;
-  for(int i=0; i<ArraySize(pCsr->azArg); i++){
+  for(int i=0; i<static_cast<int>(pCsr->azArg.size()); i++){
     sqlite3_free(pCsr->azArg[i]);
     pCsr->azArg[i] = 0;
   }
@@ -2984,7 +2984,7 @@ static int pragmaVtabFilter(
   j = (pTab->pName->mPragFlg & PragFlg_Result1)!=0 ? 0 : 1;
   for(i=0; i<argc; i++, j++){
     const char *zText = (const char*)sqlite3_value_text(argv[i]);
-    assert( j<ArraySize(pCsr->azArg) );
+    assert( j<pCsr->azArg.size() );
     assert( pCsr->azArg[j]==0 );
     if( zText ){
       pCsr->azArg[j] = sqlite3_mprintf("%s", zText);

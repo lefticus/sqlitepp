@@ -437,7 +437,7 @@ struct PagerSavepoint {
   Pgno iSubRec;                /* Index of first record in sub-journal */
   int bTruncateOnRelease;      /* If stmt journal may be truncated on RELEASE */
 #ifndef SQLITE_OMIT_WAL
-  u32 aWalData[WAL_SAVEPOINT_NDATA];        /* WAL savepoint context */
+  std::array<u32, WAL_SAVEPOINT_NDATA> aWalData;        /* WAL savepoint context */
 #endif
 };
 
@@ -667,7 +667,7 @@ struct Pager {
   PagerSavepoint *aSavepoint; /* Array of active savepoints */
   int nSavepoint;             /* Number of elements in aSavepoint[] */
   u32 iDataVersion;           /* Changes whenever database content changes */
-  char dbFileVers[16];        /* Changes whenever database file changes */
+  std::array<char, 16> dbFileVers;        /* Changes whenever database file changes */
 
   int nMmapOut;               /* Number of mmap pages currently outstanding */
   sqlite3_int64 szMmap;       /* Desired maximum mmap size */
@@ -688,7 +688,7 @@ struct Pager {
   char *zJournal;             /* Name of the journal file */
   int (*xBusyHandler)(void*); /* Function to call when busy */
   void *pBusyHandlerArg;      /* Context argument for xBusyHandler */
-  u32 aStat[4];               /* Total cache hits, misses, writes, spills */
+  std::array<u32, 4> aStat;               /* Total cache hits, misses, writes, spills */
 #ifdef SQLITE_TEST
   int nRead;                  /* Database pages read */
 #endif
@@ -754,7 +754,7 @@ int sqlite3_pager_writej_count = 0;    /* Number of pages written to journal */
 ** be correct.  But by initializing the checksum to random value which
 ** is different for every journal, we minimize that risk.
 */
-static const unsigned char aJournalMagic[] = {
+static const std::array<unsigned char, 8> aJournalMagic = {
   0xd9, 0xd5, 0x05, 0xf9, 0x20, 0xa1, 0x63, 0xd7,
 };
 
@@ -990,9 +990,9 @@ static int assert_pager_state(Pager *p){
 ** not appear in normal builds.
 */
 char *print_pager_state(Pager *p){
-  static char zRet[1024];
+  static std::array<char, 1024> zRet;
 
-  sqlite3_snprintf(1024, zRet,
+  sqlite3_snprintf(1024, zRet.data(),
       "Filename:      %s\n"
       "State:         %s errCode=%d\n"
       "Lock:          %s\n"
@@ -1027,7 +1027,7 @@ char *print_pager_state(Pager *p){
       , (int)p->dbSize, (int)p->dbOrigSize, (int)p->dbFileSize
   );
 
-  return zRet;
+  return zRet.data();
 }
 #endif
 
@@ -1097,10 +1097,10 @@ static int pageInJournal(Pager *pPager, PgHdr *pPg){
 ** All values are stored on disk as big-endian.
 */
 static int read32bits(sqlite3_file *fd, i64 offset, u32 *pRes){
-  unsigned char ac[4];
-  int rc = sqlite3OsRead(fd, ac, sizeof(ac), offset);
+  std::array<unsigned char, 4> ac;
+  int rc = sqlite3OsRead(fd, ac.data(), sizeof(ac), offset);
   if( rc==SQLITE_OK ){
-    *pRes = sqlite3Get4byte(ac);
+    *pRes = sqlite3Get4byte(ac.data());
   }
   return rc;
 }
@@ -1116,9 +1116,9 @@ static int read32bits(sqlite3_file *fd, i64 offset, u32 *pRes){
 ** on success or an error code is something goes wrong.
 */
 static int write32bits(sqlite3_file *fd, i64 offset, u32 val){
-  char ac[4];
-  put32bits(ac, val);
-  return sqlite3OsWrite(fd, ac, 4, offset);
+  std::array<char, 4> ac;
+  put32bits(ac.data(), val);
+  return sqlite3OsWrite(fd, ac.data(), 4, offset);
 }
 
 /*
@@ -1302,7 +1302,7 @@ static int readSuperJournal(sqlite3_file *pJrnl, char *zSuper, u64 nSuper){
   i64 szJ;                   /* Total size in bytes of journal file pJrnl */
   u32 cksum;                 /* MJ checksum value read from journal */
   u32 u;                     /* Unsigned loop counter */
-  unsigned char aMagic[8];   /* A buffer to hold the magic header */
+  std::array<unsigned char, 8> aMagic;   /* A buffer to hold the magic header */
   zSuper[0] = '\0';
 
   if( SQLITE_OK!=(rc = sqlite3OsFileSize(pJrnl, &szJ))
@@ -1312,8 +1312,8 @@ static int readSuperJournal(sqlite3_file *pJrnl, char *zSuper, u64 nSuper){
    || len>szJ-16
    || len==0
    || SQLITE_OK!=(rc = read32bits(pJrnl, szJ-12, &cksum))
-   || SQLITE_OK!=(rc = sqlite3OsRead(pJrnl, aMagic, 8, szJ-8))
-   || memcmp(aMagic, aJournalMagic, 8)
+   || SQLITE_OK!=(rc = sqlite3OsRead(pJrnl, aMagic.data(), 8, szJ-8))
+   || memcmp(aMagic.data(), aJournalMagic.data(), 8)
    || SQLITE_OK!=(rc = sqlite3OsRead(pJrnl, zSuper, len, szJ-16-len))
   ){
     return rc;
@@ -1396,8 +1396,8 @@ static int zeroJournalHdr(Pager *pPager, int doTruncate){
     if( doTruncate || iLimit==0 ){
       rc = sqlite3OsTruncate(pPager->jfd, 0);
     }else{
-      static const char zeroHdr[28] = {0};
-      rc = sqlite3OsWrite(pPager->jfd, zeroHdr, sizeof(zeroHdr), 0);
+      static const std::array<char, 28> zeroHdr = {};
+      rc = sqlite3OsWrite(pPager->jfd, zeroHdr.data(), sizeof(zeroHdr), 0);
     }
     if( rc==SQLITE_OK && !pPager->noSync ){
       rc = sqlite3OsSync(pPager->jfd, SQLITE_SYNC_DATAONLY|pPager->syncFlags);
@@ -1484,7 +1484,7 @@ static int writeJournalHdr(Pager *pPager){
   if( pPager->noSync || (pPager->journalMode==PAGER_JOURNALMODE_MEMORY)
    || (sqlite3OsDeviceCharacteristics(pPager->fd)&SQLITE_IOCAP_SAFE_APPEND)
   ){
-    memcpy(zHeader, aJournalMagic, sizeof(aJournalMagic));
+    memcpy(zHeader, aJournalMagic.data(), sizeof(aJournalMagic));
     put32bits(&zHeader[sizeof(aJournalMagic)], 0xffffffff);
   }else{
     memset(zHeader, 0, sizeof(aJournalMagic)+4);
@@ -1584,7 +1584,7 @@ static int readJournalHdr(
   u32 *pDbSize                 /* OUT: Value of original database size field */
 ){
   int rc;                      /* Return code */
-  unsigned char aMagic[8];     /* A buffer to hold the magic header */
+  std::array<unsigned char, 8> aMagic;     /* A buffer to hold the magic header */
   i64 iHdrOff;                 /* Offset of journal header being read */
 
   assert( isOpen(pPager->jfd) );      /* Journal file must be open. */
@@ -1605,11 +1605,11 @@ static int readJournalHdr(
   ** proceed.
   */
   if( isHot || iHdrOff!=pPager->journalHdr ){
-    rc = sqlite3OsRead(pPager->jfd, aMagic, sizeof(aMagic), iHdrOff);
+    rc = sqlite3OsRead(pPager->jfd, aMagic.data(), sizeof(aMagic), iHdrOff);
     if( rc ){
       return rc;
     }
-    if( memcmp(aMagic, aJournalMagic, sizeof(aMagic))!=0 ){
+    if( memcmp(aMagic.data(), aJournalMagic.data(), sizeof(aMagic))!=0 ){
       return SQLITE_DONE;
     }
   }
@@ -1741,7 +1741,7 @@ static int writeSuperJournal(Pager *pPager, const char *zSuper){
    || (0 != (rc = sqlite3OsWrite(pPager->jfd, zSuper, nSuper, iHdrOff+4)))
    || (0 != (rc = write32bits(pPager->jfd, iHdrOff+4+nSuper, nSuper)))
    || (0 != (rc = write32bits(pPager->jfd, iHdrOff+4+nSuper+4, cksum)))
-   || (0 != (rc = sqlite3OsWrite(pPager->jfd, aJournalMagic, 8,
+   || (0 != (rc = sqlite3OsWrite(pPager->jfd, aJournalMagic.data(), 8,
                                  iHdrOff+4+nSuper+8)))
   ){
     return rc;
@@ -2481,7 +2481,7 @@ static int pager_playback_one_page(
     /* If this was page 1, then restore the value of Pager.dbFileVers.
     ** Do this before any decoding. */
     if( pgno==1 ){
-      memcpy(&pPager->dbFileVers, &((u8*)pData)[24],sizeof(pPager->dbFileVers));
+      memcpy(pPager->dbFileVers.data(), &((u8*)pData)[24],sizeof(pPager->dbFileVers));
     }
     sqlite3PcacheRelease(pPg);
   }
@@ -3058,10 +3058,10 @@ static int readDbPage(PgHdr *pPg){
       ** white noise equaling 16 bytes of 0xff is vanishingly small so
       ** we should still be ok.
       */
-      memset(pPager->dbFileVers, 0xff, sizeof(pPager->dbFileVers));
+      memset(pPager->dbFileVers.data(), 0xff, sizeof(pPager->dbFileVers));
     }else{
       u8 *dbFileVers = &((u8*)pPg->pData)[24];
-      memcpy(&pPager->dbFileVers, dbFileVers, sizeof(pPager->dbFileVers));
+      memcpy(pPager->dbFileVers.data(), dbFileVers, sizeof(pPager->dbFileVers));
     }
   }
   PAGER_INCR(sqlite3_pager_readdb_count);
@@ -3086,7 +3086,7 @@ static void pager_write_changecounter(PgHdr *pPg){
   if( NEVER(pPg==0) ) return;
 
   /* Increment the value just read and write it back to byte 24. */
-  change_counter = sqlite3Get4byte((u8*)pPg->pPager->dbFileVers)+1;
+  change_counter = sqlite3Get4byte((u8*)pPg->pPager->dbFileVers.data())+1;
   put32bits(((char*)pPg->pData)+24, change_counter);
 
   /* Also store the SQLite version number in bytes 96..99 and in
@@ -3494,7 +3494,7 @@ static int pagerPlaybackSavepoint(Pager *pPager, PagerSavepoint *pSavepoint){
     i64 offset = (i64)pSavepoint->iSubRec*(4+pPager->pageSize);
 
     if( pagerUseWal(pPager) ){
-      rc = sqlite3WalSavepointUndo(pPager->pWal, pSavepoint->aWalData);
+      rc = sqlite3WalSavepointUndo(pPager->pWal, pSavepoint->aWalData.data());
     }
     for(ii=pSavepoint->iSubRec; rc==SQLITE_OK && ii<pPager->nSubRec; ii++){
       assert( offset==(i64)ii*(4+pPager->pageSize) );
@@ -4325,15 +4325,15 @@ static int syncJournal(Pager *pPager, int newHdr){
         ** the potential journal header.
         */
         i64 iNextHdrOffset;
-        u8 aMagic[8];
-        u8 zHeader[sizeof(aJournalMagic)+4];
+        std::array<u8, 8> aMagic;
+        std::array<u8, sizeof(aJournalMagic)+4> zHeader;
 
-        memcpy(zHeader, aJournalMagic, sizeof(aJournalMagic));
+        memcpy(zHeader.data(), aJournalMagic.data(), sizeof(aJournalMagic));
         put32bits(&zHeader[sizeof(aJournalMagic)], pPager->nRec);
 
         iNextHdrOffset = journalHdrOffset(pPager);
-        rc = sqlite3OsRead(pPager->jfd, aMagic, 8, iNextHdrOffset);
-        if( rc==SQLITE_OK && 0==memcmp(aMagic, aJournalMagic, 8) ){
+        rc = sqlite3OsRead(pPager->jfd, aMagic.data(), 8, iNextHdrOffset);
+        if( rc==SQLITE_OK && 0==memcmp(aMagic.data(), aJournalMagic.data(), 8) ){
           static const u8 zerobyte = 0;
           rc = sqlite3OsWrite(pPager->jfd, &zerobyte, 1, iNextHdrOffset);
         }
@@ -4360,7 +4360,7 @@ static int syncJournal(Pager *pPager, int newHdr){
         }
         IOTRACE(("JHDR %p %lld\n", pPager, pPager->journalHdr));
         rc = sqlite3OsWrite(
-            pPager->jfd, zHeader, sizeof(zHeader), pPager->journalHdr
+            pPager->jfd, zHeader.data(), sizeof(zHeader), pPager->journalHdr
         );
         if( rc!=SQLITE_OK ) return rc;
       }
@@ -4485,7 +4485,7 @@ static int pager_write_pagelist(Pager *pPager, PgHdr *pList){
       ** page caused the database file to grow, update dbFileSize.
       */
       if( pgno==1 ){
-        memcpy(&pPager->dbFileVers, &pData[24], sizeof(pPager->dbFileVers));
+        memcpy(pPager->dbFileVers.data(), &pData[24], sizeof(pPager->dbFileVers));
       }
       if( pgno>pPager->dbFileSize ){
         pPager->dbFileSize = pgno;
@@ -5402,18 +5402,18 @@ int sqlite3PagerSharedLock(Pager *pPager){
       ** detected.  The chance of an undetected change is so small that
       ** it can be neglected.
       */
-      char dbFileVers[sizeof(pPager->dbFileVers)];
+      std::array<char, sizeof(pPager->dbFileVers)> dbFileVers;
 
       IOTRACE(("CKVERS %p %d\n", pPager, sizeof(dbFileVers)));
-      rc = sqlite3OsRead(pPager->fd, &dbFileVers, sizeof(dbFileVers), 24);
+      rc = sqlite3OsRead(pPager->fd, dbFileVers.data(), sizeof(dbFileVers), 24);
       if( rc!=SQLITE_OK ){
         if( rc!=SQLITE_IOERR_SHORT_READ ){
           goto failed;
         }
-        memset(dbFileVers, 0, sizeof(dbFileVers));
+        dbFileVers.fill(0);
       }
 
-      if( memcmp(pPager->dbFileVers, dbFileVers, sizeof(dbFileVers))!=0 ){
+      if( memcmp(pPager->dbFileVers.data(), dbFileVers.data(), sizeof(dbFileVers))!=0 ){
         pager_reset(pPager);
 
         /* Unmap the database file. It is possible that external processes
@@ -6374,7 +6374,7 @@ static int pager_incr_changecounter(Pager *pPager, int isDirectMode){
           ** next time a read transaction is opened the cache will be
           ** flushed (as the change-counter values will not match).  */
           const void *pCopy = (const void *)&((const char *)zBuf)[24];
-          memcpy(&pPager->dbFileVers, pCopy, sizeof(pPager->dbFileVers));
+          memcpy(pPager->dbFileVers.data(), pCopy, sizeof(pPager->dbFileVers));
           pPager->changeCountDone = 1;
         }
       }else{
@@ -6849,7 +6849,7 @@ int sqlite3PagerPageRefcount(DbPage *pPage){
 ** This routine is used for testing and analysis only.
 */
 int *sqlite3PagerStats(Pager *pPager){
-  static int a[11];
+  static std::array<int, 11> a;
   a[0] = sqlite3PcacheRefCount(pPager->pPCache);
   a[1] = sqlite3PcachePagecount(pPager->pPCache);
   a[2] = sqlite3PcacheGetCachesize(pPager->pPCache);
@@ -6861,7 +6861,7 @@ int *sqlite3PagerStats(Pager *pPager){
   a[8] = 0;  /* Used to be pPager->nOvfl */
   a[9] = pPager->nRead;
   a[10] = (int)pPager->aStat[PAGER_STAT_WRITE] & 0x7fffffff;
-  return a;
+  return a.data();
 }
 #endif
 
@@ -6951,7 +6951,7 @@ static SQLITE_NOINLINE int pagerOpenSavepoint(Pager *pPager, int nSavepoint){
       return SQLITE_NOMEM_BKPT;
     }
     if( pagerUseWal(pPager) ){
-      sqlite3WalSavepoint(pPager->pWal, aNew[ii].aWalData);
+      sqlite3WalSavepoint(pPager->pWal, aNew[ii].aWalData.data());
     }
     pPager->nSavepoint = ii+1;
   }
@@ -7083,7 +7083,7 @@ int sqlite3PagerSavepoint(Pager *pPager, int op, int iSavepoint){
 ** sqlite3_uri_parameter() and sqlite3_filename_database() and friends.
 */
 const char *sqlite3PagerFilename(const Pager *pPager, int nullIfMemDb){
-  static const char zFake[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+  static const std::array<char, 8> zFake = {};
   if( nullIfMemDb && (pPager->memDb || sqlite3IsMemdb(pPager->pVfs)) ){
     return &zFake[4];
   }else{

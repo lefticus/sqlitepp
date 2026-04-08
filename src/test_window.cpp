@@ -325,17 +325,18 @@ static int SQLITE_TCLAPI test_override_sum(
 }
 
 int Sqlitetest_window_Init(Tcl_Interp *interp){
-  static struct {
+  struct ObjCmd {
      const char *zName;
      Tcl_ObjCmdProc *xProc;
      int clientData;
-  } aObjCmd[] = {
+  };
+  static const std::array<ObjCmd, 4> aObjCmd = {{
      { "sqlite3_create_window_function", test_create_window, 0 },
      { "test_create_window_function_misuse", test_create_window_misuse, 0 },
      { "test_create_sumint", test_create_sumint, 0 },
      { "test_override_sum", test_override_sum, 0 },
-  };
-  for(int i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
+  }};
+  for(size_t i=0; i<aObjCmd.size(); i++){
     ClientData c = (ClientData)SQLITE_INT_TO_PTR(aObjCmd[i].clientData);
     Tcl_CreateObjCommand(interp, aObjCmd[i].zName, aObjCmd[i].xProc, c, 0);
   }

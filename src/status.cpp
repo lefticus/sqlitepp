@@ -26,15 +26,15 @@ typedef u32 sqlite3StatValueType;
 #endif
 typedef struct sqlite3StatType sqlite3StatType;
 static SQLITE_WSD struct sqlite3StatType {
-  sqlite3StatValueType nowValue[10];  /* Current value */
-  sqlite3StatValueType mxValue[10];   /* Maximum value */
-} sqlite3Stat = { {0,}, {0,} };
+  std::array<sqlite3StatValueType, 10> nowValue;  /* Current value */
+  std::array<sqlite3StatValueType, 10> mxValue;   /* Maximum value */
+} sqlite3Stat = { {}, {} };
 
 /*
 ** Elements of sqlite3Stat[] are protected by either the memory allocator
 ** mutex, or by the pcache1 mutex.  The following array determines which.
 */
-static const char statMutex[] = {
+static const std::array<char, 10> statMutex = {{
   0,  /* SQLITE_STATUS_MEMORY_USED */
   1,  /* SQLITE_STATUS_PAGECACHE_USED */
   1,  /* SQLITE_STATUS_PAGECACHE_OVERFLOW */
@@ -45,7 +45,7 @@ static const char statMutex[] = {
   1,  /* SQLITE_STATUS_PAGECACHE_SIZE */
   0,  /* SQLITE_STATUS_SCRATCH_SIZE */
   0,  /* SQLITE_STATUS_MALLOC_COUNT */
-};
+}};
 
 
 /* The "wsdStat" macro will resolve to the status information
@@ -68,8 +68,8 @@ static const char statMutex[] = {
 */
 sqlite3_int64 sqlite3StatusValue(int op){
   wsdStatInit;
-  assert( op>=0 && op<ArraySize(wsdStat.nowValue) );
-  assert( op>=0 && op<ArraySize(statMutex) );
+  assert( op>=0 && op<wsdStat.nowValue.size() );
+  assert( op>=0 && op<statMutex.size() );
   assert( sqlite3_mutex_held(statMutex[op] ? sqlite3Pcache1Mutex()
                                            : sqlite3MallocMutex()) );
   return wsdStat.nowValue[op];
@@ -88,8 +88,8 @@ sqlite3_int64 sqlite3StatusValue(int op){
 */
 void sqlite3StatusUp(int op, int N){
   wsdStatInit;
-  assert( op>=0 && op<ArraySize(wsdStat.nowValue) );
-  assert( op>=0 && op<ArraySize(statMutex) );
+  assert( op>=0 && op<wsdStat.nowValue.size() );
+  assert( op>=0 && op<statMutex.size() );
   assert( sqlite3_mutex_held(statMutex[op] ? sqlite3Pcache1Mutex()
                                            : sqlite3MallocMutex()) );
   wsdStat.nowValue[op] += N;
@@ -100,10 +100,10 @@ void sqlite3StatusUp(int op, int N){
 void sqlite3StatusDown(int op, int N){
   wsdStatInit;
   assert( N>=0 );
-  assert( op>=0 && op<ArraySize(statMutex) );
+  assert( op>=0 && op<statMutex.size() );
   assert( sqlite3_mutex_held(statMutex[op] ? sqlite3Pcache1Mutex()
                                            : sqlite3MallocMutex()) );
-  assert( op>=0 && op<ArraySize(wsdStat.nowValue) );
+  assert( op>=0 && op<wsdStat.nowValue.size() );
   wsdStat.nowValue[op] -= N;
 }
 
@@ -115,8 +115,8 @@ void sqlite3StatusHighwater(int op, int X){
   wsdStatInit;
   assert( X>=0 );
   const sqlite3StatValueType newValue = (sqlite3StatValueType)X;
-  assert( op>=0 && op<ArraySize(wsdStat.nowValue) );
-  assert( op>=0 && op<ArraySize(statMutex) );
+  assert( op>=0 && op<wsdStat.nowValue.size() );
+  assert( op>=0 && op<statMutex.size() );
   assert( sqlite3_mutex_held(statMutex[op] ? sqlite3Pcache1Mutex()
                                            : sqlite3MallocMutex()) );
   assert( op==SQLITE_STATUS_MALLOC_SIZE
@@ -138,7 +138,7 @@ int sqlite3_status64(
 ){
   sqlite3_mutex *pMutex;
   wsdStatInit;
-  if( op<0 || op>=ArraySize(wsdStat.nowValue) ){
+  if( op<0 || op>=static_cast<int>(wsdStat.nowValue.size()) ){
     return SQLITE_MISUSE_BKPT;
   }
 #ifdef SQLITE_ENABLE_API_ARMOR

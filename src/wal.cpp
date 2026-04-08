@@ -327,9 +327,9 @@ struct WalIndexHdr {
   u16 szPage;                     /* Database page size in bytes. 1==64K */
   u32 mxFrame;                    /* Index of last valid frame in the WAL */
   u32 nPage;                      /* Size of database in pages */
-  u32 aFrameCksum[2];             /* Checksum of last frame in log */
-  u32 aSalt[2];                   /* Two salt values copied from WAL header */
-  u32 aCksum[2];                  /* Checksum over all prior fields */
+  u32 aFrameCksum[2];              /* Checksum of last frame in log */
+  u32 aSalt[2];                    /* Two salt values copied from WAL header */
+  u32 aCksum[2];                   /* Checksum over all prior fields */
 };
 
 /*
@@ -393,8 +393,8 @@ struct WalIndexHdr {
 */
 struct WalCkptInfo {
   u32 nBackfill;                  /* Number of WAL frames backfilled into DB */
-  u32 aReadMark[WAL_NREADER];     /* Reader marks */
-  u8 aLock[SQLITE_SHM_NLOCK];     /* Reserved space for locks */
+  u32 aReadMark[WAL_NREADER];              /* Reader marks */
+  u8 aLock[SQLITE_SHM_NLOCK];             /* Reserved space for locks */
   u32 nBackfillAttempted;         /* WAL frames perhaps written, or maybe not */
   u32 notUsed0;                   /* Available for future enhancements */
 };
@@ -690,11 +690,11 @@ static void sehInjectFault(Wal *pWal){
 
   const int res = sqlite3FaultSim(650);
   if( res!=0 ){
-    ULONG_PTR aArg[3];
+    std::array<ULONG_PTR, 3> aArg;
     aArg[0] = 0;
     aArg[1] = 0;
     aArg[2] = (ULONG_PTR)res;
-    RaiseException(EXCEPTION_IN_PAGE_ERROR, 0, 3, (const ULONG_PTR*)aArg);
+    RaiseException(EXCEPTION_IN_PAGE_ERROR, 0, 3, (const ULONG_PTR*)aArg.data());
   }
 }
 
@@ -1057,10 +1057,10 @@ static const char *walLockName(int lockIdx){
   }else if( lockIdx==WAL_RECOVER_LOCK ){
     return "RECOVER-LOCK";
   }else{
-    static char zName[15];
-    sqlite3_snprintf(sizeof(zName), zName, "READ-LOCK[%d]",
+    static std::array<char, 15> zName;
+    sqlite3_snprintf(zName.size(), zName.data(), "READ-LOCK[%d]",
                      lockIdx-WAL_READ_LOCK(0));
-    return zName;
+    return zName.data();
   }
 }
 #endif /*defined(SQLITE_TEST) || defined(SQLITE_DEBUG) */
@@ -1370,7 +1370,7 @@ static int walIndexAppend(Wal *pWal, u32 iFrame, u32 iPage){
 static int walIndexRecover(Wal *pWal){
   int rc;                         /* Return Code */
   i64 nSize;                      /* Size of log file */
-  u32 aFrameCksum[2] = {0, 0};
+  u32 aFrameCksum[2] = {};
 
   /* Obtain an exclusive lock on all byte in the locking range not already
   ** locked by the caller. The caller is guaranteed to have locked the
@@ -1398,7 +1398,7 @@ static int walIndexRecover(Wal *pWal){
   }
 
   if( nSize>WAL_HDRSIZE ){
-    u8 aBuf[WAL_HDRSIZE];         /* Buffer to load WAL header into */
+    std::array<u8, WAL_HDRSIZE> aBuf; /* Buffer to load WAL header into */
     u32 *aPrivate = 0;            /* Heap copy of *-shm hash being populated */
     u8 *aFrame = 0;               /* Malloc'd buffer to load entire frame */
     int szFrame;                  /* Number of bytes in buffer aFrame[] */
@@ -1411,7 +1411,7 @@ static int walIndexRecover(Wal *pWal){
     u32 iLastFrame;               /* Last frame in wal, based on nSize alone */
 
     /* Read in the WAL header. */
-    rc = sqlite3OsRead(pWal->pWalFd, aBuf, WAL_HDRSIZE, 0);
+    rc = sqlite3OsRead(pWal->pWalFd, aBuf.data(), WAL_HDRSIZE, 0);
     if( rc!=SQLITE_OK ){
       goto recovery_error;
     }
@@ -1433,11 +1433,11 @@ static int walIndexRecover(Wal *pWal){
     pWal->hdr.bigEndCksum = (u8)(magic&0x00000001);
     pWal->szPage = szPage;
     pWal->nCkpt = sqlite3Get4byte(&aBuf[12]);
-    memcpy(&pWal->hdr.aSalt, &aBuf[16], 8);
+    memcpy(pWal->hdr.aSalt, &aBuf[16], 8);
 
     /* Verify that the WAL header checksum is correct */
     walChecksumBytes(pWal->hdr.bigEndCksum==SQLITE_BIGENDIAN,
-        aBuf, WAL_HDRSIZE-2*4, 0, pWal->hdr.aFrameCksum
+        aBuf.data(), WAL_HDRSIZE-2*4, 0, pWal->hdr.aFrameCksum
     );
     if( pWal->hdr.aFrameCksum[0]!=sqlite3Get4byte(&aBuf[24])
      || pWal->hdr.aFrameCksum[1]!=sqlite3Get4byte(&aBuf[28])
@@ -1863,18 +1863,18 @@ static void walMergesort(
   ht_slot *aMerge = 0;            /* List to be merged */
   int iList;                      /* Index into input list */
   u32 iSub = 0;                   /* Index into aSub array */
-  struct Sublist aSub[13];        /* Array of sub-lists */
+  std::array<struct Sublist, 13> aSub; /* Array of sub-lists */
 
-  memset(aSub, 0, sizeof(aSub));
+  aSub.fill({});
   assert( nList<=HASHTABLE_NPAGE && nList>0 );
-  assert( HASHTABLE_NPAGE==(1<<(ArraySize(aSub)-1)) );
+  assert( HASHTABLE_NPAGE==(1<<(aSub.size()-1)) );
 
   for(iList=0; iList<nList; iList++){
     nMerge = 1;
     aMerge = &aList[iList];
     for(iSub=0; iList & (1<<iSub); iSub++){
       struct Sublist *p;
-      assert( iSub<ArraySize(aSub) );
+      assert( iSub<aSub.size() );
       p = &aSub[iSub];
       assert( p->aList && p->nList<=(1<<iSub) );
       assert( p->aList==&aList[iList&~((2<<iSub)-1)] );
@@ -1884,10 +1884,10 @@ static void walMergesort(
     aSub[iSub].nList = nMerge;
   }
 
-  for(iSub++; iSub<ArraySize(aSub); iSub++){
+  for(iSub++; iSub<aSub.size(); iSub++){
     if( nList & (1<<iSub) ){
       struct Sublist *p;
-      assert( iSub<ArraySize(aSub) );
+      assert( iSub<aSub.size() );
       p = &aSub[iSub];
       assert( p->nList<=(1<<iSub) );
       assert( p->aList==&aList[nList&~((2<<iSub)-1)] );
@@ -2550,7 +2550,7 @@ int sqlite3WalClose(
 ** is read successfully and the checksum verified, return zero.
 */
 static SQLITE_NO_TSAN int walIndexTryHdr(Wal *pWal, int *pChanged){
-  u32 aCksum[2];                  /* Checksum on the header content */
+  u32 aCksum[2];                   /* Checksum on the header content */
   WalIndexHdr h1, h2;             /* Two copies of the header content */
 
   /* The first page of the wal-index must be mapped at this point. */

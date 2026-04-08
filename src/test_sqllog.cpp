@@ -76,6 +76,7 @@
 #ifndef _SQLITE3_H_
 #include "sqlite3.hpp"
 #endif
+#include <array>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -125,13 +126,13 @@ static struct SLGlobal {
   /* Protected by SLGlobal.mutex */
   int bConditional;               /* Only trace if *-sqllog file is present */
   int bReuse;                     /* True to avoid extra copies of db files */
-  char zPrefix[SQLLOG_NAMESZ];    /* Prefix for all created files */
-  char zIdx[SQLLOG_NAMESZ];       /* Full path to *.idx file */
+  std::array<char, SQLLOG_NAMESZ> zPrefix;    /* Prefix for all created files */
+  std::array<char, SQLLOG_NAMESZ> zIdx;       /* Full path to *.idx file */
   int iNextLog;                   /* Used to allocate file names */
   int iNextDb;                    /* Used to allocate database file names */
   int bRec;                       /* True if testSqllog() is called rec. */
   int iClock;                     /* Clock value */
-  struct SLConn aConn[MAX_CONNECTIONS];
+  std::array<struct SLConn, MAX_CONNECTIONS> aConn;
 } sqllogglobal;
 
 /*
@@ -175,7 +176,7 @@ static char *sqllogFindFile(const char *zFile){
   char *zRet = 0;
 
   /* Open the index file for reading */
-  FILE *fd = fopen(sqllogglobal.zIdx, "r");
+  FILE *fd = fopen(sqllogglobal.zIdx.data(), "r");
   if( fd==0 ){
     sqlite3_log(SQLITE_IOERR, "sqllogFindFile(): error in fopen()");
     return 0;
@@ -185,10 +186,10 @@ static char *sqllogFindFile(const char *zFile){
   ** entry is a match, then set zRet to point to the filename of the existing
   ** copy and break out of the loop.  */
   while( feof(fd)==0 ){
-    char zLine[SQLLOG_NAMESZ*2+5];
-    if( fgets(zLine, sizeof(zLine), fd) ){
-      zLine[sizeof(zLine)-1] = '\0';
-      char *z = zLine;
+    std::array<char, SQLLOG_NAMESZ*2+5> zLine;
+    if( fgets(zLine.data(), zLine.size(), fd) ){
+      zLine[zLine.size()-1] = '\0';
+      char *z = zLine.data();
       while( *z>='0' && *z<='9' ) z++;
       while( *z==' ' ) z++;
 
@@ -196,14 +197,14 @@ static char *sqllogFindFile(const char *zFile){
       while( n>0 && sqllog_isspace(z[n-1]) ) n--;
 
       if( n==strlen(zFile) && 0==memcmp(zFile, z, n) ){
-        char zBuf[16];
-        memset(zBuf, 0, sizeof(zBuf));
-        z = zLine;
+        std::array<char, 16> zBuf;
+        zBuf.fill(0);
+        z = zLine.data();
         while( *z>='0' && *z<='9' ){
-          zBuf[z-zLine] = *z;
+          zBuf[z-zLine.data()] = *z;
           z++;
         }
-        zRet = sqlite3_mprintf("%s_%s.db", sqllogglobal.zPrefix, zBuf);
+        zRet = sqlite3_mprintf("%s_%s.db", sqllogglobal.zPrefix.data(), zBuf.data());
         break;
       }
     }
@@ -299,7 +300,7 @@ static void sqllogCopydb(struct SLConn *p, const char *zSearch, int bLog){
 
       /* Generate a file-name to use for the copy of this database */
       const int iDb = sqllogglobal.iNextDb++;
-      zInit = sqlite3_mprintf("%s_%02d.db", sqllogglobal.zPrefix, iDb);
+      zInit = sqlite3_mprintf("%s_%02d.db", sqllogglobal.zPrefix.data(), iDb);
 
       /* Create the backup */
       assert( sqllogglobal.bRec==0 );
@@ -320,7 +321,7 @@ static void sqllogCopydb(struct SLConn *p, const char *zSearch, int bLog){
 
       if( rc==SQLITE_OK ){
         /* Write an entry into the database index file */
-        FILE *fd = fopen(sqllogglobal.zIdx, "a");
+        FILE *fd = fopen(sqllogglobal.zIdx.data(), "a");
         if( fd ){
           fprintf(fd, "%d %s\n", iDb, zFile);
           fclose(fd);
@@ -358,20 +359,20 @@ static void sqllogOpenlog(struct SLConn *p){
     ** environment variable $ENVIRONMENT_VARIABLE1_NAME.  */
     if( sqllogglobal.zPrefix[0]==0 ){
       char *const zVar = getenv(ENVIRONMENT_VARIABLE1_NAME);
-      if( zVar==0 || strlen(zVar)+10>=(sizeof(sqllogglobal.zPrefix)) ) return;
-      sqlite3_snprintf(sizeof(sqllogglobal.zPrefix), sqllogglobal.zPrefix,
+      if( zVar==0 || strlen(zVar)+10>=(sqllogglobal.zPrefix.size()) ) return;
+      sqlite3_snprintf(sqllogglobal.zPrefix.size(), sqllogglobal.zPrefix.data(),
                         "%s/sqllog_%05d", zVar, getProcessId());
-      sqlite3_snprintf(sizeof(sqllogglobal.zIdx), sqllogglobal.zIdx,
-                        "%s.idx", sqllogglobal.zPrefix);
+      sqlite3_snprintf(sqllogglobal.zIdx.size(), sqllogglobal.zIdx.data(),
+                        "%s.idx", sqllogglobal.zPrefix.data());
       if( getenv(ENVIRONMENT_VARIABLE2_NAME) ){
         sqllogglobal.bReuse = atoi(getenv(ENVIRONMENT_VARIABLE2_NAME));
       }
-      FILE *const fd = fopen(sqllogglobal.zIdx, "w");
+      FILE *const fd = fopen(sqllogglobal.zIdx.data(), "w");
       if( fd ) fclose(fd);
     }
 
     /* Open the log file */
-    char *const zLog = sqlite3_mprintf("%s_%05d.sql", sqllogglobal.zPrefix, p->iLog);
+    char *const zLog = sqlite3_mprintf("%s_%05d.sql", sqllogglobal.zPrefix.data(), p->iLog);
     p->fd = fopen(zLog, "w");
     sqlite3_free(zLog);
     if( p->fd==0 ){

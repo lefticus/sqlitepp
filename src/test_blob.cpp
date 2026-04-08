@@ -31,9 +31,9 @@ extern void *sqlite3TestTextToPtr(const char *z);
 ** from the text using sqlite3TestTextToPtr().
 */
 static char *ptrToText(void *p){
-  static char buf[100];
-  sqlite3_snprintf(sizeof(buf)-1, buf, "%p", p);
-  return buf;
+  static std::array<char, 100> buf;
+  sqlite3_snprintf(buf.size()-1, buf.data(), "%p", p);
+  return buf.data();
 }
 
 /*
@@ -308,17 +308,18 @@ static int SQLITE_TCLAPI test_blob_write(
 */
 int Sqlitetest_blob_Init(Tcl_Interp *interp){
 #ifndef SQLITE_OMIT_INCRBLOB
-  static struct {
+  struct ObjCmdEntry {
      const char *zName;
      Tcl_ObjCmdProc *xProc;
-  } aObjCmd[] = {
+  };
+  static const std::array<ObjCmdEntry, 5> aObjCmd = {{
      { "sqlite3_blob_open",            test_blob_open        },
      { "sqlite3_blob_close",           test_blob_close       },
      { "sqlite3_blob_bytes",           test_blob_bytes       },
      { "sqlite3_blob_read",            test_blob_read        },
      { "sqlite3_blob_write",           test_blob_write       },
-  };
-  for(int i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
+  }};
+  for(int i=0; i<(int)aObjCmd.size(); i++){
     Tcl_CreateObjCommand(interp, aObjCmd[i].zName, aObjCmd[i].xProc, 0, 0);
   }
 #endif /* SQLITE_OMIT_INCRBLOB */

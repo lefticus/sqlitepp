@@ -151,7 +151,7 @@ static void attachFunc(
     /* Allocate the new entry in the db->aDb[] array and initialize the schema
     ** hash tables.
     */
-    if( db->aDb==db->aDbStatic ){
+    if( db->aDb==db->aDbStatic.data() ){
       aNew = static_cast<Db *>(sqlite3DbMallocRawNN(db, sizeof(db->aDb[0])*3 ));
       if( aNew==0 ) return;
       memcpy(aNew, db->aDb, sizeof(db->aDb[0])*2);
@@ -291,7 +291,7 @@ static void detachFunc(
   int i;
   Db *pDb = 0;
   HashElem *pEntry;
-  char zErr[128];
+  std::array<char, 128> zErr;
 
   UNUSED_PARAMETER(NotUsed);
 
@@ -303,17 +303,17 @@ static void detachFunc(
   }
 
   if( i>=db->nDb ){
-    sqlite3_snprintf(sizeof(zErr),zErr, "no such database: %s", zName);
+    sqlite3_snprintf(zErr.size(),zErr.data(), "no such database: %s", zName);
     goto detach_error;
   }
   if( i<2 ){
-    sqlite3_snprintf(sizeof(zErr),zErr, "cannot detach database %s", zName);
+    sqlite3_snprintf(zErr.size(),zErr.data(), "cannot detach database %s", zName);
     goto detach_error;
   }
   if( sqlite3BtreeTxnState(pDb->pBt)!=SQLITE_TXN_NONE
    || sqlite3BtreeIsInBackup(pDb->pBt)
   ){
-    sqlite3_snprintf(sizeof(zErr),zErr, "database %s is locked", zName);
+    sqlite3_snprintf(zErr.size(),zErr.data(), "database %s is locked", zName);
     goto detach_error;
   }
 
@@ -336,7 +336,7 @@ static void detachFunc(
   return;
 
 detach_error:
-  sqlite3_result_error(context, zErr, -1);
+  sqlite3_result_error(context, zErr.data(), -1);
 }
 
 /*

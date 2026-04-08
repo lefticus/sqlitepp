@@ -47,7 +47,7 @@ static int SQLITE_TCLAPI pager_open(
   Pager *pPager;
   int nPage;
   int rc;
-  char zBuf[100];
+  std::array<char, 100> zBuf;
   if( argc!=3 ){
     Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0],
        " FILENAME N-PAGE\"", NULL);
@@ -64,8 +64,8 @@ static int SQLITE_TCLAPI pager_open(
   sqlite3PagerSetCachesize(pPager, nPage);
   pageSize = test_pagesize;
   sqlite3PagerSetPagesize(pPager, &pageSize, -1);
-  sqlite3_snprintf(sizeof(zBuf),zBuf,"%p",pPager);
-  Tcl_AppendResult(interp, zBuf, NULL);
+  sqlite3_snprintf(zBuf.size(),zBuf.data(),"%p",pPager);
+  Tcl_AppendResult(interp, zBuf.data(), NULL);
   return TCL_OK;
 }
 
@@ -262,10 +262,10 @@ static int SQLITE_TCLAPI pager_stats(
       "ref", "page", "max", "size", "state", "err",
       "hit", "miss", "ovfl",
     };
-    char zBuf[100];
+    std::array<char, 100> zBuf;
     Tcl_AppendElement(interp, zName[i]);
-    sqlite3_snprintf(sizeof(zBuf),zBuf,"%d",a[i]);
-    Tcl_AppendElement(interp, zBuf);
+    sqlite3_snprintf(zBuf.size(),zBuf.data(),"%d",a[i]);
+    Tcl_AppendElement(interp, zBuf.data());
   }
   return TCL_OK;
 }
@@ -282,7 +282,7 @@ static int SQLITE_TCLAPI pager_pagecount(
   const char **argv      /* Text of each argument */
 ){
   Pager *pPager;
-  char zBuf[100];
+  std::array<char, 100> zBuf;
   int nPage;
   if( argc!=2 ){
     Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0],
@@ -291,8 +291,8 @@ static int SQLITE_TCLAPI pager_pagecount(
   }
   pPager = (Pager*)sqlite3TestTextToPtr(argv[1]);
   sqlite3PagerPagecount(pPager, &nPage);
-  sqlite3_snprintf(sizeof(zBuf), zBuf, "%d", nPage);
-  Tcl_AppendResult(interp, zBuf, NULL);
+  sqlite3_snprintf(zBuf.size(), zBuf.data(), "%d", nPage);
+  Tcl_AppendResult(interp, zBuf.data(), NULL);
   return TCL_OK;
 }
 
@@ -308,7 +308,7 @@ static int SQLITE_TCLAPI page_get(
   const char **argv      /* Text of each argument */
 ){
   Pager *pPager;
-  char zBuf[100];
+  std::array<char, 100> zBuf;
   DbPage *pPage = 0;
   int pgno;
   int rc;
@@ -327,8 +327,8 @@ static int SQLITE_TCLAPI page_get(
     Tcl_AppendResult(interp, sqlite3ErrName(rc), NULL);
     return TCL_ERROR;
   }
-  sqlite3_snprintf(sizeof(zBuf),zBuf,"%p",pPage);
-  Tcl_AppendResult(interp, zBuf, NULL);
+  sqlite3_snprintf(zBuf.size(),zBuf.data(),"%p",pPage);
+  Tcl_AppendResult(interp, zBuf.data(), NULL);
   return TCL_OK;
 }
 
@@ -345,7 +345,7 @@ static int SQLITE_TCLAPI page_lookup(
   const char **argv      /* Text of each argument */
 ){
   Pager *pPager;
-  char zBuf[100];
+  std::array<char, 100> zBuf;
   DbPage *pPage;
   int pgno;
   if( argc!=3 ){
@@ -357,8 +357,8 @@ static int SQLITE_TCLAPI page_lookup(
   if( Tcl_GetInt(interp, argv[2], &pgno) ) return TCL_ERROR;
   pPage = sqlite3PagerLookup(pPager, pgno);
   if( pPage ){
-    sqlite3_snprintf(sizeof(zBuf),zBuf,"%p",pPage);
-    Tcl_AppendResult(interp, zBuf, NULL);
+    sqlite3_snprintf(zBuf.size(),zBuf.data(),"%p",pPage);
+    Tcl_AppendResult(interp, zBuf.data(), NULL);
   }
   return TCL_OK;
 }
@@ -419,7 +419,7 @@ static int SQLITE_TCLAPI page_read(
   int argc,              /* Number of arguments */
   const char **argv      /* Text of each argument */
 ){
-  char zBuf[100];
+  std::array<char, 100> zBuf;
   DbPage *pPage;
   if( argc!=2 ){
     Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0],
@@ -427,8 +427,8 @@ static int SQLITE_TCLAPI page_read(
     return TCL_ERROR;
   }
   pPage = (DbPage*)sqlite3TestTextToPtr(argv[1]);
-  memcpy(zBuf, sqlite3PagerGetData(pPage), sizeof(zBuf));
-  Tcl_AppendResult(interp, zBuf, NULL);
+  memcpy(zBuf.data(), sqlite3PagerGetData(pPage), zBuf.size());
+  Tcl_AppendResult(interp, zBuf.data(), NULL);
   return TCL_OK;
 }
 
@@ -443,7 +443,7 @@ static int SQLITE_TCLAPI page_number(
   int argc,              /* Number of arguments */
   const char **argv      /* Text of each argument */
 ){
-  char zBuf[100];
+  std::array<char, 100> zBuf;
   DbPage *pPage;
   if( argc!=2 ){
     Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0],
@@ -451,8 +451,8 @@ static int SQLITE_TCLAPI page_number(
     return TCL_ERROR;
   }
   pPage = (DbPage *)sqlite3TestTextToPtr(argv[1]);
-  sqlite3_snprintf(sizeof(zBuf), zBuf, "%d", sqlite3PagerPagenumber(pPage));
-  Tcl_AppendResult(interp, zBuf, NULL);
+  sqlite3_snprintf(zBuf.size(), zBuf.data(), "%d", sqlite3PagerPagenumber(pPage));
+  Tcl_AppendResult(interp, zBuf.data(), NULL);
   return TCL_OK;
 }
 
@@ -588,7 +588,7 @@ static int faultSimCallback(int x){
     memcpy(faultSimScript+faultSimScriptSize, "0", 2);
   }else{
     /* Convert x to text without using any sqlite3 routines */
-    char zInt[30];
+    std::array<char, 30> zInt;
     int isNeg;
     if( x<0 ){
       isNeg = 1;
@@ -596,13 +596,13 @@ static int faultSimCallback(int x){
     }else{
       isNeg = 0;
     }
-    zInt[sizeof(zInt)-1] = 0;
+    zInt[zInt.size()-1] = 0;
     int i;
-    for(i=sizeof(zInt)-2; i>0 && x>0; i--, x /= 10){
+    for(i=zInt.size()-2; i>0 && x>0; i--, x /= 10){
       zInt[i] = (x%10) + '0';
     }
     if( isNeg ) zInt[i--] = '-';
-    memcpy(faultSimScript+faultSimScriptSize, zInt+i+1, sizeof(zInt)-i-1);
+    memcpy(faultSimScript+faultSimScriptSize, zInt.data()+i+1, zInt.size()-i-1);
   }
   int rc = Tcl_Eval(faultSimInterp, faultSimScript);
   if( rc ){
@@ -674,7 +674,7 @@ static int SQLITE_TCLAPI testBitvecBuiltinTest(
 ){
   int sz, rc;
   int nProg = 0;
-  int aProg[100];
+  std::array<int, 100> aProg;
   const char *z;
   if( argc!=3 ){
     Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0],
@@ -689,7 +689,7 @@ static int SQLITE_TCLAPI testBitvecBuiltinTest(
     while( sqlite3Isdigit(*z) ){ z++; }
   }
   aProg[nProg] = 0;
-  rc = sqlite3_test_control(SQLITE_TESTCTRL_BITVEC_TEST, sz, aProg);
+  rc = sqlite3_test_control(SQLITE_TESTCTRL_BITVEC_TEST, sz, aProg.data());
   Tcl_SetObjResult(interp, Tcl_NewIntObj(rc));
   return TCL_OK;
 }  
@@ -704,34 +704,35 @@ int Sqlitetest2_Init(Tcl_Interp *interp){
   extern int sqlite3_io_error_hardhit;
   extern int sqlite3_diskfull_pending;
   extern int sqlite3_diskfull;
-  static struct {
+  struct CmdEntry {
     const char *zName;
     Tcl_CmdProc *xProc;
-  } aCmd[] = {
-    { "pager_open",              (Tcl_CmdProc*)pager_open          },
-    { "pager_close",             (Tcl_CmdProc*)pager_close         },
-    { "pager_commit",            (Tcl_CmdProc*)pager_commit        },
-    { "pager_rollback",          (Tcl_CmdProc*)pager_rollback      },
-    { "pager_stmt_begin",        (Tcl_CmdProc*)pager_stmt_begin    },
-    { "pager_stmt_commit",       (Tcl_CmdProc*)pager_stmt_commit   },
-    { "pager_stmt_rollback",     (Tcl_CmdProc*)pager_stmt_rollback },
-    { "pager_stats",             (Tcl_CmdProc*)pager_stats         },
-    { "pager_pagecount",         (Tcl_CmdProc*)pager_pagecount     },
-    { "page_get",                (Tcl_CmdProc*)page_get            },
-    { "page_lookup",             (Tcl_CmdProc*)page_lookup         },
-    { "page_unref",              (Tcl_CmdProc*)page_unref          },
-    { "page_read",               (Tcl_CmdProc*)page_read           },
-    { "page_write",              (Tcl_CmdProc*)page_write          },
-    { "page_number",             (Tcl_CmdProc*)page_number         },
-    { "pager_truncate",          (Tcl_CmdProc*)pager_truncate      },
-#ifndef SQLITE_OMIT_DISKIO
-    { "fake_big_file",           (Tcl_CmdProc*)fake_big_file       },
-#endif
-    { "sqlite3BitvecBuiltinTest",(Tcl_CmdProc*)testBitvecBuiltinTest     },
-    { "sqlite3_test_control_pending_byte",  (Tcl_CmdProc*)testPendingByte },
-    { "sqlite3_test_control_fault_install", (Tcl_CmdProc*)faultInstallCmd },
   };
-  for(int i=0; i<(int)(sizeof(aCmd)/sizeof(aCmd[0])); i++){
+  static const std::array aCmd = {
+    CmdEntry{ "pager_open",              (Tcl_CmdProc*)pager_open          },
+    CmdEntry{ "pager_close",             (Tcl_CmdProc*)pager_close         },
+    CmdEntry{ "pager_commit",            (Tcl_CmdProc*)pager_commit        },
+    CmdEntry{ "pager_rollback",          (Tcl_CmdProc*)pager_rollback      },
+    CmdEntry{ "pager_stmt_begin",        (Tcl_CmdProc*)pager_stmt_begin    },
+    CmdEntry{ "pager_stmt_commit",       (Tcl_CmdProc*)pager_stmt_commit   },
+    CmdEntry{ "pager_stmt_rollback",     (Tcl_CmdProc*)pager_stmt_rollback },
+    CmdEntry{ "pager_stats",             (Tcl_CmdProc*)pager_stats         },
+    CmdEntry{ "pager_pagecount",         (Tcl_CmdProc*)pager_pagecount     },
+    CmdEntry{ "page_get",                (Tcl_CmdProc*)page_get            },
+    CmdEntry{ "page_lookup",             (Tcl_CmdProc*)page_lookup         },
+    CmdEntry{ "page_unref",              (Tcl_CmdProc*)page_unref          },
+    CmdEntry{ "page_read",               (Tcl_CmdProc*)page_read           },
+    CmdEntry{ "page_write",              (Tcl_CmdProc*)page_write          },
+    CmdEntry{ "page_number",             (Tcl_CmdProc*)page_number         },
+    CmdEntry{ "pager_truncate",          (Tcl_CmdProc*)pager_truncate      },
+#ifndef SQLITE_OMIT_DISKIO
+    CmdEntry{ "fake_big_file",           (Tcl_CmdProc*)fake_big_file       },
+#endif
+    CmdEntry{ "sqlite3BitvecBuiltinTest",(Tcl_CmdProc*)testBitvecBuiltinTest     },
+    CmdEntry{ "sqlite3_test_control_pending_byte",  (Tcl_CmdProc*)testPendingByte },
+    CmdEntry{ "sqlite3_test_control_fault_install", (Tcl_CmdProc*)faultInstallCmd },
+  };
+  for(int i=0; i<(int)aCmd.size(); i++){
     Tcl_CreateCommand(interp, aCmd[i].zName, aCmd[i].xProc, 0, 0);
   }
   Tcl_LinkVar(interp, "sqlite_io_error_pending",

@@ -19,7 +19,7 @@
 
 #ifdef SQLITE_VDBE_COVERAGE
 
-static u8 aBranchArray[200000];
+static std::array<u8, 200000> aBranchArray;
 
 static void test_vdbe_branch(
   void *pCtx, 
@@ -27,7 +27,7 @@ static void test_vdbe_branch(
   unsigned char iBranch, 
   unsigned char iType
 ){
-  if( iSrc<(int)sizeof(aBranchArray) ){
+  if( iSrc<(int)aBranchArray.size() ){
     aBranchArray[iSrc] |= iBranch;
   }
 }
@@ -54,14 +54,14 @@ static int SQLITE_TCLAPI test_vdbe_coverage(
   int objc,
   Tcl_Obj *CONST objv[]
 ){
-  const char *aSub[] = { "start", "report", "stop", 0 };
+  const std::array<const char *, 4> aSub = { "start", "report", "stop", 0 };
   int iSub = -1;
   if( objc!=2 ){
     Tcl_WrongNumArgs(interp, 1, objv, "sub-command");
     return TCL_ERROR;
   }
 
-  if( Tcl_GetIndexFromObj(interp, objv[1], aSub, "sub-command", 0, &iSub) ){
+  if( Tcl_GetIndexFromObj(interp, objv[1], aSub.data(), "sub-command", 0, &iSub) ){
     return TCL_ERROR;
   }
 
@@ -69,14 +69,14 @@ static int SQLITE_TCLAPI test_vdbe_coverage(
   assert( iSub==0 || iSub==1 || iSub==2 );
   switch( iSub ){
     case 0:       /* start */
-      memset(aBranchArray, 0, sizeof(aBranchArray));
+      aBranchArray.fill(0);
       sqlite3_test_control(SQLITE_TESTCTRL_VDBE_COVERAGE, test_vdbe_branch, 0);
       break;
     case 1: {     /* report */
       int i;
       Tcl_Obj *pRes = Tcl_NewObj();
       Tcl_IncrRefCount(pRes);
-      for(i=0; i<(int)sizeof(aBranchArray); i++){
+      for(i=0; i<(int)aBranchArray.size(); i++){
         u8 b = aBranchArray[i];
         int bFlag = ((b >> 4)==4);
         if( b ){

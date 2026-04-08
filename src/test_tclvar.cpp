@@ -537,15 +537,16 @@ static int SQLITE_TCLAPI register_tclvar_module(
 */
 int Sqlitetesttclvar_Init(Tcl_Interp *interp){
 #ifndef SQLITE_OMIT_VIRTUALTABLE
-  static struct {
+  struct ObjCmd {
      const char *zName;
      Tcl_ObjCmdProc *xProc;
      void *clientData;
-  } aObjCmd[] = {
-     { "register_tclvar_module",   register_tclvar_module, 0 },
   };
-  for(int i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
-    Tcl_CreateObjCommand(interp, aObjCmd[i].zName, 
+  static const std::array<ObjCmd, 1> aObjCmd = {{
+     { "register_tclvar_module",   register_tclvar_module, 0 },
+  }};
+  for(size_t i=0; i<aObjCmd.size(); i++){
+    Tcl_CreateObjCommand(interp, aObjCmd[i].zName,
         aObjCmd[i].xProc, aObjCmd[i].clientData, 0);
   }
 #endif

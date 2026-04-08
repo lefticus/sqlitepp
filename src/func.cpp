@@ -768,7 +768,7 @@ static int patternCompare(
       ** c or cx.
       */
       if( c<0x80 ){
-        char zStop[3];
+        std::array<char, 3> zStop;
         int bMatch;
         if( noCase ){
           zStop[0] = sqlite3Toupper(c);
@@ -779,7 +779,7 @@ static int patternCompare(
           zStop[1] = 0;
         }
         while(1){
-          zString += strcspn((const char*)zString, zStop);
+          zString += strcspn((const char*)zString, zStop.data());
           if( zString[0]==0 ) break;
           zString++;
           bMatch = patternCompare(zPattern,zString,pInfo,matchOther);
@@ -1761,7 +1761,7 @@ static void soundexFunc(
   int argc,
   sqlite3_value **argv
 ){
-  char zResult[8];
+  std::array<char, 8> zResult;
   const u8 *zIn;
   int i, j;
   static const unsigned char iCode[] = {
@@ -1796,7 +1796,7 @@ static void soundexFunc(
       zResult[j++] = '0';
     }
     zResult[j] = 0;
-    sqlite3_result_text(context, zResult, 4, SQLITE_TRANSIENT);
+    sqlite3_result_text(context, zResult.data(), 4, SQLITE_TRANSIENT);
   }else{
     /* IMP: R-64894-50321 The string "?000" is returned if the argument
     ** is NULL or contains no ASCII alphabetic characters. */
@@ -3120,7 +3120,7 @@ static void fpdecodeFunc(
   FpDecode s;
   double x;
   int y, z;
-  char zBuf[100];
+  std::array<char, 100> zBuf;
   UNUSED_PARAMETER(argc);
   assert( argc==3 );
   x = sqlite3_value_double(argv[0]);
@@ -3129,11 +3129,11 @@ static void fpdecodeFunc(
   if( z<=0 ) z = 1;
   sqlite3FpDecode(&s, x, y, z);
   if( s.isSpecial==2 ){
-    sqlite3_snprintf(sizeof(zBuf), zBuf, "NaN");
+    sqlite3_snprintf(zBuf.size(), zBuf.data(), "NaN");
   }else{
-    sqlite3_snprintf(sizeof(zBuf), zBuf, "%c%.*s/%d", s.sign, s.n, s.z, s.iDP);
+    sqlite3_snprintf(zBuf.size(), zBuf.data(), "%c%.*s/%d", s.sign, s.n, s.z, s.iDP);
   }
-  sqlite3_result_text(context, zBuf, -1, SQLITE_TRANSIENT);
+  sqlite3_result_text(context, zBuf.data(), -1, SQLITE_TRANSIENT);
 }
 #endif /* SQLITE_DEBUG */
 

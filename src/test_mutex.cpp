@@ -24,7 +24,7 @@
 /* defined in main.c */
 extern const char *sqlite3ErrName(int);
 
-static const char *aName[MAX_MUTEXES+1] = {
+static const std::array<const char *, MAX_MUTEXES+1> aName = {
   "fast",        "recursive",   "static_main",   "static_mem",
   "static_open", "static_prng", "static_lru",    "static_pmem",
   "static_app1", "static_app2", "static_app3",   "static_vfs1",
@@ -313,10 +313,10 @@ static int SQLITE_TCLAPI test_alloc_mutex(
 ){
 #if SQLITE_THREADSAFE
   sqlite3_mutex *p = sqlite3_mutex_alloc(SQLITE_MUTEX_FAST);
-  char zBuf[100];
+  std::array<char, 100> zBuf;
   sqlite3_mutex_free(p);
-  sqlite3_snprintf(sizeof(zBuf), zBuf, "%p", p);
-  Tcl_AppendResult(interp, zBuf, (char*)0);
+  sqlite3_snprintf(zBuf.size(), zBuf.data(), "%p", p);
+  Tcl_AppendResult(interp, zBuf.data(), (char*)0);
 #endif
   return TCL_OK;
 }
@@ -387,7 +387,7 @@ static sqlite3_mutex *getStaticMutexPointer(
   Tcl_Obj *pObj
 ){
   int iMutex;
-  if( Tcl_GetIndexFromObj(pInterp, pObj, aName, "mutex name", 0, &iMutex) ){
+  if( Tcl_GetIndexFromObj(pInterp, pObj, aName.data(), "mutex name", 0, &iMutex) ){
     return 0;
   }
   assert( iMutex!=SQLITE_MUTEX_FAST && iMutex!=SQLITE_MUTEX_RECURSIVE );
@@ -471,10 +471,11 @@ static int SQLITE_TCLAPI test_leave_db_mutex(
 }
 
 int Sqlitetest_mutex_Init(Tcl_Interp *interp){
-  static struct {
+  struct CmdEntry {
     const char *zName;
     Tcl_ObjCmdProc *xProc;
-  } aCmd[] = {
+  };
+  static const std::array<CmdEntry, 11> aCmd = {{
     { "sqlite3_shutdown",        (Tcl_ObjCmdProc*)test_shutdown },
     { "sqlite3_initialize",      (Tcl_ObjCmdProc*)test_initialize },
     { "sqlite3_config",          (Tcl_ObjCmdProc*)test_config },
@@ -489,8 +490,8 @@ int Sqlitetest_mutex_Init(Tcl_Interp *interp){
     { "install_mutex_counters",  (Tcl_ObjCmdProc*)test_install_mutex_counters },
     { "read_mutex_counters",     (Tcl_ObjCmdProc*)test_read_mutex_counters },
     { "clear_mutex_counters",    (Tcl_ObjCmdProc*)test_clear_mutex_counters },
-  };
-  for(int i=0; i<(int)(sizeof(aCmd)/sizeof(aCmd[0])); i++){
+  }};
+  for(int i=0; i<(int)aCmd.size(); i++){
     Tcl_CreateObjCommand(interp, aCmd[i].zName, aCmd[i].xProc, 0, 0);
   }
 

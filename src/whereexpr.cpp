@@ -186,13 +186,13 @@ static int isLikeOrGlob(
   ExprList *pList;           /* List of operands to the LIKE operator */
   u8 c;                      /* One character in z[] */
   int cnt;                   /* Number of non-wildcard prefix characters */
-  u8 wc[4];                  /* Wildcard characters */
+  std::array<u8, 4> wc;                  /* Wildcard characters */
   sqlite3 *db = pParse->db;  /* Database connection */
   sqlite3_value *pVal = 0;
   int op;                    /* Opcode of pRight */
   int rc;                    /* Result code to return */
 
-  if( !sqlite3IsLikeFunction(db, pExpr, pnoCase, (char*)wc) ){
+  if( !sqlite3IsLikeFunction(db, pExpr, pnoCase, (char*)wc.data()) ){
     return 0;
   }
 #ifdef SQLITE_EBCDIC
@@ -712,7 +712,7 @@ static void exprAnalyzeOrTerm(
   if( pOrInfo==0 ) return;
   pTerm->wtFlags |= TERM_ORINFO;
   pOrWc = &pOrInfo->wc;
-  memset(pOrWc->aStatic, 0, sizeof(pOrWc->aStatic));
+  memset(pOrWc->aStatic.data(), 0, sizeof(pOrWc->aStatic));
   sqlite3WhereClauseInit(pOrWc, pWInfo);
   sqlite3WhereSplit(pOrWc, pExpr, TK_OR);
   sqlite3WhereExprAnalyze(pSrc, pOrWc);
@@ -740,7 +740,7 @@ static void exprAnalyzeOrTerm(
         pOrTerm->eOperator = WO_AND;
         pOrTerm->leftCursor = -1;
         pAndWC = &pAndInfo->wc;
-        memset(pAndWC->aStatic, 0, sizeof(pAndWC->aStatic));
+        memset(pAndWC->aStatic.data(), 0, sizeof(pAndWC->aStatic));
         sqlite3WhereClauseInit(pAndWC, pWC->pWInfo);
         sqlite3WhereSplit(pAndWC, pOrTerm->pExpr, TK_AND);
         sqlite3WhereExprAnalyze(pSrc, pAndWC);
@@ -1195,7 +1195,7 @@ static void exprAnalyze(
   pTerm->iParent = -1;
   pTerm->eOperator = 0;
   if( allowedOp(op) ){
-    int aiCurCol[2];
+    std::array<int, 2> aiCurCol;
     Expr *pLeft = sqlite3ExprSkipCollate(pExpr->pLeft);
     Expr *pRight = sqlite3ExprSkipCollate(pExpr->pRight);
     u16 opMask = (pTerm->prereqRight & prereqLeft)==0 ? WO_ALL : WO_EQUIV;
@@ -1207,7 +1207,7 @@ static void exprAnalyze(
       pLeft = pLeft->x.pList->a[pTerm->u.x.iField-1].pExpr;
     }
 
-    if( exprMightBeIndexed(pSrc, aiCurCol, pLeft, op) ){
+    if( exprMightBeIndexed(pSrc, aiCurCol.data(), pLeft, op) ){
       pTerm->leftCursor = aiCurCol[0];
       assert( (pTerm->eOperator & (WO_OR|WO_AND))==0 );
       pTerm->u.x.leftColumn = aiCurCol[1];
@@ -1215,7 +1215,7 @@ static void exprAnalyze(
     }
     if( op==TK_IS ) pTerm->wtFlags |= TERM_IS;
     if( pRight
-     && exprMightBeIndexed(pSrc, aiCurCol, pRight, op)
+     && exprMightBeIndexed(pSrc, aiCurCol.data(), pRight, op)
      && !ExprHasProperty(pRight, EP_FixedCol)
     ){
       WhereTerm *pNew;
@@ -1744,7 +1744,7 @@ void sqlite3WhereClauseInit(
   pWC->nTerm = 0;
   pWC->nBase = 0;
   pWC->nSlot = ArraySize(pWC->aStatic);
-  pWC->a = pWC->aStatic;
+  pWC->a = pWC->aStatic.data();
 }
 
 /*

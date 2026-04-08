@@ -117,6 +117,7 @@
 
 #include "sqlite3.hpp"
 
+#include <array>
 #include <assert.h>
 #include <string.h>
 #include <sys/types.h>
@@ -449,16 +450,16 @@ static int demoDelete(sqlite3_vfs *pVfs, const char *zPath, int dirSync){
   if( rc!=0 && errno==ENOENT ) return SQLITE_OK;
 
   if( rc==0 && dirSync ){
-    char zDir[MAXPATHNAME+1];     /* Name of directory containing file zPath */
+    std::array<char, MAXPATHNAME+1> zDir;     /* Name of directory containing file zPath */
 
     /* Figure out the directory name from the path of the file deleted. */
-    sqlite3_snprintf(MAXPATHNAME, zDir, "%s", zPath);
+    sqlite3_snprintf(MAXPATHNAME, zDir.data(), "%s", zPath);
     zDir[MAXPATHNAME] = '\0';
-    char *zSlash = strrchr(zDir,'/');
+    char *zSlash = strrchr(zDir.data(),'/');
     if( zSlash ){
       /* Open a file-descriptor on the directory. Sync. Close. */
       zSlash[0] = 0;
-      const int dfd = open(zDir, O_RDONLY, 0);
+      const int dfd = open(zDir.data(), O_RDONLY, 0);
       if( dfd<0 ){
         rc = -1;
       }else{
@@ -522,15 +523,15 @@ static int demoFullPathname(
   int nPathOut,                   /* Size of output buffer in bytes */
   char *zPathOut                  /* Pointer to output buffer */
 ){
-  char zDir[MAXPATHNAME+1];
+  std::array<char, MAXPATHNAME+1> zDir;
   if( zPath[0]=='/' ){
     zDir[0] = '\0';
   }else{
-    if( getcwd(zDir, sizeof(zDir))==0 ) return SQLITE_IOERR;
+    if( getcwd(zDir.data(), zDir.size())==0 ) return SQLITE_IOERR;
   }
   zDir[MAXPATHNAME] = '\0';
 
-  sqlite3_snprintf(nPathOut, zPathOut, "%s/%s", zDir, zPath);
+  sqlite3_snprintf(nPathOut, zPathOut, "%s/%s", zDir.data(), zPath);
   zPathOut[nPathOut-1] = '\0';
 
   return SQLITE_OK;

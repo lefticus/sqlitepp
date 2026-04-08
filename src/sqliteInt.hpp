@@ -637,6 +637,7 @@
 #include <assert.h>
 #include <stddef.h>
 #include <ctype.h>
+#include <array>
 
 
 /*
@@ -1593,7 +1594,7 @@ struct Lookaside {
   u16 szTrue;             /* True value of sz, even if disabled */
   u8 bMalloced;           /* True if pStart obtained from sqlite3_malloc() */
   u32 nSlot;              /* Number of lookaside slots allocated */
-  u32 anStat[3];          /* 0: hits.  1: size misses.  2: full misses */
+  std::array<u32, 3> anStat;  /* 0: hits.  1: size misses.  2: full misses */
   LookasideSlot *pInit;   /* List of buffers not previously used */
   LookasideSlot *pFree;   /* List of available buffers */
 #ifndef SQLITE_OMIT_TWOSIZE_LOOKASIDE
@@ -1698,7 +1699,7 @@ struct sqlite3 {
   int nextPagesize;             /* Pagesize after VACUUM if >0 */
   i64 nChange;                  /* Value returned by sqlite3_changes() */
   i64 nTotalChange;             /* Value returned by sqlite3_total_changes() */
-  int aLimit[SQLITE_N_LIMIT];   /* Limits */
+  std::array<int, SQLITE_N_LIMIT> aLimit; /* Limits */
   int nMaxSorterMmap;           /* Maximum size of regions mapped by sorter */
   struct sqlite3InitInfo {      /* Information used during initialization */
     Pgno newTnum;               /* Rootpage of table being initialized */
@@ -1774,7 +1775,7 @@ struct sqlite3 {
   Hash aFunc;                   /* Hash table of connection functions */
   Hash aCollSeq;                /* All collating sequences */
   BusyHandler busyHandler;      /* Busy callback */
-  Db aDbStatic[2];              /* Static space for the 2 default backends */
+  std::array<Db, 2> aDbStatic;  /* Static space for the 2 default backends */
   Savepoint *pSavepoint;        /* List of active savepoints */
   int nAnalysisLimit;           /* Number of index rows to ANALYZE */
   int busyTimeout;              /* Busy handler timeout, in msec */
@@ -2463,7 +2464,7 @@ struct Table {
   } u;
   Trigger *pTrigger;   /* List of triggers on this object */
   Schema *pSchema;     /* Schema that contains this table */
-  u8 aHx[16];          /* Column aHt[K%sizeof(aHt)] might have hash K */
+  std::array<u8, 16> aHx; /* Column aHt[K%sizeof(aHt)] might have hash K */
 };
 
 /*
@@ -2597,8 +2598,8 @@ struct FKey {
   int nCol;         /* Number of columns in this key */
   /* EV: R-30323-21917 */
   u8 isDeferred;       /* True if constraint checking is deferred till COMMIT */
-  u8 aAction[2];        /* ON DELETE and ON UPDATE actions, respectively */
-  Trigger *apTrigger[2];/* Triggers for aAction[] actions */
+  std::array<u8, 2> aAction;        /* ON DELETE and ON UPDATE actions, respectively */
+  std::array<Trigger *, 2> apTrigger; /* Triggers for aAction[] actions */
   struct sColMap aCol[FLEXARRAY]; /* One entry for each of nCol columns */
 };
 
@@ -3808,7 +3809,7 @@ struct TriggerPrg {
   TriggerPrg *pNext;      /* Next entry in Parse.pTriggerPrg list */
   SubProgram *pProgram;   /* Program implementing pTrigger/orconf */
   int orconf;             /* Default ON CONFLICT policy */
-  u32 aColmask[2];        /* Masks of old.*, new.* columns accessed */
+  std::array<u32, 2> aColmask; /* Masks of old.*, new.* columns accessed */
 };
 
 /*
@@ -3950,7 +3951,7 @@ struct Parse {
   ** determined by offsetof(Parse,aTempReg).
   **************************************************************************/
 
-  int aTempReg[8];        /* Holding area for temporary registers */
+  std::array<int, 8> aTempReg; /* Holding area for temporary registers */
   Parse *pOuterParse;     /* Outer Parse object when nested */
   Token sNameToken;       /* Token with unqualified schema object name */
   u32 oldmask;            /* Mask of old.* columns referenced */
@@ -4193,7 +4194,7 @@ struct Returning {
   int iRetCur;          /* Transient table holding RETURNING results */
   int nRetCol;          /* Number of in pReturnEL after expansion */
   int iRetReg;          /* Register array for holding a row of RETURNING */
-  char zName[40];       /* Name of trigger: "sqlite_returning_%p" */
+  std::array<char, 40> zName; /* Name of trigger: "sqlite_returning_%p" */
 };
 
 /*
@@ -4352,7 +4353,7 @@ struct Sqlite3Config {
   unsigned int iPrngSeed;           /* Alternative fixed seed for the PRNG */
   /* vvvv--- must be last ---vvv */
 #ifdef SQLITE_DEBUG
-  sqlite3_int64 aTune[SQLITE_NTUNE]; /* Tuning parameters */
+  std::array<sqlite3_int64, SQLITE_NTUNE> aTune; /* Tuning parameters */
 #endif
 };
 
@@ -4532,7 +4533,7 @@ struct DbClientData {
 */
 struct TreeView {
   int iLevel;             /* Which level of the tree we are on */
-  u8  bLine[100];         /* Draw vertical in column i if bLine[i] is true */
+  std::array<u8, 100> bLine; /* Draw vertical in column i if bLine[i] is true */
 };
 #endif /* SQLITE_DEBUG */
 
@@ -4844,7 +4845,7 @@ struct FpDecode {
   int n;               /* Significant digits in the decode */
   int iDP;             /* Location of the decimal point */
   char *z;             /* Start of significant digits */
-  char zBuf[20];       /* Storage for significant digits */
+  std::array<char, 20> zBuf; /* Storage for significant digits */
   char sign;           /* '+' or '-' */
   char isSpecial;      /* 1: Infinity  2: NaN */
 };

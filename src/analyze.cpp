@@ -170,10 +170,11 @@ static void openStatTable(
   const char *zWhere,     /* Delete entries for this table or index */
   const char *zWhereType  /* Either "tbl" or "idx" */
 ){
-  static const struct {
+  struct StatTableEntry {
     const char *zName;
     const char *zCols;
-  } aTable[] = {
+  };
+  static const std::array<StatTableEntry, 3> aTable = {{
     { "sqlite_stat1", "tbl,idx,stat" },
 #if defined(SQLITE_ENABLE_STAT4)
     { "sqlite_stat4", "tbl,idx,neq,nlt,ndlt,sample" },
@@ -181,13 +182,13 @@ static void openStatTable(
     { "sqlite_stat4", 0 },
 #endif
     { "sqlite_stat3", 0 },
-  };
+  }};
   int i;
   sqlite3 *db = pParse->db;
   Db *pDb;
   Vdbe *v = sqlite3GetVdbe(pParse);
-  u32 aRoot[ArraySize(aTable)];
-  u8 aCreateTbl[ArraySize(aTable)];
+  std::array<u32, aTable.size()> aRoot;
+  std::array<u8, aTable.size()> aCreateTbl;
 #ifdef SQLITE_ENABLE_STAT4
   const int nToOpen = OptimizationEnabled(db,SQLITE_Stat4) ? 2 : 1;
 #else
@@ -202,7 +203,7 @@ static void openStatTable(
   /* Create new statistic tables if they do not exist, or clear them
   ** if they do already exist.
   */
-  for(i=0; i<ArraySize(aTable); i++){
+  for(i=0; i<static_cast<int>(aTable.size()); i++){
     const char *zTab = aTable[i].zName;
     Table *pStat;
     aCreateTbl[i] = 0;
@@ -243,7 +244,7 @@ static void openStatTable(
 
   /* Open the sqlite_stat[134] tables for writing. */
   for(i=0; i<nToOpen; i++){
-    assert( i<ArraySize(aTable) );
+    assert( i<aTable.size() );
     sqlite3VdbeAddOp4Int(v, OP_OpenWrite, iStatCur+i, (int)aRoot[i], iDb, 3);
     sqlite3VdbeChangeP5(v, aCreateTbl[i]);
     VdbeComment((v, aTable[i].zName));

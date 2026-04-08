@@ -304,14 +304,14 @@ void sqlite3NestedParse(Parse *pParse, const char *zFormat, ...){
   }
   pParse->nested++;
   const u32 savedDbFlags = db->mDbFlags;
-  char saveBuf[PARSE_TAIL_SZ];
-  memcpy(saveBuf, PARSE_TAIL(pParse), PARSE_TAIL_SZ);
+  std::array<char, PARSE_TAIL_SZ> saveBuf;
+  memcpy(saveBuf.data(), PARSE_TAIL(pParse), PARSE_TAIL_SZ);
   memset(PARSE_TAIL(pParse), 0, PARSE_TAIL_SZ);
   db->mDbFlags |= DBFLAG_PreferBuiltin;
   sqlite3RunParser(pParse, zSql);
   db->mDbFlags = savedDbFlags;
   sqlite3DbFree(db, zSql);
-  memcpy(PARSE_TAIL(pParse), saveBuf, PARSE_TAIL_SZ);
+  memcpy(PARSE_TAIL(pParse), saveBuf.data(), PARSE_TAIL_SZ);
   pParse->nested--;
 }
 
@@ -600,10 +600,10 @@ void sqlite3CollapseDatabaseArray(sqlite3 *db){
     j++;
   }
   db->nDb = j;
-  if( db->nDb<=2 && db->aDb!=db->aDbStatic ){
-    memcpy(db->aDbStatic, db->aDb, 2*sizeof(db->aDb[0]));
+  if( db->nDb<=2 && db->aDb!=db->aDbStatic.data() ){
+    memcpy(db->aDbStatic.data(), db->aDb, 2*sizeof(db->aDb[0]));
     sqlite3DbFree(db, db->aDb);
-    db->aDb = db->aDbStatic;
+    db->aDb = db->aDbStatic.data();
   }
 }
 
@@ -1392,7 +1392,7 @@ void sqlite3ColumnPropertiesFromName(Table *pTab, Column *pCol){
 static void sqlite3DeleteReturning(sqlite3 *db, void *pArg){
   Returning *pRet = static_cast<Returning*>(pArg);
   Hash *const pHash = &(db->aDb[1].pSchema->trigHash);
-  sqlite3HashInsert(pHash, pRet->zName, 0);
+  sqlite3HashInsert(pHash, pRet->zName.data(), 0);
   sqlite3ExprListDelete(db, pRet->pReturnEL);
   sqlite3DbFree(db, pRet);
 }
@@ -1433,9 +1433,9 @@ void sqlite3AddReturning(Parse *pParse, ExprList *pList){
   sqlite3ParserAddCleanup(pParse, sqlite3DeleteReturning, pRet);
   testcase( pParse->earlyCleanup );
   if( db->mallocFailed ) return;
-  sqlite3_snprintf(sizeof(pRet->zName), pRet->zName,
+  sqlite3_snprintf(sizeof(pRet->zName), pRet->zName.data(),
                    "sqlite_returning_%p", pParse);
-  pRet->retTrig.zName = pRet->zName;
+  pRet->retTrig.zName = pRet->zName.data();
   pRet->retTrig.op = TK_RETURNING;
   pRet->retTrig.tr_tm = TRIGGER_AFTER;
   pRet->retTrig.bReturning = 1;
@@ -1446,9 +1446,9 @@ void sqlite3AddReturning(Parse *pParse, ExprList *pList){
   pRet->retTStep.pTrig = &pRet->retTrig;
   pRet->retTStep.pExprList = pList;
   Hash *const pHash = &(db->aDb[1].pSchema->trigHash);
-  assert( sqlite3HashFind(pHash, pRet->zName)==0
+  assert( sqlite3HashFind(pHash, pRet->zName.data())==0
           || pParse->nErr  || pParse->ifNotExists );
-  if( sqlite3HashInsert(pHash, pRet->zName, &pRet->retTrig)
+  if( sqlite3HashInsert(pHash, pRet->zName.data(), &pRet->retTrig)
           ==&pRet->retTrig ){
     sqlite3OomFault(db);
   }
@@ -3306,12 +3306,12 @@ static void sqlite3ClearStatTables(
   int i;
   const char *zDbName = pParse->db->aDb[iDb].zDbSName;
   for(i=1; i<=4; i++){
-    char zTab[24];
-    sqlite3_snprintf(sizeof(zTab),zTab,"sqlite_stat%d",i);
-    if( sqlite3FindTable(pParse->db, zTab, zDbName) ){
+    std::array<char, 24> zTab;
+    sqlite3_snprintf(zTab.size(),zTab.data(),"sqlite_stat%d",i);
+    if( sqlite3FindTable(pParse->db, zTab.data(), zDbName) ){
       sqlite3NestedParse(pParse,
         "DELETE FROM %Q.%s WHERE %s=%Q",
-        zDbName, zTab, zType, zName
+        zDbName, zTab.data(), zType, zName
       );
     }
   }

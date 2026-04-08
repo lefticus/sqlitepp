@@ -577,7 +577,8 @@ static int SQLITE_TCLAPI test_syscall_errno(
   struct Errno {
     const char *z;
     int i;
-  } aErrno[] = {
+  };
+  const std::array<Errno, 12> aErrno = {{
     { "EACCES",    EACCES },
     { "EINTR",     EINTR },
     { "EIO",       EIO },
@@ -590,19 +591,19 @@ static int SQLITE_TCLAPI test_syscall_errno(
     { "EDEADLK",   EDEADLK },
     { "ENOLCK",    ENOLCK },
     { 0, 0 }
-  };
+  }};
 
   if( objc!=4 ){
     Tcl_WrongNumArgs(interp, 2, objv, "SYSCALL ERRNO");
     return TCL_ERROR;
   }
 
-  rc = Tcl_GetIndexFromObjStruct(interp, 
+  rc = Tcl_GetIndexFromObjStruct(interp,
       objv[2], aSyscall, sizeof(aSyscall[0]), "system-call", 0, &iCall
   );
   if( rc!=TCL_OK ) return rc;
-  rc = Tcl_GetIndexFromObjStruct(interp, 
-      objv[3], aErrno, sizeof(aErrno[0]), "errno", 0, &iErrno
+  rc = Tcl_GetIndexFromObjStruct(interp,
+      objv[3], aErrno.data(), sizeof(aErrno[0]), "errno", 0, &iErrno
   );
   if( rc!=TCL_OK ) return rc;
 
@@ -706,7 +707,8 @@ static int SQLITE_TCLAPI test_syscall(
   struct SyscallCmd {
     const char *zName;
     Tcl_ObjCmdProc *xCmd;
-  } aCmd[] = {
+  };
+  const std::array<SyscallCmd, 10> aCmd = {{
     { "fault",      test_syscall_fault },
     { "install",    test_syscall_install },
     { "uninstall",  test_syscall_uninstall },
@@ -717,7 +719,7 @@ static int SQLITE_TCLAPI test_syscall(
     { "defaultvfs", test_syscall_defaultvfs },
     { "pagesize",   test_syscall_pagesize },
     { 0, 0 }
-  };
+  }};
   int iCmd;
   int rc;
   sqlite3_vfs *pVfs = sqlite3_vfs_find(0);
@@ -730,8 +732,8 @@ static int SQLITE_TCLAPI test_syscall(
     Tcl_AppendResult(interp, "VFS does not support xSetSystemCall", NULL);
     rc = TCL_ERROR;
   }else{
-    rc = Tcl_GetIndexFromObjStruct(interp, 
-        objv[1], aCmd, sizeof(aCmd[0]), "sub-command", 0, &iCmd
+    rc = Tcl_GetIndexFromObjStruct(interp,
+        objv[1], aCmd.data(), sizeof(aCmd[0]), "sub-command", 0, &iCmd
     );
   }
   if( rc!=TCL_OK ) return rc;

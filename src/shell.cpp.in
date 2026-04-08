@@ -119,6 +119,7 @@ typedef sqlite3_uint64 u64;
 typedef unsigned char u8;
 #include <ctype.h>
 #include <stdarg.h>
+#include <array>
 #ifndef _WIN32
 # include <sys/time.h>
 # include <sys/ioctl.h>
@@ -371,7 +372,7 @@ struct AuxDb {         /* Storage space for auxiliary database connections */
   char *zFreeOnClose;        /* Free this memory allocation on close */
 #if defined(SQLITE_ENABLE_SESSION)
   int nSession;              /* Number of active sessions */
-  OpenSession aSession[4];   /* Array of sessions.  [0] is in focus. */
+  std::array<OpenSession, 4> aSession;   /* Array of sessions.  [0] is in focus. */
 #endif
 };
 
@@ -422,15 +423,15 @@ struct ShellState {
   char *zDestTable;      /* Name of destination table when MODE_Insert */
   char *zTempFile;       /* Temporary file that might need deleting */
   char *zErrPrefix;      /* Alternative error message prefix */
-  char zTestcase[30];    /* Name of current test case */
-  char outfile[FILENAME_MAX]; /* Filename for *out */
+  std::array<char, 30> zTestcase;    /* Name of current test case */
+  std::array<char, FILENAME_MAX> outfile; /* Filename for *out */
   sqlite3_stmt *pStmt;   /* Current statement if any. */
   FILE *pLog;            /* Write log output here */
   Mode mode;             /* Current display mode */
   Mode modePrior;        /* Backup */
   struct SavedMode *aSavedModes; /* Array of saved .mode settings. system malloc() */
   int nSavedModes;       /* Number of saved .mode settings */
-  struct AuxDb aAuxDb[5]; /* Array of all database connections */
+  std::array<struct AuxDb, 5> aAuxDb; /* Array of all database connections */
   struct AuxDb *pAuxDb;   /* Currently active database connection */
   char *zNonce;          /* Nonce for temporary safe-mode escapes */
 #if !defined(SQLITE_OMIT_VIRTUALTABLE) && !defined(SQLITE_OMIT_AUTHORIZATION)
@@ -8690,7 +8691,7 @@ static int dotCmdOutput(ShellState *p){
     }else{
       output_redir(p, pfPipe);
       if( zBom ) cli_puts(zBom, pfPipe);
-      sqlite3_snprintf(sizeof(p->outfile), p->outfile, "%s", zFile);
+      sqlite3_snprintf(sizeof(p->outfile), p->outfile.data(), "%s", zFile);
     }
 #endif
   }else{
@@ -8710,7 +8711,7 @@ static int dotCmdOutput(ShellState *p){
           pfFile
         );
       }
-      sqlite3_snprintf(sizeof(p->outfile), p->outfile, "%s", zFile);
+      sqlite3_snprintf(sizeof(p->outfile), p->outfile.data(), "%s", zFile);
     }
   }
   sqlite3_free(zFile);
@@ -8846,7 +8847,7 @@ static int dotCmdCheck(ShellState *p){
   if( !isOk ){
     sqlite3_fprintf(stderr,
           "%s:%lld: .check failed for testcase %s\n",
-        p->zInFile, iStart, p->zTestcase);
+        p->zInFile, iStart, p->zTestcase.data());
     p->nTestErr++;
     sqlite3_fprintf(stderr, "Expected: [%s]\n", zPattern);
     sqlite3_fprintf(stderr, "Got:      [%s]\n", zTest);
@@ -8902,9 +8903,9 @@ static int dotCmdTestcase(ShellState *p){
   }
   cli_output_capture = sqlite3_str_new(0);
   if( zName ){
-    sqlite3_snprintf(sizeof(p->zTestcase), p->zTestcase, "%s", zName);
+    sqlite3_snprintf(sizeof(p->zTestcase), p->zTestcase.data(), "%s", zName);
   }else{
-    sqlite3_snprintf(sizeof(p->zTestcase), p->zTestcase, "%s:%lld",
+    sqlite3_snprintf(sizeof(p->zTestcase), p->zTestcase.data(), "%s:%lld",
                      p->zInFile, p->lineno);
   }
   return 0;
@@ -11309,7 +11310,7 @@ static int do_meta_command(const char *zLine, ShellState *p){
     output_c_string(p->out, p->mode.spec.zNull);
     cli_puts("\n", p->out);
     cli_printf(p->out, "%12.12s: %s\n","output",
-          strlen30(p->outfile) ? p->outfile : "stdout");
+          strlen30(p->outfile.data()) ? p->outfile.data() : "stdout");
     cli_printf(p->out, "%12.12s: ", "colseparator");
     output_c_string(p->out, p->mode.spec.zColumnSep);
     cli_puts("\n", p->out);
@@ -13036,8 +13037,8 @@ int SQLITE_CDECL main(int argc, char **argv){
     char *z;
     z = argv[i];
     if( z[0]!='-' || i>nOptsEnd ){
-      if( data.aAuxDb->zDbFilename==0 && !isScriptFile(z,1) ){
-        data.aAuxDb->zDbFilename = z;
+      if( data.aAuxDb[0].zDbFilename==0 && !isScriptFile(z,1) ){
+        data.aAuxDb[0].zDbFilename = z;
       }else{
         /* Excess arguments are interpreted as SQL (or dot-commands) and
         ** mean that nothing is read from stdin */

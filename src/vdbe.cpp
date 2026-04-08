@@ -595,8 +595,8 @@ static void memTracePrint(Mem *p){
     printf(" (rowset)");
   }else{
     StrAccum acc;
-    char zBuf[1000];
-    sqlite3StrAccumInit(&acc, 0, zBuf, sizeof(zBuf), 0);
+    std::array<char, 1000> zBuf;
+    sqlite3StrAccumInit(&acc, 0, zBuf.data(), zBuf.size(), 0);
     sqlite3VdbeMemPrettyPrint(p, &acc);
     printf(" %s", sqlite3StrAccumFinish(&acc));
   }
@@ -799,16 +799,16 @@ static SQLITE_NOINLINE void sqlite3VdbeLogAbort(
   const char *zSql = p->zSql;   /* Original SQL text */
   const char *zPrefix = "";     /* Prefix added to SQL text */
   int pc;                       /* Opcode address */
-  char zXtra[100];              /* Buffer space to store zPrefix */
+  std::array<char, 100> zXtra;  /* Buffer space to store zPrefix */
 
   if( p->pFrame ){
     assert( aOp[0].opcode==OP_Init );
     if( aOp[0].p4.z!=0 ){
-      assert( aOp[0].p4.z[0]=='-' 
-           && aOp[0].p4.z[1]=='-' 
+      assert( aOp[0].p4.z[0]=='-'
+           && aOp[0].p4.z[1]=='-'
            && aOp[0].p4.z[2]==' ' );
-      sqlite3_snprintf(sizeof(zXtra), zXtra,"/* %s */ ",aOp[0].p4.z+3);
-      zPrefix = zXtra;
+      sqlite3_snprintf(zXtra.size(), zXtra.data(),"/* %s */ ",aOp[0].p4.z+3);
+      zPrefix = zXtra.data();
     }else{
       zPrefix = "/* unknown trigger */ ";
     }
@@ -8008,7 +8008,7 @@ case OP_AggFinal: {
 */
 case OP_Checkpoint: {
   int i;                          /* Loop counter */
-  int aRes[3];                    /* Results */
+  std::array<int, 3> aRes;        /* Results */
   Mem *pMem;                      /* Write results here */
 
   assert( p->readOnly==0 );

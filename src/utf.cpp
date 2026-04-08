@@ -256,8 +256,8 @@ SQLITE_NOINLINE int sqlite3VdbeMemTranslate(Mem *pMem, u8 desiredEnc){
 #if defined(TRANSLATE_TRACE) && defined(SQLITE_DEBUG)
   {
     StrAccum acc;
-    char zBuf[1000];
-    sqlite3StrAccumInit(&acc, 0, zBuf, sizeof(zBuf), 0);  
+    std::array<char, 1000> zBuf;
+    sqlite3StrAccumInit(&acc, 0, zBuf.data(), zBuf.size(), 0);
     sqlite3VdbeMemPrettyPrint(pMem, &acc);
     fprintf(stderr, "INPUT:  %s\n", sqlite3StrAccumFinish(&acc));
   }
@@ -414,8 +414,8 @@ translate_out:
 #if defined(TRANSLATE_TRACE) && defined(SQLITE_DEBUG)
   {
     StrAccum acc;
-    char zBuf[1000];
-    sqlite3StrAccumInit(&acc, 0, zBuf, sizeof(zBuf), 0);  
+    std::array<char, 1000> zBuf;
+    sqlite3StrAccumInit(&acc, 0, zBuf.data(), zBuf.size(), 0);
     sqlite3VdbeMemPrettyPrint(pMem, &acc);
     fprintf(stderr, "OUTPUT: %s\n", sqlite3StrAccumFinish(&acc));
   }
@@ -573,25 +573,25 @@ int sqlite3Utf16ByteLen(const void *zIn, int nByte, int nChar){
 */
 void sqlite3UtfSelfTest(void){
   unsigned int i, t;
-  unsigned char zBuf[20];
+  std::array<unsigned char, 20> zBuf;
   unsigned char *z;
   int n;
   unsigned int c;
   (void)t; (void)n; (void)c;
 
   for(i=0; i<0x00110000; i++){
-    z = zBuf;
+    z = zBuf.data();
     WRITE_UTF8(z, i);
-    n = (int)(z-zBuf);
+    n = (int)(z-zBuf.data());
     assert( n>0 && n<=4 );
     z[0] = 0;
-    z = zBuf;
+    z = zBuf.data();
     c = sqlite3Utf8Read((const u8**)&z);
     t = i;
     if( i>=0xD800 && i<=0xDFFF ) t = 0xFFFD;
     if( (i&0xFFFFFFFE)==0xFFFE ) t = 0xFFFD;
     assert( c==t );
-    assert( (z-zBuf)==n );
+    assert( (z-zBuf.data())==n );
   }
 }
 #endif /* SQLITE_TEST */

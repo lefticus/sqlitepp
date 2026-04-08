@@ -91,7 +91,7 @@ for {set r 0} {$r<$mx} {incr r} {
 
 static const char aDigits[] = "0123456789ABCDEF0123456789abcdef";
 static const char aPrefix[] = "-x0\000X0";
-static const et_info fmtinfo[23] = {
+static const std::array<et_info, 23> fmtinfo = {{
   /*  0 */  {  's',  0, 4, etSTRING,     0,  0,  1 },
   /*  1 */  {  'E',  0, 1, etEXP,        14, 0,  0 },  /* Hash: 0 */
   /*  2 */  {  'u', 10, 0, etDECIMAL,    0,  0,  3 },
@@ -115,7 +115,7 @@ static const et_info fmtinfo[23] = {
   /* 20 */  {  'p', 16, 0, etPOINTER,    0,  1,  0 },
   /* 21 */  {  'q',  0, 4, etESCAPE_q,   0,  0,  0 },
   /* 22 */  {  'r', 10, 1, etORDINAL,    0,  0,  0 }
-};
+}};
 
 /* Additional Notes:
 **
@@ -219,7 +219,7 @@ void sqlite3_str_vappendf(
   char *zExtra = 0;          /* Malloced memory used by some conversion */
 
   PrintfArguments *pArgList = 0; /* Arguments for SQLITE_PRINTF_SQLFUNC */
-  char buf[etBUFSIZE];       /* Conversion buffer */
+  std::array<char, etBUFSIZE> buf;       /* Conversion buffer */
 
   /* pAccum never starts out with an empty buffer that was obtained from 
   ** malloc().  This precondition is required by the mprintf("%z...")
@@ -361,7 +361,7 @@ void sqlite3_str_vappendf(
     ** a linear search of the table */
     infop = &fmtinfo[0];
     xtype = etINVALID;
-    for(idx=0; idx<ArraySize(fmtinfo); idx++){
+    for(idx=0; idx<fmtinfo.size(); idx++){
       if( c==fmtinfo[idx].fmttype ){
         infop = &fmtinfo[idx];
         xtype = infop->type;
@@ -370,7 +370,7 @@ void sqlite3_str_vappendf(
     }
 #else
     /* Fast hash-table lookup */
-    assert( ArraySize(fmtinfo)==23 );
+    assert( fmtinfo.size()==23 );
     idx = ((unsigned)c) % 23;
     if( fmtinfo[idx].fmttype==c
      || fmtinfo[idx = fmtinfo[idx].iNxt].fmttype==c
@@ -463,7 +463,7 @@ void sqlite3_str_vappendf(
         }
         if( precision<etBUFSIZE-10-etBUFSIZE/3 ){
           nOut = etBUFSIZE;
-          zOut = buf;
+          zOut = buf.data();
         }else{
           u64 n;
           n = (u64)precision + 10;
@@ -561,8 +561,8 @@ void sqlite3_str_vappendf(
             s.iDP = 1000;
             s.n = 1;
           }else{
-            memcpy(buf, "-Inf", 5);
-            bufpt = buf;
+            memcpy(buf.data(), "-Inf", 5);
+            bufpt = buf.data();
             if( s.sign=='-' ){
               /* no-op */
             }else if( flag_prefix ){
@@ -618,7 +618,7 @@ void sqlite3_str_vappendf(
         }else{
           e2 = s.iDP - 1;
         }
-        bufpt = buf;
+        bufpt = buf.data();
         {
           i64 szBufNeeded;           /* Size of a temporary buffer needed */
           szBufNeeded = MAX(e2,0)+(i64)precision+(i64)width+15;
@@ -743,7 +743,7 @@ void sqlite3_str_vappendf(
         break;
       case etPERCENT:
         buf[0] = '%';
-        bufpt = buf;
+        bufpt = buf.data();
         length = 1;
         break;
       case etCHARX:
@@ -762,7 +762,7 @@ void sqlite3_str_vappendf(
           }
         }else{
           unsigned int ch = va_arg(ap,unsigned int);
-          length = sqlite3AppendOneUtf8Character(buf, ch);
+          length = sqlite3AppendOneUtf8Character(buf.data(), ch);
         }
         if( precision>1 ){
           i64 nPrior = 1;
@@ -771,7 +771,7 @@ void sqlite3_str_vappendf(
             sqlite3_str_appendchar(pAccum, width-1, ' ');
             width = 0;
           }
-          sqlite3_str_append(pAccum, buf, length);
+          sqlite3_str_append(pAccum, buf.data(), length);
           precision--;
           while( precision > 1 ){
             i64 nCopyBytes;
@@ -787,7 +787,7 @@ void sqlite3_str_vappendf(
             nPrior *= 2;
           }
         }
-        bufpt = buf;
+        bufpt = buf.data();
         flag_altform2 = 1;
         goto adjust_width_for_utf8;
       case etSTRING:
@@ -908,7 +908,7 @@ void sqlite3_str_vappendf(
           bufpt = zExtra = printfTempBuf(pAccum, n);
           if( bufpt==0 ) return;
         }else{
-          bufpt = buf;
+          bufpt = buf.data();
         }
         j = 0;
         if( needQuote ){
@@ -1333,10 +1333,10 @@ sqlite3_str *sqlite3_str_new(sqlite3 *db){
 ** %-conversion extensions.
 */
 char *sqlite3VMPrintf(sqlite3 *db, const char *zFormat, va_list ap){
-  char zBase[SQLITE_PRINT_BUF_SIZE];
+  std::array<char, SQLITE_PRINT_BUF_SIZE> zBase;
   StrAccum acc;
   assert( db!=0 );
-  sqlite3StrAccumInit(&acc, db, zBase, sizeof(zBase),
+  sqlite3StrAccumInit(&acc, db, zBase.data(), zBase.size(),
                       db->aLimit[SQLITE_LIMIT_LENGTH]);
   acc.printfFlags = SQLITE_PRINTF_INTERNAL;
   sqlite3_str_vappendf(&acc, zFormat, ap);
@@ -1364,7 +1364,7 @@ char *sqlite3MPrintf(sqlite3 *db, const char *zFormat, ...){
 ** %-conversion extensions.
 */
 char *sqlite3_vmprintf(const char *zFormat, va_list ap){
-  char zBase[SQLITE_PRINT_BUF_SIZE];
+  std::array<char, SQLITE_PRINT_BUF_SIZE> zBase;
   StrAccum acc;
 
 #ifdef SQLITE_ENABLE_API_ARMOR
@@ -1376,7 +1376,7 @@ char *sqlite3_vmprintf(const char *zFormat, va_list ap){
 #ifndef SQLITE_OMIT_AUTOINIT
   if( sqlite3_initialize() ) return 0;
 #endif
-  sqlite3StrAccumInit(&acc, 0, zBase, sizeof(zBase), SQLITE_MAX_LENGTH);
+  sqlite3StrAccumInit(&acc, 0, zBase.data(), zBase.size(), SQLITE_MAX_LENGTH);
   sqlite3_str_vappendf(&acc, zFormat, ap);
   char *const z = sqlite3StrAccumFinish(&acc);
   return z;
@@ -1469,9 +1469,9 @@ char *sqlite3_snprintf(int n, char *zBuf, const char *zFormat, ...){
 */
 static void renderLogMsg(int iErrCode, const char *zFormat, va_list ap){
   StrAccum acc;                          /* String accumulator */
-  char zMsg[SQLITE_MAX_LOG_MESSAGE];     /* Complete log message */
+  std::array<char, SQLITE_MAX_LOG_MESSAGE> zMsg;     /* Complete log message */
 
-  sqlite3StrAccumInit(&acc, 0, zMsg, sizeof(zMsg), 0);
+  sqlite3StrAccumInit(&acc, 0, zMsg.data(), zMsg.size(), 0);
   sqlite3_str_vappendf(&acc, zFormat, ap);
   sqlite3GlobalConfig.xLog(sqlite3GlobalConfig.pLogArg, iErrCode,
                            sqlite3StrAccumFinish(&acc));
@@ -1498,8 +1498,8 @@ void sqlite3_log(int iErrCode, const char *zFormat, ...){
 void sqlite3DebugPrintf(const char *zFormat, ...){
   va_list ap;
   StrAccum acc;
-  char zBuf[SQLITE_PRINT_BUF_SIZE*10];
-  sqlite3StrAccumInit(&acc, 0, zBuf, sizeof(zBuf), 0);
+  std::array<char, SQLITE_PRINT_BUF_SIZE*10> zBuf;
+  sqlite3StrAccumInit(&acc, 0, zBuf.data(), zBuf.size(), 0);
   va_start(ap,zFormat);
   sqlite3_str_vappendf(&acc, zFormat, ap);
   va_end(ap);
@@ -1507,10 +1507,10 @@ void sqlite3DebugPrintf(const char *zFormat, ...){
 #ifdef SQLITE_OS_TRACE_PROC
   {
     extern void SQLITE_OS_TRACE_PROC(const char *zBuf, int nBuf);
-    SQLITE_OS_TRACE_PROC(zBuf, sizeof(zBuf));
+    SQLITE_OS_TRACE_PROC(zBuf.data(), zBuf.size());
   }
 #else
-  fprintf(stdout,"%s", zBuf);
+  fprintf(stdout,"%s", zBuf.data());
   fflush(stdout);
 #endif
 }

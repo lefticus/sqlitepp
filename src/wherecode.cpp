@@ -135,7 +135,7 @@ void sqlite3WhereAddExplainText(
     char *zMsg;                   /* Text to add to EQP output */
 #endif
     StrAccum str;                 /* EQP output string */
-    char zBuf[100];               /* Initial space for EQP output string */
+    std::array<char, 100> zBuf;               /* Initial space for EQP output string */
 
     if( db->mallocFailed ) return;
 
@@ -146,7 +146,7 @@ void sqlite3WhereAddExplainText(
             || ((flags&WHERE_VIRTUALTABLE)==0 && (pLoop->u.btree.nEq>0))
             || (wctrlFlags&(WHERE_ORDERBY_MIN|WHERE_ORDERBY_MAX));
 
-    sqlite3StrAccumInit(&str, db, zBuf, sizeof(zBuf), SQLITE_MAX_LENGTH);
+    sqlite3StrAccumInit(&str, db, zBuf.data(), zBuf.size(), SQLITE_MAX_LENGTH);
     str.printfFlags = SQLITE_PRINTF_INTERNAL;
     sqlite3_str_appendf(&str, "%s %S%s",
        isSearch ? "SEARCH" : "SCAN",
@@ -290,9 +290,9 @@ int sqlite3WhereExplainBloomFilter(
   int i;                        /* Loop counter */
   WhereLoop *pLoop;             /* The where loop */
   StrAccum str;                 /* EQP output string */
-  char zBuf[100];               /* Initial space for EQP output string */
+  std::array<char, 100> zBuf;               /* Initial space for EQP output string */
 
-  sqlite3StrAccumInit(&str, db, zBuf, sizeof(zBuf), SQLITE_MAX_LENGTH);
+  sqlite3StrAccumInit(&str, db, zBuf.data(), zBuf.size(), SQLITE_MAX_LENGTH);
   str.printfFlags = SQLITE_PRINTF_INTERNAL;
   sqlite3_str_appendf(&str, "BLOOM FILTER ON %S (", pItem);
   pLoop = pLevel->pWLoop;
@@ -1085,8 +1085,8 @@ static int codeCursorHintIsOrFunction(Walker *pWalker, Expr *pExpr){
     pWalker->eCode = 1;
   }else if( pExpr->op==TK_FUNCTION ){
     int d1;
-    char d2[4];
-    if( 0==sqlite3IsLikeFunction(pWalker->pParse->db, pExpr, &d1, d2) ){
+    std::array<char, 4> d2;
+    if( 0==sqlite3IsLikeFunction(pWalker->pParse->db, pExpr, &d1, d2.data()) ){
       pWalker->eCode = 1;
     }
   }

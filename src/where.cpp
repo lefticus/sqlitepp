@@ -168,7 +168,7 @@ int sqlite3WhereBreakLabel(WhereInfo *pWInfo){
 ** unable to use the ONEPASS optimization.
 */
 int sqlite3WhereOkOnePass(WhereInfo *pWInfo, int *aiCur){
-  memcpy(aiCur, pWInfo->aiCurOnePass, sizeof(int)*2);
+  memcpy(aiCur, pWInfo->aiCurOnePass.data(), sizeof(int)*2);
 #ifdef WHERETRACE_ENABLED
   if( sqlite3WhereTrace && pWInfo->eOnePass!=ONEPASS_OFF ){
     sqlite3DebugPrintf("%s cursors: %d %d\n",
@@ -192,7 +192,7 @@ int sqlite3WhereUsesDeferredSeek(WhereInfo *pWInfo){
 */
 static void whereOrMove(WhereOrSet *pDest, WhereOrSet *pSrc){
   pDest->n = pSrc->n;
-  memcpy(pDest->a, pSrc->a, pDest->n*sizeof(pDest->a[0]));
+  memcpy(pDest->a.data(), pSrc->a.data(), pDest->n*sizeof(pDest->a[0]));
 }
 
 /*
@@ -210,7 +210,7 @@ static int whereOrInsert(
 ){
   u16 i;
   WhereOrCost *p;
-  for(i=pSet->n, p=pSet->a; i>0; i--, p++){
+  for(i=pSet->n, p=pSet->a.data(); i>0; i--, p++){
     if( rRun<=p->rRun && (prereq & p->prereq)==prereq ){
       goto whereOrInsert_done;
     }
@@ -222,9 +222,9 @@ static int whereOrInsert(
     p = &pSet->a[pSet->n++];
     p->nOut = nOut;
   }else{
-    p = pSet->a;
+    p = pSet->a.data();
     for(i=1; i<pSet->n; i++){
-      if( p->rRun>pSet->a[i].rRun ) p = pSet->a + i;
+      if( p->rRun>pSet->a[i].rRun ) p = pSet->a.data() + i;
     }
     if( p->rRun<=rRun ) return 0;
   }
@@ -2094,7 +2094,7 @@ static int whereRangeScanEst(
   ){
     if( nEq==pBuilder->nRecValid ){
       UnpackedRecord *pRec = pBuilder->pRec;
-      tRowcnt a[2];
+      std::array<tRowcnt, 2> a;
       int nBtm = pLoop->u.btree.nBtm;
       int nTop = pLoop->u.btree.nTop;
 
@@ -2133,7 +2133,7 @@ static int whereRangeScanEst(
       }else{
         /* Note: this call could be optimized away - since the same values must
         ** have been requested when testing key $P in whereEqualScanEst().  */
-        whereKeyStats(pParse, p, pRec, 0, a);
+        whereKeyStats(pParse, p, pRec, 0, a.data());
         iLower = a[0];
         iUpper = a[0] + a[1];
       }
@@ -2156,7 +2156,7 @@ static int whereRangeScanEst(
           tRowcnt iNew;
           u16 mask = WO_GT|WO_LE;
           if( sqlite3ExprVectorSize(pExpr)>n ) mask = (WO_LE|WO_LT);
-          iLwrIdx = whereKeyStats(pParse, p, pRec, 0, a);
+          iLwrIdx = whereKeyStats(pParse, p, pRec, 0, a.data());
           iNew = a[0] + ((pLower->eOperator & mask) ? a[1] : 0);
           if( iNew>iLower ) iLower = iNew;
           nOut--;
@@ -2173,7 +2173,7 @@ static int whereRangeScanEst(
           tRowcnt iNew;
           u16 mask = WO_GT|WO_LE;
           if( sqlite3ExprVectorSize(pExpr)>n ) mask = (WO_LE|WO_LT);
-          iUprIdx = whereKeyStats(pParse, p, pRec, 1, a);
+          iUprIdx = whereKeyStats(pParse, p, pRec, 1, a.data());
           iNew = a[0] + ((pUpper->eOperator & mask) ? a[1] : 0);
           if( iNew<iUpper ) iUpper = iNew;
           nOut--;
@@ -2266,7 +2266,7 @@ static int whereEqualScanEst(
   int nEq = pBuilder->pNew->u.btree.nEq;
   UnpackedRecord *pRec = pBuilder->pRec;
   int rc;                   /* Subfunction return code */
-  tRowcnt a[2];             /* Statistics */
+  std::array<tRowcnt, 2> a;             /* Statistics */
   int bOk;
 
   assert( nEq>=1 );
@@ -2294,7 +2294,7 @@ static int whereEqualScanEst(
   if( bOk==0 ) return SQLITE_NOTFOUND;
   pBuilder->nRecValid = nEq;
 
-  whereKeyStats(pParse, p, pRec, 0, a);
+  whereKeyStats(pParse, p, pRec, 0, a.data());
   WHERETRACE(0x20,("equality scan regions %s(%d): %d\n",
                    p->zName, nEq-1, (int)a[1]));
   *pnRow = a[1];
@@ -2361,27 +2361,27 @@ void sqlite3WhereTermPrint(WhereTerm *pTerm, int iTerm){
   if( pTerm==0 ){
     sqlite3DebugPrintf("TERM-%-3d NULL\n", iTerm);
   }else{
-    char zType[8];
-    char zLeft[50];
-    memcpy(zType, "....", 5);
+    std::array<char, 8> zType;
+    std::array<char, 50> zLeft;
+    memcpy(zType.data(), "....", 5);
     if( pTerm->wtFlags & TERM_VIRTUAL ) zType[0] = 'V';
     if( pTerm->eOperator & WO_EQUIV  ) zType[1] = 'E';
     if( ExprHasProperty(pTerm->pExpr, EP_OuterON) ) zType[2] = 'L';
     if( pTerm->wtFlags & TERM_CODED  ) zType[3] = 'C';
     if( pTerm->eOperator & WO_SINGLE ){
       assert( (pTerm->eOperator & (WO_OR|WO_AND))==0 );
-      sqlite3_snprintf(sizeof(zLeft),zLeft,"left={%d:%d}",
+      sqlite3_snprintf(zLeft.size(),zLeft.data(),"left={%d:%d}",
                        pTerm->leftCursor, pTerm->u.x.leftColumn);
     }else if( (pTerm->eOperator & WO_OR)!=0 && pTerm->u.pOrInfo!=0 ){
-      sqlite3_snprintf(sizeof(zLeft),zLeft,"indexable=0x%llx",
+      sqlite3_snprintf(zLeft.size(),zLeft.data(),"indexable=0x%llx",
                        pTerm->u.pOrInfo->indexable);
     }else{
-      sqlite3_snprintf(sizeof(zLeft),zLeft,"left=%d", pTerm->leftCursor);
+      sqlite3_snprintf(zLeft.size(),zLeft.data(),"left=%d", pTerm->leftCursor);
     }
     iTerm = pTerm->iTerm = MAX(iTerm,pTerm->iTerm);
     sqlite3DebugPrintf(
        "TERM-%-3d %p %s %-12s op=%03x wtFlags=%04x",
-       iTerm, pTerm, zType, zLeft, pTerm->eOperator, pTerm->wtFlags);
+       iTerm, pTerm, zType.data(), zLeft.data(), pTerm->eOperator, pTerm->wtFlags);
     /* The 0x10000 .wheretrace flag causes extra information to be
     ** shown about each Term */
     if( sqlite3WhereTrace & 0x10000 ){
@@ -3983,7 +3983,7 @@ static int whereLoopAddBtree(
   WhereInfo *pWInfo;          /* WHERE analysis context */
   Index *pProbe;              /* An index we are evaluating */
   Index sPk;                  /* A fake index object for the primary key */
-  LogEst aiRowEstPk[2];       /* The aiRowLogEst[] value for the sPk index */
+  std::array<LogEst, 2> aiRowEstPk;       /* The aiRowLogEst[] value for the sPk index */
   i16 aiColumnPk = -1;        /* The aColumn[] value for the sPk index */
   SrcList *pTabList;          /* The FROM clause */
   SrcItem *pSrc;              /* The FROM clause btree term to add */
@@ -4019,7 +4019,7 @@ static int whereLoopAddBtree(
     sPk.nKeyCol = 1;
     sPk.nColumn = 1;
     sPk.aiColumn = &aiColumnPk;
-    sPk.aiRowLogEst = aiRowEstPk;
+    sPk.aiRowLogEst = aiRowEstPk.data();
     sPk.onError = OE_Replace;
     sPk.pTable = pTab;
     sPk.szIdxRow = 3;  /* TUNING: Interior rows of IPK table are very small */
@@ -5484,12 +5484,12 @@ int sqlite3WhereIsSorted(WhereInfo *pWInfo){
 #ifdef WHERETRACE_ENABLED
 /* For debugging use only: */
 static const char *wherePathName(WherePath *pPath, int nLoop, WhereLoop *pLast){
-  static char zName[65];
+  static std::array<char, 65> zName;
   int i;
   for(i=0; i<nLoop; i++){ zName[i] = pPath->aLoop[i]->cId; }
   if( pLast ) zName[i++] = pLast->cId;
   zName[i] = 0;
-  return zName;
+  return zName.data();
 }
 #endif
 

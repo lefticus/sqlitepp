@@ -22,8 +22,8 @@
 ** This structure is the current state of the generator.
 */
 static SQLITE_WSD struct sqlite3PrngType {
-  u32 s[16];                 /* 64 bytes of chacha20 state */
-  u8 out[64];                /* Output bytes */
+  std::array<u32, 16> s;     /* 64 bytes of chacha20 state */
+  std::array<u8, 64> out;    /* Output bytes */
   u8 n;                      /* Output bytes remaining */
 } sqlite3Prng;
 
@@ -37,8 +37,8 @@ static SQLITE_WSD struct sqlite3PrngType {
     a += b, d ^= a, d = ROTL(d, 8), \
     c += d, b ^= c, b = ROTL(b, 7))
 static void chacha_block(u32 *out, const u32 *in){
-  u32 x[16];
-  memcpy(x, in, 64);
+  std::array<u32, 16> x;
+  memcpy(x.data(), in, 64);
   for(int i=0; i<10; i++){
     QR(x[0], x[4], x[ 8], x[12]);
     QR(x[1], x[5], x[ 9], x[13]);
@@ -91,10 +91,10 @@ void sqlite3_randomness(int N, void *pBuf){
   */
   if( wsdPrng.s[0]==0 ){
     sqlite3_vfs *pVfs = sqlite3_vfs_find(0);
-    static const u32 chacha20_init[] = {
+    static const std::array<u32, 4> chacha20_init = {{
       0x61707865, 0x3320646e, 0x79622d32, 0x6b206574
-    };
-    memcpy(&wsdPrng.s[0], chacha20_init, 16);
+    }};
+    memcpy(&wsdPrng.s[0], chacha20_init.data(), 16);
     if( NEVER(pVfs==0) ){
       memset(&wsdPrng.s[4], 0, 44);
     }else{
@@ -113,12 +113,12 @@ void sqlite3_randomness(int N, void *pBuf){
       break;
     }
     if( wsdPrng.n>0 ){
-      memcpy(zBuf, wsdPrng.out, wsdPrng.n);
+      memcpy(zBuf, wsdPrng.out.data(), wsdPrng.n);
       N -= wsdPrng.n;
       zBuf += wsdPrng.n;
     }
     wsdPrng.s[12]++;
-    chacha_block((u32*)wsdPrng.out, wsdPrng.s);
+    chacha_block((u32*)wsdPrng.out.data(), wsdPrng.s.data());
     wsdPrng.n = 64;
   }
   sqlite3_mutex_leave(mutex);

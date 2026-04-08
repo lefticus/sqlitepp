@@ -420,11 +420,12 @@ static int unixGetpagesize(void);
 ** testing and sandboxing.  The following array holds the names and pointers
 ** to all overrideable system calls.
 */
-static struct unix_syscall {
+struct unix_syscall {
   const char *zName;            /* Name of the system call */
   sqlite3_syscall_ptr pCurrent; /* Current value of the system call */
   sqlite3_syscall_ptr pDefault; /* Default value */
-} aSyscall[] = {
+};
+static std::array<unix_syscall, 29> aSyscall = {{
   { "open",         (sqlite3_syscall_ptr)posixOpen,  0  },
 #define osOpen      ((int(*)(const char*,int,int))aSyscall[0].pCurrent)
 
@@ -593,7 +594,7 @@ static struct unix_syscall {
   { "ioctl",         (sqlite3_syscall_ptr)0,              0 },
 #endif
 
-}; /* End of the overrideable system calls */
+}}; /* End of the overrideable system calls */
 
 
 #if defined(SQLITE_DEBUG) || defined(SQLITE_ENABLE_FILESTAT)
@@ -642,17 +643,17 @@ static int unixPosixAdvisoryLocks(
   int in;
   ssize_t n;
   char *p, *pNext, *x;
-  char z[2000];
+  std::array<char, 2000> z;
 
         /*             1     */
         /*   012 4 678 01234 */
   memcpy(a, "---/-.---.-----", 16);
-  sqlite3_snprintf(sizeof(z), z, "/proc/%d/fdinfo/%d", getpid(), fd);
-  in = osOpen(z, O_RDONLY, 0);
+  sqlite3_snprintf(z.size(), z.data(), "/proc/%d/fdinfo/%d", getpid(), fd);
+  in = osOpen(z.data(), O_RDONLY, 0);
   if( in<0 ){
     return SQLITE_ERROR_UNABLE;
   }
-  n = osRead(in, z, sizeof(z)-1);
+  n = osRead(in, z.data(), z.size()-1);
   osClose(in);
   if( n<=0 ) return SQLITE_ERROR_UNABLE;
   z[n] = 0;
@@ -664,7 +665,7 @@ static int unixPosixAdvisoryLocks(
   ** lock: 2: POSIX  ADVISORY  READ 494716 08:02:5282282 123 123
   ** lock: 3: POSIX  ADVISORY  READ 494716 08:02:5282282 128 128
   */
-  pNext = strstr(z, "lock:\t");
+  pNext = strstr(z.data(), "lock:\t");
   while( pNext ){
     char cType = 0;
     sqlite3_int64 iFirst, iLast;
@@ -742,7 +743,7 @@ static int unixSetSystemCall(
     ** settings and return NULL
     */
     rc = SQLITE_OK;
-    for(i=0; i<sizeof(aSyscall)/sizeof(aSyscall[0]); i++){
+    for(i=0; i<aSyscall.size(); i++){
       if( aSyscall[i].pDefault ){
         aSyscall[i].pCurrent = aSyscall[i].pDefault;
       }
@@ -751,7 +752,7 @@ static int unixSetSystemCall(
     /* If zName is specified, operate on only the one system call
     ** specified.
     */
-    for(i=0; i<sizeof(aSyscall)/sizeof(aSyscall[0]); i++){
+    for(i=0; i<aSyscall.size(); i++){
       if( strcmp(zName, aSyscall[i].zName)==0 ){
         if( aSyscall[i].pDefault==0 ){
           aSyscall[i].pDefault = aSyscall[i].pCurrent;
@@ -778,7 +779,7 @@ static sqlite3_syscall_ptr unixGetSystemCall(
   unsigned int i;
 
   UNUSED_PARAMETER(pNotUsed);
-  for(i=0; i<sizeof(aSyscall)/sizeof(aSyscall[0]); i++){
+  for(i=0; i<aSyscall.size(); i++){
     if( strcmp(zName, aSyscall[i].zName)==0 ) return aSyscall[i].pCurrent;
   }
   return 0;
@@ -795,11 +796,11 @@ static const char *unixNextSystemCall(sqlite3_vfs *p, const char *zName){
 
   UNUSED_PARAMETER(p);
   if( zName ){
-    for(i=0; i<ArraySize(aSyscall)-1; i++){
+    for(i=0; i<static_cast<int>(aSyscall.size())-1; i++){
       if( strcmp(zName, aSyscall[i].zName)==0 ) break;
     }
   }
-  for(i++; i<ArraySize(aSyscall); i++){
+  for(i++; i<static_cast<int>(aSyscall.size()); i++){
     if( aSyscall[i].pCurrent!=0 ) return aSyscall[i].zName;
   }
   return 0;
@@ -1395,9 +1396,9 @@ static int unixLogErrorAtLine(
   ** equivalent to errno. Otherwise, use strerror_r().
   */
 #if SQLITE_THREADSAFE && defined(HAVE_STRERROR_R)
-  char aErr[80];
-  memset(aErr, 0, sizeof(aErr));
-  zErr = aErr;
+  std::array<char, 80> aErr;
+  aErr.fill(0);
+  zErr = aErr.data();
 
   /* If STRERROR_R_CHAR_P (set by autoconf scripts) or __USE_GNU is defined,
   ** assume that the system provides the GNU version of strerror_r() that
@@ -1418,7 +1419,7 @@ static int unixLogErrorAtLine(
   && !defined(ANDROID) && !defined(__ANDROID__)
   zErr =
 # endif
-  strerror_r(iErrno, aErr, sizeof(aErr)-1);
+  strerror_r(iErrno, aErr.data(), aErr.size()-1);
 
 #elif SQLITE_THREADSAFE
   /* This is a threadsafe build, but strerror_r() is not available. */
@@ -3668,11 +3669,11 @@ static int unixWrite(
     pFile->dbUpdate = 1;  /* The database has been modified */
     if( offset<=24 && offset+amt>=27 ){
       int rc;
-      char oldCntr[4];
+      std::array<char, 4> oldCntr;
       SimulateIOErrorBenign(1);
-      rc = seekAndRead(pFile, 24, oldCntr, 4);
+      rc = seekAndRead(pFile, 24, oldCntr.data(), 4);
       SimulateIOErrorBenign(0);
-      if( rc!=4 || memcmp(oldCntr, &((char*)pBuf)[24-offset], 4)!=0 ){
+      if( rc!=4 || memcmp(oldCntr.data(), &((char*)pBuf)[24-offset], 4)!=0 ){
         pFile->transCntrChng = 1;  /* The transaction counter has changed */
       }
     }
@@ -3871,23 +3872,23 @@ static int full_fsync(int fd, int fullSync, int dataOnly){
 static int openDirectory(const char *zFilename, int *pFd){
   int ii;
   int fd = -1;
-  char zDirname[MAX_PATHNAME+1];
+  std::array<char, MAX_PATHNAME+1> zDirname;
 
-  sqlite3_snprintf(MAX_PATHNAME, zDirname, "%s", zFilename);
-  for(ii=(int)strlen(zDirname); ii>0 && zDirname[ii]!='/'; ii--);
+  sqlite3_snprintf(MAX_PATHNAME, zDirname.data(), "%s", zFilename);
+  for(ii=(int)strlen(zDirname.data()); ii>0 && zDirname[ii]!='/'; ii--);
   if( ii>0 ){
     zDirname[ii] = '\0';
   }else{
     if( zDirname[0]!='/' ) zDirname[0] = '.';
     zDirname[1] = 0;
   }
-  fd = robust_open(zDirname, O_RDONLY|O_BINARY, 0);
+  fd = robust_open(zDirname.data(), O_RDONLY|O_BINARY, 0);
   if( fd>=0 ){
-    OSTRACE(("OPENDIR %-3d %s\n", fd, zDirname));
+    OSTRACE(("OPENDIR %-3d %s\n", fd, zDirname.data()));
   }
   *pFd = fd;
   if( fd>=0 ) return SQLITE_OK;
-  return unixLogError(SQLITE_CANTOPEN_BKPT, "openDirectory", zDirname);
+  return unixLogError(SQLITE_CANTOPEN_BKPT, "openDirectory", zDirname.data());
 }
 
 /*
@@ -4277,17 +4278,17 @@ static int unixFileControl(sqlite3_file *id, int op, void *pArg){
 #if defined(SQLITE_DEBUG) || defined(SQLITE_ENABLE_FILESTAT)
     case SQLITE_FCNTL_FILESTAT: {
       sqlite3_str *pStr = (sqlite3_str*)pArg;
-      char aLck[16];
+      std::array<char, 16> aLck;
       unixInodeInfo *pInode;
-      static const char *azLock[] = { "SHARED", "RESERVED",
+      static std::array<const char *, 4> azLock = { "SHARED", "RESERVED",
                                       "PENDING", "EXCLUSIVE" };
       sqlite3_str_appendf(pStr, "{\"h\":%d", pFile->h);
       sqlite3_str_appendf(pStr, ",\"vfs\":\"%s\"", pFile->pVfs->zName);
       if( pFile->eFileLock ){
         sqlite3_str_appendf(pStr, ",\"eFileLock\":\"%s\"", 
                                   azLock[pFile->eFileLock-1]);
-        if( unixPosixAdvisoryLocks(pFile->h, aLck)==SQLITE_OK ){
-          sqlite3_str_appendf(pStr, ",\"pal\":\"%s\"", aLck);
+        if( unixPosixAdvisoryLocks(pFile->h, aLck.data())==SQLITE_OK ){
+          sqlite3_str_appendf(pStr, ",\"pal\":\"%s\"", aLck.data());
         }
       }
       unixEnterMutex();
@@ -4605,15 +4606,15 @@ struct unixShm {
 */
 static void unixDescribeShm(sqlite3_str *pStr, unixShm *pShm){
   unixShmNode *const pNode = pShm->pShmNode;
-  char aLck[16];
+  std::array<char, 16> aLck;
   sqlite3_str_appendf(pStr, "{\"h\":%d", pNode->hShm);
   assert( unixMutexHeld() );
   sqlite3_str_appendf(pStr, ",\"nRef\":%d", pNode->nRef);
   sqlite3_str_appendf(pStr, ",\"id\":%d", pShm->id);
   sqlite3_str_appendf(pStr, ",\"sharedMask\":%d", pShm->sharedMask);
   sqlite3_str_appendf(pStr, ",\"exclMask\":%d", pShm->exclMask);
-  if( unixPosixAdvisoryLocks(pNode->hShm, aLck)==SQLITE_OK ){
-    sqlite3_str_appendf(pStr, ",\"pal\":\"%s\"", aLck);
+  if( unixPosixAdvisoryLocks(pNode->hShm, aLck.data())==SQLITE_OK ){
+    sqlite3_str_appendf(pStr, ",\"pal\":\"%s\"", aLck.data());
   }
   sqlite3_str_append(pStr, "}", 1);
 }
@@ -5247,9 +5248,9 @@ static int assertLockingArrayOk(unixShmNode *pShmNode){
   return 1;
 #else
   unixShm *pX;
-  int aLock[SQLITE_SHM_NLOCK];
+  std::array<int, SQLITE_SHM_NLOCK> aLock;
 
-  memset(aLock, 0, sizeof(aLock));
+  aLock.fill(0);
   for(pX=pShmNode->pFirst; pX; pX=pX->pNext){
     int i;
     for(i=0; i<SQLITE_SHM_NLOCK; i++){
@@ -5263,8 +5264,8 @@ static int assertLockingArrayOk(unixShmNode *pShmNode){
     }
   }
 
-  assert( 0==memcmp(pShmNode->aLock, aLock, sizeof(aLock)) );
-  return (memcmp(pShmNode->aLock, aLock, sizeof(aLock))==0);
+  assert( 0==memcmp(pShmNode->aLock, aLock.data(), sizeof(pShmNode->aLock)) );
+  return (memcmp(pShmNode->aLock, aLock.data(), sizeof(pShmNode->aLock))==0);
 #endif
 }
 #endif /* !defined(SQLITE_WASI) && !defined(SQLITE_OMIT_WAL) */
@@ -6254,9 +6255,9 @@ static int fillInUnixFile(
 /*
 ** Directories to consider for temp files.
 */
-static const char *azTempDirs[] = {
-  0,
-  0,
+static std::array<const char *, 6> azTempDirs = {
+  nullptr,
+  nullptr,
   "/var/tmp",
   "/usr/tmp",
   "/tmp",
@@ -6291,7 +6292,7 @@ static const char *unixTempFileDir(void){
     ){
       return zDir;
     }
-    if( i>=sizeof(azTempDirs)/sizeof(azTempDirs[0]) ) break;
+    if( i>=azTempDirs.size() ) break;
     zDir = azTempDirs[i++];
   }
   return 0;
@@ -6951,13 +6952,13 @@ static void appendOnePathElement(
       }
     }else if( S_ISLNK(buf.st_mode) ){
       ssize_t got;
-      char zLnk[SQLITE_MAX_PATHLEN+2];
+      std::array<char, SQLITE_MAX_PATHLEN+2> zLnk;
       if( pPath->nSymlink++ > SQLITE_MAX_SYMLINK ){
         pPath->rc = SQLITE_CANTOPEN_BKPT;
         return;
       }
-      got = osReadlink(zIn, zLnk, sizeof(zLnk)-2);
-      if( got<=0 || got>=(ssize_t)sizeof(zLnk)-2 ){
+      got = osReadlink(zIn, zLnk.data(), zLnk.size()-2);
+      if( got<=0 || got>=(ssize_t)zLnk.size()-2 ){
         pPath->rc = unixLogError(SQLITE_CANTOPEN_BKPT, "readlink", zIn);
         return;
       }
@@ -6967,7 +6968,7 @@ static void appendOnePathElement(
       }else{
         pPath->nUsed -= nName + 1;
       }
-      appendAllPathElements(pPath, zLnk);
+      appendAllPathElements(pPath, zLnk.data());
     }
   }
 #endif
@@ -7466,7 +7467,7 @@ static int proxyGetLockPath(const char *dbPath, char *lPath, size_t maxLen){
  */
 static int proxyCreateLockPath(const char *lockPath){
   int i, len;
-  char buf[MAXPATHLEN];
+  std::array<char, MAXPATHLEN> buf;
   int start = 0;
 
   assert(lockPath!=NULL);
@@ -7479,12 +7480,12 @@ static int proxyCreateLockPath(const char *lockPath){
       if( i-start>2 || (i-start==1 && buf[start] != '.' && buf[start] != '/')
          || (i-start==2 && buf[start] != '.' && buf[start+1] != '.') ){
         buf[i]='\0';
-        if( osMkdir(buf, SQLITE_DEFAULT_PROXYDIR_PERMISSIONS) ){
+        if( osMkdir(buf.data(), SQLITE_DEFAULT_PROXYDIR_PERMISSIONS) ){
           int err=errno;
           if( err!=EEXIST ) {
             OSTRACE(("CREATELOCKPATH  FAILED creating %s, "
                      "'%s' proxy lock path=%s pid=%d\n",
-                     buf, strerror(err), lockPath, osGetpid(0)));
+                     buf.data(), strerror(err), lockPath, osGetpid(0)));
             return err;
           }
         }
@@ -7644,41 +7645,41 @@ static int proxyGetHostID(unsigned char *pHostID, int *pError){
 static int proxyBreakConchLock(unixFile *pFile, uuid_t myHostID){
   proxyLockingContext *const pCtx = (proxyLockingContext *)pFile->lockingContext;
   unixFile *const conchFile = pCtx->conchFile;
-  char tPath[MAXPATHLEN];
-  char buf[PROXY_MAXCONCHLEN];
+  std::array<char, MAXPATHLEN> tPath;
+  std::array<char, PROXY_MAXCONCHLEN> buf;
   char *cPath = pCtx->conchFilePath;
   size_t readLen = 0;
   size_t pathLen = 0;
-  char errmsg[64] = "";
+  std::array<char, 64> errmsg = {};
   int fd = -1;
   int rc = -1;
   UNUSED_PARAMETER(myHostID);
 
   /* create a new path by replace the trailing '-conch' with '-break' */
-  pathLen = strlcpy(tPath, cPath, MAXPATHLEN);
+  pathLen = strlcpy(tPath.data(), cPath, MAXPATHLEN);
   if( pathLen>MAXPATHLEN || pathLen<6 ||
      (strlcpy(&tPath[pathLen-5], "break", 6) != 5) ){
-    sqlite3_snprintf(sizeof(errmsg),errmsg,"path error (len %d)",(int)pathLen);
+    sqlite3_snprintf(errmsg.size(),errmsg.data(),"path error (len %d)",(int)pathLen);
     goto end_breaklock;
   }
   /* read the conch content */
-  readLen = osPread(conchFile->h, buf, PROXY_MAXCONCHLEN, 0);
+  readLen = osPread(conchFile->h, buf.data(), PROXY_MAXCONCHLEN, 0);
   if( readLen<PROXY_PATHINDEX ){
-    sqlite3_snprintf(sizeof(errmsg),errmsg,"read error (len %d)",(int)readLen);
+    sqlite3_snprintf(errmsg.size(),errmsg.data(),"read error (len %d)",(int)readLen);
     goto end_breaklock;
   }
   /* write it out to the temporary break file */
-  fd = robust_open(tPath, (O_RDWR|O_CREAT|O_EXCL|O_NOFOLLOW), 0);
+  fd = robust_open(tPath.data(), (O_RDWR|O_CREAT|O_EXCL|O_NOFOLLOW), 0);
   if( fd<0 ){
-    sqlite3_snprintf(sizeof(errmsg), errmsg, "create failed (%d)", errno);
+    sqlite3_snprintf(errmsg.size(), errmsg.data(), "create failed (%d)", errno);
     goto end_breaklock;
   }
-  if( osPwrite(fd, buf, readLen, 0) != (ssize_t)readLen ){
-    sqlite3_snprintf(sizeof(errmsg), errmsg, "write failed (%d)", errno);
+  if( osPwrite(fd, buf.data(), readLen, 0) != (ssize_t)readLen ){
+    sqlite3_snprintf(errmsg.size(), errmsg.data(), "write failed (%d)", errno);
     goto end_breaklock;
   }
-  if( rename(tPath, cPath) ){
-    sqlite3_snprintf(sizeof(errmsg), errmsg, "rename failed (%d)", errno);
+  if( rename(tPath.data(), cPath) ){
+    sqlite3_snprintf(errmsg.size(), errmsg.data(), "rename failed (%d)", errno);
     goto end_breaklock;
   }
   rc = 0;
@@ -7690,10 +7691,10 @@ static int proxyBreakConchLock(unixFile *pFile, uuid_t myHostID){
 end_breaklock:
   if( rc ){
     if( fd>=0 ){
-      osUnlink(tPath);
+      osUnlink(tPath.data());
       robust_close(pFile, fd, __LINE__);
     }
-    fprintf(stderr, "failed to break stale lock on %s, %s\n", cPath, errmsg);
+    fprintf(stderr, "failed to break stale lock on %s, %s\n", cPath, errmsg.data());
   }
   return rc;
 }
@@ -7738,8 +7739,8 @@ static int proxyConchLock(unixFile *pFile, uuid_t myHostID, int lockType){
       }
     
       if( nTries==2 ){
-        char tBuf[PROXY_MAXCONCHLEN];
-        int len = osPread(conchFile->h, tBuf, PROXY_MAXCONCHLEN, 0);
+        std::array<char, PROXY_MAXCONCHLEN> tBuf;
+        int len = osPread(conchFile->h, tBuf.data(), PROXY_MAXCONCHLEN, 0);
         if( len<0 ){
           storeLastErrno(pFile, errno);
           return SQLITE_IOERR_LOCK;
@@ -7788,8 +7789,8 @@ static int proxyTakeConch(unixFile *pFile){
     unixFile *conchFile = pCtx->conchFile;
     uuid_t myHostID;
     int pError = 0;
-    char readBuf[PROXY_MAXCONCHLEN];
-    char lockPath[MAXPATHLEN];
+    std::array<char, PROXY_MAXCONCHLEN> readBuf;
+    std::array<char, MAXPATHLEN> lockPath;
     char *tempLockPath = NULL;
     int rc = SQLITE_OK;
     int createConch = 0;
@@ -7812,7 +7813,7 @@ static int proxyTakeConch(unixFile *pFile){
       goto end_takeconch;
     }
     /* read the existing conch file */
-    readLen = seekAndRead((unixFile*)conchFile, 0, readBuf, PROXY_MAXCONCHLEN);
+    readLen = seekAndRead((unixFile*)conchFile, 0, readBuf.data(), PROXY_MAXCONCHLEN);
     if( readLen<0 ){
       /* I/O error: lastErrno set by seekAndRead */
       storeLastErrno(pFile, conchFile->lastErrno);
@@ -7845,9 +7846,9 @@ static int proxyTakeConch(unixFile *pFile){
             if( pathLen>=MAXPATHLEN ){
               pathLen=MAXPATHLEN-1;
             }
-            memcpy(lockPath, &readBuf[PROXY_PATHINDEX], pathLen);
+            memcpy(lockPath.data(), &readBuf[PROXY_PATHINDEX], pathLen);
             lockPath[pathLen] = 0;
-            tempLockPath = lockPath;
+            tempLockPath = lockPath.data();
             tryOldLockPath = 1;
             /* create a copy of the lock path if the conch is taken */
             goto end_takeconch;
@@ -8520,7 +8521,7 @@ int sqlite3_os_init(void){
 
   /* Double-check that the aSyscall[] array has been constructed
   ** correctly.  See ticket [bb3a86e890c8e96ab] */
-  assert( ArraySize(aSyscall)==29 );
+  assert( aSyscall.size()==29 );
 
   /* Register all VFSes defined in the aVfs[] array */
   for(i=0; i<(sizeof(aVfs)/sizeof(sqlite3_vfs)); i++){

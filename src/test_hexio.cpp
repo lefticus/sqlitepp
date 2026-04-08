@@ -48,7 +48,7 @@ void sqlite3TestBinToHex(unsigned char *zBuf, int N){
 ** Return the number of bytes of binary rendered.
 */
 int sqlite3TestHexToBin(const unsigned char *zIn, int N, unsigned char *aOut){
-  const unsigned char aMap[] = {
+  const std::array<unsigned char, 256> aMap = {{
      0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0,
      0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0,
      0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0,
@@ -65,7 +65,7 @@ int sqlite3TestHexToBin(const unsigned char *zIn, int N, unsigned char *aOut){
      0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0,
      0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0,
      0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0,
-  };
+  }};
   int i, j;
   int hi=1;
 
@@ -201,7 +201,7 @@ static int SQLITE_TCLAPI hexio_get_int(
   int nOut;
   const unsigned char *zIn;
   unsigned char *aOut;
-  unsigned char aNum[4];
+  std::array<unsigned char, 4> aNum;
   int bLittle = 0;
 
   if( objc==3 ){
@@ -222,9 +222,9 @@ static int SQLITE_TCLAPI hexio_get_int(
   }
   nOut = sqlite3TestHexToBin(zIn, (int)nIn, aOut);
   if( nOut>=4 ){
-    memcpy(aNum, aOut, 4);
+    memcpy(aNum.data(), aOut, 4);
   }else{
-    memset(aNum, 0, sizeof(aNum));
+    aNum.fill(0);
     memcpy(&aNum[4-nOut], aOut, nOut);
   }
   sqlite3_free(aOut);
@@ -250,7 +250,7 @@ static int SQLITE_TCLAPI hexio_render_int16(
   Tcl_Obj *CONST objv[]
 ){
   int val;
-  unsigned char aNum[10];
+  std::array<unsigned char, 10> aNum;
 
   if( objc!=2 ){
     Tcl_WrongNumArgs(interp, 1, objv, "INTEGER");
@@ -259,8 +259,8 @@ static int SQLITE_TCLAPI hexio_render_int16(
   if( Tcl_GetIntFromObj(interp, objv[1], &val) ) return TCL_ERROR;
   aNum[0] = val>>8;
   aNum[1] = val;
-  sqlite3TestBinToHex(aNum, 2);
-  Tcl_SetObjResult(interp, Tcl_NewStringObj((char*)aNum, 4));
+  sqlite3TestBinToHex(aNum.data(), 2);
+  Tcl_SetObjResult(interp, Tcl_NewStringObj((char*)aNum.data(), 4));
   return TCL_OK;
 }
 
@@ -277,7 +277,7 @@ static int SQLITE_TCLAPI hexio_render_int32(
   Tcl_Obj *CONST objv[]
 ){
   int val;
-  unsigned char aNum[10];
+  std::array<unsigned char, 10> aNum;
 
   if( objc!=2 ){
     Tcl_WrongNumArgs(interp, 1, objv, "INTEGER");
@@ -288,8 +288,8 @@ static int SQLITE_TCLAPI hexio_render_int32(
   aNum[1] = val>>16;
   aNum[2] = val>>8;
   aNum[3] = val;
-  sqlite3TestBinToHex(aNum, 4);
-  Tcl_SetObjResult(interp, Tcl_NewStringObj((char*)aNum, 8));
+  sqlite3TestBinToHex(aNum.data(), 4);
+  Tcl_SetObjResult(interp, Tcl_NewStringObj((char*)aNum.data(), 8));
   return TCL_OK;
 }
 
@@ -451,10 +451,11 @@ static int SQLITE_TCLAPI make_fts3record(
 ** Register commands with the TCL interpreter.
 */
 int Sqlitetest_hexio_Init(Tcl_Interp *interp){
-  static struct {
+  struct ObjCmdEntry {
      const char *zName;
      Tcl_ObjCmdProc *xProc;
-  } aObjCmd[] = {
+  };
+  static const std::array<ObjCmdEntry, 8> aObjCmd = {{
      { "hexio_read",                   hexio_read            },
      { "hexio_write",                  hexio_write           },
      { "hexio_get_int",                hexio_get_int         },
@@ -463,8 +464,8 @@ int Sqlitetest_hexio_Init(Tcl_Interp *interp){
      { "utf8_to_utf8",                 utf8_to_utf8          },
      { "read_fts3varint",              read_fts3varint       },
      { "make_fts3record",              make_fts3record       },
-  };
-  for(int i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
+  }};
+  for(int i=0; i<(int)aObjCmd.size(); i++){
     Tcl_CreateObjCommand(interp, aObjCmd[i].zName, aObjCmd[i].xProc, 0, 0);
   }
   return TCL_OK;

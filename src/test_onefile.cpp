@@ -80,6 +80,7 @@
 */
 
 #include "sqlite3.hpp"
+#include <array>
 #include <assert.h>
 #include <string.h>
 
@@ -506,12 +507,12 @@ static int fsSync(sqlite3_file *pFile, int flags){
   int rc = SQLITE_OK;
 
   if( p->eType==DATABASE_FILE ){
-    unsigned char zSize[4];
+    std::array<unsigned char, 4> zSize;
     zSize[0] = (pReal->nDatabase&0xFF000000)>>24;
     zSize[1] = (unsigned char)((pReal->nDatabase&0x00FF0000)>>16);
     zSize[2] = (pReal->nDatabase&0x0000FF00)>>8;
     zSize[3] = (pReal->nDatabase&0x000000FF);
-    rc = pRealFile->pMethods->xWrite(pRealFile, zSize, 4, 0);
+    rc = pRealFile->pMethods->xWrite(pRealFile, zSize.data(), 4, 0);
   }
   if( rc==SQLITE_OK ){
     rc = pRealFile->pMethods->xSync(pRealFile, flags&(~SQLITE_SYNC_DATAONLY));
@@ -638,12 +639,12 @@ static int fsOpen(
       rc = pRealFile->pMethods->xWrite(pRealFile, "\0", 1, BLOBSIZE-1);
       pReal->nBlob = BLOBSIZE;
     }else{
-      unsigned char zS[4];
+      std::array<unsigned char, 4> zS;
       pReal->nBlob = (int)size;
-      rc = pRealFile->pMethods->xRead(pRealFile, zS, 4, 0);
+      rc = pRealFile->pMethods->xRead(pRealFile, zS.data(), 4, 0);
       pReal->nDatabase = (zS[0]<<24)+(zS[1]<<16)+(zS[2]<<8)+zS[3];
       if( rc==SQLITE_OK ){
-        rc = pRealFile->pMethods->xRead(pRealFile, zS, 4, pReal->nBlob-4);
+        rc = pRealFile->pMethods->xRead(pRealFile, zS.data(), 4, pReal->nBlob-4);
         if( zS[0] || zS[1] || zS[2] || zS[3] ){
           pReal->nJournal = pReal->nBlob;
         }

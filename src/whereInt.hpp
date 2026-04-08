@@ -190,7 +190,7 @@ struct WhereOrCost {
 #define N_OR_COST 3
 struct WhereOrSet {
   u16 n;                      /* Number of valid a[] entries */
-  WhereOrCost a[N_OR_COST];   /* Set of best costs */
+  std::array<WhereOrCost, N_OR_COST> a; /* Set of best costs */
 };
 
 /*
@@ -335,8 +335,8 @@ struct WhereScan {
   char idxaff;               /* Must match this affinity, if zCollName!=NULL */
   unsigned char iEquiv;      /* Current slot in aiCur[] and aiColumn[] */
   unsigned char nEquiv;      /* Number of entries in aiCur[] and aiColumn[] */
-  int aiCur[11];             /* Cursors in the equivalence class */
-  i16 aiColumn[11];          /* Corresponding column number in the eq-class */
+  std::array<int, 11> aiCur;    /* Cursors in the equivalence class */
+  std::array<i16, 11> aiColumn; /* Corresponding column number in the eq-class */
 };
 
 /*
@@ -361,9 +361,9 @@ struct WhereClause {
   int nBase;               /* Number of terms through the last non-Virtual */
   WhereTerm *a;            /* Each a[] describes a term of the WHERE clause */
 #if defined(SQLITE_SMALL_STACK)
-  WhereTerm aStatic[1];    /* Initial static space for a[] */
+  std::array<WhereTerm, 1> aStatic; /* Initial static space for a[] */
 #else
-  WhereTerm aStatic[8];    /* Initial static space for a[] */
+  std::array<WhereTerm, 8> aStatic; /* Initial static space for a[] */
 #endif
 };
 
@@ -413,7 +413,7 @@ struct WhereAndInfo {
 struct WhereMaskSet {
   int bVarSelect;               /* Used by sqlite3WhereExprUsage() */
   int n;                        /* Number of assigned cursor values */
-  int ix[BMS];                  /* Cursor assigned to each bit */
+  std::array<int, BMS> ix;      /* Cursor assigned to each bit */
 };
 
 /*
@@ -479,7 +479,7 @@ struct WhereInfo {
   Expr *pWhere;             /* The complete WHERE clause */
 #endif
   Select *pSelect;          /* The entire SELECT statement containing WHERE */
-  int aiCurOnePass[2];      /* OP_OpenWrite cursors for the ONEPASS opt */
+  std::array<int, 2> aiCurOnePass; /* OP_OpenWrite cursors for the ONEPASS opt */
   int iContinue;            /* Jump here to continue with next record */
   int iBreak;               /* Jump here to break out of the loop */
   int savedNQueryLoop;      /* pParse->nQueryLoop outside the WHERE loop */

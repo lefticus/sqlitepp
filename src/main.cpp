@@ -1403,7 +1403,7 @@ void sqlite3LeaveMutexAndCloseZombie(sqlite3 *db){
   /* Free up the array of auxiliary databases */
   sqlite3CollapseDatabaseArray(db);
   assert( db->nDb<=2 );
-  assert( db->aDb==db->aDbStatic );
+  assert( db->aDb==db->aDbStatic.data() );
 
   /* Tell the code in notify.cpp that the connection no longer holds any
   ** locks and does not require any further unlock-notify callbacks.
@@ -1625,9 +1625,9 @@ const char *sqlite3ErrName(int rc){
     }
   }
   if( zName==0 ){
-    static char zBuf[50];
-    sqlite3_snprintf(sizeof(zBuf), zBuf, "SQLITE_UNKNOWN(%d)", origRc);
-    zName = zBuf;
+    static std::array<char, 50> zBuf;
+    sqlite3_snprintf(zBuf.size(), zBuf.data(), "SQLITE_UNKNOWN(%d)", origRc);
+    zName = zBuf.data();
   }
   return zName;
 }
@@ -3389,13 +3389,13 @@ static int openDatabase(
   db->errMask = (flags & SQLITE_OPEN_EXRESCODE)!=0 ? 0xffffffff : 0xff;
   db->nDb = 2;
   db->eOpenState = SQLITE_STATE_BUSY;
-  db->aDb = db->aDbStatic;
+  db->aDb = db->aDbStatic.data();
   db->lookaside.bDisable = 1;
   db->lookaside.sz = 0;
   db->nFpDigit = 17;
 
   assert( sizeof(db->aLimit)==sizeof(aHardLimit) );
-  memcpy(db->aLimit, aHardLimit, sizeof(db->aLimit));
+  memcpy(db->aLimit.data(), aHardLimit, sizeof(db->aLimit));
   db->aLimit[SQLITE_LIMIT_WORKER_THREADS] = SQLITE_DEFAULT_WORKER_THREADS;
   db->autoCommit = 1;
   db->nextAutovac = -1;
@@ -3959,10 +3959,10 @@ int sqlite3CantopenError(int lineno){
 }
 #if defined(SQLITE_DEBUG) || defined(SQLITE_ENABLE_CORRUPT_PGNO)
 int sqlite3CorruptPgnoError(int lineno, Pgno pgno){
-  char zMsg[100];
-  sqlite3_snprintf(sizeof(zMsg), zMsg, "database corruption page %d", pgno);
+  std::array<char, 100> zMsg;
+  sqlite3_snprintf(zMsg.size(), zMsg.data(), "database corruption page %d", pgno);
   testcase( sqlite3GlobalConfig.xLog!=0 );
-  return sqlite3ReportError(SQLITE_CORRUPT, lineno, zMsg);
+  return sqlite3ReportError(SQLITE_CORRUPT, lineno, zMsg.data());
 }
 #endif
 #ifdef SQLITE_DEBUG

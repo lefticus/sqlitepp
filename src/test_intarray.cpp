@@ -19,6 +19,7 @@
 ** is production-ready, see the "carray" virtual table over in ext/misc.
 */
 #include "test_intarray.hpp"
+#include <array>
 #include <string.h>
 #include <assert.h>
 
@@ -305,7 +306,7 @@ static int SQLITE_TCLAPI test_intarray_create(
   const char *zName;
   sqlite3_intarray *pArray;
   int rc = SQLITE_OK;
-  char zPtr[100];
+  std::array<char, 100> zPtr;
 
   if( objc!=3 ){
     Tcl_WrongNumArgs(interp, 1, objv, "DB");
@@ -320,8 +321,8 @@ static int SQLITE_TCLAPI test_intarray_create(
     Tcl_AppendResult(interp, sqlite3ErrName(rc), (char*)0);
     return TCL_ERROR;
   }
-  sqlite3TestMakePointerStr(interp, zPtr, pArray);
-  Tcl_AppendResult(interp, zPtr, (char*)0);
+  sqlite3TestMakePointerStr(interp, zPtr.data(), pArray);
+  Tcl_AppendResult(interp, zPtr.data(), (char*)0);
   return TCL_OK;
 }
 
@@ -371,15 +372,16 @@ static int SQLITE_TCLAPI test_intarray_bind(
 ** Register commands with the TCL interpreter.
 */
 int Sqlitetestintarray_Init(Tcl_Interp *interp){
-  static struct {
+  struct ObjCmd {
      const char *zName;
      Tcl_ObjCmdProc *xProc;
      void *clientData;
-  } aObjCmd[] = {
+  };
+  static std::array<ObjCmd, 2> aObjCmd = {{
      { "sqlite3_intarray_create", test_intarray_create, 0 },
      { "sqlite3_intarray_bind", test_intarray_bind, 0 },
-  };
-  for(int i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
+  }};
+  for(int i=0; i<(int)aObjCmd.size(); i++){
     Tcl_CreateObjCommand(interp, aObjCmd[i].zName, 
         aObjCmd[i].xProc, aObjCmd[i].clientData, 0);
   }

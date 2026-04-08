@@ -28,6 +28,7 @@
 ** continues as if nothing had happened.
 */
 #include "test_quota.hpp"
+#include <array>
 #include <string.h>
 #include <assert.h>
 
@@ -1458,12 +1459,12 @@ static int SQLITE_TCLAPI test_quota_dump(
           Tcl_NewWideIntObj(pGroup->iSize));
     for(pFile=pGroup->pFiles; pFile; pFile=pFile->pNext){
       int i;
-      char zTemp[1000];
+      std::array<char, 1000> zTemp;
       pFileTerm = Tcl_NewObj();
-      sqlite3_snprintf(sizeof(zTemp), zTemp, "%s", pFile->zFilename);
+      sqlite3_snprintf(zTemp.size(), zTemp.data(), "%s", pFile->zFilename);
       for(i=0; zTemp[i]; i++){ if( zTemp[i]=='\\' ) zTemp[i] = '/'; }
       Tcl_ListObjAppendElement(interp, pFileTerm,
-            Tcl_NewStringObj(zTemp, -1));
+            Tcl_NewStringObj(zTemp.data(), -1));
       Tcl_ListObjAppendElement(interp, pFileTerm,
             Tcl_NewWideIntObj(pFile->iSize));
       Tcl_ListObjAppendElement(interp, pFileTerm,
@@ -1496,9 +1497,9 @@ static int SQLITE_TCLAPI test_quota_fopen(
   const char *zFilename = Tcl_GetString(objv[1]);
   const char *zMode = Tcl_GetString(objv[2]);
   quota_FILE *p = sqlite3_quota_fopen(zFilename, zMode);
-  char zReturn[50];
-  sqlite3_snprintf(sizeof(zReturn), zReturn, "%p", p);
-  Tcl_SetResult(interp, zReturn, TCL_VOLATILE);
+  std::array<char, 50> zReturn;
+  sqlite3_snprintf(zReturn.size(), zReturn.data(), "%p", p);
+  Tcl_SetResult(interp, zReturn.data(), TCL_VOLATILE);
   return TCL_OK;
 }
 

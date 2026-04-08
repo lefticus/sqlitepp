@@ -88,7 +88,7 @@ void sqlite3VdbeAddDblquoteStr(sqlite3 *db, Vdbe *p, const char *z){
     if( pStr ){
       pStr->pNextStr = p->pDblStr;
       p->pDblStr = pStr;
-      memcpy(pStr->z, z, n+1);
+      memcpy(pStr->z.data(), z, n+1);
     }
   }
 }
@@ -107,7 +107,7 @@ int sqlite3VdbeUsesDoubleQuotedString(
   assert( zId!=0 );
   if( pVdbe->pDblStr==0 ) return 0;
   for(pStr=pVdbe->pDblStr; pStr; pStr=pStr->pNextStr){
-    if( strcmp(zId, pStr->z)==0 ) return 1;
+    if( strcmp(zId, pStr->z.data())==0 ) return 1;
   }
   return 0;
 }
@@ -146,7 +146,7 @@ void sqlite3VdbeSwap(Vdbe *pA, Vdbe *pB){
 #endif
   pB->expmask = pA->expmask;
   pB->prepFlags = pA->prepFlags;
-  memcpy(pB->aCounter, pA->aCounter, sizeof(pB->aCounter));
+  memcpy(pB->aCounter.data(), pA->aCounter.data(), sizeof(pB->aCounter));
   pB->aCounter[SQLITE_STMTSTATUS_REPREPARE]++;
 }
 
@@ -1216,7 +1216,7 @@ void sqlite3VdbeScanStatusRange(
     }
     if( pScan ){
       if( addrEnd<0 ) addrEnd = sqlite3VdbeCurrentAddr(p)-1;
-      for(ii=0; ii<ArraySize(pScan->aAddrRange); ii+=2){
+      for(ii=0; ii<static_cast<int>(pScan->aAddrRange.size()); ii+=2){
         if( pScan->aAddrRange[ii]==0 ){
           pScan->aAddrRange[ii] = addrStart;
           pScan->aAddrRange[ii+1] = addrEnd;
@@ -1723,7 +1723,7 @@ char *sqlite3VdbeDisplayComment(
   const char *zSynopsis;
   int nOpName;
   int ii;
-  char zAlt[50];
+  std::array<char, 50> zAlt;
   StrAccum x;
 
   sqlite3StrAccumInit(&x, 0, 0, 0, SQLITE_MAX_LENGTH);
@@ -1734,8 +1734,8 @@ char *sqlite3VdbeDisplayComment(
     char c;
     zSynopsis = zOpName + nOpName + 1;
     if( strncmp(zSynopsis,"IF ",3)==0 ){
-      sqlite3_snprintf(sizeof(zAlt), zAlt, "if %s goto P2", zSynopsis+3);
-      zSynopsis = zAlt;
+      sqlite3_snprintf(static_cast<int>(zAlt.size()), zAlt.data(), "if %s goto P2", zSynopsis+3);
+      zSynopsis = zAlt.data();
     }
     for(ii=0; (c = zSynopsis[ii])!=0; ii++){
       if( c=='P' ){
@@ -2492,8 +2492,8 @@ void sqlite3VdbeIOTraceSql(Vdbe *p){
   VdbeOp *const pOp = &p->aOp[0];
   if( pOp->opcode==OP_Init && pOp->p4.z!=0 ){
     int i, j;
-    char z[1000];
-    sqlite3_snprintf(sizeof(z), z, "%s", pOp->p4.z);
+    std::array<char, 1000> z;
+    sqlite3_snprintf(static_cast<int>(z.size()), z.data(), "%s", pOp->p4.z);
     for(i=0; sqlite3Isspace(z[i]); i++){}
     for(j=0; z[i]; i++){
       if( sqlite3Isspace(z[i]) ){
@@ -2505,7 +2505,7 @@ void sqlite3VdbeIOTraceSql(Vdbe *p){
       }
     }
     z[j] = 0;
-    sqlite3IoTrace("SQL %s\n", z);
+    sqlite3IoTrace("SQL %s\n", z.data());
   }
 }
 #endif /* !SQLITE_OMIT_TRACE && SQLITE_ENABLE_IOTRACE */
@@ -3615,15 +3615,15 @@ int sqlite3VdbeReset(Vdbe *p){
         if( pc!='\n' ) fprintf(out, "\n");
       }
       for(i=0; i<p->nOp; i++){
-        char zHdr[100];
+        std::array<char, 100> zHdr;
         i64 cnt = p->aOp[i].nExec;
         i64 cycles = p->aOp[i].nCycle;
-        sqlite3_snprintf(sizeof(zHdr), zHdr, "%6u %12llu %8llu ",
+        sqlite3_snprintf(static_cast<int>(zHdr.size()), zHdr.data(), "%6u %12llu %8llu ",
            cnt,
            cycles,
            cnt>0 ? cycles/cnt : 0
         );
-        fprintf(out, "%s", zHdr);
+        fprintf(out, "%s", zHdr.data());
         sqlite3VdbePrintOp(out, i, &p->aOp[i]);
       }
       fclose(out);
@@ -3926,7 +3926,7 @@ u32 sqlite3VdbeSerialType(Mem *pMem, int file_format, u32 *pLen){
 /*
 ** The sizes for serial types less than 128
 */
-const u8 sqlite3SmallTypeSizes[128] = {
+const std::array<u8, 128> sqlite3SmallTypeSizes = {
         /*  0   1   2   3   4   5   6   7   8   9 */  
 /*   0 */   0,  1,  2,  3,  4,  6,  8,  8,  0,  0,
 /*  10 */   0,  0,  0,  0,  1,  1,  2,  2,  3,  3,

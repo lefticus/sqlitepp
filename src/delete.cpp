@@ -306,7 +306,7 @@ void sqlite3DeleteFrom(
   int memCnt = 0;        /* Memory cell used for change counting */
   int rcauth;            /* Value returned by authorization callback */
   int eOnePass;          /* ONEPASS_OFF or _SINGLE or _MULTI */
-  int aiCurOnePass[2];   /* The write cursors opened by WHERE_ONEPASS */
+  std::array<int, 2> aiCurOnePass;   /* The write cursors opened by WHERE_ONEPASS */
   u8 *aToOpen = 0;       /* Open cursor iTabCur+j if aToOpen[j] is true */
   Index *pPk;            /* The PRIMARY KEY index on the table */
   int iPk = 0;           /* First of nPk registers holding PRIMARY KEY value */
@@ -523,7 +523,7 @@ void sqlite3DeleteFrom(
     */
     pWInfo = sqlite3WhereBegin(pParse, pTabList, pWhere, 0, 0,0,wcf,iTabCur+1);
     if( pWInfo==0 ) goto delete_from_cleanup;
-    eOnePass = sqlite3WhereOkOnePass(pWInfo, aiCurOnePass);
+    eOnePass = sqlite3WhereOkOnePass(pWInfo, aiCurOnePass.data());
     assert( IsVirtual(pTab)==0 || eOnePass!=ONEPASS_MULTI );
     assert( IsVirtual(pTab) || bComplex || eOnePass!=ONEPASS_OFF
             || OptimizationDisabled(db, SQLITE_OnePass) );

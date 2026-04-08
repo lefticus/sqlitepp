@@ -1000,7 +1000,7 @@ int sqlite3Int64ToText(i64 v, char *zOut){
   int i;
   u64 x;
   union {
-    char a[23];
+    std::array<char, 23> a;
     u16 forceAlignment;
   } u;
   if( v>0 ){
@@ -1012,7 +1012,7 @@ int sqlite3Int64ToText(i64 v, char *zOut){
   }else{
     x = (v==SMALLEST_INT64) ? ((u64)1)<<63 : (u64)-v;
   }
-  i = sizeof(u.a)-1;
+  i = u.a.size()-1;
   u.a[i] = 0;
   while( x>=10 ){
     int kk = (x%100)*2;
@@ -1026,8 +1026,8 @@ int sqlite3Int64ToText(i64 v, char *zOut){
     u.a[--i] = x + '0';
   }
   if( v<0 ) u.a[--i] = '-';
-  memcpy(zOut, &u.a[i], sizeof(u.a)-i);
-  return sizeof(u.a)-1-i;
+  memcpy(zOut, &u.a[i], u.a.size()-i);
+  return u.a.size()-1-i;
 }
 
 /*
@@ -1324,7 +1324,7 @@ void sqlite3FpDecode(FpDecode *p, double r, int iRound, int mxRound){
     p->isSpecial = 1 + (v!=0x7ff0000000000000LL);
     p->n = 0;
     p->iDP = 0;
-    p->z = p->zBuf;
+    p->z = p->zBuf.data();
     return;
   }
   v &= 0x000fffffffffffffULL;
@@ -1342,7 +1342,7 @@ void sqlite3FpDecode(FpDecode *p, double r, int iRound, int mxRound){
   ** and working back to the right.  "i" keeps track of the next slot in
   ** which to store a digit. */
   int i = sizeof(p->zBuf)-1;
-  char *zBuf = p->zBuf;
+  char *zBuf = p->zBuf.data();
   assert( v>0 );
   while( v>=10 ){
     int kk = (v%100)*2;
@@ -1482,7 +1482,7 @@ int sqlite3GetUInt32(const char *z, u32 *pI){
 ** 8 bits and is the last byte.
 */
 static int SQLITE_NOINLINE putVarint64(unsigned char *p, u64 v){
-  u8 buf[10];
+  std::array<u8, 10> buf;
   if( v & (((u64)0xff000000)<<32) ){
     p[8] = (u8)v;
     v >>= 8;
@@ -1976,7 +1976,7 @@ void sqlite3FileSuffix3(const char *zBaseFilename, char *z){
 **
 */
 LogEst sqlite3LogEstAdd(LogEst a, LogEst b){
-  static const unsigned char x[] = {
+  static const std::array<unsigned char, 32> x = {{
      10, 10,                         /* 0,1 */
       9, 9,                          /* 2,3 */
       8, 8,                          /* 4,5 */
@@ -1986,7 +1986,7 @@ LogEst sqlite3LogEstAdd(LogEst a, LogEst b){
       4, 4, 4, 4,                    /* 15-18 */
       3, 3, 3, 3, 3, 3,              /* 19-24 */
       2, 2, 2, 2, 2, 2, 2,           /* 25-31 */
-  };
+  }};
   if( a>=b ){
     if( a>b+49 ) return a;
     if( a>b+31 ) return a+1;
@@ -2003,7 +2003,7 @@ LogEst sqlite3LogEstAdd(LogEst a, LogEst b){
 ** approximation for 10*log2(x).
 */
 LogEst sqlite3LogEst(u64 x){
-  static LogEst a[] = { 0, 2, 3, 5, 6, 7, 8, 9 };
+  static const std::array<LogEst, 8> a = {{ 0, 2, 3, 5, 6, 7, 8, 9 }};
   LogEst y = 40;
   if( x<8 ){
     if( x<2 ) return 0;

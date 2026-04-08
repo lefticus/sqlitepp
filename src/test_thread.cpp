@@ -267,7 +267,7 @@ static int SQLITE_TCLAPI sqlthread_open(
 
   const char *zFilename;
   sqlite3 *db;
-  char zBuf[100];
+  std::array<char, 100> zBuf;
   extern int Md5_Register(sqlite3*,char**,const sqlite3_api_routines*);
 
   UNUSED_PARAMETER(clientData);
@@ -278,8 +278,8 @@ static int SQLITE_TCLAPI sqlthread_open(
   Md5_Register(db, 0, 0);
   sqlite3_busy_handler(db, xBusy, 0);
   
-  if( sqlite3TestMakePointerStr(interp, zBuf, db) ) return TCL_ERROR;
-  Tcl_AppendResult(interp, zBuf, NULL);
+  if( sqlite3TestMakePointerStr(interp, zBuf.data(), db) ) return TCL_ERROR;
+  Tcl_AppendResult(interp, zBuf.data(), NULL);
 
   return TCL_OK;
 }
@@ -575,7 +575,7 @@ static int SQLITE_TCLAPI blocking_prepare_v2_proc(
   int bytes;
   const char *zTail = 0;
   sqlite3_stmt *pStmt = 0;
-  char zBuf[50];
+  std::array<char, 50> zBuf;
   int rc;
   int isBlocking = !(clientData==0);
 
@@ -603,8 +603,8 @@ static int SQLITE_TCLAPI blocking_prepare_v2_proc(
   }
   if( rc!=SQLITE_OK ){
     assert( pStmt==0 );
-    sqlite3_snprintf(sizeof(zBuf), zBuf, "%s ", (char *)sqlite3ErrName(rc));
-    Tcl_AppendResult(interp, zBuf, sqlite3_errmsg(db), NULL);
+    sqlite3_snprintf(zBuf.size(), zBuf.data(), "%s ", (char *)sqlite3ErrName(rc));
+    Tcl_AppendResult(interp, zBuf.data(), sqlite3_errmsg(db), NULL);
     return TCL_ERROR;
   }
 

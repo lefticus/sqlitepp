@@ -288,9 +288,9 @@ struct MemPage {
   int nFree;           /* Number of free bytes on the page. -1 for unknown */
   u16 nCell;           /* Number of cells on this page, local and ovfl */
   u16 maskPage;        /* Mask for page offset */
-  u16 aiOvfl[4];       /* Insert the i-th overflow cell before the aiOvfl-th
-                       ** non-overflow cell */
-  u8 *apOvfl[4];       /* Pointers to the body of overflow cells */
+  std::array<u16, 4> aiOvfl; /* Insert the i-th overflow cell before the
+                       ** aiOvfl-th non-overflow cell */
+  std::array<u8 *, 4> apOvfl; /* Pointers to the body of overflow cells */
   BtShared *pBt;       /* Pointer to BtShared that this page is part of */
   u8 *aData;           /* Pointer to disk image of the page data */
   u8 *aDataEnd;        /* One byte past the end of the entire page - not just
@@ -544,10 +544,10 @@ struct BtCursor {
   i8 iPage;                 /* Index of current page in apPage */
   u8 curIntKey;             /* Value of apPage[0]->intKey */
   u16 ix;                   /* Current index for apPage[iPage] */
-  u16 aiIdx[BTCURSOR_MAX_DEPTH-1];     /* Current index in apPage[i] */
+  std::array<u16, BTCURSOR_MAX_DEPTH-1> aiIdx; /* Current index in apPage[i] */
   struct KeyInfo *pKeyInfo;            /* Arg passed to comparison function */
   MemPage *pPage;                        /* Current page */
-  MemPage *apPage[BTCURSOR_MAX_DEPTH-1]; /* Stack of parents of current page */
+  std::array<MemPage *, BTCURSOR_MAX_DEPTH-1> apPage; /* Stack of parents of current page */
 };
 
 /*

@@ -112,7 +112,7 @@ struct DateTime {
 static int getDigits(const char *zDate, const char *zFormat, ...){
   /* The aMx[] array translates the 3rd character of each format
   ** spec into a max size:    a   b   c   d   e      f */
-  static const u16 aMx[] = { 12, 14, 24, 31, 59, 14712 };
+  static const std::array<u16, 6> aMx = { 12, 14, 24, 31, 59, 14712 };
   va_list ap;
   int cnt = 0;
   char nextC;
@@ -660,19 +660,20 @@ static int toLocaltime(
 ** Where NNN is an arbitrary floating-point number and "days" can be one
 ** of several units of time.
 */
-static const struct {
+struct XformType {
   u8 nName;           /* Length of the name */
   char zName[7];      /* Name of the transformation */
   float rLimit;       /* Maximum NNN value for this transform */
   float rXform;       /* Constant used for this transform */
-} aXformType[] = {
+};
+static const std::array<XformType, 6> aXformType = {{
   /* 0 */ { 6, "second",   4.6427e+14,         1.0  },
   /* 1 */ { 6, "minute",   7.7379e+12,        60.0  },
   /* 2 */ { 4, "hour",     1.2897e+11,      3600.0  },
   /* 3 */ { 3, "day",      5373485.0,      86400.0  },
   /* 4 */ { 5, "month",    176546.0,     2592000.0  },
   /* 5 */ { 4, "year",     14713.0,     31536000.0  },
-};
+}};
 
 /*
 ** If the DateTime p is raw number, try to figure out if it is
@@ -1045,7 +1046,7 @@ static int parseModifier(
       assert( rc==1 );
       rRounder = r<0 ? -0.5 : +0.5;
       p->nFloor = 0;
-      for(i=0; i<ArraySize(aXformType); i++){
+      for(i=0; i<static_cast<int>(aXformType.size()); i++){
         if( aXformType[i].nName==n
          && sqlite3_strnicmp(aXformType[i].zName, z, n)==0
          && r>-aXformType[i].rLimit && r<aXformType[i].rLimit
@@ -1197,7 +1198,7 @@ static void datetimeFunc(
   DateTime x;
   if( isDate(context, argc, argv, &x)==0 ){
     int Y, s, n;
-    char zBuf[32];
+    std::array<char, 32> zBuf;
     computeYMD_HMS(&x);
     Y = x.Y;
     if( Y<0 ) Y = -Y;
@@ -1237,7 +1238,7 @@ static void datetimeFunc(
     }
     if( x.Y<0 ){
       zBuf[0] = '-';
-      sqlite3_result_text(context, zBuf, n, SQLITE_TRANSIENT);
+      sqlite3_result_text(context, zBuf.data(), n, SQLITE_TRANSIENT);
     }else{
       sqlite3_result_text(context, &zBuf[1], n-1, SQLITE_TRANSIENT);
     }
@@ -1257,7 +1258,7 @@ static void timeFunc(
   DateTime x;
   if( isDate(context, argc, argv, &x)==0 ){
     int s, n;
-    char zBuf[16];
+    std::array<char, 16> zBuf;
     computeHMS(&x);
     zBuf[0] = '0' + (x.h/10)%10;
     zBuf[1] = '0' + (x.h)%10;
@@ -1282,7 +1283,7 @@ static void timeFunc(
       zBuf[8] = 0;
       n = 8;
     }
-    sqlite3_result_text(context, zBuf, n, SQLITE_TRANSIENT);
+    sqlite3_result_text(context, zBuf.data(), n, SQLITE_TRANSIENT);
   }
 }
 
@@ -1299,7 +1300,7 @@ static void dateFunc(
   DateTime x;
   if( isDate(context, argc, argv, &x)==0 ){
     int Y;
-    char zBuf[16];
+    std::array<char, 16> zBuf;
     computeYMD(&x);
     Y = x.Y;
     if( Y<0 ) Y = -Y;
@@ -1316,7 +1317,7 @@ static void dateFunc(
     zBuf[11] = 0;
     if( x.Y<0 ){
       zBuf[0] = '-';
-      sqlite3_result_text(context, zBuf, 11, SQLITE_TRANSIENT);
+      sqlite3_result_text(context, zBuf.data(), 11, SQLITE_TRANSIENT);
     }else{
       sqlite3_result_text(context, &zBuf[1], 10, SQLITE_TRANSIENT);
     }
@@ -1740,7 +1741,7 @@ static void currentTimeFunc(
   sqlite3_int64 iT;
   struct tm *pTm;
   struct tm sNow;
-  char zBuf[20];
+  std::array<char, 20> zBuf;
 
   UNUSED_PARAMETER(argc);
   UNUSED_PARAMETER(argv);
@@ -1757,8 +1758,8 @@ static void currentTimeFunc(
   sqlite3_mutex_leave(sqlite3MutexAlloc(SQLITE_MUTEX_STATIC_MAIN));
 #endif
   if( pTm ){
-    strftime(zBuf, 20, zFormat, &sNow);
-    sqlite3_result_text(context, zBuf, -1, SQLITE_TRANSIENT);
+    strftime(zBuf.data(), zBuf.size(), zFormat, &sNow);
+    sqlite3_result_text(context, zBuf.data(), -1, SQLITE_TRANSIENT);
   }
 }
 #endif
@@ -1820,5 +1821,5 @@ void sqlite3RegisterDateTimeFunctions(void){
     STR_FUNCTION(current_timestamp, 0, "%Y-%m-%d %H:%M:%S", 0, currentTimeFunc),
 #endif
   };
-  sqlite3InsertBuiltinFuncs(aDateTimeFuncs, ArraySize(aDateTimeFuncs));
+  sqlite3InsertBuiltinFuncs(aDateTimeFuncs, std::size(aDateTimeFuncs));
 }

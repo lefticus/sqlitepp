@@ -462,7 +462,7 @@ static int fstreeFilter(
   int nPrefix;
   const char *zDir;
   int nDir;
-  char aWild[2] = { '\0', '\0' };
+  std::array<char, 2> aWild = {};
 
 #ifdef _WIN32
   const char *zDrive = getenv("fstreeDrive");
@@ -878,15 +878,16 @@ static int SQLITE_TCLAPI register_fs_module(
 */
 int Sqlitetestfs_Init(Tcl_Interp *interp){
 #ifndef SQLITE_OMIT_VIRTUALTABLE
-  static struct {
+  struct ObjCmd {
      const char *zName;
      Tcl_ObjCmdProc *xProc;
      void *clientData;
-  } aObjCmd[] = {
-     { "register_fs_module",   register_fs_module, 0 },
   };
-  for(int i=0; i<(int)(sizeof(aObjCmd)/sizeof(aObjCmd[0])); i++){
-    Tcl_CreateObjCommand(interp, aObjCmd[i].zName, 
+  static const std::array<ObjCmd, 1> aObjCmd = {{
+     { "register_fs_module",   register_fs_module, 0 },
+  }};
+  for(size_t i=0; i<aObjCmd.size(); i++){
+    Tcl_CreateObjCommand(interp, aObjCmd[i].zName,
         aObjCmd[i].xProc, aObjCmd[i].clientData, 0);
   }
 #endif
