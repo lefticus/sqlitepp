@@ -91,10 +91,10 @@ struct echo_cursor {
 };
 
 static int simulateVtabError(echo_vtab *p, const char *zMethod){
-  char zVarname[128];
+  std::array<char, 128> zVarname;
   zVarname[127] = '\0';
-  sqlite3_snprintf(127, zVarname, "echo_module_fail(%s,%s)", zMethod, p->zTableName);
-  const char *zErr = Tcl_GetVar(p->interp, zVarname, TCL_GLOBAL_ONLY);
+  sqlite3_snprintf(127, zVarname.data(), "echo_module_fail(%s,%s)", zMethod, p->zTableName);
+  const char *zErr = Tcl_GetVar(p->interp, zVarname.data(), TCL_GLOBAL_ONLY);
   if( zErr ){
     p->base.zErrMsg = sqlite3_mprintf("echo-vtab-error: %s", zErr);
   }

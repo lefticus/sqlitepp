@@ -273,9 +273,9 @@ static struct RowSetEntry *rowSetEntryMerge(
 */
 static struct RowSetEntry *rowSetEntrySort(struct RowSetEntry *pIn){
   unsigned int i;
-  struct RowSetEntry *aBucket[40];
+  std::array<struct RowSetEntry *, 40> aBucket;
 
-  memset(aBucket, 0, sizeof(aBucket));
+  aBucket.fill(nullptr);
   while( pIn ){
     struct RowSetEntry *const pNext = pIn->pRight;
     pIn->pRight = 0;
@@ -287,7 +287,7 @@ static struct RowSetEntry *rowSetEntrySort(struct RowSetEntry *pIn){
     pIn = pNext;
   }
   pIn = aBucket[0];
-  for(i=1; i<sizeof(aBucket)/sizeof(aBucket[0]); i++){
+  for(i=1; i<aBucket.size(); i++){
     if( aBucket[i]==0 ) continue;
     pIn = pIn ? rowSetEntryMerge(pIn, aBucket[i]) : aBucket[i];
   }

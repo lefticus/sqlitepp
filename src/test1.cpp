@@ -1395,7 +1395,8 @@ static int SQLITE_TCLAPI sqlite3_mprintf_int(
   int argc,              /* Number of arguments */
   char **argv            /* Text of each argument */
 ){
-  int a[3], i;
+  std::array<int, 3> a;
+  int i;
   char *z;
   if( argc!=5 ){
     Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0],
@@ -1423,7 +1424,7 @@ static int SQLITE_TCLAPI sqlite3_mprintf_int64(
   char **argv            /* Text of each argument */
 ){
   int i;
-  sqlite_int64 a[3];
+  std::array<sqlite_int64, 3> a;
   char *z;
   if( argc!=5 ){
     Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0],
@@ -1456,8 +1457,8 @@ static int SQLITE_TCLAPI sqlite3_mprintf_long(
   char **argv            /* Text of each argument */
 ){
   int i;
-  long int a[3];
-  int b[3];
+  std::array<long int, 3> a;
+  std::array<int, 3> b;
   char *z;
   if( argc!=5 ){
     Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0],
@@ -1486,7 +1487,8 @@ static int SQLITE_TCLAPI sqlite3_mprintf_str(
   int argc,              /* Number of arguments */
   char **argv            /* Text of each argument */
 ){
-  int a[3], i;
+  std::array<int, 3> a;
+  int i;
   char *z;
   if( argc<4 || argc>5 ){
     Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0],
@@ -1513,7 +1515,8 @@ static int SQLITE_TCLAPI sqlite3_snprintf_str(
   int argc,              /* Number of arguments */
   char **argv            /* Text of each argument */
 ){
-  int a[3], i;
+  std::array<int, 3> a;
+  int i;
   int n;
   char *z;
   if( argc<5 || argc>6 ){
@@ -1547,7 +1550,8 @@ static int SQLITE_TCLAPI sqlite3_mprintf_double(
   int argc,              /* Number of arguments */
   char **argv            /* Text of each argument */
 ){
-  int a[3], i;
+  std::array<int, 3> a;
+  int i;
   double r;
   char *z;
   if( argc!=5 ){
@@ -1579,7 +1583,7 @@ static int SQLITE_TCLAPI sqlite3_mprintf_scaled(
   char **argv            /* Text of each argument */
 ){
   int i;
-  double r[2];
+  std::array<double, 2> r;
   char *z;
   if( argc!=4 ){
     Tcl_AppendResult(interp, "wrong # args: should be \"", argv[0],
@@ -7055,7 +7059,7 @@ static int SQLITE_TCLAPI file_control_win32_av_retry(
 ){
   sqlite3 *db;
   int rc;
-  int a[2];
+  std::array<int, 2> a;
   char z[100];
 
   if( objc!=4 ){
@@ -7068,7 +7072,7 @@ static int SQLITE_TCLAPI file_control_win32_av_retry(
   }
   if( Tcl_GetIntFromObj(interp, objv[2], &a[0]) ) return TCL_ERROR;
   if( Tcl_GetIntFromObj(interp, objv[3], &a[1]) ) return TCL_ERROR;
-  rc = sqlite3_file_control(db, NULL, SQLITE_FCNTL_WIN32_AV_RETRY, (void*)a);
+  rc = sqlite3_file_control(db, NULL, SQLITE_FCNTL_WIN32_AV_RETRY, (void*)a.data());
   sqlite3_snprintf(sizeof(z), z, "%d %d %d", rc, a[0], a[1]);
   Tcl_AppendResult(interp, z, (char*)0);
   return TCL_OK;  

@@ -430,7 +430,7 @@ void sqlite3Pragma(
   char *zRight = 0;      /* Nul-terminated UTF-8 string <value>, or NULL */
   const char *zDb = 0;   /* The database name */
   Token *pId;            /* Pointer to <id> token */
-  char *aFcntl[4];       /* Argument to SQLITE_FCNTL_PRAGMA */
+  std::array<char *, 4> aFcntl;       /* Argument to SQLITE_FCNTL_PRAGMA */
   int iDb;               /* Database index for <database> */
   int rc;                      /* return value form SQLITE_FCNTL_PRAGMA */
   sqlite3 *db = pParse->db;    /* The database connection */
@@ -489,7 +489,7 @@ void sqlite3Pragma(
   aFcntl[2] = zRight;
   aFcntl[3] = 0;
   db->busyHandler.nBusy = 0;
-  rc = sqlite3_file_control(db, zDb, SQLITE_FCNTL_PRAGMA, (void*)aFcntl);
+  rc = sqlite3_file_control(db, zDb, SQLITE_FCNTL_PRAGMA, (void*)aFcntl.data());
   if( rc==SQLITE_OK ){
     sqlite3VdbeSetNumCols(v, 1);
     sqlite3VdbeSetColName(v, 0, COLNAME_NAME, aFcntl[0], SQLITE_TRANSIENT);

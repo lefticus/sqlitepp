@@ -687,9 +687,9 @@ static char *Argv0;
 */
 #define PROMPT_LEN_MAX 128
 /* First line prompt.   default: "sqlite> " */
-static char mainPrompt[PROMPT_LEN_MAX];
+static std::array<char, PROMPT_LEN_MAX> mainPrompt;
 /* Continuation prompt. default: "   ...> " */
-static char continuePrompt[PROMPT_LEN_MAX];
+static std::array<char, PROMPT_LEN_MAX> continuePrompt;
 
 /*
 ** Write I/O traces to the following stream.
@@ -834,7 +834,7 @@ static void shell_strcpy(char *dest, const char *src){
 ** below 5 macros are used.
 */
 #ifdef SQLITE_OMIT_DYNAPROMPT
-# define CONTINUATION_PROMPT continuePrompt
+# define CONTINUATION_PROMPT continuePrompt.data()
 # define CONTINUE_PROMPT_RESET
 # define CONTINUE_PROMPT_AWAITS(p,s)
 # define CONTINUE_PROMPT_AWAITC(p,c)
@@ -885,15 +885,15 @@ static void setLexemeOpen(struct DynaPrompt *p, const char *s, char c){
 static char *dynamicContinuePrompt(void){
   if( continuePrompt[0]==0
       || (dynPrompt.zScannerAwaits==0 && dynPrompt.inParenLevel == 0) ){
-    return continuePrompt;
+    return continuePrompt.data();
   }else{
     if( dynPrompt.zScannerAwaits ){
-      size_t ncp = strlen(continuePrompt);
+      size_t ncp = strlen(continuePrompt.data());
       size_t ndp = strlen(dynPrompt.zScannerAwaits);
-      if( ndp > ncp-3 ) return continuePrompt;
+      if( ndp > ncp-3 ) return continuePrompt.data();
       shell_strcpy(dynPrompt.dynamicPrompt, dynPrompt.zScannerAwaits);
       while( ndp<3 ) dynPrompt.dynamicPrompt[ndp++] = ' ';
-      shell_strncpy(dynPrompt.dynamicPrompt+3, continuePrompt+3,
+      shell_strncpy(dynPrompt.dynamicPrompt+3, continuePrompt.data()+3,
               PROMPT_LEN_MAX-4);
     }else{
       if( dynPrompt.inParenLevel>9 ){
@@ -904,7 +904,7 @@ static char *dynamicContinuePrompt(void){
         shell_strncpy(dynPrompt.dynamicPrompt, "(x.", 4);
         dynPrompt.dynamicPrompt[2] = (char)('0'+dynPrompt.inParenLevel);
       }
-      shell_strncpy(dynPrompt.dynamicPrompt+3, continuePrompt+3,
+      shell_strncpy(dynPrompt.dynamicPrompt+3, continuePrompt.data()+3,
                     PROMPT_LEN_MAX-4);
     }
   }
@@ -1053,7 +1053,7 @@ static char *one_input_line(ShellState *p, char *zPrior, int isContinuation){
   if( in!=0 ){
     zResult = local_getline(zPrior, in);
   }else{
-    zPrompt = isContinuation ? CONTINUATION_PROMPT : mainPrompt;
+    zPrompt = isContinuation ? CONTINUATION_PROMPT : mainPrompt.data();
 #if SHELL_USE_LOCAL_GETLINE
     sputz(stdout, zPrompt);
     fflush(stdout);
@@ -1314,11 +1314,11 @@ static void shellDtostr(
 ){
   double r = sqlite3_value_double(apVal[0]);
   int n = nVal>=2 ? sqlite3_value_int(apVal[1]) : 26;
-  char z[400];
+  std::array<char, 400> z;
   if( n<1 ) n = 1;
   if( n>350 ) n = 350;
-  sprintf(z, "%#+.*e", n, r);
-  sqlite3_result_text(pCtx, z, -1, SQLITE_TRANSIENT);
+  sprintf(z.data(), "%#+.*e", n, r);
+  sqlite3_result_text(pCtx, z.data(), -1, SQLITE_TRANSIENT);
 }
 
 /*
@@ -2071,7 +2071,7 @@ static void output_c_string(FILE *out, const char *z){
   static const char *zq = "\"";
   static long ctrlMask = ~0L;
   static const char *zDQBSRO = "\"\\\x7f"; /* double-quote, backslash, rubout */
-  char ace[3] = "\\?";
+  std::array<char, 3> ace = {'\\', '?', '\0'};
   char cbsSay;
   cli_puts(zq, out);
   if( z==0 ) z = "";
@@ -2096,12 +2096,12 @@ static void output_c_string(FILE *out, const char *z){
     }
     if( cbsSay ){
       ace[1] = cbsSay;
-      cli_puts(ace, out);
+      cli_puts(ace.data(), out);
     }else if( !isprint(c&0xff) ){
       cli_printf(out, "\\%03o", c&0xff);
     }else{
       ace[1] = (char)c;
-      cli_puts(ace+1, out);
+      cli_puts(ace.data()+1, out);
     }
     z = pcEnd;
   }
@@ -2116,7 +2116,7 @@ static void append_c_string(sqlite3_str *out, const char *z){
   static const char *zq = "\"";
   static long ctrlMask = ~0L;
   static const char *zDQBSRO = "\"\\\x7f"; /* double-quote, backslash, rubout */
-  char ace[3] = "\\?";
+  std::array<char, 3> ace = {'\\', '?', '\0'};
   char cbsSay;
   if( z==0 ) z = "";
   sqlite3_str_appendall(out,zq);
@@ -2141,12 +2141,12 @@ static void append_c_string(sqlite3_str *out, const char *z){
     }
     if( cbsSay ){
       ace[1] = cbsSay;
-      sqlite3_str_appendall(out,ace);
+      sqlite3_str_appendall(out,ace.data());
     }else if( !isprint(c&0xff) ){
       sqlite3_str_appendf(out, "\\%03o", c&0xff);
     }else{
       ace[1] = (char)c;
-      sqlite3_str_appendall(out, ace+1);
+      sqlite3_str_appendall(out, ace.data()+1);
     }
     z = pcEnd;
   }
@@ -2290,7 +2290,7 @@ static int shellAuth(
      "FUNCTION",             "SAVEPOINT",            "RECURSIVE"
   };
   int i;
-  const char *az[4];
+  std::array<const char *, 4> az;
   az[0] = zA1;
   az[1] = zA2;
   az[2] = zA3;
@@ -2729,11 +2729,11 @@ static char *save_err_msg(
 */
 static void displayLinuxIoStats(FILE *out){
   FILE *in;
-  char z[200];
-  sqlite3_snprintf(sizeof(z), z, "/proc/%d/io", getpid());
-  in = sqlite3_fopen(z, "rb");
+  std::array<char, 200> z;
+  sqlite3_snprintf(z.size(), z.data(), "/proc/%d/io", getpid());
+  in = sqlite3_fopen(z.data(), "rb");
   if( in==0 ) return;
-  while( sqlite3_fgets(z, sizeof(z), in)!=0 ){
+  while( sqlite3_fgets(z.data(), z.size(), in)!=0 ){
     static const struct {
       const char *zPattern;
       const char *zDesc;
@@ -2749,7 +2749,7 @@ static void displayLinuxIoStats(FILE *out){
     int i;
     for(i=0; i<ArraySize(aTrans); i++){
       int n = strlen30(aTrans[i].zPattern);
-      if( cli_strncmp(aTrans[i].zPattern, z, n)==0 ){
+      if( cli_strncmp(aTrans[i].zPattern, z.data(), n)==0 ){
         cli_printf(out, "%-36s %s", aTrans[i].zDesc, &z[n]);
         break;
       }
@@ -2772,17 +2772,17 @@ static void displayStatLine(
   sqlite3_int64 iCur = -1;
   sqlite3_int64 iHiwtr = -1;
   int i, nPercent;
-  char zLine[200];
+  std::array<char, 200> zLine;
   sqlite3_status64(iStatusCtrl, &iCur, &iHiwtr, bReset);
   for(i=0, nPercent=0; zFormat[i]; i++){
     if( zFormat[i]=='%' ) nPercent++;
   }
   if( nPercent>1 ){
-    sqlite3_snprintf(sizeof(zLine), zLine, zFormat, iCur, iHiwtr);
+    sqlite3_snprintf(zLine.size(), zLine.data(), zFormat, iCur, iHiwtr);
   }else{
-    sqlite3_snprintf(sizeof(zLine), zLine, zFormat, iHiwtr);
+    sqlite3_snprintf(zLine.size(), zLine.data(), zFormat, iHiwtr);
   }
-  cli_printf(out, "%-36s %s\n", zLabel, zLine);
+  cli_printf(out, "%-36s %s\n", zLabel, zLine.data());
 }
 
 /*
@@ -2802,24 +2802,24 @@ static int display_stats(
   if( pArg->pStmt && pArg->statsOn==2 ){
     int nCol, i, x;
     sqlite3_stmt *pStmt = pArg->pStmt;
-    char z[100];
+    std::array<char, 100> z;
     nCol = sqlite3_column_count(pStmt);
     cli_printf(out, "%-36s %d\n", "Number of output columns:", nCol);
     for(i=0; i<nCol; i++){
-      sqlite3_snprintf(sizeof(z),z,"Column %d %nname:", i, &x);
-      cli_printf(out, "%-36s %s\n", z, sqlite3_column_name(pStmt,i));
+      sqlite3_snprintf(z.size(),z.data(),"Column %d %nname:", i, &x);
+      cli_printf(out, "%-36s %s\n", z.data(), sqlite3_column_name(pStmt,i));
 #ifndef SQLITE_OMIT_DECLTYPE
-      sqlite3_snprintf(30, z+x, "declared type:");
-      cli_printf(out, "%-36s %s\n", z, sqlite3_column_decltype(pStmt, i));
+      sqlite3_snprintf(30, z.data()+x, "declared type:");
+      cli_printf(out, "%-36s %s\n", z.data(), sqlite3_column_decltype(pStmt, i));
 #endif
 #ifdef SQLITE_ENABLE_COLUMN_METADATA
-      sqlite3_snprintf(30, z+x, "database name:");
-      cli_printf(out, "%-36s %s\n", z,
+      sqlite3_snprintf(30, z.data()+x, "database name:");
+      cli_printf(out, "%-36s %s\n", z.data(),
                            sqlite3_column_database_name(pStmt,i));
-      sqlite3_snprintf(30, z+x, "table name:");
-      cli_printf(out, "%-36s %s\n", z, sqlite3_column_table_name(pStmt,i));
-      sqlite3_snprintf(30, z+x, "origin name:");
-      cli_printf(out, "%-36s %s\n", z,sqlite3_column_origin_name(pStmt,i));
+      sqlite3_snprintf(30, z.data()+x, "table name:");
+      cli_printf(out, "%-36s %s\n", z.data(), sqlite3_column_table_name(pStmt,i));
+      sqlite3_snprintf(30, z.data()+x, "origin name:");
+      cli_printf(out, "%-36s %s\n", z.data(),sqlite3_column_origin_name(pStmt,i));
 #endif
     }
   }
@@ -3016,11 +3016,11 @@ static void bind_prepared_stmt(ShellState *pArg, sqlite3_stmt *pStmt){
             " WHERE key=?1", -1, &pQ, 0);
   }
   for(i=1; i<=nVar; i++){
-    char zNum[30];
+    std::array<char, 30> zNum;
     const char *zVar = sqlite3_bind_parameter_name(pStmt, i);
     if( zVar==0 ){
-      sqlite3_snprintf(sizeof(zNum),zNum,"?%d",i);
-      zVar = zNum;
+      sqlite3_snprintf(zNum.size(),zNum.data(),"?%d",i);
+      zVar = zNum.data();
     }
     sqlite3_bind_text(pQ, 1, zVar, -1, SQLITE_STATIC);
     if( rc==SQLITE_OK && pQ && sqlite3_step(pQ)==SQLITE_ROW ){
@@ -3516,15 +3516,15 @@ static char **tableColumnList(ShellState *p, const char *zTab){
 static void toggleSelectOrder(sqlite3 *db){
   sqlite3_stmt *pStmt = 0;
   int iSetting = 0;
-  char zStmt[100];
+  std::array<char, 100> zStmt;
   sqlite3_prepare_v2(db, "PRAGMA reverse_unordered_selects", -1, &pStmt, 0);
   if( sqlite3_step(pStmt)==SQLITE_ROW ){
     iSetting = sqlite3_column_int(pStmt, 0);
   }
   sqlite3_finalize(pStmt);
-  sqlite3_snprintf(sizeof(zStmt), zStmt,
+  sqlite3_snprintf(zStmt.size(), zStmt.data(),
        "PRAGMA reverse_unordered_selects(%d)", !iSetting);
-  sqlite3_exec(db, zStmt, 0, 0, 0);
+  sqlite3_exec(db, zStmt.data(), 0, 0, 0);
 }
 
 /* Forward reference */
@@ -4255,7 +4255,7 @@ int deduceDatabaseType(const char *zName, int dfltZip, int openFlags){
   FILE *f;
   size_t n;
   int rc = SHELL_OPEN_UNSPEC;
-  char zBuf[100];
+  std::array<char, 100> zBuf;
   if( access(zName,0)!=0 ) goto database_type_by_name;
   if( isDatabaseFile(zName, openFlags) ){
     rc = SHELL_OPEN_NORMAL;
@@ -4263,18 +4263,18 @@ int deduceDatabaseType(const char *zName, int dfltZip, int openFlags){
   if( rc==SHELL_OPEN_NORMAL ) return SHELL_OPEN_NORMAL;
   f = sqlite3_fopen(zName, "rb");
   if( f==0 ) goto database_type_by_name;
-  n = fread(zBuf, 16, 1, f);
-  if( n==1 && memcmp(zBuf, "SQLite format 3", 16)==0 ){
+  n = fread(zBuf.data(), 16, 1, f);
+  if( n==1 && memcmp(zBuf.data(), "SQLite format 3", 16)==0 ){
     fclose(f);
     return SHELL_OPEN_NORMAL;
   }
   fseek(f, -25, SEEK_END);
-  n = fread(zBuf, 25, 1, f);
-  if( n==1 && memcmp(zBuf, "Start-Of-SQLite3-", 17)==0 ){
+  n = fread(zBuf.data(), 25, 1, f);
+  if( n==1 && memcmp(zBuf.data(), "Start-Of-SQLite3-", 17)==0 ){
     rc = SHELL_OPEN_APPENDVFS;
   }else{
     fseek(f, -22, SEEK_END);
-    n = fread(zBuf, 22, 1, f);
+    n = fread(zBuf.data(), 22, 1, f);
     if( n==1 && zBuf[0]==0x50 && zBuf[1]==0x4b && zBuf[2]==0x05
        && zBuf[3]==0x06 ){
       rc = SHELL_OPEN_ZIPFILE;
@@ -4339,8 +4339,8 @@ static unsigned char *readHexDb(ShellState *p, int *pnData){
   int rc;
   FILE *in;
   const char *zDbFilename = p->pAuxDb->zDbFilename;
-  unsigned int x[16];
-  char zLine[1000];
+  std::array<unsigned int, 16> x;
+  std::array<char, 1000> zLine;
   if( zDbFilename ){
     in = sqlite3_fopen(zDbFilename, "r");
     if( in==0 ){
@@ -4355,8 +4355,8 @@ static unsigned char *readHexDb(ShellState *p, int *pnData){
   }
   *pnData = 0;
   nLine++;
-  if( sqlite3_fgets(zLine, sizeof(zLine), in)==0 ) goto readHexDb_error;
-  rc = sscanf(zLine, "| size %d pagesize %d", &n, &pgsz);
+  if( sqlite3_fgets(zLine.data(), zLine.size(), in)==0 ) goto readHexDb_error;
+  rc = sscanf(zLine.data(), "| size %d pagesize %d", &n, &pgsz);
   if( rc!=2 ) goto readHexDb_error;
   if( n<0 ) goto readHexDb_error;
   if( pgsz<512 || pgsz>65536 || (pgsz & (pgsz-1))!=0 ){
@@ -4367,22 +4367,22 @@ static unsigned char *readHexDb(ShellState *p, int *pnData){
   a = (unsigned char*)sqlite3_malloc64( sz ? sz : 1 );
   shell_check_oom(a);
   memset(a, 0, sz);
-  for(nLine++; sqlite3_fgets(zLine, sizeof(zLine), in)!=0; nLine++){
+  for(nLine++; sqlite3_fgets(zLine.data(), zLine.size(), in)!=0; nLine++){
     int j = 0;                    /* Page number from "| page" line */
     int k = 0;                    /* Offset from "| page" line */
     if( nLine>=2000000000 ){
       cli_printf(stderr, "input too big\n");
       goto readHexDb_error;
     }
-    rc = sscanf(zLine, "| page %d offset %d", &j, &k);
+    rc = sscanf(zLine.data(), "| page %d offset %d", &j, &k);
     if( rc==2 ){
       iOffset = k;
       continue;
     }
-    if( cli_strncmp(zLine, "| end ", 6)==0 ){
+    if( cli_strncmp(zLine.data(), "| end ", 6)==0 ){
       break;
     }
-    rc = sscanf(zLine,"| %d: %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x",
+    rc = sscanf(zLine.data(),"| %d: %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x",
                 &j, &x[0], &x[1], &x[2], &x[3], &x[4], &x[5], &x[6], &x[7],
                 &x[8], &x[9], &x[10], &x[11], &x[12], &x[13], &x[14], &x[15]);
     if( rc==17 ){
@@ -4405,9 +4405,9 @@ readHexDb_error:
   if( in!=p->in ){
     fclose(in);
   }else{
-    while( sqlite3_fgets(zLine, sizeof(zLine), p->in)!=0 ){
+    while( sqlite3_fgets(zLine.data(), zLine.size(), p->in)!=0 ){
       nLine++;
-      if(cli_strncmp(zLine, "| end ", 6)==0 ) break;
+      if(cli_strncmp(zLine.data(), "| end ", 6)==0 ) break;
     }
     p->lineno = nLine;
   }
@@ -4724,17 +4724,17 @@ static void linenoise_completion(
   i64 i, iStart;
   sqlite3_stmt *pStmt = 0;
   char *zSql;
-  char zBuf[1000];
+  std::array<char, 1000> zBuf;
 
 #if HAVE_LINENOISE==2
   UNUSED_PARAMETER(pUserData);
 #endif
-  if( nLine>(i64)sizeof(zBuf)-30 ) return;
+  if( nLine>(i64)zBuf.size()-30 ) return;
   if( zLine[0]=='.' || zLine[0]=='#') return;
   for(i=nLine-1; i>=0 && (IsAlnum(zLine[i]) || zLine[i]=='_'); i--){}
   if( i==nLine-1 ) return;
   iStart = i+1;
-  memcpy(zBuf, zLine, iStart);
+  memcpy(zBuf.data(), zLine, iStart);
   zSql = sqlite3_mprintf("SELECT DISTINCT candidate COLLATE nocase"
                          "  FROM completion(%Q,%Q) ORDER BY 1",
                          &zLine[iStart], zLine);
@@ -4745,9 +4745,9 @@ static void linenoise_completion(
   while( sqlite3_step(pStmt)==SQLITE_ROW ){
     const char *zCompletion = (const char*)sqlite3_column_text(pStmt, 0);
     int nCompletion = sqlite3_column_bytes(pStmt, 0);
-    if( iStart+nCompletion < (i64)sizeof(zBuf)-1 && zCompletion ){
-      memcpy(zBuf+iStart, zCompletion, nCompletion+1);
-      linenoiseAddCompletion(lc, zBuf);
+    if( iStart+nCompletion < (i64)zBuf.size()-1 && zCompletion ){
+      memcpy(zBuf.data()+iStart, zCompletion, nCompletion+1);
+      linenoiseAddCompletion(lc, zBuf.data());
     }
   }
   sqlite3_finalize(pStmt);
@@ -5522,7 +5522,7 @@ static int shell_dbinfo_command(ShellState *p, int nArg, char **azArg){
   char *zSchemaTab;
   const char *zDb = nArg>=2 ? azArg[1] : "main";
   sqlite3_stmt *pStmt = 0;
-  unsigned char aHdr[100];
+  std::array<unsigned char, 100> aHdr;
   open_db(p, 0);
   if( p->db==0 ) return 1;
   rc = sqlite3_prepare_v2(p->db,
@@ -5539,14 +5539,14 @@ static int shell_dbinfo_command(ShellState *p, int nArg, char **azArg){
   ){
     const u8 *pb = (const u8*)sqlite3_column_blob(pStmt,0);
     shell_check_oom(pb);
-    memcpy(aHdr, pb, 100);
+    memcpy(aHdr.data(), pb, 100);
     sqlite3_finalize(pStmt);
   }else{
     cli_puts("unable to read database header\n", stderr);
     sqlite3_finalize(pStmt);
     return 1;
   }
-  i = get2byteInt(aHdr+16);
+  i = get2byteInt(aHdr.data()+16);
   if( i==1 ) i = 65536;
   cli_printf(p->out, "%-20s %d\n", "database page size:", i);
   cli_printf(p->out, "%-20s %d\n", "write format:", aHdr[18]);
@@ -5554,7 +5554,7 @@ static int shell_dbinfo_command(ShellState *p, int nArg, char **azArg){
   cli_printf(p->out, "%-20s %d\n", "reserved bytes:", aHdr[20]);
   for(i=0; i<ArraySize(aField); i++){
     int ofst = aField[i].ofst;
-    unsigned int val = get4byteInt(aHdr + ofst);
+    unsigned int val = get4byteInt(aHdr.data() + ofst);
     cli_printf(p->out, "%-20s %u", aField[i].zName, val);
     switch( ofst ){
       case 56: {
@@ -5595,11 +5595,11 @@ static int shell_dbtotxt_command(ShellState *p, int nArg, char **azArg){
   const char *zTail;
   char *zName = 0;
   int rc, i, j;
-  unsigned char bShow[256];   /* Characters ok to display */
+  std::array<unsigned char, 256> bShow;   /* Characters ok to display */
 
   UNUSED_PARAMETER(nArg);
   UNUSED_PARAMETER(azArg);
-  memset(bShow, '.', sizeof(bShow));
+  bShow.fill('.');
   for(i=' '; i<='~'; i++){
     if( i!='{' && i!='}' && i!='"' && i!='\\' ) bShow[i] = (unsigned char)i;
   }
@@ -5882,7 +5882,7 @@ static void newTempFile(ShellState *p, const char *zSuffix){
   char *zHome;          /* Home directory */
   int i;                /* Loop counter */
   sqlite3_uint64 r = 0; /* Integer with 64 bits of randomness */
-  char zRand[32];       /* Text string with 160 bits of randomness */
+  std::array<char, 32> zRand;       /* Text string with 160 bits of randomness */
 #ifdef _WIN32
   const char cDirSep = '\\';
 #else
@@ -5900,7 +5900,7 @@ static void newTempFile(ShellState *p, const char *zSuffix){
   p->zTempFile = 0;
   zHome = find_home_dir(0);
   p->zTempFile = sqlite3_mprintf("%s%ctemp-%s.%s",
-                                 zHome,cDirSep,zRand,zSuffix);
+                                 zHome,cDirSep,zRand.data(),zSuffix);
   shell_check_oom(p->zTempFile);
 }
 
@@ -6807,7 +6807,7 @@ static int arCreateOrUpdateCommand(
       "  data BLOB               -- compressed content\n"
       ")";
   const char *zDrop = "DROP TABLE IF EXISTS sqlar";
-  const char *zInsertFmt[2] = {
+  std::array<const char *, 2> zInsertFmt = {
      "REPLACE INTO %s(name,mode,mtime,sz,data)\n"
      "  SELECT\n"
      "    %s,\n"
@@ -6834,7 +6834,7 @@ static int arCreateOrUpdateCommand(
   int rc;                         /* Return code */
   const char *zTab = 0;           /* SQL table into which to insert */
   char *zSql;
-  char zTemp[50];
+  std::array<char, 50> zTemp;
   char *zExists = 0;
 
   arExecSql(pAr, "PRAGMA page_size=512");
@@ -6846,8 +6846,8 @@ static int arCreateOrUpdateCommand(
     if( pAr->zFile ){
       sqlite3_uint64 r;
       sqlite3_randomness(sizeof(r),&r);
-      sqlite3_snprintf(sizeof(zTemp),zTemp,"zip%016llx",r);
-      zTab = zTemp;
+      sqlite3_snprintf(zTemp.size(),zTemp.data(),"zip%016llx",r);
+      zTab = zTemp.data();
       zSql = sqlite3_mprintf(
          "CREATE VIRTUAL TABLE temp.%s USING zipfile(%Q)",
          zTab, pAr->zFile
@@ -7614,23 +7614,23 @@ static int dotCmdImport(ShellState *p){
     sqlite3_str *pContent = sqlite3_str_new(p->db);
     int ckEnd = 1;
     i64 iStart = p->lineno;
-    char zLine[2000];
+    std::array<char, 2000> zLine;
     sCtx.zFile = p->zInFile;
     sCtx.nLine = p->lineno+1;
     iLineOffset = p->lineno;
-    while( sqlite3_fgets(zLine,sizeof(zLine),p->in) ){
-      if( ckEnd && cli_strncmp(zLine,zEndMark,nEndMark)==0 ){
+    while( sqlite3_fgets(zLine.data(),zLine.size(),p->in) ){
+      if( ckEnd && cli_strncmp(zLine.data(),zEndMark,nEndMark)==0 ){
         ckEnd = 2;
-        if( strchr(zLine,'\n') ) p->lineno++;
+        if( strchr(zLine.data(),'\n') ) p->lineno++;
         break;
       }
-      if( strchr(zLine,'\n') ){
+      if( strchr(zLine.data(),'\n') ){
         p->lineno++;
         ckEnd = 1;
       }else{
         ckEnd = 0;
       }
-      sqlite3_str_appendall(pContent, zLine);
+      sqlite3_str_appendall(pContent, zLine.data());
     }
     sCtx.zIn = sqlite3_str_finish(pContent);
     if( sCtx.zIn==0 ){
@@ -7654,14 +7654,14 @@ static int dotCmdImport(ShellState *p){
     return 1;
   }
   if( eVerbose>=1 ){
-    char zSep[2];
+    std::array<char, 2> zSep;
     zSep[1] = 0;
     zSep[0] = sCtx.cColSep;
     cli_puts("Column separator ", p->out);
-    output_c_string(p->out, zSep);
+    output_c_string(p->out, zSep.data());
     cli_puts(", row separator ", p->out);
     zSep[0] = sCtx.cRowSep;
-    output_c_string(p->out, zSep);
+    output_c_string(p->out, zSep.data());
     cli_puts("\n", p->out);
   }
   sCtx.z = (char*)sqlite3_malloc64(120);
@@ -8798,11 +8798,11 @@ static int dotCmdCheck(ShellState *p){
   if( zCheck[0]=='<' && zCheck[1]=='<' && zCheck[2]!=0 ){
     int nCheck = strlen30(zCheck);
     sqlite3_str *pPattern = sqlite3_str_new(p->db);
-    char zLine[2000];
-    while( sqlite3_fgets(zLine,sizeof(zLine),p->in) ){
-      if( strchr(zLine,'\n') ) p->lineno++;
-      if( cli_strncmp(&zCheck[2],zLine,nCheck-2)==0 ) break;
-      sqlite3_str_appendall(pPattern, zLine);
+    std::array<char, 2000> zLine;
+    while( sqlite3_fgets(zLine.data(),zLine.size(),p->in) ){
+      if( strchr(zLine.data(),'\n') ) p->lineno++;
+      if( cli_strncmp(&zCheck[2],zLine.data(),nCheck-2)==0 ) break;
+      sqlite3_str_appendall(pPattern, zLine.data());
     }
     zPattern = sqlite3_str_finish(pPattern);
     if( zPattern==0 ){
@@ -9686,16 +9686,16 @@ static int do_meta_command(const char *zLine, ShellState *p){
                       zCmd, aCtrl[iCtrl].zUsage);
       rc = 1;
     }else if( isOk==1 ){
-      char zBuf[100];
-      sqlite3_snprintf(sizeof(zBuf), zBuf, "%lld", iRes);
-      cli_printf(p->out, "%s\n", zBuf);
+      std::array<char, 100> zBuf;
+      sqlite3_snprintf(zBuf.size(), zBuf.data(), "%lld", iRes);
+      cli_printf(p->out, "%s\n", zBuf.data());
     }
   }else
 
   if( c=='f' && cli_strncmp(azArg[0], "fullschema", n)==0 ){
     ShellState data;
     int doStats = 0;
-    int hasStat[5];
+    std::array<int, 5> hasStat;
     int flgs = 0;
     char *zSql;
     if( nArg==2 && optionMatch(azArg[1], "indent") ){
@@ -9725,7 +9725,7 @@ static int do_meta_command(const char *zLine, ShellState *p){
     sqlite3_free(zSql);
     if( rc==SQLITE_OK ){
       sqlite3_stmt *pStmt;
-      memset(hasStat, 0, sizeof(hasStat));
+      hasStat.fill(0);
       rc = sqlite3_prepare_v2(p->db,
                "SELECT substr(name,12,1) FROM sqlite_schema"
                " WHERE name GLOB 'sqlite_stat[134]'",
@@ -9833,15 +9833,15 @@ static int do_meta_command(const char *zLine, ShellState *p){
     sqlite3_free(zSql);
     i = 0;
     while( rc==SQLITE_OK && sqlite3_step(pStmt)==SQLITE_ROW ){
-      char zLabel[20];
+      std::array<char, 20> zLabel;
       const char *zCol = (const char*)sqlite3_column_text(pStmt,2);
       i++;
       if( zCol==0 ){
         if( sqlite3_column_int(pStmt,1)==-1 ){
           zCol = "_ROWID_";
         }else{
-          sqlite3_snprintf(sizeof(zLabel),zLabel,"expr%d",i);
-          zCol = zLabel;
+          sqlite3_snprintf(zLabel.size(),zLabel.data(),"expr%d",i);
+          zCol = zLabel.data();
         }
       }
       if( isWO && lenPK==0 && sqlite3_column_int(pStmt,5)==0 && zCollist ){
@@ -10445,10 +10445,10 @@ static int do_meta_command(const char *zLine, ShellState *p){
 
   if( c=='p' && cli_strncmp(azArg[0], "prompt", n)==0 ){
     if( nArg >= 2) {
-      shell_strncpy(mainPrompt,azArg[1],(int)ArraySize(mainPrompt)-1);
+      shell_strncpy(mainPrompt.data(),azArg[1],(int)mainPrompt.size()-1);
     }
     if( nArg >= 3) {
-      shell_strncpy(continuePrompt,azArg[2],(int)ArraySize(continuePrompt)-1);
+      shell_strncpy(continuePrompt.data(),azArg[2],(int)continuePrompt.size()-1);
     }
   }else
 
@@ -10650,8 +10650,8 @@ static int do_meta_command(const char *zLine, ShellState *p){
     iSchema = 0;
     while( sqlite3_step(pStmt)==SQLITE_ROW ){
       const char *zDb = (const char*)sqlite3_column_text(pStmt, 1);
-      char zScNum[30];
-      sqlite3_snprintf(sizeof(zScNum), zScNum, "%d", ++iSchema);
+      std::array<char, 30> zScNum;
+      sqlite3_snprintf(zScNum.size(), zScNum.data(), "%d", ++iSchema);
       sqlite3_str_appendall(pSql, zDiv);
       zDiv = " UNION ALL ";
       if( sqlite3_stricmp(zDb, "main")==0 ){
@@ -10940,10 +10940,10 @@ static int do_meta_command(const char *zLine, ShellState *p){
     if( cli_strncmp(azArg[0]+9, "integer", n-9)==0 ){
       int i; sqlite3_int64 v;
       for(i=1; i<nArg; i++){
-        char zBuf[200];
+        std::array<char, 200> zBuf;
         v = integerValue(azArg[i]);
-        sqlite3_snprintf(sizeof(zBuf),zBuf,"%s: %lld 0x%llx\n", azArg[i],v,v);
-        cli_puts(zBuf, p->out);
+        sqlite3_snprintf(zBuf.size(),zBuf.data(),"%s: %lld 0x%llx\n", azArg[i],v,v);
+        cli_puts(zBuf.data(), p->out);
       }
     }
   }else
@@ -12328,7 +12328,7 @@ static int runOneSqlLine(
   rc = shell_exec(p, zSql, &zErrMsg);
   END_TIMER(p);
   if( rc || zErrMsg ){
-    char zPrefix[100];
+    std::array<char, 100> zPrefix;
     const char *zErrorTail;
     const char *zErrorType;
     if( zErrMsg==0 ){
@@ -12346,28 +12346,28 @@ static int runOneSqlLine(
     }
     if( zFilename || !stdin_is_interactive ){
       if( cli_strcmp(zFilename,"cmdline")==0 ){
-        sqlite3_snprintf(sizeof(zPrefix), zPrefix,
+        sqlite3_snprintf(zPrefix.size(), zPrefix.data(),
                   "%s in %r command line argument:", zErrorType, startline);
       }else if( cli_strcmp(zFilename,"<stdin>")==0 ){
-        sqlite3_snprintf(sizeof(zPrefix), zPrefix,
+        sqlite3_snprintf(zPrefix.size(), zPrefix.data(),
                   "%s near line %d:", zErrorType, startline);
       }else{
-        sqlite3_snprintf(sizeof(zPrefix), zPrefix,
+        sqlite3_snprintf(zPrefix.size(), zPrefix.data(),
                   "%s near line %d of %s:", zErrorType, startline, zFilename);
       }
     }else{
-      sqlite3_snprintf(sizeof(zPrefix), zPrefix, "%s:", zErrorType);
+      sqlite3_snprintf(zPrefix.size(), zPrefix.data(), "%s:", zErrorType);
     }
-    cli_printf(stderr,"%s %s\n", zPrefix, zErrorTail);
+    cli_printf(stderr,"%s %s\n", zPrefix.data(), zErrorTail);
     sqlite3_free(zErrMsg);
     zErrMsg = 0;
     return 1;
   }else if( ShellHasFlag(p, SHFLG_CountChanges) ){
-    char zLineBuf[2000];
-    sqlite3_snprintf(sizeof(zLineBuf), zLineBuf,
+    std::array<char, 2000> zLineBuf;
+    sqlite3_snprintf(zLineBuf.size(), zLineBuf.data(),
             "changes: %lld   total_changes: %lld",
             sqlite3_changes64(p->db), sqlite3_total_changes64(p->db));
-    cli_printf(p->out, "%s\n", zLineBuf);
+    cli_printf(p->out, "%s\n", zLineBuf.data());
   }
 
   if( doAutoDetectRestore(p, zSql) ) return 1;
@@ -12509,10 +12509,10 @@ static int process_input(ShellState *p, const char *zSrc){
       nSql += nLine;
     }
     if( nSql>0x7fff0000 ){
-      char zSize[100];
-      sqlite3_snprintf(sizeof(zSize),zSize,"%,lld",nSql);
+      std::array<char, 100> zSize;
+      sqlite3_snprintf(zSize.size(),zSize.data(),"%,lld",nSql);
       cli_printf(stderr, "%s:%lld: Input SQL is too big: %s bytes\n",
-                      zSrc, startline, zSize);
+                      zSrc, startline, zSize.data());
       nSql = 0;
       errCnt++;
       break;
@@ -12831,8 +12831,8 @@ static void main_init(ShellState *p) {
 #endif
   sqlite3_config(SQLITE_CONFIG_URI, 1);
   sqlite3_config(SQLITE_CONFIG_MULTITHREAD);
-  sqlite3_snprintf(sizeof(mainPrompt), mainPrompt,"sqlite> ");
-  sqlite3_snprintf(sizeof(continuePrompt), continuePrompt,"   ...> ");
+  sqlite3_snprintf(mainPrompt.size(), mainPrompt.data(),"sqlite> ");
+  sqlite3_snprintf(continuePrompt.size(), continuePrompt.data(),"   ...> ");
 }
 
 /*
@@ -12973,12 +12973,12 @@ int SQLITE_CDECL main(int argc, char **argv){
 #if !defined(_WIN32_WCE)
   if( getenv("SQLITE_DEBUG_BREAK") ){
     if( isatty(0) && isatty(2) ){
-      char zLine[100];
+      std::array<char, 100> zLine;
       cli_printf(stderr,
             "attach debugger to process %d and press ENTER to continue...",
             GETPID());
-      if( sqlite3_fgets(zLine, sizeof(zLine), stdin)!=0
-       && cli_strcmp(zLine,"stop")==0
+      if( sqlite3_fgets(zLine.data(), zLine.size(), stdin)!=0
+       && cli_strcmp(zLine.data(),"stop")==0
       ){
         exit(1);
       }

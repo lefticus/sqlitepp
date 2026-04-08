@@ -259,7 +259,7 @@ static Select *findRightmost(Select *p){
 */
 int sqlite3JoinType(Parse *pParse, Token *pA, Token *pB, Token *pC){
   int jointype = 0;
-  Token *apAll[3];
+  std::array<Token *, 3> apAll;
                              /*   0123456789 123456789 123456789 123 */
   static const char zKeyText[] = "naturaleftouterightfullinnercross";
   static const struct {

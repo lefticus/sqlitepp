@@ -1015,10 +1015,10 @@ static int resolveExprStep(Walker *pWalker, Expr *pExpr){
     */
     case TK_NOTNULL:
     case TK_ISNULL: {
-      int anRef[8];
+      std::array<int, 8> anRef;
       NameContext *p;
       int i;
-      for(i=0, p=pNC; p && i<ArraySize(anRef); p=p->pNext, i++){
+      for(i=0, p=pNC; p && i<static_cast<int>(anRef.size()); p=p->pNext, i++){
         anRef[i] = p->nRef;
       }
       sqlite3WalkExpr(pWalker, pExpr->pLeft);
@@ -1047,7 +1047,7 @@ static int resolveExprStep(Walker *pWalker, Expr *pExpr){
       pExpr->u.iValue = (pExpr->op==TK_NOTNULL);
       pExpr->flags |= EP_IntValue;
       pExpr->op = TK_INTEGER;
-      for(i=0, p=pNC; p && i<ArraySize(anRef); p=p->pNext, i++){
+      for(i=0, p=pNC; p && i<static_cast<int>(anRef.size()); p=p->pNext, i++){
         p->nRef = anRef[i];
       }
       sqlite3ExprDelete(pParse->db, pExpr->pLeft);

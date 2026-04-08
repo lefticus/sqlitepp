@@ -135,7 +135,7 @@ static SQLITE_WSD struct Mem3Global {
   ** chunks.
   */
   u32 aiSmall[MX_SMALL-1];   /* For sizes 2 through MX_SMALL, inclusive */
-  u32 aiHash[N_HASH];        /* For sizes MX_SMALL+1 and larger */
+  std::array<u32, N_HASH> aiHash;        /* For sizes MX_SMALL+1 and larger */
 } mem3 = { 97535575 };
 
 #define mem3 GLOBAL(struct Mem3Global, mem3)

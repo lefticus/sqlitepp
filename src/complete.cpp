@@ -108,29 +108,29 @@ int sqlite3_complete(const char *zSql){
   /* A complex statement machine used to detect the end of a CREATE TRIGGER
   ** statement.  This is the normal case.
   */
-  static const u8 trans[8][8] = {
+  static const std::array<std::array<u8, 8>, 8> trans = {{
                      /* Token:                                                */
      /* State:       **  SEMI  WS  OTHER  EXPLAIN  CREATE  TEMP  TRIGGER  END */
-     /* 0 INVALID: */ {    1,  0,     2,       3,      4,    2,       2,   2, },
-     /* 1   START: */ {    1,  1,     2,       3,      4,    2,       2,   2, },
-     /* 2  NORMAL: */ {    1,  2,     2,       2,      2,    2,       2,   2, },
-     /* 3 EXPLAIN: */ {    1,  3,     3,       2,      4,    2,       2,   2, },
-     /* 4  CREATE: */ {    1,  4,     2,       2,      2,    4,       5,   2, },
-     /* 5 TRIGGER: */ {    6,  5,     5,       5,      5,    5,       5,   5, },
-     /* 6    SEMI: */ {    6,  6,     5,       5,      5,    5,       5,   7, },
-     /* 7     END: */ {    1,  7,     5,       5,      5,    5,       5,   5, },
-  };
+     /* 0 INVALID: */ {{   1,  0,     2,       3,      4,    2,       2,   2, }},
+     /* 1   START: */ {{   1,  1,     2,       3,      4,    2,       2,   2, }},
+     /* 2  NORMAL: */ {{   1,  2,     2,       2,      2,    2,       2,   2, }},
+     /* 3 EXPLAIN: */ {{   1,  3,     3,       2,      4,    2,       2,   2, }},
+     /* 4  CREATE: */ {{   1,  4,     2,       2,      2,    4,       5,   2, }},
+     /* 5 TRIGGER: */ {{   6,  5,     5,       5,      5,    5,       5,   5, }},
+     /* 6    SEMI: */ {{   6,  6,     5,       5,      5,    5,       5,   7, }},
+     /* 7     END: */ {{   1,  7,     5,       5,      5,    5,       5,   5, }},
+  }};
 #else
   /* If triggers are not supported by this compile then the statement machine
   ** used to detect the end of a statement is much simpler
   */
-  static const u8 trans[3][3] = {
+  static const std::array<std::array<u8, 3>, 3> trans = {{
                      /* Token:           */
      /* State:       **  SEMI  WS  OTHER */
-     /* 0 INVALID: */ {    1,  0,     2, },
-     /* 1   START: */ {    1,  1,     2, },
-     /* 2  NORMAL: */ {    1,  2,     2, },
-  };
+     /* 0 INVALID: */ {{   1,  0,     2, }},
+     /* 1   START: */ {{   1,  1,     2, }},
+     /* 2  NORMAL: */ {{   1,  2,     2, }},
+  }};
 #endif /* SQLITE_OMIT_TRIGGER */
 
 #ifdef SQLITE_ENABLE_API_ARMOR

@@ -1418,8 +1418,8 @@ static int vdbeSorterSort(SortSubtask *pTask, SorterList *pList){
   SorterRecord *p = pList->pList;
   pTask->xCompare = vdbeSorterGetCompare(pTask->pSorter);
   int i;
-  SorterRecord *aSlot[64];
-  memset(aSlot, 0, sizeof(aSlot));
+  std::array<SorterRecord *, 64> aSlot;
+  aSlot.fill(nullptr);
 
   while( p ){
     SorterRecord *pNext;
@@ -1440,7 +1440,7 @@ static int vdbeSorterSort(SortSubtask *pTask, SorterList *pList){
       /* ,--Each aSlot[] holds twice as much as the previous. So we cannot use
       ** |  up all 64 aSlots[] with only a 64-bit address space.
       ** v                                                                */
-      assert( i<ArraySize(aSlot) );
+      assert( i<static_cast<int>(aSlot.size()) );
       aSlot[i] = 0;
     }
     aSlot[i] = p;
@@ -1448,7 +1448,7 @@ static int vdbeSorterSort(SortSubtask *pTask, SorterList *pList){
   }
 
   p = 0;
-  for(i=0; i<ArraySize(aSlot); i++){
+  for(i=0; i<static_cast<int>(aSlot.size()); i++){
     if( aSlot[i]==0 ) continue;
     p = p ? vdbeSorterMerge(pTask, p, aSlot[i]) : aSlot[i];
   }
@@ -1541,9 +1541,9 @@ static int vdbePmaWriterFinish(PmaWriter *p, i64 *piEof, u64 *pnSpill){
 ** SQLITE_OK if successful, or an SQLite error code if an error occurs.
 */
 static void vdbePmaWriteVarint(PmaWriter *p, u64 iVal){
-  u8 aByte[10];
-  const int nByte = sqlite3PutVarint(aByte, iVal);
-  vdbePmaWriteBlob(p, aByte, nByte);
+  std::array<u8, 10> aByte;
+  const int nByte = sqlite3PutVarint(aByte.data(), iVal);
+  vdbePmaWriteBlob(p, aByte.data(), nByte);
 }
 
 /*

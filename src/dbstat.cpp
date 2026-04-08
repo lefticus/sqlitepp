@@ -122,7 +122,7 @@ struct StatCursor {
   u8 isAgg;                       /* Aggregate results for each table */
   int iDb;                        /* Schema used for this query */
 
-  StatPage aPage[32];             /* Pages in path to current page */
+  std::array<StatPage, 32> aPage;             /* Pages in path to current page */
   int iPage;                      /* Current entry in aPage[] */
 
   /* Values to return. */

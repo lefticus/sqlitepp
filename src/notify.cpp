@@ -227,8 +227,8 @@ void sqlite3ConnectionUnlocked(sqlite3 *db){
   void (*xUnlockNotify)(void **, int) = 0; /* Unlock-notify cb to invoke */
   int nArg = 0;                            /* Number of entries in aArg[] */
   void **aDyn = 0;           /* Dynamically allocated space for aArg[] */
-  void *aStatic[16];         /* Starter space for aArg[].  No malloc required */
-  void **aArg = aStatic;    /* Arguments to the unlock callback */
+  std::array<void *, 16> aStatic;         /* Starter space for aArg[].  No malloc required */
+  void **aArg = aStatic.data();    /* Arguments to the unlock callback */
 
   enterMutex();         /* Enter STATIC_MAIN mutex */
 
@@ -250,9 +250,9 @@ void sqlite3ConnectionUnlocked(sqlite3 *db){
       }
 
       sqlite3BeginBenignMalloc();
-      assert( aArg==aDyn || (aDyn==0 && aArg==aStatic) );
-      assert( nArg<=(int)ArraySize(aStatic) || aArg==aDyn );
-      if( (!aDyn && nArg==(int)ArraySize(aStatic))
+      assert( aArg==aDyn || (aDyn==0 && aArg==aStatic.data()) );
+      assert( nArg<=static_cast<int>(aStatic.size()) || aArg==aDyn );
+      if( (!aDyn && nArg==static_cast<int>(aStatic.size()))
        || (aDyn && nArg==(int)(sqlite3MallocSize(aDyn)/sizeof(void*)))
       ){
         /* The aArg[] array needs to grow. */

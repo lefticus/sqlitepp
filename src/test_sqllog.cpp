@@ -280,18 +280,18 @@ static int sqllogFindAttached(
 ** The SLGlobal.mutex mutex is always held when this function is called.
 */
 static void sqllogCopydb(struct SLConn *p, const char *zSearch, int bLog){
-  char zName[SQLLOG_NAMESZ];      /* Attached database name */
-  char zFile[SQLLOG_NAMESZ];      /* Database file name */
+  std::array<char, SQLLOG_NAMESZ> zName;      /* Attached database name */
+  std::array<char, SQLLOG_NAMESZ> zFile;      /* Database file name */
   char *zInit = 0;
 
-  const int rc = sqllogFindAttached(p->db, zSearch, zName, zFile);
+  const int rc = sqllogFindAttached(p->db, zSearch, zName.data(), zFile.data());
   if( rc!=SQLITE_OK ) return;
 
   if( zFile[0]=='\0' ){
     zInit = sqlite3_mprintf("");
   }else{
     if( sqllogglobal.bReuse ){
-      zInit = sqllogFindFile(zFile);
+      zInit = sqllogFindFile(zFile.data());
     }else{
       zInit = 0;
     }
@@ -308,7 +308,7 @@ static void sqllogCopydb(struct SLConn *p, const char *zSearch, int bLog){
       int rc = sqlite3_open(zInit, &copy);
       if( rc==SQLITE_OK ){
         sqlite3_exec(copy, "PRAGMA synchronous = 0", 0, 0, 0);
-        sqlite3_backup *const pBak = sqlite3_backup_init(copy, "main", p->db, zName);
+        sqlite3_backup *const pBak = sqlite3_backup_init(copy, "main", p->db, zName.data());
         if( pBak ){
           sqlite3_backup_step(pBak, -1);
           rc = sqlite3_backup_finish(pBak);
@@ -323,7 +323,7 @@ static void sqllogCopydb(struct SLConn *p, const char *zSearch, int bLog){
         /* Write an entry into the database index file */
         FILE *fd = fopen(sqllogglobal.zIdx.data(), "a");
         if( fd ){
-          fprintf(fd, "%d %s\n", iDb, zFile);
+          fprintf(fd, "%d %s\n", iDb, zFile.data());
           fclose(fd);
         }
       }else{
@@ -335,7 +335,7 @@ static void sqllogCopydb(struct SLConn *p, const char *zSearch, int bLog){
   char *zFree;
   if( bLog ){
     zFree = sqlite3_mprintf("ATTACH '%q' AS '%q'; -- clock=%d\n",
-        zInit, zName, sqllogglobal.iClock++
+        zInit, zName.data(), sqllogglobal.iClock++
     );
   }else{
     zFree = sqlite3_mprintf("-- Main database is '%q'\n", zInit);
@@ -410,10 +410,10 @@ static void testSqllogStmt(struct SLConn *p, const char *zSql){
 static int sqllogTraceDb(sqlite3 *db){
   int bRet = 1;
   if( sqllogglobal.bConditional ){
-    char zFile[SQLLOG_NAMESZ];      /* Attached database name */
-    const int rc = sqllogFindAttached(db, "main", 0, zFile);
+    std::array<char, SQLLOG_NAMESZ> zFile;      /* Attached database name */
+    const int rc = sqllogFindAttached(db, "main", 0, zFile.data());
     if( rc==SQLITE_OK ){
-      const int nFile = strlen(zFile);
+      const int nFile = strlen(zFile.data());
       if( (SQLLOG_NAMESZ-nFile)<8 ){
         sqlite3_log(SQLITE_IOERR, 
             "sqllogTraceDb(): database name too long (%d bytes)", nFile
@@ -421,7 +421,7 @@ static int sqllogTraceDb(sqlite3 *db){
         bRet = 0;
       }else{
         memcpy(&zFile[nFile], "-sqllog", 8);
-        bRet = !access(zFile, F_OK);
+        bRet = !access(zFile.data(), F_OK);
       }
     }
   }

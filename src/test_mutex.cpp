@@ -44,8 +44,8 @@ static struct test_mutex_globals {
   int disableTry;            /* True to force sqlite3_mutex_try() to fail */
   int isInit;                /* True if initialized */
   sqlite3_mutex_methods m;   /* Interface to "real" mutex system */
-  int aCounter[MAX_MUTEXES]; /* Number of grabs of each type of mutex */
-  sqlite3_mutex aStatic[STATIC_MUTEXES]; /* The static mutexes */
+  std::array<int, MAX_MUTEXES> aCounter; /* Number of grabs of each type of mutex */
+  std::array<sqlite3_mutex, STATIC_MUTEXES> aStatic; /* The static mutexes */
 } g = {0};
 
 /* Return true if the countable mutex is currently held */
@@ -287,16 +287,12 @@ static int SQLITE_TCLAPI test_clear_mutex_counters(
   int objc,
   Tcl_Obj *CONST objv[]
 ){
-  int ii;
-
   if( objc!=1 ){
     Tcl_WrongNumArgs(interp, 1, objv, "");
     return TCL_ERROR;
   }
 
-  for(ii=0; ii<MAX_MUTEXES; ii++){
-    g.aCounter[ii] = 0;
-  }
+  g.aCounter.fill(0);
   return TCL_OK;
 }
 
