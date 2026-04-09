@@ -37,7 +37,9 @@
 #include "sqliteInt.hpp"
 
 /* Size of the Bitvec structure in bytes. */
-#define BITVEC_SZ        512
+enum {
+BITVEC_SZ =        512
+};
 
 /* Round the union size down to the nearest pointer boundary, since that's how
 ** it will be aligned within the Bitvec struct. */
@@ -50,7 +52,9 @@
 ** performance. */
 #define BITVEC_TELEM     u8
 /* Size, in bits, of the bitmap element. */
-#define BITVEC_SZELEM    8
+enum {
+BITVEC_SZELEM =    8
+};
 /* Number of elements in a bitmap array. */
 #define BITVEC_NELEM     (BITVEC_USIZE/sizeof(BITVEC_TELEM))
 /* Number of bits in the bitmap array. */

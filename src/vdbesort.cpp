@@ -152,7 +152,9 @@
 ** to a level 0 PMA. The purpose of this limit is to prevent various integer
 ** overflows. 512MiB.
 */
-#define SQLITE_MAX_PMASZ    (1<<29)
+enum {
+SQLITE_MAX_PMASZ =    (1<<29)
+};
 
 /*
 ** Private objects used by the sorter
@@ -339,8 +341,10 @@ struct VdbeSorter {
 /* Size (in bytes) of a VdbeSorter object that works with N or fewer subtasks */
 #define SZ_VDBESORTER(N)  (offsetof(VdbeSorter,aTask)+(N)*sizeof(SortSubtask))
 
-#define SORTER_TYPE_INTEGER 0x01
-#define SORTER_TYPE_TEXT    0x02
+enum {
+SORTER_TYPE_INTEGER = 0x01,
+SORTER_TYPE_TEXT =    0x02
+};
 
 /*
 ** An instance of the following object is used to read records out of a
@@ -2092,9 +2096,11 @@ static void vdbeMergeEngineCompare(
 ** SQLITE_MAX_WORKER_THREADS==0).  The other values are only used
 ** when there exists one or more separate worker threads.
 */
-#define INCRINIT_NORMAL 0
-#define INCRINIT_TASK   1
-#define INCRINIT_ROOT   2
+enum {
+INCRINIT_NORMAL = 0,
+INCRINIT_TASK =   1,
+INCRINIT_ROOT =   2
+};
 
 /*
 ** Forward reference required as the vdbeIncrMergeInit() and

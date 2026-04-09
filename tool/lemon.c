@@ -442,7 +442,9 @@ struct state {
   struct rule *pDfltReduce;/* The default REDUCE rule. */
   int autoReduce;          /* True if this is an auto-reduce state */
 };
-#define NO_OFFSET (-2147483647)
+enum {
+NO_OFFSET = (-2147483647)
+};
 
 /* A followset propagation link indicates that the contents of one
 ** configuration followset should be propagated to another whenever

@@ -674,9 +674,11 @@ static const struct compareInfo likeInfoAlt = { '%', '_',   0, 0 };
 /*
 ** Possible error returns from patternMatch()
 */
-#define SQLITE_MATCH             0
-#define SQLITE_NOMATCH           1
-#define SQLITE_NOWILDCARDMATCH   2
+enum {
+SQLITE_MATCH =             0,
+SQLITE_NOMATCH =           1,
+SQLITE_NOWILDCARDMATCH =   2
+};
 
 /*
 ** Compare two UTF-8 strings for equality where the first string is

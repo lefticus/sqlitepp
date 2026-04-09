@@ -44,7 +44,9 @@ struct FileChunk {
 /*
 ** By default, allocate this many bytes of memory for each FileChunk object.
 */
-#define MEMJOURNAL_DFLT_FILECHUNKSIZE 1024
+enum {
+MEMJOURNAL_DFLT_FILECHUNKSIZE = 1024
+};
 
 /*
 ** For chunk size nChunkSize, return the number of bytes that should

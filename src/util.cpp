@@ -541,8 +541,10 @@ static u64 sqlite3Multiply160(u64 a, u32 aLo, u64 b, u32 *pLo){
 ** Range of powers of 10 that we need to deal with when converting
 ** IEEE754 doubles to and from decimal.
 */
-#define POWERSOF10_FIRST (-348)
-#define POWERSOF10_LAST  (+347)
+enum {
+POWERSOF10_FIRST = (-348),
+POWERSOF10_LAST =  (+347)
+};
 
 /*
 ** For any p between -348 and +347, return the integer part of
@@ -1526,8 +1528,10 @@ int sqlite3PutVarint(unsigned char *p, u64 v){
 **
 ** SLOT_4_2_0   A mask for  (0x7f<<28) | SLOT_2_0
 */
-#define SLOT_2_0     0x001fc07f
-#define SLOT_4_2_0   0xf01fc07f
+enum {
+SLOT_2_0 =     0x001fc07f,
+SLOT_4_2_0 =   0xf01fc07f
+};
 
 
 /*

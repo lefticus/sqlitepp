@@ -1662,8 +1662,10 @@ insert_cleanup:
 ** Meanings of bits in of pWalker->eCode for
 ** sqlite3ExprReferencesUpdatedColumn()
 */
-#define CKCNSTRNT_COLUMN   0x01    /* CHECK constraint uses a changing column */
-#define CKCNSTRNT_ROWID    0x02    /* CHECK constraint references the ROWID */
+enum {
+CKCNSTRNT_COLUMN =   0x01,    /* CHECK constraint uses a changing column */
+CKCNSTRNT_ROWID =    0x02    /* CHECK constraint references the ROWID */
+};
 
 /* This is the Walker callback from sqlite3ExprReferencesUpdatedColumn().
 *  Set bit 0x01 of pWalker->eCode if pWalker->eCode to 0 and if this

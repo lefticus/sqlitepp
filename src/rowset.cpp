@@ -67,7 +67,9 @@
 /*
 ** Target size for allocation chunks.
 */
-#define ROWSET_ALLOCATION_SIZE 1024
+enum {
+ROWSET_ALLOCATION_SIZE = 1024
+};
 
 /*
 ** The number of rowset entries per allocation chunk.
@@ -120,8 +122,10 @@ struct RowSet {
 /*
 ** Allowed values for RowSet.rsFlags
 */
-#define ROWSET_SORTED  0x01   /* True if RowSet.pEntry is sorted */
-#define ROWSET_NEXT    0x02   /* True if sqlite3RowSetNext() has been called */
+enum {
+ROWSET_SORTED =  0x01,   /* True if RowSet.pEntry is sorted */
+ROWSET_NEXT =    0x02   /* True if sqlite3RowSetNext() has been called */
+};
 
 /*
 ** Allocate a RowSet object.  Return NULL if a memory allocation

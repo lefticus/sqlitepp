@@ -411,7 +411,9 @@ int speedtest1_numbername(unsigned int n, char *zOut, int nOut){
 
 
 /* Start a new test case */
-#define NAMEWIDTH 60
+enum {
+NAMEWIDTH = 60
+};
 static const char zDots[] =
   ".......................................................................";
 static int iTestNumber = 0;  /* Current test # for begin/end_test(). */

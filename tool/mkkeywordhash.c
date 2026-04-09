@@ -398,10 +398,13 @@ static void reorder(int *pFrom){
 /* Parameter to the hash function
 */
 #define HASH_OP ^
-#define HASH_CC '^'
-#define HASH_C0 4
-#define HASH_C1 3
-#define HASH_C2 1
+
+enum {
+HASH_CC = '^',
+HASH_C0 = 4,
+HASH_C1 = 3,
+HASH_C2 = 1
+};
 
 /*
 ** This routine does the work.  The generated code is printed on standard

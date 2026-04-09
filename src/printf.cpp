@@ -15,27 +15,31 @@
 ** Conversion types fall into various categories as defined by the
 ** following enumeration.
 */
-#define etRADIX       0 /* non-decimal integer types.  %x %o */
-#define etFLOAT       1 /* Floating point.  %f */
-#define etEXP         2 /* Exponentional notation. %e and %E */
-#define etGENERIC     3 /* Floating or exponential, depending on exponent. %g */
-#define etSIZE        4 /* Return number of characters processed so far. %n */
-#define etSTRING      5 /* Strings. %s */
-#define etDYNSTRING   6 /* Dynamically allocated strings. %z */
-#define etPERCENT     7 /* Percent symbol. %% */
-#define etCHARX       8 /* Characters. %c */
+enum {
+etRADIX =       0, /* non-decimal integer types.  %x %o */
+etFLOAT =       1, /* Floating point.  %f */
+etEXP =         2, /* Exponentional notation. %e and %E */
+etGENERIC =     3, /* Floating or exponential, depending on exponent. %g */
+etSIZE =        4, /* Return number of characters processed so far. %n */
+etSTRING =      5, /* Strings. %s */
+etDYNSTRING =   6, /* Dynamically allocated strings. %z */
+etPERCENT =     7, /* Percent symbol. %% */
+etCHARX =       8, /* Characters. %c */
 /* The rest are extensions, not normally found in printf() */
-#define etESCAPE_q    9  /* Strings with '\'' doubled.  %q */
-#define etESCAPE_Q    10 /* Strings with '\'' doubled and enclosed in '',
+etESCAPE_q =    9,  /* Strings with '\'' doubled.  %q */
+etESCAPE_Q =    10, /* Strings with '\'' doubled and enclosed in '',
                             NULL pointers replaced by SQL NULL.  %Q */
-#define etTOKEN       11 /* a pointer to a Token structure */
-#define etSRCITEM     12 /* a pointer to a SrcItem */
-#define etPOINTER     13 /* The %p conversion */
-#define etESCAPE_w    14 /* %w -> Strings with '\"' doubled */
-#define etORDINAL     15 /* %r -> 1st, 2nd, 3rd, 4th, etc.  English only */
-#define etDECIMAL     16 /* %d or %u, but not %x, %o */
+etTOKEN =       11, /* a pointer to a Token structure */
+etSRCITEM =     12, /* a pointer to a SrcItem */
+etPOINTER =     13, /* The %p conversion */
+etESCAPE_w =    14, /* %w -> Strings with '\"' doubled */
+etORDINAL =     15, /* %r -> 1st, 2nd, 3rd, 4th, etc.  English only */
+etDECIMAL =     16 /* %d or %u, but not %x, %o */
+};
 
-#define etINVALID     17 /* Any unrecognized conversion type */
+enum {
+etINVALID =     17 /* Any unrecognized conversion type */
+};
 
 
 /*
@@ -60,8 +64,10 @@ typedef struct et_info {   /* Information about each format field */
 /*
 ** Allowed values for et_info.flags
 */
-#define FLAG_SIGNED    1     /* True if the value to convert is signed */
-#define FLAG_STRING    4     /* Allow infinite precision */
+enum {
+FLAG_SIGNED =    1,     /* True if the value to convert is signed */
+FLAG_STRING =    4     /* Allow infinite precision */
+};
 
 /*
 ** The table is searched by hash.  In the case of %C where C is the character

@@ -70,7 +70,9 @@ struct SortCtx {
   int addrPushEnd;      /* Last instruction that pushes data into sorter */
 #endif
 };
-#define SORTFLAG_UseSorter  0x01   /* Use SorterOpen instead of OpenEphemeral */
+enum {
+SORTFLAG_UseSorter =  0x01   /* Use SorterOpen instead of OpenEphemeral */
+};
 
 /*
 ** Delete all the content of a Select structure.  Deallocate the structure

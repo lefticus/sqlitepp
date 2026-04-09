@@ -19,7 +19,9 @@
 /*
 ** Magic table number to mean the EXCLUDED table in an UPSERT statement.
 */
-#define EXCLUDED_TABLE_NUMBER  2
+enum {
+EXCLUDED_TABLE_NUMBER =  2
+};
 
 /*
 ** Walk the expression tree pExpr and increase the aggregate function

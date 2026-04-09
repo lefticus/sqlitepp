@@ -179,9 +179,11 @@ int sqlite3PcachePageSanity(PgHdr *pPg){
 /********************************** Linked List Management ********************/
 
 /* Allowed values for second argument to pcacheManageDirtyList() */
-#define PCACHE_DIRTYLIST_REMOVE   1    /* Remove pPage from dirty list */
-#define PCACHE_DIRTYLIST_ADD      2    /* Add pPage to the dirty list */
-#define PCACHE_DIRTYLIST_FRONT    3    /* Move pPage to the front of the list */
+enum {
+PCACHE_DIRTYLIST_REMOVE =   1,    /* Remove pPage from dirty list */
+PCACHE_DIRTYLIST_ADD =      2,    /* Add pPage to the dirty list */
+PCACHE_DIRTYLIST_FRONT =    3    /* Move pPage to the front of the list */
+};
 
 /*
 ** Manage pPage's participation on the dirty list.  Bits of the addRemove
@@ -762,7 +764,9 @@ static PgHdr *pcacheMergeDirtyList(PgHdr *pA, PgHdr *pB){
 ** One extra bucket is added to catch overflow in case something
 ** ever changes to make the previous sentence incorrect.
 */
-#define N_SORT_BUCKET  32
+enum {
+N_SORT_BUCKET =  32
+};
 static PgHdr *pcacheSortDirtyList(PgHdr *pIn){
   PgHdr *a[N_SORT_BUCKET], *p;
   int i;

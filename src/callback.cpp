@@ -292,7 +292,9 @@ CollSeq *sqlite3LocateCollSeq(Parse *pParse, const char *zName){
 ** a perfect match and any function with xSFunc NULL is
 ** a non-match.
 */
-#define FUNC_PERFECT_MATCH 6  /* The score for a perfect match */
+enum {
+FUNC_PERFECT_MATCH = 6  /* The score for a perfect match */
+};
 static int matchQuality(
   FuncDef *p,     /* The function we are evaluating for match quality */
   int nArg,       /* Desired number of arguments.  (-1)==any */
