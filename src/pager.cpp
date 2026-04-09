@@ -754,7 +754,7 @@ int sqlite3_pager_writej_count = 0;    /* Number of pages written to journal */
 ** be correct.  But by initializing the checksum to random value which
 ** is different for every journal, we minimize that risk.
 */
-static const std::array<unsigned char, 8> aJournalMagic = {
+constexpr inline std::array<unsigned char, 8> aJournalMagic = {
   0xd9, 0xd5, 0x05, 0xf9, 0x20, 0xa1, 0x63, 0xd7,
 };
 

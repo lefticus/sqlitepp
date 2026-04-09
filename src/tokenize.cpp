@@ -60,7 +60,7 @@ CC_NUL =       29,    /* 0x00 */
 CC_BOM =       30    /* First byte of UTF8 BOM:  0xEF 0xBB 0xBF */
 };
 
-static const unsigned char aiClass[] = {
+constexpr inline unsigned char aiClass[] = {
 #ifdef SQLITE_ASCII
 /*         x0  x1  x2  x3  x4  x5  x6  x7  x8  x9  xa  xb  xc  xd  xe  xf */
 /* 0x */   29, 28, 28, 28, 28, 28, 28, 28, 28,  7,  7, 28,  7,  7, 28, 28,

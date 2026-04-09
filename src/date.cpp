@@ -666,7 +666,7 @@ struct XformType {
   float rLimit;       /* Maximum NNN value for this transform */
   float rXform;       /* Constant used for this transform */
 };
-static const std::array<XformType, 6> aXformType = {{
+constexpr inline std::array<XformType, 6> aXformType = {{
   /* 0 */ { 6, "second",   4.6427e+14,         1.0  },
   /* 1 */ { 6, "minute",   7.7379e+12,        60.0  },
   /* 2 */ { 4, "hour",     1.2897e+11,      3600.0  },

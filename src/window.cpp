@@ -536,17 +536,17 @@ static void last_valueFinalizeFunc(sqlite3_context *pCtx){
 **
 **       if( pFuncDef->zName==row_valueName ){ ... }
 */
-static const char row_numberName[] =   "row_number";
-static const char dense_rankName[] =   "dense_rank";
-static const char rankName[] =         "rank";
-static const char percent_rankName[] = "percent_rank";
-static const char cume_distName[] =    "cume_dist";
-static const char ntileName[] =        "ntile";
-static const char last_valueName[] =   "last_value";
-static const char nth_valueName[] =    "nth_value";
-static const char first_valueName[] =  "first_value";
-static const char leadName[] =         "lead";
-static const char lagName[] =          "lag";
+constexpr inline char row_numberName[] =   "row_number";
+constexpr inline char dense_rankName[] =   "dense_rank";
+constexpr inline char rankName[] =         "rank";
+constexpr inline char percent_rankName[] = "percent_rank";
+constexpr inline char cume_distName[] =    "cume_dist";
+constexpr inline char ntileName[] =        "ntile";
+constexpr inline char last_valueName[] =   "last_value";
+constexpr inline char nth_valueName[] =    "nth_value";
+constexpr inline char first_valueName[] =  "first_value";
+constexpr inline char leadName[] =         "lead";
+constexpr inline char lagName[] =          "lag";
 
 /*
 ** No-op implementations of xStep() and xFinalize().  Used as place-holders

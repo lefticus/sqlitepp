@@ -2913,7 +2913,7 @@ static int createCollation(
 ** initializer must be kept in sync with the SQLITE_LIMIT_*
 ** #defines in sqlite3.h.
 */
-static const int aHardLimit[] = {
+constexpr inline int aHardLimit[] = {
   SQLITE_MAX_LENGTH,
   SQLITE_MAX_SQL_LENGTH,
   SQLITE_MAX_COLUMN,

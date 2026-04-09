@@ -65,7 +65,7 @@
 **
 **      '/1c2/000/'               // Left-most child of 451st child of root
 */
-static const char zDbstatSchema[] = 
+constexpr inline char zDbstatSchema[] =
   "CREATE TABLE x("
   " name       TEXT,"          /*  0 Name of table or index */
   " path       TEXT,"          /*  1 Path to page from root (NULL for agg) */

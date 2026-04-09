@@ -34,7 +34,7 @@ static SQLITE_WSD struct sqlite3StatType {
 ** Elements of sqlite3Stat[] are protected by either the memory allocator
 ** mutex, or by the pcache1 mutex.  The following array determines which.
 */
-static const std::array<char, 10> statMutex = {{
+constexpr inline std::array<char, 10> statMutex = {{
   0,  /* SQLITE_STATUS_MEMORY_USED */
   1,  /* SQLITE_STATUS_PAGECACHE_USED */
   1,  /* SQLITE_STATUS_PAGECACHE_OVERFLOW */

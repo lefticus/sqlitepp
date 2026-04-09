@@ -2013,7 +2013,7 @@ Select *sqlite3SelectDup(sqlite3 *db, const Select *p, int flags){
 ** NULL is returned.  If non-NULL is returned, then it is guaranteed
 ** that the new entry was successfully appended.
 */
-static const struct ExprList_item zeroItem = {0};
+constexpr inline struct ExprList_item zeroItem = {0};
 SQLITE_NOINLINE ExprList *sqlite3ExprListAppendNew(
   sqlite3 *db,            /* Database handle.  Used for memory allocation */
   Expr *pExpr             /* Expression to be appended. Might be NULL */

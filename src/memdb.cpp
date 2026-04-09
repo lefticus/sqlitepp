@@ -159,7 +159,7 @@ static sqlite3_vfs memdb_vfs = {
   0,                           /* xNextSystemCall */
 };
 
-static const sqlite3_io_methods memdb_io_methods = {
+constexpr inline sqlite3_io_methods memdb_io_methods = {
   3,                              /* iVersion */
   memdbClose,                      /* xClose */
   memdbRead,                       /* xRead */

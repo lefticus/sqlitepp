@@ -315,7 +315,7 @@ static int memjrnlFileSize(sqlite3_file *pJfd, sqlite_int64 *pSize){
 /*
 ** Table of methods for MemJournal sqlite3_file object.
 */
-static const struct sqlite3_io_methods MemJournalMethods = {
+constexpr inline struct sqlite3_io_methods MemJournalMethods = {
   1,                /* iVersion */
   memjrnlClose,     /* xClose */
   memjrnlRead,      /* xRead */

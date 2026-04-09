@@ -484,7 +484,7 @@ static void statInit(
   ** value. */
   sqlite3_result_blob(context, p, sizeof(*p), statAccumDestructor);
 }
-static const FuncDef statInitFuncdef = {
+constexpr inline FuncDef statInitFuncdef = {
   4,               /* nArg */
   SQLITE_UTF8,     /* funcFlags */
   0,               /* pUserData */
@@ -774,7 +774,7 @@ static void statPush(
   }
 }
 
-static const FuncDef statPushFuncdef = {
+constexpr inline FuncDef statPushFuncdef = {
   2+IsStat4,       /* nArg */
   SQLITE_UTF8,     /* funcFlags */
   0,               /* pUserData */
@@ -916,7 +916,7 @@ static void statGet(
   UNUSED_PARAMETER( argc );
 #endif
 }
-static const FuncDef statGetFuncdef = {
+constexpr inline FuncDef statGetFuncdef = {
   1+IsStat4,       /* nArg */
   SQLITE_UTF8,     /* funcFlags */
   0,               /* pUserData */

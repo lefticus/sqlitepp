@@ -24,7 +24,7 @@
 /* defined in main.c */
 extern const char *sqlite3ErrName(int);
 
-static const std::array<const char *, MAX_MUTEXES+1> aName = {
+constexpr inline std::array<const char *, MAX_MUTEXES+1> aName = {
   "fast",        "recursive",   "static_main",   "static_mem",
   "static_open", "static_prng", "static_lru",    "static_pmem",
   "static_app1", "static_app2", "static_app3",   "static_vfs1",

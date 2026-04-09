@@ -66,7 +66,7 @@
 /*
 ** Names of allowed datatypes
 */
-static const char *azCarrayType[] = {
+constexpr inline const char *azCarrayType[] = {
   "int32", "int64", "double", "char*", "struct iovec"
 };
 

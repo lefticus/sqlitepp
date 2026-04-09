@@ -139,7 +139,7 @@
 /* Human-readable names for the JSONB values.  The index for each
 ** string must correspond to the JSONB_* integer above.
 */
-static const std::array<const char * const, 17> jsonbType = {{
+constexpr inline std::array<const char * const, 17> jsonbType = {{
   "null", "true", "false", "integer", "integer",
   "real", "real", "text",  "text",    "text",
   "text", "array", "object", "", "", "", ""
@@ -150,7 +150,7 @@ static const std::array<const char * const, 17> jsonbType = {{
 ** the library isspace() function, resulting in a 7% overall performance
 ** increase for the text-JSON parser.  (Ubuntu14.10 gcc 4.8.4 x64 with -Os).
 */
-static const std::array<char, 256> jsonIsSpace = {
+constexpr inline std::array<char, 256> jsonIsSpace = {
 #ifdef SQLITE_ASCII
 /*0  1  2  3  4  5  6  7   8  9  a  b  c  d  e  f  */
   0, 0, 0, 0, 0, 0, 0, 0,  0, 1, 1, 0, 0, 1, 0, 0,  /* 0 */
@@ -200,10 +200,10 @@ static const std::array<char, 256> jsonIsSpace = {
 ** Useful as the second argument to strspn().
 */
 #ifdef SQLITE_ASCII
-static const char jsonSpaces[] = "\011\012\015\040";
+constexpr inline char jsonSpaces[] = "\011\012\015\040";
 #endif
 #ifdef SQLITE_EBCDIC
-static const char jsonSpaces[] = "\005\045\015\100";
+constexpr inline char jsonSpaces[] = "\005\045\015\100";
 #endif
 
 
@@ -213,7 +213,7 @@ static const char jsonSpaces[] = "\005\045\015\100";
 ** canonical JSON, but it is special in JSON-5, so we include
 ** it in the set of special characters.
 */
-static const std::array<char, 256> jsonIsOk = {
+constexpr inline std::array<char, 256> jsonIsOk = {
 #ifdef SQLITE_ASCII
 /*0  1  2  3  4  5  6  7   8  9  a  b  c  d  e  f  */
   0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0,  /* 0 */
@@ -1115,7 +1115,7 @@ struct NanInfName {
   const char *zMatch;
   const char *zRepl;
 };
-static const std::array<NanInfName, 5> aNanInfName = {{
+constexpr inline std::array<NanInfName, 5> aNanInfName = {{
   { 'i', 'I', 3, JSONB_FLOAT, 7, "inf", "9.0e999" },
   { 'i', 'I', 8, JSONB_FLOAT, 7, "infinity", "9.0e999" },
   { 'n', 'N', 3, JSONB_NULL, 4, "NaN", "null" },

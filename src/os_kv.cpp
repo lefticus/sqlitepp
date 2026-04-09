@@ -411,7 +411,7 @@ int kvvfsEncode(const char *aData, int nData, char *aOut){
   return j;
 }
 
-static const std::array<signed char, 256> kvvfsHexValue = {
+constexpr inline std::array<signed char, 256> kvvfsHexValue = {
   -1, -1, -1, -1, -1, -1, -1, -1,   -1, -1, -1, -1, -1, -1, -1, -1,
   -1, -1, -1, -1, -1, -1, -1, -1,   -1, -1, -1, -1, -1, -1, -1, -1,
   -1, -1, -1, -1, -1, -1, -1, -1,   -1, -1, -1, -1, -1, -1, -1, -1,

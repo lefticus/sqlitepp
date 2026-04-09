@@ -1424,7 +1424,7 @@ static const char * const azExplainColNames8[] = {
    "addr", "opcode", "p1", "p2", "p3", "p4", "p5", "comment",  /* EXPLAIN */
    "id", "parent", "notused", "detail"                         /* EQP */
 };
-static const u16 azExplainColNames16data[] = {
+constexpr inline u16 azExplainColNames16data[] = {
   /*   0 */  'a', 'd', 'd', 'r',                0,
   /*   5 */  'o', 'p', 'c', 'o', 'd', 'e',      0,
   /*  12 */  'p', '1',                          0, 
@@ -1438,7 +1438,7 @@ static const u16 azExplainColNames16data[] = {
   /*  45 */  'n', 'o', 't', 'u', 's', 'e', 'd', 0,
   /*  53 */  'd', 'e', 't', 'a', 'i', 'l',      0
 };
-static const u8 iExplainColNames16[] = {
+constexpr inline u8 iExplainColNames16[] = {
   0, 5, 12, 15, 18, 21, 24, 27,
   35, 38, 45, 53
 };

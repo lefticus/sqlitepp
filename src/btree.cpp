@@ -19,7 +19,7 @@
 ** The header string that appears at the beginning of every
 ** SQLite database.
 */
-static const char zMagicHeader[] = SQLITE_FILE_HEADER;
+constexpr inline char zMagicHeader[] = SQLITE_FILE_HEADER;
 
 /*
 ** Set this global variable to 1 to enable tracing using the TRACE

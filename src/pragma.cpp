@@ -3049,7 +3049,7 @@ static int pragmaVtabRowid(sqlite3_vtab_cursor *pVtabCursor, sqlite_int64 *p){
 }
 
 /* The pragma virtual table object */
-static const sqlite3_module pragmaVtabModule = {
+constexpr inline sqlite3_module pragmaVtabModule = {
   0,                           /* iVersion */
   0,                           /* xCreate - create a table */
   pragmaVtabConnect,           /* xConnect - connect to an existing table */

@@ -95,9 +95,9 @@ for {set r 0} {$r<$mx} {incr r} {
 }
 #endif /***** End of script ********/
 
-static const char aDigits[] = "0123456789ABCDEF0123456789abcdef";
-static const char aPrefix[] = "-x0\000X0";
-static const std::array<et_info, 23> fmtinfo = {{
+constexpr inline char aDigits[] = "0123456789ABCDEF0123456789abcdef";
+constexpr inline char aPrefix[] = "-x0\000X0";
+constexpr inline std::array<et_info, 23> fmtinfo = {{
   /*  0 */  {  's',  0, 4, etSTRING,     0,  0,  1 },
   /*  1 */  {  'E',  0, 1, etEXP,        14, 0,  0 },  /* Hash: 0 */
   /*  2 */  {  'u', 10, 0, etDECIMAL,    0,  0,  3 },
