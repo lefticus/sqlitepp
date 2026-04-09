@@ -361,9 +361,9 @@ int sqlite3ExprIsLikeOperator(const Expr *pExpr){
   };
   assert( pExpr->op==TK_FUNCTION );
   assert( !ExprHasProperty(pExpr, EP_IntValue) );
-  for(int i=0; i<ArraySize(aOp); i++){
-    if( sqlite3StrICmp(pExpr->u.zToken, aOp[i].zOp)==0 ){
-      return aOp[i].eOp;
+  for(auto i : aOp){
+    if( sqlite3StrICmp(pExpr->u.zToken, i.zOp)==0 ){
+      return i.eOp;
     }
   }
   return 0;

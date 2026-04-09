@@ -52,8 +52,8 @@ static void callCollNeeded(sqlite3 *db, int enc, const char *zName){
 static int synthCollSeq(sqlite3 *db, CollSeq *pColl){
   char *z = pColl->zName;
   static const u8 aEnc[] = { SQLITE_UTF16BE, SQLITE_UTF16LE, SQLITE_UTF8 };
-  for(int i=0; i<3; i++){
-    CollSeq *pColl2 = sqlite3FindCollSeq(db, aEnc[i], z, 0);
+  for(unsigned char i : aEnc){
+    CollSeq *pColl2 = sqlite3FindCollSeq(db, i, z, 0);
     if( pColl2->xCmp!=0 ){
       memcpy(pColl, pColl2, sizeof(CollSeq));
       pColl->xDel = 0;         /* Do not copy the destructor */

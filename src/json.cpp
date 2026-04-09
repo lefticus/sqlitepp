@@ -5655,9 +5655,9 @@ Module *sqlite3JsonVtabRegister(sqlite3 *db, const char *zName){
     "json_each", "json_tree", "jsonb_each", "jsonb_tree"
   }};
   assert( sqlite3HashFind(&db->aModule, zName)==0 );
-  for(unsigned int i=0; i<azModule.size(); i++){
-    if( sqlite3StrICmp(azModule[i],zName)==0 ){
-      return sqlite3VtabCreateModule(db, azModule[i], &jsonEachModule, 0, 0);
+  for(auto i : azModule){
+    if( sqlite3StrICmp(i,zName)==0 ){
+      return sqlite3VtabCreateModule(db, i, &jsonEachModule, 0, 0);
     }
   }
   return 0;

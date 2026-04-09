@@ -277,8 +277,8 @@ void sqlite3BitvecClear(Bitvec *p, u32 i, void *pBuf){
 void sqlite3BitvecDestroy(Bitvec *p){
   if( p==0 ) return;
   if( p->iDivisor ){
-    for(unsigned int i=0; i<BITVEC_NPTR; i++){
-      sqlite3BitvecDestroy(p->u.apSub[i]);
+    for(auto & i : p->u.apSub){
+      sqlite3BitvecDestroy(i);
     }
   }
   sqlite3_free(p);

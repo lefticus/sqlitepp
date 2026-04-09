@@ -2933,9 +2933,9 @@ static void pragmaVtabCursorClear(PragmaVtabCursor *pCsr){
   sqlite3_finalize(pCsr->pPragma);
   pCsr->pPragma = 0;
   pCsr->iRowid = 0;
-  for(int i=0; i<static_cast<int>(pCsr->azArg.size()); i++){
-    sqlite3_free(pCsr->azArg[i]);
-    pCsr->azArg[i] = 0;
+  for(auto & i : pCsr->azArg){
+    sqlite3_free(i);
+    i = 0;
   }
 }
 
