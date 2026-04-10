@@ -533,7 +533,7 @@ static int SQLITE_TCLAPI testBestIndexObj(
   int objc,              /* Number of arguments */
   Tcl_Obj *CONST objv[]  /* Command arguments */
 ){
-  const char *azSub[] = {
+  constexpr const char *azSub[] = {
     "constraints",                /* 0 */
     "orderby",                    /* 1 */
     "mask",                       /* 2 */

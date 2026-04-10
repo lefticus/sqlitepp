@@ -562,7 +562,7 @@ static int isRealTable(Parse *pParse, Table *pTab, int iOp){
   }
 #endif
   if( zType ){
-    const char *azMsg[] = {
+    constexpr const char *azMsg[] = {
       "rename columns of", "drop column from", "edit constraints of"
     };
     assert( iOp>=0 && iOp<ArraySize(azMsg) );

@@ -330,7 +330,7 @@ void sqlite3_mutex_enter(sqlite3_mutex *p){
 ** thread holds the mutex and it cannot be obtained, return SQLITE_BUSY.
 */
 int sqlite3_mutex_try(sqlite3_mutex *p){
-  const int rc = SQLITE_OK;
+  constexpr int rc = SQLITE_OK;
   if( p ){
     assert( sqlite3GlobalConfig.mutex.xMutexTry );
     return sqlite3GlobalConfig.mutex.xMutexTry(p);

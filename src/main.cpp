@@ -436,7 +436,7 @@ int sqlite3_config(int op, ...){
   ** are allowed.
   */
   if( sqlite3GlobalConfig.isInit ){
-    static const u64 mAnytimeConfigOption = 0
+    static constexpr u64 mAnytimeConfigOption = 0
        | MASKBIT64( SQLITE_CONFIG_LOG )
        | MASKBIT64( SQLITE_CONFIG_PCACHE_HDRSZ )
     ;
@@ -981,7 +981,7 @@ int sqlite3_db_config(sqlite3 *db, int op, ...){
       break;
     }
     default: {
-      static const struct {
+      static constexpr struct {
         int op;      /* The opcode */
         u64 mask;    /* Mask of the bit in sqlite3.flags to set/clear */
       } aFlagOp[] = {
@@ -1638,7 +1638,7 @@ const char *sqlite3ErrName(int rc){
 ** argument.
 */
 const char *sqlite3ErrStr(int rc){
-  static const char* const aMsg[] = {
+  static constexpr const char* const aMsg[] = {
     /* SQLITE_OK          */ "not an error",
     /* SQLITE_ERROR       */ "SQL logic error",
     /* SQLITE_INTERNAL    */ 0,
@@ -1714,9 +1714,9 @@ static int sqliteDefaultBusyCallback(
 #if SQLITE_OS_WIN || !defined(HAVE_NANOSLEEP) || HAVE_NANOSLEEP
   /* This case is for systems that have support for sleeping for fractions of
   ** a second.  Examples:  All windows systems, unix systems with nanosleep() */
-  static const u8 delays[] =
+  static constexpr u8 delays[] =
      { 1, 2, 5, 10, 15, 20, 25, 25,  25,  50,  50, 100 };
-  static const u8 totals[] =
+  static constexpr u8 totals[] =
      { 0, 1, 3,  8, 18, 33, 53, 78, 103, 128, 178, 228 };
 # define NDELAY ArraySize(delays)
   sqlite3 *db = (sqlite3 *)ptr;
@@ -2760,10 +2760,10 @@ int sqlite3_error_offset(sqlite3 *db){
 ** error.
 */
 const void *sqlite3_errmsg16(sqlite3 *db){
-  static const u16 outOfMem[] = {
+  static constexpr u16 outOfMem[] = {
     'o', 'u', 't', ' ', 'o', 'f', ' ', 'm', 'e', 'm', 'o', 'r', 'y', 0
   };
-  static const u16 misuse[] = {
+  static constexpr u16 misuse[] = {
     'b', 'a', 'd', ' ', 'p', 'a', 'r', 'a', 'm', 'e', 't', 'e', 'r', ' ',
     'o', 'r', ' ', 'o', 't', 'h', 'e', 'r', ' ', 'A', 'P', 'I', ' ',
     'm', 'i', 's', 'u', 's', 'e', 0

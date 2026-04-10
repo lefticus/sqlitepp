@@ -620,7 +620,7 @@ static int vtabCallConstructor(
     pMod->nRefModule++;
     pVTable->nRef = 1;
     if( sCtx.bDeclared==0 ){
-      const char *zFormat = "vtable constructor did not declare schema: %s";
+      constexpr const char *zFormat = "vtable constructor did not declare schema: %s";
       *pzErr = sqlite3MPrintf(db, zFormat, zModuleName);
       sqlite3VtabUnlock(pVTable);
       rc = SQLITE_ERROR;
@@ -714,7 +714,7 @@ int sqlite3VtabCallConnect(Parse *pParse, Table *pTab){
 ** more v-table. Return SQLITE_NOMEM if a malloc fails, or SQLITE_OK otherwise.
 */
 static int growVTrans(sqlite3 *db){
-  const int ARRAY_INCR = 5;
+  constexpr int ARRAY_INCR = 5;
 
   /* Grow the sqlite3.aVTrans array if required */
   if( (db->nVTrans%ARRAY_INCR)==0 ){
@@ -790,7 +790,7 @@ int sqlite3VtabCallCreate(sqlite3 *db, int iDb, const char *zTab, char **pzErr){
 */
 int sqlite3_declare_vtab(sqlite3 *db, const char *zCreateTable){
   int rc = SQLITE_OK;
-  static const u8 aKeyword[] = { TK_CREATE, TK_TABLE, 0 };
+  static constexpr u8 aKeyword[] = { TK_CREATE, TK_TABLE, 0 };
 
 #ifdef SQLITE_ENABLE_API_ARMOR
   if( !sqlite3SafetyCheckOk(db) || zCreateTable==0 ){
@@ -1276,7 +1276,7 @@ void sqlite3VtabEponymousTableClear(sqlite3 *db, Module *pMod){
 ** within an xUpdate method.
 */
 int sqlite3_vtab_on_conflict(sqlite3 *db){
-  static const unsigned char aMap[] = {
+  static constexpr unsigned char aMap[] = {
     SQLITE_ROLLBACK, SQLITE_ABORT, SQLITE_FAIL, SQLITE_IGNORE, SQLITE_REPLACE
   };
 #ifdef SQLITE_ENABLE_API_ARMOR

@@ -263,8 +263,8 @@ int sqlite3JoinType(Parse *pParse, Token *pA, Token *pB, Token *pC){
   int jointype = 0;
   std::array<Token *, 3> apAll;
                              /*   0123456789 123456789 123456789 123 */
-  static const char zKeyText[] = "naturaleftouterightfullinnercross";
-  static const struct {
+  static constexpr char zKeyText[] = "naturaleftouterightfullinnercross";
+  static constexpr struct {
     u8 i;        /* Beginning of keyword text in zKeyText[] */
     u8 nChar;    /* Length of the keyword in characters */
     u8 code;     /* Join type mask */
@@ -600,7 +600,7 @@ static int sqlite3ProcessJoin(Parse *pParse, Select *p){
           ** adding a new error so as to not break legacy applications.
           */
           ExprList *pFuncArgs = 0;   /* Arguments to the coalesce() */
-          static const Token tkCoalesce = { "coalesce", 8 };
+          static constexpr Token tkCoalesce = { "coalesce", 8 };
           assert( pE1!=0 );
           ExprSetProperty(pE1, EP_CanBeNull);
           while( tableAndColumnIndex(pSrc, iLeft+1, i, zName, &iLeft, &iLeftCol,

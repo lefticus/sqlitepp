@@ -484,8 +484,8 @@ static ShellState shellState;
 
 /* Names of values for Mode.spec.eEsc and Mode.spec.eText
 */
-static const char *qrfEscNames[] = { "auto", "off", "ascii", "symbol" };
-static const char *qrfQuoteNames[] = 
+static constexpr const char *qrfEscNames[] = { "auto", "off", "ascii", "symbol" };
+static constexpr const char *qrfQuoteNames[] =
       { "off","off","sql","hex","csv","tcl","json","relaxed"};
 
 /*
@@ -562,13 +562,13 @@ struct ModeInfo {
 };
 
 /* String constants used by built-in modes */
-static const char *aModeStr[] = 
+static constexpr const char *aModeStr[] =
   /* 0    1       2       3       4     5        6        7        8    */
    { 0,   "\n",   "|",    " ",    ",",  "\r\n",  "\036",  "\037",  "\t",
      "",  "NULL", "null", "\"\"", ": ",                                   };
   /* 9    10      11      12      13                                    */
 
-static const ModeInfo aModeInfo[] = {
+static constexpr ModeInfo aModeInfo[] = {
 /*   zName      eCSep  eRSep eNull eText eHdr eBlob bHdr eStyle eCx mFlg */
   { "ascii",    7,     6,    9,    1,    1,    0,   1,   12,    0,  0 },
   { "box",      0,     0,    9,    1,    1,    0,   2,   1,     2,  0 },
@@ -1099,7 +1099,7 @@ static int hexDigitValue(char c){
 */
 static sqlite3_int64 integerValue(const char *zArg){
   sqlite3_uint64 v = 0;
-  static const struct { const char *zSuffix; unsigned int iMult; } aMult[] = {
+  static constexpr struct { const char *zSuffix; unsigned int iMult; } aMult[] = {
     { "KiB", 1024 },
     { "MiB", 1024*1024 },
     { "GiB", 1024*1024*1024 },
@@ -1345,7 +1345,7 @@ static void shellAddSchemaName(
   int nVal,
   sqlite3_value **apVal
 ){
-  static const char *aPrefix[] = {
+  static constexpr const char *aPrefix[] = {
      "TABLE",
      "INDEX",
      "UNIQUE INDEX",
@@ -2068,9 +2068,9 @@ const char *zSkipValidUtf8(const char *z, int nAccept, long ccm){
 */
 static void output_c_string(FILE *out, const char *z){
   char c;
-  static const char *zq = "\"";
+  static constexpr const char *zq = "\"";
   static long ctrlMask = ~0L;
-  static const char *zDQBSRO = "\"\\\x7f"; /* double-quote, backslash, rubout */
+  static constexpr const char *zDQBSRO = "\"\\\x7f"; /* double-quote, backslash, rubout */
   std::array<char, 3> ace = {'\\', '?', '\0'};
   char cbsSay;
   cli_puts(zq, out);
@@ -2113,9 +2113,9 @@ static void output_c_string(FILE *out, const char *z){
 */
 static void append_c_string(sqlite3_str *out, const char *z){
   char c;
-  static const char *zq = "\"";
+  static constexpr const char *zq = "\"";
   static long ctrlMask = ~0L;
-  static const char *zDQBSRO = "\"\\\x7f"; /* double-quote, backslash, rubout */
+  static constexpr const char *zDQBSRO = "\"\\\x7f"; /* double-quote, backslash, rubout */
   std::array<char, 3> ace = {'\\', '?', '\0'};
   char cbsSay;
   if( z==0 ) z = "";
@@ -2227,7 +2227,7 @@ static int safeModeAuth(
   const char *zA4
 ){
   ShellState *p = (ShellState*)pClientData;
-  static const char *azProhibitedFunctions[] = {
+  static constexpr const char *azProhibitedFunctions[] = {
     "edit",
     "fts3_tokenizer",
     "load_extension",
@@ -2276,7 +2276,7 @@ static int shellAuth(
   const char *zA4
 ){
   ShellState *p = (ShellState*)pClientData;
-  static const char *azAction[] = { 0,
+  static constexpr const char *azAction[] = { 0,
      "CREATE_INDEX",         "CREATE_TABLE",         "CREATE_TEMP_INDEX",
      "CREATE_TEMP_TABLE",    "CREATE_TEMP_TRIGGER",  "CREATE_TEMP_VIEW",
      "CREATE_TRIGGER",       "CREATE_VIEW",          "DELETE",
@@ -2326,7 +2326,7 @@ static void printSchemaLine(FILE *out, const char *z, const char *zTail){
   if( zTail==0 ) return;
   if( zTail[0]==';' && (strstr(z, "/*")!=0 || strstr(z,"--")!=0) ){
     const char *zOrig = z;
-    static const char *azTerm[] = { "", "*/", "\n" };
+    static constexpr const char *azTerm[] = { "", "*/", "\n" };
     int i;
     for(i=0; i<ArraySize(azTerm); i++){
       char *zNew = sqlite3_mprintf("%s%s;", zOrig, azTerm[i]);
@@ -2734,7 +2734,7 @@ static void displayLinuxIoStats(FILE *out){
   in = sqlite3_fopen(z.data(), "rb");
   if( in==0 ) return;
   while( sqlite3_fgets(z.data(), z.size(), in)!=0 ){
-    static const struct {
+    static constexpr struct {
       const char *zPattern;
       const char *zDesc;
     } aTrans[] = {
@@ -3490,7 +3490,7 @@ static char **tableColumnList(ShellState *p, const char *zTab){
   if( preserveRowid ){
     /* Only preserve the rowid if we can find a name to use for the
     ** rowid */
-    static const char *azRowid[] = { "rowid", "_rowid_", "oid" };
+    static constexpr const char *azRowid[] = { "rowid", "_rowid_", "oid" };
     int i, j;
     for(j=0; j<3; j++){
       for(i=1; i<=nCol; i++){
@@ -3713,7 +3713,7 @@ static int run_schema_dump_query(
 ** There must be two or more spaces between the end of the command and the
 ** start of the description of what that command does.
 */
-static const char *azHelp[] = {
+static constexpr const char *azHelp[] = {
 #if defined(SQLITE_HAVE_ZLIB) && !defined(SQLITE_OMIT_VIRTUALTABLE) \
   && !defined(SQLITE_SHELL_FIDDLE)
   ".archive ...             Manage SQL archives",
@@ -5176,7 +5176,7 @@ static void tryToCloneData(
   int nTable = strlen30(zTable);
   int k = 0;
   int cnt = 0;
-  const int spinRate = 10000;
+  constexpr int spinRate = 10000;
 
   zQuery = sqlite3_mprintf("SELECT * FROM \"%w\"", zTable);
   shell_check_oom(zQuery);
@@ -5414,7 +5414,7 @@ static void output_reset(ShellState *p){
     output_file_close(p->out);
 #ifndef SQLITE_NOHAVE_SYSTEM
     if( p->doXdgOpen ){
-      const char *zXdgOpenCmd =
+      constexpr const char *zXdgOpenCmd =
 #if defined(_WIN32)
       "start";
 #elif defined(__APPLE__)
@@ -5491,7 +5491,7 @@ static unsigned int get4byteInt(unsigned char *a){
 ** Return 1 on error, 2 to exit, and 0 otherwise.
 */
 static int shell_dbinfo_command(ShellState *p, int nArg, char **azArg){
-  static const struct { const char *zName; int ofst; } aField[] = {
+  static constexpr struct { const char *zName; int ofst; } aField[] = {
      { "file change counter:",  24  },
      { "database page count:",  28  },
      { "freelist page count:",  36  },
@@ -5505,7 +5505,7 @@ static int shell_dbinfo_command(ShellState *p, int nArg, char **azArg){
      { "application id:",       68  },
      { "software version:",     96  },
   };
-  static const struct { const char *zName; const char *zSql; } aQuery[] = {
+  static constexpr struct { const char *zName; const char *zSql; } aQuery[] = {
      { "number of tables:",
        "SELECT count(*) FROM %s WHERE type='table'" },
      { "number of indexes:",
@@ -5884,9 +5884,9 @@ static void newTempFile(ShellState *p, const char *zSuffix){
   sqlite3_uint64 r = 0; /* Integer with 64 bits of randomness */
   std::array<char, 32> zRand;       /* Text string with 160 bits of randomness */
 #ifdef _WIN32
-  const char cDirSep = '\\';
+  constexpr char cDirSep = '\\';
 #else
-  const char cDirSep = '/';
+  constexpr char cDirSep = '/';
 #endif
 
   for(i=0; i<31; i++){
@@ -6009,7 +6009,7 @@ static int lintFkeyIndexes(
   **
   ** These six values are used by the C logic below to generate the report.
   */
-  const char *zSql =
+  constexpr const char *zSql =
   "SELECT "
     "     'EXPLAIN QUERY PLAN SELECT 1 FROM ' || quote(s.name) || ' WHERE '"
     "  || group_concat(quote(s.name) || '.' || quote(f.[from]) || '=?' "
@@ -6036,7 +6036,7 @@ static int lintFkeyIndexes(
     "GROUP BY s.name, f.id "
     "ORDER BY (CASE WHEN ? THEN f.[table] ELSE s.name END)"
   ;
-  const char *zGlobIPK = "SEARCH * USING INTEGER PRIMARY KEY (rowid=?)";
+  constexpr const char *zGlobIPK = "SEARCH * USING INTEGER PRIMARY KEY (rowid=?)";
 
   for(i=2; i<nArg; i++){
     int n = strlen30(azArg[i]);
@@ -6601,8 +6601,8 @@ static void arWhereClause(
 ** Implementation of .ar "lisT" command.
 */
 static int arListCommand(ArCommand *pAr){
-  const char *zSql = "SELECT %s FROM %s WHERE %s";
-  const char *azCols[] = {
+  constexpr const char *zSql = "SELECT %s FROM %s WHERE %s";
+  constexpr const char *azCols[] = {
     "name",
     "lsmode(mode), sz, datetime(mtime, 'unixepoch'), name"
   };
@@ -6679,7 +6679,7 @@ static int arRemoveCommand(ArCommand *pAr){
 ** Implementation of .ar "eXtract" command.
 */
 static int arExtractCommand(ArCommand *pAr){
-  const char *zSql1 =
+  constexpr const char *zSql1 =
     "WITH dest(dpath,dlen) AS (SELECT realpath($dir),length(realpath($dir)))\n"
     "SELECT ($dir || name),\n"
     "       CASE WHEN $dryrun THEN 0\n"
@@ -6690,7 +6690,7 @@ static int arExtractCommand(ArCommand *pAr){
     "   AND dpath=substr(realpath($dir||name),1,dlen)\n" /* No escapes */
     "   AND name NOT GLOB '*..[/\\]*'\n";                /* No /../ in paths */
 
-  const char *azExtraArg[] = {
+  constexpr const char *azExtraArg[] = {
     "sqlar_uncompress(data, sz)",
     "data"
   };
@@ -6798,7 +6798,7 @@ static int arCreateOrUpdateCommand(
   int bUpdate,                    /* true for a --create. */
   int bOnlyIfChanged              /* Only update if file has changed */
 ){
-  const char *zCreate =
+  constexpr const char *zCreate =
       "CREATE TABLE IF NOT EXISTS sqlar(\n"
       "  name TEXT PRIMARY KEY,  -- name of the file\n"
       "  mode INT,               -- access permissions\n"
@@ -6806,7 +6806,7 @@ static int arCreateOrUpdateCommand(
       "  sz INT,                 -- original file size\n"
       "  data BLOB               -- compressed content\n"
       ")";
-  const char *zDrop = "DROP TABLE IF EXISTS sqlar";
+  constexpr const char *zDrop = "DROP TABLE IF EXISTS sqlar";
   std::array<const char *, 2> zInsertFmt = {
      "REPLACE INTO %s(name,mode,mtime,sz,data)\n"
      "  SELECT\n"
@@ -7156,7 +7156,7 @@ static void rc_err_oom_die(int rc){
 #ifdef SHELL_COLFIX_DB /* If this is set, the DB can be in a file. */
 static char zCOL_DB[] = SHELL_STRINGIFY(SHELL_COLFIX_DB);
 #else  /* Otherwise, memory is faster/better for the transient DB. */
-static const char *zCOL_DB = ":memory:";
+static constexpr const char *zCOL_DB = ":memory:";
 #endif
 
 /* Define character (as C string) to separate generated column ordinal
@@ -7172,7 +7172,7 @@ static const char *zCOL_DB = ":memory:";
 
 static char *zAutoColumn(const char *zColNew, sqlite3 **pDb, char **pzRenamed){
   /* Queries and D{D,M}L used here */
-  static const char * const zTabMake = "\
+  static constexpr const char * zTabMake = "\
 CREATE TABLE ColNames(\
  cpos INTEGER PRIMARY KEY,\
  name TEXT, nlen INT, chop INT, reps INT, suff TEXT);\
@@ -7182,16 +7182,16 @@ WHERE t.name COLLATE NOCASE IN (\
  SELECT o.name FROM ColNames o WHERE o.cpos<>t.cpos\
 );\
 ";
-  static const char * const zTabFill = "\
+  static constexpr const char * zTabFill = "\
 INSERT INTO ColNames(name,nlen,chop,reps,suff)\
  VALUES(iif(length(?1)>0,?1,'?'),max(length(?1),1),0,0,'')\
 ";
-  static const char * const zHasDupes = "\
+  static constexpr const char * zHasDupes = "\
 SELECT count(DISTINCT (substring(name,1,nlen-chop)||suff) COLLATE NOCASE)\
  <count(name) FROM ColNames\
 ";
 #ifdef SHELL_COLUMN_RENAME_CLEAN
-  static const char * const zDedoctor = "\
+  static constexpr const char * zDedoctor = "\
 UPDATE ColNames SET chop=iif(\
   (substring(name,nlen,1) BETWEEN '0' AND '9')\
   AND (rtrim(name,'0123456790') glob '*" AUTOCOLUMN_SEP "'),\
@@ -7200,7 +7200,7 @@ UPDATE ColNames SET chop=iif(\
 )\
 ";
 #endif
-  static const char * const zSetReps = "\
+  static constexpr const char * zSetReps = "\
 UPDATE ColNames AS t SET reps=\
 (SELECT count(*) FROM ColNames d \
  WHERE substring(t.name,1,t.nlen-t.chop)=substring(d.name,1,d.nlen-d.chop)\
@@ -7208,18 +7208,18 @@ UPDATE ColNames AS t SET reps=\
 )\
 ";
 #ifdef SQLITE_ENABLE_MATH_FUNCTIONS
-  static const char * const zColDigits = "\
+  static constexpr const char * zColDigits = "\
 SELECT CAST(ceil(log(count(*)+0.5)) AS INT) FROM ColNames \
 ";
 #else
   /* Counting on SQLITE_MAX_COLUMN < 100,000 here. (32767 is the hard limit.) */
-  static const char * const zColDigits = "\
+  static constexpr const char * zColDigits = "\
 SELECT CASE WHEN (nc < 10) THEN 1 WHEN (nc < 100) THEN 2 \
  WHEN (nc < 1000) THEN 3 WHEN (nc < 10000) THEN 4 \
  ELSE 5 FROM (SELECT count(*) AS nc FROM ColNames) \
 ";
 #endif
-  static const char * const zRenameRank =
+  static constexpr const char * zRenameRank =
 #ifdef SHELL_COLUMN_RENAME_CLEAN
     "UPDATE ColNames AS t SET suff="
     "iif(reps>1, printf('%c%0*d', '" AUTOCOLUMN_SEP "', $1, cpos), '')"
@@ -7256,7 +7256,7 @@ SELECT CASE WHEN (nc < 10) THEN 1 WHEN (nc < 100) THEN 2 \
 " )"
 #endif
     ;
-  static const char * const zCollectVar = "\
+  static constexpr const char * zCollectVar = "\
 SELECT\
  '('||x'0a'\
  || group_concat(\
@@ -7267,7 +7267,7 @@ FROM (\
  SELECT cpos, printf('\"%w\"',printf('%!.*s%s', nlen-chop,name,suff)) AS cname \
  FROM ColNames ORDER BY cpos\
 )";
-  static const char * const zRenamesDone =
+  static constexpr const char * zRenamesDone =
     "SELECT group_concat("
     " printf('\"%w\" to \"%w\"',name,printf('%!.*s%s', nlen-chop, name, suff)),"
     " ','||x'0a')"
@@ -8375,7 +8375,7 @@ static int dotCmdMode(ShellState *p){
              p->mode.spec.bBorder==QRF_No ? "off" : "on");
     }
     if( bAll || p->mode.spec.eBlob!=QRF_BLOB_Auto ){
-      const char *azBQuote[] =
+      constexpr const char *azBQuote[] =
            { "auto", "text", "sql", "hex", "tcl", "json", "size" };
       /*      0       1       2      3      4      5       6
       ** Must match QRF_BLOB_xxxx values.  See all instances of tag-20251124a */
@@ -8456,7 +8456,7 @@ static int dotCmdMode(ShellState *p){
     }else if( k==2 ){
       sqlite3_str_appendall(pDesc, " --titles on");
     }else if( k==3 ){
-      static const char *azTitle[] =
+      static constexpr const char *azTitle[] =
           { "plain", "sql", "csv", "html", "tcl", "json"};
       sqlite3_str_appendf(pDesc, " --titles %s",
                    azTitle[p->mode.spec.eTitle-1]);
@@ -8555,7 +8555,7 @@ static int dotCmdOutput(ShellState *p){
   int bOnce = 0;          /* 0: .output, 1: .once, 2: .excel/.www */
   int bPlain = 0;         /* --plain option */
   int bKeep = 0;          /* Keep redirecting */
-  static const char *zBomUtf8 = "\357\273\277";
+  static constexpr const char *zBomUtf8 = "\357\273\277";
   const char *zBom = 0;
   char c = azArg[0][0];
   int n = strlen30(azArg[0]);
@@ -9285,7 +9285,7 @@ static int do_meta_command(const char *zLine, ShellState *p){
   }else
 
   if( c=='d' && n>=3 && cli_strncmp(azArg[0], "dbconfig", n)==0 ){
-    static const struct DbConfigChoices {
+    static constexpr struct DbConfigChoices {
       const char *zName;
       int op;
     } aDbConfig[] = {
@@ -9545,7 +9545,7 @@ static int do_meta_command(const char *zLine, ShellState *p){
 #endif
 
   if( c=='f' && cli_strncmp(azArg[0], "filectrl", n)==0 ){
-    static const struct {
+    static constexpr struct {
        const char *zCtrlName;   /* Name of a test-control option */
        int ctrlCode;            /* Integer code for that option */
        const char *zUsage;      /* Usage notes */
@@ -10008,7 +10008,7 @@ static int do_meta_command(const char *zLine, ShellState *p){
 #endif
 
   if( c=='l' && n>=5 && cli_strncmp(azArg[0], "limits", n)==0 ){
-    static const struct {
+    static constexpr struct {
        const char *zLimitName;   /* Name of a limit */
        int limitCode;            /* Integer code for that limit */
     } aLimit[] = {
@@ -11188,7 +11188,7 @@ static int do_meta_command(const char *zLine, ShellState *p){
 #if !defined(SQLITE_OMIT_SCHEMA_PRAGMAS) && !defined(SQLITE_OMIT_VIRTUALTABLE)
     {
       int lrc;
-      static const char zRevTmpl[] = /* Query template */
+      static constexpr char zRevTmpl[] = /* Query template */
         "SELECT lower(name) as tname FROM sqlite_schema\n"
         "WHERE type='table' AND coalesce(rootpage,0)>1\n"
         "AND name NOT LIKE 'sqlite__%%' ESCAPE '_'%s\n"
@@ -11277,7 +11277,7 @@ static int do_meta_command(const char *zLine, ShellState *p){
 #endif /* !defined(SQLITE_NOHAVE_SYSTEM) && !defined(SQLITE_SHELL_FIDDLE) */
 
   if( c=='s' && cli_strncmp(azArg[0], "show", n)==0 ){
-    static const char *azBool[] = { "off", "on", "trigger", "full"};
+    static constexpr const char *azBool[] = { "off", "on", "trigger", "full"};
     const char *zOut;
     int i;
     if( nArg!=1 ){
@@ -11405,7 +11405,7 @@ static int do_meta_command(const char *zLine, ShellState *p){
 
 #ifndef SQLITE_UNTESTABLE
   if( c=='t' && n>=8 && cli_strncmp(azArg[0], "testctrl", n)==0 ){
-    static const struct {
+    static constexpr struct {
        const char *zCtrlName;   /* Name of a test-control option */
        int ctrlCode;            /* Integer code for that option */
        int unSafe;              /* Not valid unless --unsafe-testing */
@@ -11497,7 +11497,7 @@ static int do_meta_command(const char *zLine, ShellState *p){
         **      INTEGER      Mask of optimizations to disable
         */
         case SQLITE_TESTCTRL_OPTIMIZATIONS: {
-          static const struct {
+          static constexpr struct {
              unsigned int mask;    /* Mask for this optimization */
              unsigned int bDsply;  /* Display this on output */
              const char *zLabel;   /* Name of optimization */
@@ -11988,7 +11988,7 @@ static int do_meta_command(const char *zLine, ShellState *p){
 #endif
 
   if( c=='v' && cli_strncmp(azArg[0], "version", n)==0 ){
-    const char *zPtrSz = sizeof(void*)==8 ? "64-bit" : "32-bit";
+    constexpr const char *zPtrSz = sizeof(void*)==8 ? "64-bit" : "32-bit";
     cli_printf(p->out, "SQLite %s %s\n" /*extra-version-info*/,
           sqlite3_libversion(), sqlite3_sourceid());
 #if SQLITE_HAVE_ZLIB
@@ -12248,7 +12248,7 @@ static int doAutoDetectRestore(ShellState *p, const char *zSql){
   if( p->eRestoreState<7 ){
     switch( p->eRestoreState ){
       case 0: {
-        const char *zExpect = "PRAGMA foreign_keys=OFF;";
+        constexpr const char *zExpect = "PRAGMA foreign_keys=OFF;";
         assert( strlen(zExpect)==24 );
         if( p->bSafeMode==0
          && strlen(zSql)>=24
@@ -12263,11 +12263,11 @@ static int doAutoDetectRestore(ShellState *p, const char *zSql){
   
       case 1: {
         int bIsDump = 0;
-        const char *zExpect = "BEGIN TRANSACTION;";
+        constexpr const char *zExpect = "BEGIN TRANSACTION;";
         assert( strlen(zExpect)==18 );
         if( memcmp(zSql, zExpect, 19)==0 ){
           /* Now check if the database is empty. */
-          const char *zQuery = "SELECT 1 FROM sqlite_schema LIMIT 1";
+          constexpr const char *zQuery = "SELECT 1 FROM sqlite_schema LIMIT 1";
           sqlite3_stmt *pStmt = 0;
   
           bIsDump = 1;
@@ -12728,7 +12728,7 @@ static void process_sqliterc(
 /*
 ** Show available command line options
 */
-static const char zOptions[] =
+static constexpr char zOptions[] =
   "   --                   treat no subsequent arguments as options\n"
 #if defined(SQLITE_HAVE_ZLIB) && !defined(SQLITE_OMIT_VIRTUALTABLE)
   "   -A ARGS...           run \".archive ARGS\" and exit\n"

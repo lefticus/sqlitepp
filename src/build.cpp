@@ -5236,7 +5236,7 @@ int sqlite3OpenTempDatabase(Parse *pParse){
   if( db->aDb[1].pBt==0 && !pParse->explain ){
     int rc;
     Btree *pBt;
-    static const int flags =
+    static constexpr int flags =
           SQLITE_OPEN_READWRITE |
           SQLITE_OPEN_CREATE |
           SQLITE_OPEN_EXCLUSIVE |

@@ -1396,7 +1396,7 @@ static int zeroJournalHdr(Pager *pPager, int doTruncate){
     if( doTruncate || iLimit==0 ){
       rc = sqlite3OsTruncate(pPager->jfd, 0);
     }else{
-      static const std::array<char, 28> zeroHdr = {};
+      static constexpr std::array<char, 28> zeroHdr = {};
       rc = sqlite3OsWrite(pPager->jfd, zeroHdr.data(), sizeof(zeroHdr), 0);
     }
     if( rc==SQLITE_OK && !pPager->noSync ){
@@ -2551,7 +2551,7 @@ static int pager_delsuper(Pager *pPager, const char *zSuper){
     rc = SQLITE_NOMEM_BKPT;
     pJournal = 0;
   }else{
-    const int flags = (SQLITE_OPEN_READONLY|SQLITE_OPEN_SUPER_JOURNAL);
+    constexpr int flags = (SQLITE_OPEN_READONLY|SQLITE_OPEN_SUPER_JOURNAL);
     rc = sqlite3OsOpen(pVfs, zSuper, pSuper, flags, 0);
     pJournal = (sqlite3_file *)(((u8 *)pSuper) + pVfs->szOsFile);
   }
@@ -4334,7 +4334,7 @@ static int syncJournal(Pager *pPager, int newHdr){
         iNextHdrOffset = journalHdrOffset(pPager);
         rc = sqlite3OsRead(pPager->jfd, aMagic.data(), 8, iNextHdrOffset);
         if( rc==SQLITE_OK && 0==memcmp(aMagic.data(), aJournalMagic.data(), 8) ){
-          static const u8 zerobyte = 0;
+          static constexpr u8 zerobyte = 0;
           rc = sqlite3OsWrite(pPager->jfd, &zerobyte, 1, iNextHdrOffset);
         }
         if( rc!=SQLITE_OK && rc!=SQLITE_IOERR_SHORT_READ ){
@@ -4520,7 +4520,7 @@ static int pager_write_pagelist(Pager *pPager, PgHdr *pList){
 static int openSubJournal(Pager *pPager){
   int rc = SQLITE_OK;
   if( !isOpen(pPager->sjfd) ){
-    const int flags =  SQLITE_OPEN_SUBJOURNAL | SQLITE_OPEN_READWRITE
+    constexpr int flags =  SQLITE_OPEN_SUBJOURNAL | SQLITE_OPEN_READWRITE
       | SQLITE_OPEN_CREATE | SQLITE_OPEN_EXCLUSIVE
       | SQLITE_OPEN_DELETEONCLOSE;
     int nStmtSpill = sqlite3Config.nStmtSpill;
@@ -7083,7 +7083,7 @@ int sqlite3PagerSavepoint(Pager *pPager, int op, int iSavepoint){
 ** sqlite3_uri_parameter() and sqlite3_filename_database() and friends.
 */
 const char *sqlite3PagerFilename(const Pager *pPager, int nullIfMemDb){
-  static const std::array<char, 8> zFake = {};
+  static constexpr std::array<char, 8> zFake = {};
   if( nullIfMemDb && (pPager->memDb || sqlite3IsMemdb(pPager->pVfs)) ){
     return &zFake[4];
   }else{

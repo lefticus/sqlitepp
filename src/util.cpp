@@ -80,19 +80,6 @@ int sqlite3IsOverflow(double x){
 #endif /* SQLITE_OMIT_FLOATING_POINT */
 
 /*
-** Compute a string length that is limited to what can be stored in
-** lower 30 bits of a 32-bit signed integer.
-**
-** The value returned will never be negative.  Nor will it ever be greater
-** than the actual length of the string.  For very long strings (greater
-** than 1GiB) the value returned might be less than the true string length.
-*/
-int sqlite3Strlen30(const char *z){
-  if( z==0 ) return 0;
-  return 0x3fffffff & (int)strlen(z);
-}
-
-/*
 ** Return the declared type of a column.  Or return zDflt if the column
 ** has no declared type.
 **
@@ -1727,17 +1714,6 @@ u8 sqlite3GetVarint32(const unsigned char *p, u32 *v){
 }
 
 /*
-** Return the number of bytes that will be needed to store the given
-** 64-bit integer.
-*/
-int sqlite3VarintLen(u64 v){
-  int i;
-  for(i=1; (v >>= 7)!=0; i++){ assert( i<10 ); }
-  return i;
-}
-
-
-/*
 ** Read or write a four-byte big-endian integer value.
 */
 u32 sqlite3Get4byte(const u8 *p){
@@ -1776,22 +1752,6 @@ void sqlite3Put4byte(unsigned char *p, u32 v){
 }
 
 
-
-/*
-** Translate a single byte of Hex into an integer.
-** This routine only works if h really is a valid hexadecimal
-** character:  0..9a..fA..F
-*/
-u8 sqlite3HexToInt(int h){
-  assert( (h>='0' && h<='9') ||  (h>='a' && h<='f') ||  (h>='A' && h<='F') );
-#ifdef SQLITE_ASCII
-  h += 9*(1&(h>>6));
-#endif
-#ifdef SQLITE_EBCDIC
-  h += 9*(1&~(h>>4));
-#endif
-  return (u8)(h & 0xf);
-}
 
 #if !defined(SQLITE_OMIT_BLOB_LITERAL)
 /*

@@ -1276,7 +1276,7 @@ static void t1CountStep(
       sqlite3_result_error(context, "value of 40 handed to x_count", -1);
 #ifndef SQLITE_OMIT_UTF16
     }else if( v==41 ){
-      const char zUtf16ErrMsg[] = { 0, 0x61, 0, 0x62, 0, 0x63, 0, 0, 0};
+      constexpr char zUtf16ErrMsg[] = { 0, 0x61, 0, 0x62, 0, 0x63, 0, 0, 0};
       sqlite3_result_error16(context, &zUtf16ErrMsg[1-SQLITE_BIGENDIAN], -1);
 #endif
     }
@@ -2017,7 +2017,7 @@ static int SQLITE_TCLAPI test_create_function_v2(
 
   for(i=5; i<objc; i+=2){
     int iSwitch;
-    const char *azSwitch[] = {"-func", "-step", "-final", "-destroy", 0};
+    constexpr const char *azSwitch[] = {"-func", "-step", "-final", "-destroy", 0};
     if( Tcl_GetIndexFromObj(interp, objv[i], azSwitch, "switch", 0, &iSwitch) ){
       sqlite3_free(p);
       return TCL_ERROR;
@@ -2292,7 +2292,7 @@ static int SQLITE_TCLAPI test_stmt_status(
   const char *zOpName;
   sqlite3_stmt *pStmt;
 
-  static const struct {
+  static constexpr struct {
     const char *zName;
     int op;
   } aOp[] = {
@@ -4015,7 +4015,7 @@ static int SQLITE_TCLAPI test_bind_double(
   int rc;
   const char *zVal;
   int i;
-  static const struct {
+  static constexpr struct {
     const char *zName;     /* Name of the special floating point value */
     unsigned int iUpper;   /* Upper 32 bits */
     unsigned int iLower;   /* Lower 32 bits */
@@ -5237,7 +5237,7 @@ static int SQLITE_TCLAPI test_prepare_tkt3134(
   Tcl_Obj *CONST objv[]
 ){
   sqlite3 *db;
-  static const char zSql[] = "\000SELECT 1";
+  static constexpr char zSql[] = "\000SELECT 1";
   sqlite3_stmt *pStmt = 0;
   char zBuf[50];
   int rc;
@@ -7380,7 +7380,7 @@ static int SQLITE_TCLAPI test_limit(
 ){
   sqlite3 *db;
   int rc;
-  static const struct {
+  static constexpr struct {
      const char *zName;
      int id;
   } aId[] = {
@@ -7695,7 +7695,7 @@ static int SQLITE_TCLAPI test_wal_checkpoint_v2(
   int nCkpt = -555;
   Tcl_Obj *pRet;
 
-  const char * aMode[] = {"noop", "passive", "full", "restart", "truncate", 0};
+  constexpr const char * aMode[] = {"noop", "passive", "full", "restart", "truncate", 0};
   assert( SQLITE_CHECKPOINT_NOOP==-1 );
   assert( SQLITE_CHECKPOINT_PASSIVE==0 );
   assert( SQLITE_CHECKPOINT_FULL==1 );
@@ -8302,7 +8302,7 @@ static int SQLITE_TCLAPI optimization_control(
   int onoff;
   int mask = 0;
   int cnt = 0;
-  static const struct {
+  static constexpr struct {
     const char *zOptName;
     int mask;
   } aOpt[] = {
@@ -8392,7 +8392,7 @@ static int SQLITE_TCLAPI tclLoadStaticExtensionCmd(
 #ifdef SQLITE_HAVE_ZLIB
   extern int sqlite3_zipfile_init(sqlite3*,char**,const sqlite3_api_routines*);
 #endif
-  static const struct {
+  static constexpr struct {
     const char *zExtName;
     int (*pInit)(sqlite3*,char**,const sqlite3_api_routines*);
   } aExtension[] = {
@@ -8612,7 +8612,7 @@ static int SQLITE_TCLAPI test_sqlite3_db_config(
   int objc,
   Tcl_Obj *CONST objv[]
 ){
-  static const struct {
+  static constexpr struct {
     const char *zName;
     int eVal;
   } aSetting[] = {

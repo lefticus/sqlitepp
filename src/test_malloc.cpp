@@ -235,7 +235,7 @@ extern const char *sqlite3ErrName(int);
 ** Transform pointers to text and back again
 */
 static void pointerToText(void *p, char *z){
-  static const char zHex[] = "0123456789abcdef";
+  static constexpr char zHex[] = "0123456789abcdef";
   if( p==0 ){
     strcpy(z, "0");
     return;
@@ -786,7 +786,7 @@ static int SQLITE_TCLAPI test_memdebug_log(
   static int isInit = 0;
   int iSub;
 
-  static const char *MB_strs[] = { "start", "stop", "dump", "clear", "sync" };
+  static constexpr const char *MB_strs[] = { "start", "stop", "dump", "clear", "sync" };
   enum MB_enum { 
       MB_LOG_START, MB_LOG_STOP, MB_LOG_DUMP, MB_LOG_CLEAR, MB_LOG_SYNC 
   };
@@ -1286,7 +1286,7 @@ static int SQLITE_TCLAPI test_status(
   int rc, iValue, mxValue;
   int i, op = 0, resetFlag;
   const char *zOpName;
-  static const struct {
+  static constexpr struct {
     const char *zName;
     int op;
   } aOp[] = {
@@ -1345,7 +1345,7 @@ static int SQLITE_TCLAPI test_db_status(
   const char *zOpName;
   sqlite3 *db;
   extern int getDbPointer(Tcl_Interp*, const char*, sqlite3**);
-  static const struct {
+  static constexpr struct {
     const char *zName;
     int op;
   } aOp[] = {

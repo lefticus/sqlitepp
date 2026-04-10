@@ -4792,7 +4792,7 @@ static int unixShmSystemLock(
 ** shm regions.
 */
 static int unixShmRegionPerMap(void){
-  const int shmsz = 32*1024;            /* SHM region size */
+  constexpr int shmsz = 32*1024;            /* SHM region size */
   const int pgsz = osGetpagesize();   /* System page size */
   assert( ((pgsz-1)&pgsz)==0 );   /* Page size must be a power of 2 */
   if( pgsz<shmsz ) return 1;
@@ -5169,7 +5169,7 @@ static int unixShmMap(
         ** the chances of SIGBUS while accessing the mapped region later on.
         */
         else{
-          static const int pgsz = 4096;
+          static constexpr int pgsz = 4096;
           int iPg;
 
           /* Write to the last byte of each newly allocated or extended page */
@@ -5719,7 +5719,7 @@ static int unixFetch(sqlite3_file *fd, i64 iOff, int nAmt, void **pp){
     ** memory following the returned page. If the database is corrupt,
     ** SQLite may overread the page slightly (in practice only a few bytes,
     ** but 256 is safe, round, number).  */
-    const int nEofBuffer = 256;
+    constexpr int nEofBuffer = 256;
     if( pFd->pMapRegion==0 ){
       int rc = unixMapfile(pFd, -1);
       if( rc!=SQLITE_OK ) return rc;
@@ -7187,7 +7187,7 @@ int sqlite3_current_time = 0;  /* Fake system time in seconds since 1970. */
 ** cannot be found.
 */
 static int unixCurrentTimeInt64(sqlite3_vfs *NotUsed, sqlite3_int64 *piNow){
-  static const sqlite3_int64 unixEpoch = 24405875*(sqlite3_int64)8640000;
+  static constexpr sqlite3_int64 unixEpoch = 24405875*(sqlite3_int64)8640000;
   int rc = SQLITE_OK;
 #if defined(NO_GETTOD)
   time_t t;

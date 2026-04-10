@@ -2475,7 +2475,7 @@ int sqlite3BtreeOpen(
   ** false for a file-based database.
   */
 #ifdef SQLITE_OMIT_MEMORYDB
-  const int isMemdb = 0;
+  constexpr int isMemdb = 0;
 #else
   const int isMemdb = (zFilename && strcmp(zFilename, ":memory:")==0)
                        || (isTempDb && sqlite3TempInMemory(db))
@@ -6035,7 +6035,7 @@ bypass_moveto_root:
         ** case this happens.  */
         void *pCellKey;
         u8 * const pCellBody = pCell - pPage->childPtrSize;
-        const int nOverrun = 18;  /* Size of the overrun padding */
+        constexpr int nOverrun = 18;  /* Size of the overrun padding */
         pPage->xParseCell(pPage, pCellBody, &pCur->info);
         nCell = (int)pCur->info.nKey;
         testcase( nCell<0 );   /* True if key size is 2^32 or more */

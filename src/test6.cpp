@@ -171,7 +171,7 @@ static void *crash_realloc(void *p, int n){
 ** 512 byte block beginning at offset PENDING_BYTE.
 */
 static int writeDbFile(CrashFile *p, u8 *z, i64 iAmt, i64 iOff){
-  const int iSkip = 0;
+  constexpr int iSkip = 0;
   int rc = SQLITE_OK;
   if( (iAmt-iSkip)>0 ){
     rc = sqlite3OsWrite(p->pRealFile, &z[iSkip], (int)(iAmt-iSkip), iOff+iSkip);
@@ -568,7 +568,7 @@ static int cfShmMap(
   return pReal->pMethods->xShmMap(pReal, iRegion, sz, w, pp);
 }
 
-static const sqlite3_io_methods CrashFileVtab = {
+static constexpr sqlite3_io_methods CrashFileVtab = {
   2,                            /* iVersion */
   cfClose,                      /* xClose */
   cfRead,                       /* xRead */

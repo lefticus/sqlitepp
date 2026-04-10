@@ -1586,8 +1586,8 @@ static int SQLITE_TCLAPI test_vfs_shmlock(
   int objc,
   Tcl_Obj *CONST objv[]
 ){
-  const char *azArg1[] = {"shared", "exclusive", 0};
-  const char *azArg2[] = {"lock", "unlock", 0};
+  constexpr const char *azArg1[] = {"shared", "exclusive", 0};
+  constexpr const char *azArg2[] = {"lock", "unlock", 0};
   sqlite3 *db = 0;
   int rc = SQLITE_OK;
   const char *zDbname = 0;

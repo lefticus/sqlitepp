@@ -462,8 +462,8 @@ void sqlite3AutoincrementBegin(Parse *pParse){
 
   assert( v );   /* We failed long ago if this is not so */
   for(AutoincInfo *p = pParse->pAinc; p; p = p->pNext){
-    static const int iLn = VDBE_OFFSET_LINENO(2);
-    static const VdbeOpList autoInc[] = {
+    static constexpr int iLn = VDBE_OFFSET_LINENO(2);
+    static constexpr VdbeOpList autoInc[] = {
       /* 0  */ {OP_Null,    0,  0, 0},
       /* 1  */ {OP_Rewind,  0, 10, 0},
       /* 2  */ {OP_Column,  0,  0, 0},
@@ -527,8 +527,8 @@ static SQLITE_NOINLINE void autoIncrementEnd(Parse *pParse){
 
   assert( v );
   for(AutoincInfo *p = pParse->pAinc; p; p = p->pNext){
-    static const int iLn = VDBE_OFFSET_LINENO(2);
-    static const VdbeOpList autoIncEnd[] = {
+    static constexpr int iLn = VDBE_OFFSET_LINENO(2);
+    static constexpr VdbeOpList autoIncEnd[] = {
       /* 0 */ {OP_NotNull,     0, 2, 0},
       /* 1 */ {OP_NewRowid,    0, 0, 0},
       /* 2 */ {OP_MakeRecord,  0, 2, 0},

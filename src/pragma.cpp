@@ -71,10 +71,10 @@
 */
 static u8 getSafetyLevel(const char *z, int omitFull, u8 dflt){
                              /* 123456789 123456789 123 */
-  static const char zText[] = "onoffalseyestruextrafull";
-  static const std::array<u8, 8> iOffset = {{0, 1, 2,  4,    9,  12,  15,   20}};
-  static const std::array<u8, 8> iLength = {{2, 2, 3,  5,    3,   4,   5,    4}};
-  static const std::array<u8, 8> iValue =  {{1, 0, 0,  0,    1,   1,   3,    2}};
+  static constexpr char zText[] = "onoffalseyestruextrafull";
+  static constexpr std::array<u8, 8> iOffset = {{0, 1, 2,  4,    9,  12,  15,   20}};
+  static constexpr std::array<u8, 8> iLength = {{2, 2, 3,  5,    3,   4,   5,    4}};
+  static constexpr std::array<u8, 8> iValue =  {{1, 0, 0,  0,    1,   1,   3,    2}};
                             /* on no off false yes true extra full */
   if( sqlite3Isdigit(*z) ){
     return (u8)sqlite3Atoi(z);
@@ -285,7 +285,7 @@ static const char *actionName(u8 action){
 ** journal-mode name.
 */
 const char *sqlite3JournalModename(int eMode){
-  static const char * const azModeName[] = {
+  static constexpr const char * const azModeName[] = {
     "delete", "persist", "off", "truncate", "memory"
 #ifndef SQLITE_OMIT_WAL
      , "wal"
@@ -343,7 +343,7 @@ static void pragmaFunclistLine(
   if( showInternFuncs ) mask = 0xffffffff;
   for(; p; p=p->pNext){
     const char *zType;
-    static const char *azEnc[] = { 0, "utf8", "utf16le", "utf16be" };
+    static constexpr const char *azEnc[] = { 0, "utf8", "utf16le", "utf16be" };
 
     assert( SQLITE_FUNC_ENCMASK==0x3 );
     assert( strcmp(azEnc[SQLITE_UTF8],"utf8")==0 );
@@ -548,8 +548,8 @@ void sqlite3Pragma(
   ** size of historical compatibility.
   */
   case PragTyp_DEFAULT_CACHE_SIZE: {
-    static const int iLn = VDBE_OFFSET_LINENO(2);
-    static const VdbeOpList getCacheSize[] = {
+    static constexpr int iLn = VDBE_OFFSET_LINENO(2);
+    static constexpr VdbeOpList getCacheSize[] = {
       { OP_Transaction, 0, 0,        0},                         /* 0 */
       { OP_ReadCookie,  0, 1,        BTREE_DEFAULT_CACHE_SIZE},  /* 1 */
       { OP_IfPos,       1, 8,        0},
@@ -817,8 +817,8 @@ void sqlite3Pragma(
         ** file. Before writing to meta[6], check that meta[3] indicates
         ** that this really is an auto-vacuum capable database.
         */
-        static const int iLn = VDBE_OFFSET_LINENO(2);
-        static const VdbeOpList setMeta6[] = {
+        static constexpr int iLn = VDBE_OFFSET_LINENO(2);
+        static constexpr VdbeOpList setMeta6[] = {
           { OP_Transaction,    0,         1,                 0},    /* 0 */
           { OP_ReadCookie,     0,         1,         BTREE_LARGEST_ROOT_PAGE},
           { OP_If,             1,         0,                 0},    /* 2 */
@@ -2190,8 +2190,8 @@ void sqlite3Pragma(
 #endif
     }
     {
-      static const int iLn = VDBE_OFFSET_LINENO(2);
-      static const VdbeOpList endCode[] = {
+      static constexpr int iLn = VDBE_OFFSET_LINENO(2);
+      static constexpr VdbeOpList endCode[] = {
         { OP_AddImm,      1, 0,        0},    /* 0 */
         { OP_IfNotZero,   1, 4,        0},    /* 1 */
         { OP_String8,     0, 3,        0},    /* 2 */
@@ -2241,7 +2241,7 @@ void sqlite3Pragma(
   ** useful if invoked immediately after the main database i
   */
   case PragTyp_ENCODING: {
-    static const struct EncName {
+    static constexpr struct EncName {
       const char *zName;
       u8 enc;
     } encnames[] = {
@@ -2324,7 +2324,7 @@ void sqlite3Pragma(
     sqlite3VdbeUsesBtree(v, iDb);
     if( zRight && (pPragma->mPragFlg & PragFlg_ReadOnly)==0 ){
       /* Write the specified cookie value */
-      static const VdbeOpList setCookie[] = {
+      static constexpr VdbeOpList setCookie[] = {
         { OP_Transaction,    0,  1,  0},    /* 0 */
         { OP_SetCookie,      0,  0,  0},    /* 1 */
       };
@@ -2344,7 +2344,7 @@ void sqlite3Pragma(
       }
     }else{
       /* Read the specified cookie value */
-      static const VdbeOpList readCookie[] = {
+      static constexpr VdbeOpList readCookie[] = {
         { OP_Transaction,     0,  0,  0},    /* 0 */
         { OP_ReadCookie,      0,  1,  0},    /* 1 */
         { OP_ResultRow,       1,  1,  0}
@@ -2595,7 +2595,7 @@ void sqlite3Pragma(
         ** unanalyzed indexes. */
         sqlite3OpenTable(pParse, iTabCur, iDb, pTab, OP_OpenRead);
         if( szThreshold>=0 ){
-          const LogEst iRange = 33;   /* 10x size change */
+          constexpr LogEst iRange = 33;   /* 10x size change */
           sqlite3VdbeAddOp4Int(v, OP_IfSizeBetween, iTabCur,
                          sqlite3VdbeCurrentAddr(v)+2+(opMask&1),
                          szThreshold>=iRange ? szThreshold-iRange : -1,
@@ -2739,7 +2739,7 @@ void sqlite3Pragma(
   ** Report the current state of file logs for all databases
   */
   case PragTyp_LOCK_STATUS: {
-    static const char *const azLockName[] = {
+    static constexpr const char *const azLockName[] = {
       "unlocked", "shared", "reserved", "pending", "exclusive"
     };
     int i;

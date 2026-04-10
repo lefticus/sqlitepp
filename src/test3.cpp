@@ -172,7 +172,7 @@ static int SQLITE_TCLAPI btree_pager_stats(
   sqlite3BtreeEnter(pBt);
   a = sqlite3PagerStats(sqlite3BtreePager(pBt));
   for(i=0; i<11; i++){
-    static const char *zName[] = {
+    static constexpr const char *zName[] = {
       "ref", "page", "max", "size", "state", "err",
       "hit", "miss", "ovfl", "read", "write"
     };

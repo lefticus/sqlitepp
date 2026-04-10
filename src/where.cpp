@@ -6434,7 +6434,7 @@ static int exprIsDeterministic(Expr *p){
 */
 static void showAllWhereLoops(WhereInfo *pWInfo, WhereClause *pWC){
   if( sqlite3WhereTrace ){    /* Display all of the WhereLoop objects */
-    static const char zLabel[] = "0123456789abcdefghijklmnopqrstuvwyxz"
+    static constexpr char zLabel[] = "0123456789abcdefghijklmnopqrstuvwyxz"
                                            "ABCDEFGHIJKLMNOPQRSTUVWYXZ";
     int i;
     WhereLoop *p;
@@ -6591,7 +6591,7 @@ static SQLITE_NOINLINE void whereCheckIfBloomFilterIsUseful(
   assert( OptimizationEnabled(pWInfo->pParse->db, SQLITE_BloomFilter) );
   for(i=0; i<pWInfo->nLevel; i++){
     WhereLoop *pLoop = pWInfo->a[i].pWLoop;
-    const unsigned int reqFlags = (WHERE_SELFCULL|WHERE_COLUMN_EQ);
+    constexpr unsigned int reqFlags = (WHERE_SELFCULL|WHERE_COLUMN_EQ);
     SrcItem *pItem = &pWInfo->pTabList->a[pLoop->iTab];
     Table *pTab = pItem->pSTab;
     if( (pTab->tabFlags & TF_HasStat1)==0 ) break;

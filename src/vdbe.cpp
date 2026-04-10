@@ -515,7 +515,7 @@ static u16 numericType(Mem *pMem){
 */
 void sqlite3VdbeMemPrettyPrint(Mem *pMem, StrAccum *pStr){
   const int f = pMem->flags;
-  static const char *const encnames[] = {"(X)", "(8)", "(16LE)", "(16BE)"};
+  static constexpr const char *const encnames[] = {"(X)", "(8)", "(16LE)", "(16BE)"};
   if( f&MEM_Blob ){
     int i;
     char c;
@@ -822,7 +822,7 @@ static SQLITE_NOINLINE void sqlite3VdbeLogAbort(
 ** Return the symbolic name for the data type of a pMem
 */
 static const char *vdbeMemTypeName(Mem *pMem){
-  static const char *azTypes[] = {
+  static constexpr const char *azTypes[] = {
       /* SQLITE_INTEGER */ "INT",
       /* SQLITE_FLOAT   */ "REAL",
       /* SQLITE_TEXT    */ "TEXT",
@@ -1329,7 +1329,7 @@ case OP_Halt: {
       zErr = static_cast<const char*>(sqlite3ValueText(&aMem[pOp->p3], SQLITE_UTF8));
       sqlite3VdbeError(p, "%s", zErr);
     }else if( pOp->p5 ){
-      static const char * const azType[] = { "NOT NULL", "UNIQUE", "CHECK",
+      static constexpr const char * const azType[] = { "NOT NULL", "UNIQUE", "CHECK",
                                              "FOREIGN KEY" };
       testcase( pOp->p5==1 );
       testcase( pOp->p5==2 );
@@ -2592,10 +2592,10 @@ case OP_Or: {             /* same as TK_OR, in1, in2, out3 */
   v1 = sqlite3VdbeBooleanValue(&aMem[pOp->p1], 2);
   v2 = sqlite3VdbeBooleanValue(&aMem[pOp->p2], 2);
   if( pOp->opcode==OP_And ){
-    static const unsigned char and_logic[] = { 0, 0, 0, 0, 1, 2, 0, 2, 2 };
+    static constexpr unsigned char and_logic[] = { 0, 0, 0, 0, 1, 2, 0, 2, 2 };
     v1 = and_logic[v1*3+v2];
   }else{
-    static const unsigned char or_logic[] = { 0, 1, 2, 1, 1, 1, 2, 1, 2 };
+    static constexpr unsigned char or_logic[] = { 0, 1, 2, 1, 1, 1, 2, 1, 2 };
     v1 = or_logic[v1*3+v2];
   }
   pOut = &aMem[pOp->p3];
@@ -2810,7 +2810,7 @@ case OP_IsType: {        /* jump */
           typeMask = 0x08;   /* SQLITE_BLOB */
         }
       }else{
-        static const unsigned char aMask[] = {
+        static constexpr unsigned char aMask[] = {
            0x10, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x2,
            0x01, 0x01, 0x10, 0x10
         };
@@ -3193,7 +3193,7 @@ op_column_restart:
       ** a MEM_Ephem value.  This branch is a fast short-cut that is equivalent
       ** to calling sqlite3VdbeSerialGet() and sqlite3VdbeDeephemeralize().
       */
-      static const u16 aFlag[] = { MEM_Blob, MEM_Str|MEM_Term };
+      static constexpr u16 aFlag[] = { MEM_Blob, MEM_Str|MEM_Term };
       pDest->n = len = (t-12)/2;
       pDest->enc = encoding;
       if( pDest->szMalloc < len+2 ){
@@ -4537,7 +4537,7 @@ case OP_OpenEphemeral: {     /* ncycle */
   VdbeCursor *pCx;
   KeyInfo *pKeyInfo;
 
-  static const int vfsFlags =
+  static constexpr int vfsFlags =
       SQLITE_OPEN_READWRITE |
       SQLITE_OPEN_CREATE |
       SQLITE_OPEN_EXCLUSIVE |

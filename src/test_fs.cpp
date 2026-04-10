@@ -448,7 +448,7 @@ static int fstreeFilter(
   FstreeCsr *const pCsr = (FstreeCsr*)pVtabCursor;
   FstreeVtab *const pTab = (FstreeVtab*)(pCsr->base.pVtab);
   int rc;
-  const char *zSql = 
+  constexpr const char *zSql =
 "WITH r(d) AS ("
 "  SELECT CASE WHEN dir=?2 THEN ?3 ELSE dir END || '/' || name "
 "    FROM fsdir WHERE dir=?1 AND name NOT LIKE '.%'"
@@ -883,7 +883,7 @@ int Sqlitetestfs_Init(Tcl_Interp *interp){
      Tcl_ObjCmdProc *xProc;
      void *clientData;
   };
-  static const std::array<ObjCmd, 1> aObjCmd = {{
+  static constexpr std::array<ObjCmd, 1> aObjCmd = {{
      { "register_fs_module",   register_fs_module, 0 },
   }};
   for(size_t i=0; i<aObjCmd.size(); i++){

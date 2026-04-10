@@ -112,7 +112,7 @@ struct DateTime {
 static int getDigits(const char *zDate, const char *zFormat, ...){
   /* The aMx[] array translates the 3rd character of each format
   ** spec into a max size:    a   b   c   d   e      f */
-  static const std::array<u16, 6> aMx = { 12, 14, 24, 31, 59, 14712 };
+  static constexpr std::array<u16, 6> aMx = { 12, 14, 24, 31, 59, 14712 };
   va_list ap;
   int cnt = 0;
   char nextC;

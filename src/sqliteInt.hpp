@@ -4709,7 +4709,10 @@ int sqlite3IsIdChar(u8);
 ** Internal function prototypes
 */
 int sqlite3StrICmp(const char*,const char*);
-int sqlite3Strlen30(const char*);
+constexpr int sqlite3Strlen30(const char *z){
+  if( z==0 ) return 0;
+  return 0x3fffffff & (int)strlen(z);
+}
 #define sqlite3Strlen30NN(C) (strlen(C)&0x3fffffff)
 char *sqlite3ColumnType(Column*,const char*);
 #define sqlite3StrNICmp sqlite3_strnicmp
@@ -5338,7 +5341,11 @@ int sqlite3VListNameToNum(VList*,const char*,int);
 int sqlite3PutVarint(unsigned char*, u64);
 u8 sqlite3GetVarint(const unsigned char *, u64 *);
 u8 sqlite3GetVarint32(const unsigned char *, u32 *);
-int sqlite3VarintLen(u64 v);
+constexpr int sqlite3VarintLen(u64 v){
+  int i;
+  for(i=1; (v >>= 7)!=0; i++){ assert( i<10 ); }
+  return i;
+}
 
 /*
 ** The common case is for a varint to be a single byte.  They following
@@ -5373,7 +5380,16 @@ void sqlite3SystemError(sqlite3*,int);
 #if !defined(SQLITE_OMIT_BLOB_LITERAL)
 void *sqlite3HexToBlob(sqlite3*, const char *z, int n);
 #endif
-u8 sqlite3HexToInt(int h);
+constexpr u8 sqlite3HexToInt(int h){
+  assert( (h>='0' && h<='9') ||  (h>='a' && h<='f') ||  (h>='A' && h<='F') );
+#ifdef SQLITE_ASCII
+  h += 9*(1&(h>>6));
+#endif
+#ifdef SQLITE_EBCDIC
+  h += 9*(1&~(h>>4));
+#endif
+  return (u8)(h & 0xf);
+}
 int sqlite3TwoPartName(Parse *, Token *, Token *, Token **);
 
 #if defined(SQLITE_NEED_ERR_NAME)

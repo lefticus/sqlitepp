@@ -304,7 +304,7 @@ get_index_array_out:
 ** the string element zArg to that list in interpreter interp.
 */
 static void appendToEchoModule(Tcl_Interp *interp, const char *zArg){
-  const int flags = (TCL_APPEND_VALUE | TCL_LIST_ELEMENT | TCL_GLOBAL_ONLY);
+  constexpr int flags = (TCL_APPEND_VALUE | TCL_LIST_ELEMENT | TCL_GLOBAL_ONLY);
   Tcl_SetVar(interp, "echo_module", (zArg?zArg:""), flags);
 }
 

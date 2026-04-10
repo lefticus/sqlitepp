@@ -272,7 +272,7 @@ static void MD5Final(unsigned char digest[16], MD5Context *ctx){
 ** Convert a 128-bit MD5 digest into a 32-digit base-16 number.
 */
 static void MD5DigestToBase16(unsigned char *digest, char *zBuf){
-  static char const zEncode[] = "0123456789abcdef";
+  static constexpr char zEncode[] = "0123456789abcdef";
   int i, j;
 
   for(j=i=0; i<16; i++){

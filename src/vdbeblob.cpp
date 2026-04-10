@@ -265,8 +265,8 @@ int sqlite3_blob_open(
       ** which closes the b-tree cursor and (possibly) commits the 
       ** transaction.
       */
-      static const int iLn = VDBE_OFFSET_LINENO(2);
-      static const VdbeOpList openBlob[] = {
+      static constexpr int iLn = VDBE_OFFSET_LINENO(2);
+      static constexpr VdbeOpList openBlob[] = {
         {OP_TableLock,      0, 0, 0},  /* 0: Acquire a read or write lock */
         {OP_OpenRead,       0, 0, 0},  /* 1: Open a cursor */
         /* blobSeekToRow() will initialize r[1] to the desired rowid */

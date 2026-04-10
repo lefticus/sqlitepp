@@ -892,7 +892,7 @@ static void setTestUnlockNotifyVars(Tcl_Interp *interp, int iArg, int nArg){
 #ifdef SQLITE_ENABLE_UNLOCK_NOTIFY
 static void DbUnlockNotify(void **apArg, int nArg){
   for(int i=0; i<nArg; i++){
-    const int flags = (TCL_EVAL_GLOBAL|TCL_EVAL_DIRECT);
+    constexpr int flags = (TCL_EVAL_GLOBAL|TCL_EVAL_DIRECT);
     SqliteDb *pDb = (SqliteDb *)apArg[i];
     setTestUnlockNotifyVars(pDb->interp, i, nArg);
     assert( pDb->pUnlockNotify);
@@ -918,7 +918,7 @@ static void DbPreUpdateHandler(
 ){
   SqliteDb *pDb = (SqliteDb *)p;
   Tcl_Obj *pCmd;
-  static const std::array<const char *, 3> azStr = {"DELETE", "INSERT", "UPDATE"};
+  static constexpr std::array<const char *, 3> azStr = {"DELETE", "INSERT", "UPDATE"};
 
   assert( (SQLITE_DELETE-1)/9 == 0 );
   assert( (SQLITE_INSERT-1)/9 == 1 );
@@ -948,7 +948,7 @@ static void DbUpdateHandler(
 ){
   SqliteDb *pDb = (SqliteDb *)p;
   Tcl_Obj *pCmd;
-  static const std::array<const char *, 3> azStr = {"DELETE", "INSERT", "UPDATE"};
+  static constexpr std::array<const char *, 3> azStr = {"DELETE", "INSERT", "UPDATE"};
 
   assert( (SQLITE_DELETE-1)/9 == 0 );
   assert( (SQLITE_INSERT-1)/9 == 1 );
@@ -1301,7 +1301,7 @@ static int SQLITE_TCLAPI DbTransPostCmd(
   Tcl_Interp *interp,                  /* Tcl interpreter */
   int result                           /* Result of evaluating SCRIPT */
 ){
-  static const std::array<const char *const, 4> azEnd = {
+  static constexpr std::array<const char *const, 4> azEnd = {
     "RELEASE _tcl_transaction",        /* rc==TCL_ERROR, nTransaction!=0 */
     "COMMIT",                          /* rc!=TCL_ERROR, nTransaction==0 */
     "ROLLBACK TO _tcl_transaction ; RELEASE _tcl_transaction",
@@ -2107,7 +2107,7 @@ static int dbQrf(SqliteDb *pDb, int objc, Tcl_Obj *const*objv){
   const char *zSql = 0;          /* SQL to run */
   int rc;                        /* Result code */
   sqlite3_qrf_spec qrf;          /* Formatting spec */
-  static const std::array<const char *, 17> azAlign = {
+  static constexpr std::array<const char *, 17> azAlign = {
     "auto",           "bottom",          "c",
     "center",         "e",               "left",
     "middle",         "n",               "ne",
@@ -2115,7 +2115,7 @@ static int dbQrf(SqliteDb *pDb, int objc, Tcl_Obj *const*objv){
     "se",             "sw",              "top",
     "w",              nullptr
   };
-  static const std::array<unsigned char, 16> aAlignMap = {
+  static constexpr std::array<unsigned char, 16> aAlignMap = {
     QRF_ALIGN_Auto,   QRF_ALIGN_Bottom,  QRF_ALIGN_C,
     QRF_ALIGN_Center, QRF_ALIGN_E,       QRF_ALIGN_Left,
     QRF_ALIGN_Middle, QRF_ALIGN_N,       QRF_ALIGN_NE,
@@ -2129,8 +2129,8 @@ static int dbQrf(SqliteDb *pDb, int objc, Tcl_Obj *const*objv){
   qrf.pzOutput = &zResult;
   for(int i=2; i<objc; i++){
     const char *zArg = Tcl_GetString(objv[i]);
-    const std::array<const char *, 6> azBool = { "auto", "yes", "no", "on", "off", nullptr };
-    const std::array<unsigned char, 5> aBoolMap = { 0, 2, 1, 2, 1 };
+    constexpr std::array<const char *, 6> azBool = { "auto", "yes", "no", "on", "off", nullptr };
+    constexpr std::array<unsigned char, 5> aBoolMap = { 0, 2, 1, 2, 1 };
     if( zArg[0]!='-' ){
       if( zSql ){
         Tcl_AppendResult(pDb->interp, "unknown argument: ", zArg, (char*)0);
@@ -2143,7 +2143,7 @@ static int dbQrf(SqliteDb *pDb, int objc, Tcl_Obj *const*objv){
       rc = TCL_ERROR;
       goto format_failed;
     }else if( strcmp(zArg,"-style")==0 ){
-      static const std::array<const char *, 20> azStyles = {
+      static constexpr std::array<const char *, 20> azStyles = {
         "auto",             "box",              "column",
         "count",            "csv",              "eqp",
         "explain",          "html",             "insert",
@@ -2152,7 +2152,7 @@ static int dbQrf(SqliteDb *pDb, int objc, Tcl_Obj *const*objv){
         "stats",            "stats-est",        "stats-vm",
         "table",            nullptr
       };
-      static const std::array<unsigned char, 19> aStyleMap = {
+      static constexpr std::array<unsigned char, 19> aStyleMap = {
         QRF_STYLE_Auto,     QRF_STYLE_Box,      QRF_STYLE_Column,
         QRF_STYLE_Count,    QRF_STYLE_Csv,      QRF_STYLE_Eqp,
         QRF_STYLE_Explain,  QRF_STYLE_Html,     QRF_STYLE_Insert,
@@ -2168,7 +2168,7 @@ static int dbQrf(SqliteDb *pDb, int objc, Tcl_Obj *const*objv){
       qrf.eStyle = aStyleMap[style];
       i++;
     }else if( strcmp(zArg,"-esc")==0 ){
-      static const char *azEsc[] = {
+      static constexpr const char *azEsc[] = {
         "ascii",        "auto",         "off",      "symbol",   0
       };
       static unsigned char aEscMap[] = {
@@ -2184,7 +2184,7 @@ static int dbQrf(SqliteDb *pDb, int objc, Tcl_Obj *const*objv){
       /* NB: --title can be "off" or "on but --text may not be.  Thus we put
       ** the "off" and "on" choices first and start the search on the
       ** thrid element of the array when processing --text */
-      static const char *azText[] = {           "off",   "on",
+      static constexpr const char *azText[] = {           "off",   "on",
         "auto",             "csv",              "html",
         "json",             "plain",            "relaxed",
         "sql",              "tcl",              0
@@ -2210,7 +2210,7 @@ static int dbQrf(SqliteDb *pDb, int objc, Tcl_Obj *const*objv){
       }
       i++;
     }else if( strcmp(zArg,"-blob")==0 ){
-      static const char *azBlob[] = {
+      static constexpr const char *azBlob[] = {
         "auto",             "hex",              "json",
         "tcl",              "text",             "sql",
         "size",             0
@@ -2425,7 +2425,7 @@ static int SQLITE_TCLAPI DbObjCmd(
   SqliteDb *pDb = (SqliteDb*)cd;
   int choice;
   int rc = TCL_OK;
-  static const char *DB_strs[] = {
+  static constexpr const char *DB_strs[] = {
     "authorizer",             "backup",                "bind_fallback",
     "busy",                   "cache",                 "changes",
     "close",                  "collate",               "collation_needed",
@@ -2851,7 +2851,7 @@ static int SQLITE_TCLAPI DbObjCmd(
   ** interface.
   */
   case DB_CONFIG: {
-    static const struct DbConfigChoices {
+    static constexpr struct DbConfigChoices {
       const char *zName;
       int op;
     } aDbConfig[] = {
@@ -3410,7 +3410,7 @@ deserialize_error:
         flags |= SQLITE_INNOCUOUS;
       }else
       if( n>1 && strncmp(z, "-returntype", n)==0 ){
-        const char *azType[] = {"integer", "real", "text", "blob", "any", 0};
+        constexpr const char *azType[] = {"integer", "real", "text", "blob", "any", 0};
         assert( SQLITE_INTEGER==1 && SQLITE_FLOAT==2 && SQLITE_TEXT==3 );
         assert( SQLITE_BLOB==4 && SQLITE_NULL==5 );
         if( i==(objc-2) ){
@@ -3870,7 +3870,7 @@ deserialize_error:
       Tcl_Size len;
       Tcl_WideInt wMask = 0;
       if( objc==4 ){
-        static const char *TTYPE_strs[] = {
+        static constexpr const char *TTYPE_strs[] = {
           "statement", "profile", "row", "close", 0
         };
         enum TTYPE_enum {
@@ -3953,7 +3953,7 @@ deserialize_error:
     }
 
     if( pDb->nTransaction==0 && objc==4 ){
-      static const char *TTYPE_strs[] = {
+      static constexpr const char *TTYPE_strs[] = {
         "deferred",   "exclusive",  "immediate", 0
       };
       enum TTYPE_enum {
@@ -4046,7 +4046,7 @@ deserialize_error:
                      (char*)0);
     rc = TCL_ERROR;
 #else
-    static const char *azSub[] = {"count", "depth", "hook", "new", "old", 0};
+    static constexpr const char *azSub[] = {"count", "depth", "hook", "new", "old", 0};
     enum DbPreupdateSubCmd {
       PRE_COUNT, PRE_DEPTH, PRE_HOOK, PRE_NEW, PRE_OLD
     };
@@ -4485,7 +4485,7 @@ extern "C" int sqlite_Init(Tcl_Interp *interp){ return Sqlite3_Init(interp);}
 ** commands from standard input
 */
 static const char *tclsh_main_loop(void){
-  static const char zMainloop[] =
+  static constexpr char zMainloop[] =
     "if {[llength $argv]>=1} {\n"
 #ifdef WIN32
       "set new [list]\n"

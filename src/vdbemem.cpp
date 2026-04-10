@@ -463,7 +463,7 @@ int sqlite3VdbeMemNulTerminate(Mem *pMem){
 ** user and the latter is an internal programming error.
 */
 int sqlite3VdbeMemStringify(Mem *pMem, u8 enc, u8 bForce){
-  const int nByte = 32;
+  constexpr int nByte = 32;
 
   assert( pMem!=0 );
   assert( pMem->db==0 || sqlite3_mutex_held(pMem->db->mutex) );

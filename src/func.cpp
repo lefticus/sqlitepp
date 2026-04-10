@@ -80,7 +80,7 @@ static void typeofFunc(
   int NotUsed,
   sqlite3_value **argv
 ){
-  static const char *azType[] = { "integer", "real", "text", "blob", "null" };
+  static constexpr const char *azType[] = { "integer", "real", "text", "blob", "null" };
   int i = sqlite3_value_type(argv[0]) - 1;
   UNUSED_PARAMETER(NotUsed);
   assert( i>=0 && i<ArraySize(azType) );
@@ -1587,7 +1587,7 @@ static void trimFunc(
   nIn = (unsigned)sqlite3_value_bytes(argv[0]);
   assert( zIn==sqlite3_value_text(argv[0]) );
   if( argc==1 ){
-    static const unsigned lenOne[] = { 1 };
+    static constexpr unsigned lenOne[] = { 1 };
     static unsigned char * const azOne[] = { (u8*)" " };
     nChar = 1;
     aLen = (unsigned*)lenOne;
@@ -1766,7 +1766,7 @@ static void soundexFunc(
   std::array<char, 8> zResult;
   const u8 *zIn;
   int i, j;
-  static const unsigned char iCode[] = {
+  static constexpr unsigned char iCode[] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

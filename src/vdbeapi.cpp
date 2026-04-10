@@ -146,7 +146,7 @@ int sqlite3_reset(sqlite3_stmt *pStmt){
 ** Set all the parameters in the compiled SQL statement to NULL.
 */
 int sqlite3_clear_bindings(sqlite3_stmt *pStmt){
-  const int rc = SQLITE_OK;
+  constexpr int rc = SQLITE_OK;
   Vdbe * const p = (Vdbe*)pStmt;
 #ifdef SQLITE_ENABLE_API_ARMOR
   if( pStmt==0 ){

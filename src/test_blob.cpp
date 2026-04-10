@@ -113,7 +113,7 @@ static int SQLITE_TCLAPI test_blob_open(
   int rc;
 
   if( objc!=8 ){
-    const char *zUsage = "DB DATABASE TABLE COLUMN ROWID FLAGS VARNAME";
+    constexpr const char *zUsage = "DB DATABASE TABLE COLUMN ROWID FLAGS VARNAME";
     Tcl_WrongNumArgs(interp, 1, objv, zUsage);
     return TCL_ERROR;
   }
@@ -312,7 +312,7 @@ int Sqlitetest_blob_Init(Tcl_Interp *interp){
      const char *zName;
      Tcl_ObjCmdProc *xProc;
   };
-  static const std::array<ObjCmdEntry, 5> aObjCmd = {{
+  static constexpr std::array<ObjCmdEntry, 5> aObjCmd = {{
      { "sqlite3_blob_open",            test_blob_open        },
      { "sqlite3_blob_close",           test_blob_close       },
      { "sqlite3_blob_bytes",           test_blob_bytes       },

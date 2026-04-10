@@ -258,7 +258,7 @@ static int SQLITE_TCLAPI pager_stats(
   pPager = (Pager*)sqlite3TestTextToPtr(argv[1]);
   a = sqlite3PagerStats(pPager);
   for(i=0; i<9; i++){
-    static const char *zName[] = {
+    static constexpr const char *zName[] = {
       "ref", "page", "max", "size", "state", "err",
       "hit", "miss", "ovfl",
     };

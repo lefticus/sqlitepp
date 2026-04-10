@@ -1909,7 +1909,7 @@ char *sqlite3VdbeDisplayP4(sqlite3 *db, Op *pOp){
     }
 #endif
     case P4_COLLSEQ: {
-      static const char *const encnames[] = {"?", "8", "16LE", "16BE"};
+      static constexpr const char *const encnames[] = {"?", "8", "16LE", "16BE"};
       CollSeq *pColl = pOp->p4.pColl;
       assert( pColl->enc<4 );
       sqlite3_str_appendf(&x, "%.18s-%s", pColl->zName,
@@ -2081,7 +2081,7 @@ void sqlite3VdbePrintOp(FILE *pOut, int pc, VdbeOp *pOp){
   char *zP4;
   char *zCom;
   sqlite3 dummyDb;
-  static const char *zFormat1 = "%4d %-13s %4d %4d %4d %-13s %.2X %s\n";
+  static constexpr const char *zFormat1 = "%4d %-13s %4d %4d %4d %-13s %.2X %s\n";
   if( pOut==0 ) pOut = stdout;
   sqlite3BeginBenignMalloc();
   dummyDb.mallocFailed = 1;
@@ -2915,7 +2915,7 @@ static int vdbeCommit(sqlite3 *db, Vdbe *p){
       /* Whether or not a database might need a super-journal depends upon
       ** its journal mode (among other things).  This matrix determines which
       ** journal modes use a super-journal and which do not */
-      static const u8 aMJNeeded[] = {
+      static constexpr u8 aMJNeeded[] = {
         /* DELETE   */  1,
         /* PERSIST   */ 1,
         /* OFF       */ 0,
@@ -4052,8 +4052,8 @@ static void serialGet(
     ** defined that 64-bit floating point values really are mixed
     ** endian.
     */
-    static const u64 t1 = ((u64)0x3ff00000)<<32;
-    static const double r1 = 1.0;
+    static constexpr u64 t1 = ((u64)0x3ff00000)<<32;
+    static constexpr double r1 = 1.0;
     u64 t2 = t1;
     swapMixedEndianFloat(t2);
     assert( sizeof(r1)==sizeof(t2) && memcmp(&r1, &t2, sizeof(r1))==0 );
@@ -4164,7 +4164,7 @@ void sqlite3VdbeSerialGet(
       ** length.
       ** EVIDENCE-OF: R-28401-00140 Value is a string in the text encoding and
       ** (N-13)/2 bytes in length. */
-      static const u16 aFlag[] = { MEM_Blob|MEM_Ephem, MEM_Str|MEM_Ephem };
+      static constexpr u16 aFlag[] = { MEM_Blob|MEM_Ephem, MEM_Str|MEM_Ephem };
       pMem->z = (char *)buf;
       pMem->n = (serial_type-12)/2;
       pMem->flags = aFlag[serial_type&1];

@@ -691,7 +691,7 @@ static void jsonAppendSeparator(JsonString *p){
 ** sufficiently to hold the worst-case encoding plus a nul terminator.
 */
 static void jsonAppendControlChar(JsonString *p, u8 c){
-  static const std::array<char, 32> aSpecial = {{
+  static constexpr std::array<char, 32> aSpecial = {{
      0, 0, 0, 0, 0, 0, 0, 0, 'b', 't', 'n', 0, 'f', 'r', 0, 0,
      0, 0, 0, 0, 0, 0, 0, 0,   0,   0,   0, 0,   0,   0, 0, 0
   }};
@@ -2578,7 +2578,7 @@ static int jsonBlobOverwrite(
   ** expanded aIns[], based on the size of the expanded aIns[] header:
   **
   **                             2     3  4     5  6  7  8     9 */
-  static const std::array<u8, 8> aType = {{ 0xc0, 0xd0, 0, 0xe0, 0, 0, 0, 0xf0 }};
+  static constexpr std::array<u8, 8> aType = {{ 0xc0, 0xd0, 0, 0xe0, 0, 0, 0, 0xf0 }};
 
   if( (aIns[0]&0x0f)<=2 ) return 0;    /* Cannot enlarge NULL, true, false */
   switch( aIns[0]>>4 ){
@@ -2921,7 +2921,7 @@ static u32 jsonCreateEditSubstructure(
   JsonParse *pIns,    /* Populate this with the blob data to insert */
   const char *zTail   /* Tail of the path that determines substructure */
 ){
-  static const std::array<u8, 2> emptyObject = {{ JSONB_ARRAY, JSONB_OBJECT }};
+  static constexpr std::array<u8, 2> emptyObject = {{ JSONB_ARRAY, JSONB_OBJECT }};
   int rc;
   memset(pIns, 0, sizeof(*pIns));
   pIns->db = pParse->db;
@@ -4542,8 +4542,8 @@ static void jsonSetFunc(
 ){
   int flags = SQLITE_PTR_TO_INT(sqlite3_user_data(ctx));
   int eInsType = JSON_INSERT_TYPE(flags);
-  static const std::array<const char *, 3> azInsType = {{ "insert", "set", "array_insert" }};
-  static const std::array<u8, 3> aEditType = {{ JEDIT_INS, JEDIT_SET, JEDIT_AINS }};
+  static constexpr std::array<const char *, 3> azInsType = {{ "insert", "set", "array_insert" }};
+  static constexpr std::array<u8, 3> aEditType = {{ JEDIT_INS, JEDIT_SET, JEDIT_AINS }};
 
   if( argc<1 ) return;
   assert( eInsType>=0 && eInsType<=2 );
@@ -4864,7 +4864,7 @@ static void jsonArrayCompute(sqlite3_context *ctx, int isFinal){
       jsonStringTrimOneChar(pStr);
     }
   }else if( flags & JSON_BLOB ){
-    static const u8 emptyArray = 0x0b;
+    static constexpr u8 emptyArray = 0x0b;
     sqlite3_result_blob(ctx, &emptyArray, 1, SQLITE_STATIC);
   }else{
     sqlite3_result_text(ctx, "[]", 2, SQLITE_STATIC);
@@ -4988,7 +4988,7 @@ static void jsonObjectCompute(sqlite3_context *ctx, int isFinal){
       jsonStringTrimOneChar(pStr);
     }
   }else if( flags & JSON_BLOB ){
-    static const unsigned char emptyObject = 0x0c;
+    static constexpr unsigned char emptyObject = 0x0c;
     sqlite3_result_blob(ctx, &emptyObject, 1, SQLITE_STATIC); 
   }else{
     sqlite3_result_text(ctx, "{}", 2, SQLITE_STATIC);
@@ -5651,7 +5651,7 @@ void sqlite3RegisterJsonFunctions(void){
 ** pointer to its Module object.  Return NULL if something goes wrong.
 */
 Module *sqlite3JsonVtabRegister(sqlite3 *db, const char *zName){
-  static const std::array<const char *, 4> azModule = {{
+  static constexpr std::array<const char *, 4> azModule = {{
     "json_each", "json_tree", "jsonb_each", "jsonb_tree"
   }};
   assert( sqlite3HashFind(&db->aModule, zName)==0 );

@@ -1380,7 +1380,7 @@ static void exprAnalyze(
     int idxNew1;
     int idxNew2;
     const char *zCollSeqName;     /* Name of collating sequence */
-    const u16 wtFlags = TERM_LIKEOPT | TERM_VIRTUAL | TERM_DYNAMIC;
+    constexpr u16 wtFlags = TERM_LIKEOPT | TERM_VIRTUAL | TERM_DYNAMIC;
 
     assert( ExprUseXList(pExpr) );
     pLeft = pExpr->x.pList->a[1].pExpr;

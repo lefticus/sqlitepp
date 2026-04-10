@@ -941,7 +941,7 @@ static void walShmBarrier(Wal *pWal){
 */
 static SQLITE_NO_TSAN void walIndexWriteHdr(Wal *pWal){
   volatile WalIndexHdr *aHdr = walIndexHdr(pWal);
-  const int nCksum = offsetof(WalIndexHdr, aCksum);
+  constexpr int nCksum = offsetof(WalIndexHdr, aCksum);
 
   assert( pWal->writeLock );
   pWal->hdr.isInit = 1;
@@ -1187,7 +1187,7 @@ static int walHashGet(
 ** iFrame. The wal-index is broken up into 32KB pages. Wal-index pages
 ** are numbered starting from 0.
 */
-static int walFramePage(u32 iFrame){
+static constexpr int walFramePage(u32 iFrame){
   int iHash = (iFrame+HASHTABLE_NPAGE-HASHTABLE_NPAGE_ONE-1) / HASHTABLE_NPAGE;
   assert( (iHash==0 || iFrame>HASHTABLE_NPAGE_ONE)
        && (iHash>=1 || iFrame<=HASHTABLE_NPAGE_ONE)
@@ -2400,8 +2400,8 @@ static void walLimitSize(Wal *pWal, i64 nMax){
 */
 static int walHandleException(Wal *pWal){
   if( pWal->exclusiveMode==0 ){
-    static const int S = 1;
-    static const int E = (1<<SQLITE_SHM_NLOCK);
+    static constexpr int S = 1;
+    static constexpr int E = (1<<SQLITE_SHM_NLOCK);
     if( pWal->writeLock==2 ) pWal->writeLock = 0;
     const u32 mUnlock = pWal->lockMask & ~(
         (pWal->readLock<0 ? 0 : (S << WAL_READ_LOCK(pWal->readLock)))
@@ -2431,8 +2431,8 @@ static int walHandleException(Wal *pWal){
 */
 static int walAssertLockmask(Wal *pWal){
   if( pWal->exclusiveMode==0 ){
-    static const int S = 1;
-    static const int E = (1<<SQLITE_SHM_NLOCK);
+    static constexpr int S = 1;
+    static constexpr int E = (1<<SQLITE_SHM_NLOCK);
     const u32 mExpect = (
         (pWal->readLock<0 ? 0 : (S << WAL_READ_LOCK(pWal->readLock)))
       | (pWal->writeLock ? (E << WAL_WRITE_LOCK) : 0)
@@ -4474,7 +4474,7 @@ int sqlite3WalHeapMemory(Wal *pWal){
 */
 int sqlite3WalSnapshotGet(Wal *pWal, sqlite3_snapshot **ppSnapshot){
   int rc = SQLITE_OK;
-  static const u32 aZero[4] = { 0, 0, 0, 0 };
+  static constexpr u32 aZero[4] = { 0, 0, 0, 0 };
 
   assert( pWal->readLock>=0 && pWal->writeLock==0 );
 

@@ -39,7 +39,7 @@ static void *testContextMalloc(sqlite3_context *context, int nByte){
 ** generating test data.
 */
 static void randStr(sqlite3_context *context, int argc, sqlite3_value **argv){
-  static const unsigned char zSrc[] = 
+  static constexpr unsigned char zSrc[] =
      "abcdefghijklmnopqrstuvwxyz"
      "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
      "0123456789"
@@ -642,7 +642,7 @@ static int registerTestFunctions(
   char **pzErrMsg,
   const sqlite3_api_routines *pThunk
 ){
-  static const struct {
+  static constexpr struct {
      const char *zName;
      signed char nArg;
      unsigned int eTextRep; /* 1: UTF-16.  0: UTF-8 */

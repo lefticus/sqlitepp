@@ -869,7 +869,7 @@ static int vdbeSorterCompareInt(
 
   if( s1==s2 ){
     /* The two values have the same sign. Compare using memcmp(). */
-    static const u8 aLen[] = {0, 1, 2, 3, 4, 6, 8, 0, 0, 0 };
+    static constexpr u8 aLen[] = {0, 1, 2, 3, 4, 6, 8, 0, 0, 0 };
     const u8 n = aLen[s1];
     int i;
     res = 0;

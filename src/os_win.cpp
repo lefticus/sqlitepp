@@ -1605,7 +1605,7 @@ static void winMemShutdown(void *pAppData){
 ** is not required to be threadsafe (it is not).
 */
 const sqlite3_mem_methods *sqlite3MemGetWin32(void){
-  static const sqlite3_mem_methods winMemMethods = {
+  static constexpr sqlite3_mem_methods winMemMethods = {
     winMemMalloc,
     winMemFree,
     winMemRealloc,
@@ -3723,7 +3723,7 @@ static int winFileControl(sqlite3_file *id, int op, void *pArg){
       sqlite3_str_appendf(pStr, "{\"h\":%llu", (sqlite3_uint64)pFile->h);
       sqlite3_str_appendf(pStr, ",\"vfs\":\"%s\"", pFile->pVfs->zName);
       if( pFile->locktype ){
-        static const char *azLock[] = { "SHARED", "RESERVED",
+        static constexpr const char *azLock[] = { "SHARED", "RESERVED",
                                       "PENDING", "EXCLUSIVE" };
         sqlite3_str_appendf(pStr, ",\"locktype\":\"%s\"", 
                                   azLock[pFile->locktype-1]);
@@ -4092,9 +4092,9 @@ static int winHandleOpen(
   HANDLE h = INVALID_HANDLE_VALUE;
 
 #ifdef SQLITE_ENABLE_SETLK_TIMEOUT
-  const DWORD flag_overlapped = FILE_FLAG_OVERLAPPED;
+  constexpr DWORD flag_overlapped = FILE_FLAG_OVERLAPPED;
 #else
-  const DWORD flag_overlapped = 0;
+  constexpr DWORD flag_overlapped = 0;
 #endif
 
   /* Convert the filename to the system encoding. */
@@ -4800,7 +4800,7 @@ static int winFetch(sqlite3_file *fd, i64 iOff, int nAmt, void **pp){
     ** memory following the returned page. If the database is corrupt,
     ** SQLite may overread the page slightly (in practice only a few bytes,
     ** but 256 is safe, round, number).  */
-    const int nEofBuffer = 256;
+    constexpr int nEofBuffer = 256;
     if( pFd->pMapRegion==0 ){
       int rc = winMapfile(pFd, -1);
       if( rc!=SQLITE_OK ){
@@ -4988,12 +4988,12 @@ static int winTempDirDefined(void){
 ** The pointer returned in pzBuf must be freed via sqlite3_free().
 */
 static int winGetTempname(sqlite3_vfs *pVfs, char **pzBuf){
-  static const char zChars[] =
+  static constexpr char zChars[] =
     "abcdefghijklmnopqrstuvwxyz"
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "0123456789";
   size_t i, j;
-  const int nPre = sqlite3Strlen30(SQLITE_TEMP_FILE_PREFIX);
+  constexpr int nPre = sqlite3Strlen30(SQLITE_TEMP_FILE_PREFIX);
   i64 nMax, nBuf, nDir, nLen;
   char *zBuf;
 
@@ -6217,12 +6217,12 @@ static int winCurrentTimeInt64(sqlite3_vfs *pVfs, sqlite3_int64 *piNow){
      100-nanosecond intervals since January 1, 1601 (= JD 2305813.5).
   */
   FILETIME ft;
-  static const sqlite3_int64 winFiletimeEpoch = 23058135*(sqlite3_int64)8640000;
+  static constexpr sqlite3_int64 winFiletimeEpoch = 23058135*(sqlite3_int64)8640000;
 #ifdef SQLITE_TEST
-  static const sqlite3_int64 unixEpoch = 24405875*(sqlite3_int64)8640000;
+  static constexpr sqlite3_int64 unixEpoch = 24405875*(sqlite3_int64)8640000;
 #endif
   /* 2^32 - to avoid use of LL and warnings in gcc */
-  static const sqlite3_int64 max32BitValue =
+  static constexpr sqlite3_int64 max32BitValue =
       (sqlite3_int64)2000000000 + (sqlite3_int64)2000000000 +
       (sqlite3_int64)294967296;
 

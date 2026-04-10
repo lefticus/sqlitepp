@@ -204,7 +204,7 @@ static int dbpageClose(sqlite3_vtab_cursor *pCursor){
 ** Move a dbpagevfs cursor to the next entry in the file.
 */
 static int dbpageNext(sqlite3_vtab_cursor *pCursor){
-  const int rc = SQLITE_OK;
+  constexpr int rc = SQLITE_OK;
   DbpageCursor *const pCsr = (DbpageCursor *)pCursor;
   pCsr->pgno++;
   return rc;
